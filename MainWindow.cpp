@@ -1,7 +1,6 @@
 #include "MainWindow.hpp"
 #include <QPushButton>
-#include <iostream>
-#include<QDebug>
+#include <QDebug>
 
 namespace UPIM {
 
@@ -33,28 +32,28 @@ namespace UPIM {
                     _typesMap[type]->setText(0,type);
                     _mainTree->addTopLevelItem( _typesMap[type].get());
                 }
-                _namesMap[name] = new QTreeWidgetItem();
+                _namesMap[name] = std::make_unique<QTreeWidgetItem>();
                 _namesMap[name]->setText(1,name);
                 _namesMap[name]->setText(2,QString::fromStdString(std::to_string(fed.second.GetAttributes().size())));
                 _namesMap[name]->setText(3,fed.second.GetSemantic());
-                auto target = _namesMap[name];
-                _windowMap[target] = new QTreeWidget();
+                auto target = _namesMap[name].get();
+                _windowMap[target] = std::make_unique<QTreeWidget>();
                 _windowMap[target]->setColumnCount(4);
                 _windowMap[target]->setHeaderLabels(QStringList() << "Name" << "Value" << "Owner" << "Semantic");
                 _windowMap[target]->setAttribute( Qt::WA_QuitOnClose, false );
-                connect(this,&QMainWindow::destroyed,_windowMap[target],&QTreeWidget::close);
-                _typesMap[type]->addChild(_namesMap[name]);
-                _buttonsMap[_namesMap[name]] = new QPushButton("Attributes");
-                _mainTree->setItemWidget(_namesMap[name],4,_buttonsMap[_namesMap[name]]);
-                connect(_buttonsMap[_namesMap[name]], &QPushButton::clicked, _windowMap[target], &QTreeWidget::show);
+                connect(this,&QMainWindow::destroyed,_windowMap[target].get(),&QTreeWidget::close);
+                _typesMap[type]->addChild(_namesMap[name].get());
+                _buttonsMap[_namesMap[name].get()] = std::make_unique<QPushButton>("Attributes");
+                _mainTree->setItemWidget(_namesMap[name].get(),4,_buttonsMap[_namesMap[name].get()].get());
+                connect(_buttonsMap[_namesMap[name].get()].get(), &QPushButton::clicked, _windowMap[target].get(), &QTreeWidget::show);
                 for(const auto& attr:fed.second.GetAttributes()){
                     auto name = attr.GetName();
-                    _attribMap[target][name] = new QTreeWidgetItem();
+                    _attribMap[target][name] = std::make_unique<QTreeWidgetItem>();
                     _attribMap[target][name]->setText(0,name);
                     _attribMap[target][name]->setText(1,QString(attr.GetValue().toString()));
                     _attribMap[target][name]->setText(2,attr.GetOwner());
                     _attribMap[target][name]->setText(3,attr.GetSemantic());
-                    _windowMap[target]->addTopLevelItem(_attribMap[target][name]);
+                    _windowMap[target]->addTopLevelItem(_attribMap[target][name].get());
                 }
             }
         }

@@ -1,6 +1,7 @@
 #include "UPIM.hpp"
 #include <QDebug>
 #include "profile.hpp"
+
 namespace UPIM{
 	using namespace std;
 	using namespace rti1516e;
@@ -37,26 +38,30 @@ namespace UPIM{
 	}
 
     unique_ptr<RTIambassador>UPIMFederate::MakeRTIambassador() const{
+        LOG_DURATION("Make Ambassador")
         unique_ptr<RTIambassadorFactory> rtiAmbassadorFactory = make_unique<RTIambassadorFactory>();
         unique_ptr<RTIambassador> _rtiAmbassador(rtiAmbassadorFactory->createRTIambassador());
         return _rtiAmbassador;
 	}
 
 	void UPIMFederate::ConnectRRTI() &{
-        LOG_DURATION("Connect")
+        LOG_DURATION("Total")
 		vector<wstring> FOMmoduleUrls;
 		FOMmoduleUrls.push_back(_FOMname);
         _rtiAmbassador = MakeRTIambassador();
+        {LOG_DURATION("Connect")
         if(_host_IP_address == L"localhost")
             _rtiAmbassador->connect(*this,_callback_mode);
         else
             _rtiAmbassador->connect(*this,_callback_mode,L"crcAddress="+_host_IP_address);
-
+        }
+        {LOG_DURATION("Create and join")
 		try{
 			_rtiAmbassador->createFederationExecution(_federation_name, FOMmoduleUrls);
 		}
 		catch(FederationExecutionAlreadyExists&){}
 		_rtiAmbassador->joinFederationExecution(_federate_name,_federation_name);
+        }
         qDebug()<<"Connect done"<<endl;
 		_f_connect = true;
 		try{
@@ -65,7 +70,7 @@ namespace UPIM{
 		}
 		catch(RTIinternalError& e){
 			wcerr<<L"Error in Init() with "<<e.what()<<endl;
-		}
+        }
 		try{
 			RunFederate();
 		}

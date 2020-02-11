@@ -3,43 +3,56 @@
 
 #include <boost/optional.hpp>
 #include <QVariant>
-#include <unordered_set>
 
 namespace UPIM{
 	namespace DATA{
-
+//Data structure for ordinary Attribute
 		class DataAttribute{
-		public:
-			DataAttribute() noexcept;
 
+        public:
+//Default constructor
+            DataAttribute() noexcept;
+
+//Full-gapes lvalue constructor
             DataAttribute(const QString& name, const QString& owner, const QVariant& value, const QString& semantic = "") noexcept;
 
+//Full-gapes rvalue constructor
             DataAttribute(QString&& name, QString&& owner,QVariant&& value,QString&& semantic = "") noexcept;
 
+//Get attribute name
             QString GetName() const noexcept;
 
+//Get name of the attribute owner
             QString GetOwner() const noexcept;
 
+//Get attribute value(const)
             QVariant GetValue() const noexcept;
 
+//Get attribute value to change
             QVariant& GetValue() noexcept;
 
+   //Get other info about attribute
             QString GetSemantic() const noexcept;
 
 		private:
+
+//Attribute name
             QString _name = "";
+//Owner name
             QString _owner = "";
+//Attribute value
             boost::optional<QVariant> _value;
+//Other info about attribute
             QString _semantic = "";
 		};
 
+//Equality operator for Attributes
 		bool operator==(const DataAttribute& lhs, const DataAttribute&rhs);
 
+//Hasher for Attribute
 		struct DataAttributeHash{
 			size_t operator()(const DataAttribute& _attr) const;
 		};
-
-        //std::string to_str(const QString& wstr) noexcept;
 
 }
 }

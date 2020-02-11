@@ -19,7 +19,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     MainWindow.cpp \
     main.cpp \
-    mainwindow.cpp\
     Analyzer.cpp\
     UPIM.cpp\
     DataAttribute.cpp\
@@ -27,7 +26,6 @@ SOURCES += \
 
 HEADERS += \
     MainWindow.hpp \
-    mainwindow.h\
     Analyzer.hpp\
     UPIM.hpp\
     DataAttribute.hpp\
@@ -35,7 +33,6 @@ HEADERS += \
     profile.hpp
 
 FORMS += \
-    mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
