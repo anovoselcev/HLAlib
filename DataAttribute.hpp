@@ -19,6 +19,18 @@ namespace UPIM{
 //Full-gapes rvalue constructor
             DataAttribute(QString&& name, QString&& owner,QVariant&& value,QString&& semantic = "") noexcept;
 
+//Copy constructor
+            DataAttribute(const DataAttribute&) = default;
+
+//Move constructor
+            DataAttribute(DataAttribute&&) = default;
+
+//Copy assigment operator
+            DataAttribute& operator=(const DataAttribute&) = default;
+
+//Move assigment operator
+            DataAttribute& operator=(DataAttribute&&) = default;
+
 //Get attribute name
             QString GetName() const noexcept;
 
@@ -53,7 +65,10 @@ namespace UPIM{
 		struct DataAttributeHash{
 			size_t operator()(const DataAttribute& _attr) const;
 		};
-
+//Hasher for QString
+        struct QStringHash{
+            size_t operator()(const QString& _str) const;
+        };
 }
 }
 

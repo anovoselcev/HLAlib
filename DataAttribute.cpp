@@ -39,8 +39,9 @@ namespace UPIM{
 			return h4+h3*151+h2*151*151+h1*151*151*151;
 		}
 
-//		std::string to_str(const std::QString& wstr) noexcept{
-//			return string(wstr.begin(),wstr.end());
-//		}
+        size_t QStringHash::operator()(const QString& _str) const{
+            return qHash(_str);
+        }
+
 	}
 }

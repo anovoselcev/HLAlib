@@ -29,12 +29,14 @@ namespace UPIM{
 	}
 
 	void AnalyzerFederate::SetWindow(){
-        _federates[L"First"] = DATA::DataFederate("First","Tank","Test");
-        _federates[L"Second"] = DATA::DataFederate("Second","Tank","Test2");
-        _federates[L"First"].AddAttribute(DATA::DataAttribute("Position","First",13.5));
-        _federates[L"Second"].AddAttribute(DATA::DataAttribute("Position","Second",-0.33));
-        _federates[L"Third"] = DATA::DataFederate("Third","Ship","Test3");
-        _federates[L"Third"].AddAttribute(DATA::DataAttribute("Position","Third",-33));
+        _federates[L"A"] = DATA::DataFederate("First","A","Test");
+        _federates[L"B"] = DATA::DataFederate("Second","A","Test2");
+        _federates[L"A"].AddAttribute(DATA::DataAttribute("A","First",13.5));
+        _federates[L"A"].AddAttribute(DATA::DataAttribute("C","First",20));
+        _federates[L"A"].AddAttribute(DATA::DataAttribute("B","First","A"));
+        _federates[L"B"].AddAttribute(DATA::DataAttribute("A","Second",-0.33));
+        _federates[L"C"] = DATA::DataFederate("Third","B","Test3");
+        _federates[L"C"].AddAttribute(DATA::DataAttribute("A","Third",-33));
         _MainWindow = make_unique<GRAPH::MainWindow>();
         _MainWindow->SetTree();
         _MainWindow->show();

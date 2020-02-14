@@ -1,9 +1,5 @@
-//#include "mainwindow.h"
 #include "Analyzer.hpp"
-#include "MainWindow.hpp"
 #include <QApplication>
-#include <QMenuBar>
-#include <QTreeWidget>
 
 int main(int argc, char *argv[])
 {

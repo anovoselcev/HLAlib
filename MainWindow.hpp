@@ -50,11 +50,11 @@ namespace UPIM {
 
 
         std::unique_ptr<QTreeWidget> _mainTree;
-        std::map<QString, std::unique_ptr<QTreeWidgetItem>> _typesMap;
-        std::map<QString, std::unique_ptr<QTreeWidgetItem>> _namesMap;
+        std::unordered_map<QString, std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash> _typesMap;
+        std::unordered_map<QString, std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash> _namesMap;
         std::unordered_map<QTreeWidgetItem*, std::unique_ptr<QTreeWidget>> _windowMap;
         std::unordered_map<QTreeWidgetItem*, std::unique_ptr<QPushButton>> _buttonsMap;
-        std::unordered_map<QTreeWidgetItem*, std::map<QString,std::unique_ptr<QTreeWidgetItem>>> _attribMap;
+        std::unordered_map<QTreeWidgetItem*, std::unordered_map<QString,std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash>> _attribMap;
         int _width = 550;
         int _height = 600;
     };

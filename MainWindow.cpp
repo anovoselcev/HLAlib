@@ -55,7 +55,10 @@ namespace UPIM {
                     _attribMap[target][name]->setText(3,attr.GetSemantic());
                     _windowMap[target]->addTopLevelItem(_attribMap[target][name].get());
                 }
+                _windowMap[target]->sortItems(0,Qt::AscendingOrder);
             }
+            _mainTree->sortItems(0,Qt::AscendingOrder);
+            _mainTree->sortItems(1,Qt::AscendingOrder);
         }
 
 

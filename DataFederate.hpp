@@ -19,6 +19,18 @@ namespace UPIM{
 //Full-gapes rvalue constructor
             DataFederate(QString&& name, QString&& type, QString&& semantic = "") noexcept;
 
+//Copy constructor
+            DataFederate(const DataFederate&) = delete;
+
+//Move constructor
+            DataFederate(DataFederate&&) = default;
+
+//Copy assigment operator
+            DataFederate& operator=(const DataFederate&) = delete;
+
+//Move assigment operator
+            DataFederate& operator=(DataFederate&&) = default;
+
 //Init lvalue set of federate attributes
 			void SetAttributes(const std::unordered_set<DataAttribute,DataAttributeHash>& attributes) noexcept;
 
