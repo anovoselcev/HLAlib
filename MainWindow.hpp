@@ -1,65 +1,43 @@
-﻿#ifndef MAINWINDOW_HPP
-#define MAINWINDOW_HPP
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QTreeWidget>
 #include <memory>
-#include <map>
 #include <unordered_map>
 #include "DataFederate.hpp"
 #include <QPushButton>
+#include <QGridLayout>
+QT_BEGIN_NAMESPACE
+namespace Ui { class MainWindow; }
+QT_END_NAMESPACE
+namespace UPIM{
 
-namespace UPIM {
+    namespace GRAPH{
 
-    namespace GRAPH {
+        class MainWindow : public QMainWindow
+        {
+            Q_OBJECT
 
-//Main Widget, which shows federation state
-    class MainWindow : public QMainWindow{
+        public:
+            MainWindow(QWidget *parent = nullptr);
 
-        Q_OBJECT
+            void SetTree() noexcept;
 
-    public:
+            void SetInitialMap(const std::unordered_map<std::wstring, DATA::DataFederate>&) noexcept;
 
-//Default constructor
-        MainWindow() noexcept;
+            ~MainWindow();
 
-//Constructor with size
-        MainWindow(int w, int h) noexcept;
-
-//Copy constructor
-        MainWindow(const MainWindow&) = delete;
-
-//Move constructor
-        MainWindow(MainWindow&&) = delete;
-
-//Copy assigment operator
-        MainWindow& operator=(const MainWindow&) = delete;
-
-//Move assigment operator
-        MainWindow& operator=(MainWindow&&) = delete;
-
-//Init TreeWidget
-        void SetTree() noexcept;
-
-//Set initial conditional of federation and show it
-        void SetInitialMap(const std::unordered_map<std::wstring, DATA::DataFederate>&) noexcept;
-
-        //void Update() noexcept;
-
-    protected:
-
-
-        std::unique_ptr<QTreeWidget> _mainTree;
-        std::unordered_map<QString, std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash> _typesMap;
-        std::unordered_map<QString, std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash> _namesMap;
-        std::unordered_map<QTreeWidgetItem*, std::unique_ptr<QTreeWidget>> _windowMap;
-        std::unordered_map<QTreeWidgetItem*, std::unique_ptr<QPushButton>> _buttonsMap;
-        std::unordered_map<QTreeWidgetItem*, std::unordered_map<QString,std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash>> _attribMap;
-        int _width = 550;
-        int _height = 600;
-    };
-
+        private:
+            std::unique_ptr<Ui::MainWindow>                                                                                      _ui;
+            std::unordered_map<QString, std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash>                                      _typesMap;
+            std::unordered_map<QString, std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash>                                      _namesMap;
+            std::unordered_map<QTreeWidgetItem*, std::unique_ptr<QTreeWidget>>                                                   _windowMap;
+            std::unordered_map<QTreeWidgetItem*, std::unique_ptr<QPushButton>>                                                   _buttonsMap;
+            std::unordered_map<QTreeWidgetItem*, std::unordered_map<QString,std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash>> _attribMap;
+            int _width = 550;
+            int _height = 600;
+        };
     }
 }
-
-#endif // MAINWINDOW_HPP
+#endif // MAINWINDOW_H

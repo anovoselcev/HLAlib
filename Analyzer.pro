@@ -25,14 +25,14 @@ SOURCES += \
     DataFederate.cpp
 
 HEADERS += \
-    MainWindow.hpp \
     Analyzer.hpp\
+    MainWindow.hpp \
     UPIM.hpp\
     DataAttribute.hpp\
     DataFederate.hpp \
     profile.hpp
 
-FORMS += \
+FORMS += mainwindow.ui\
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -63,7 +63,7 @@ namespace UPIM{
 
 //Hasher for Attribute
 		struct DataAttributeHash{
-			size_t operator()(const DataAttribute& _attr) const;
+            size_t operator()(const DataAttribute& _attr) const;
 		};
 //Hasher for QString
         struct QStringHash{

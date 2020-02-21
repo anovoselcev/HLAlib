@@ -1,0 +1,12 @@
+digraph "UPIM::AnalyzerFederate"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node4 [label="UPIM::AnalyzerFederate",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node5 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="QObject",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node6 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="UPIM::UPIMFederate",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classUPIM_1_1UPIMFederate.html",tooltip="The UPIMFederate class Basic federate of UPIM. "];
+  Node7 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="rti1516e::NullFederateAmbassador",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+}

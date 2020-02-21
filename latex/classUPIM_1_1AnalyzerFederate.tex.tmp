@@ -1,0 +1,53 @@
+\hypertarget{classUPIM_1_1AnalyzerFederate}{}\section{U\+P\+IM\+:\+:Analyzer\+Federate Class Reference}
+\label{classUPIM_1_1AnalyzerFederate}\index{U\+P\+I\+M\+::\+Analyzer\+Federate@{U\+P\+I\+M\+::\+Analyzer\+Federate}}
+
+
+Inheritance diagram for U\+P\+IM\+:\+:Analyzer\+Federate\+:
+% FIG 0
+
+
+Collaboration diagram for U\+P\+IM\+:\+:Analyzer\+Federate\+:
+% FIG 1
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_afc910e2af5137113ca41c3c3c7cf45b1}\label{classUPIM_1_1AnalyzerFederate_afc910e2af5137113ca41c3c3c7cf45b1}} 
+{\bfseries Analyzer\+Federate} (const std\+::wstring \&name, const std\+::wstring \&type, const std\+::wstring \&F\+O\+Mname, const std\+::wstring \&ip=L\char`\"{}localhost\char`\"{}, const std\+::wstring \&fname=L\char`\"{}U\+P\+IM\char`\"{}) noexcept
+\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_a2cff2668740be5e0a157d01504b2c96c}\label{classUPIM_1_1AnalyzerFederate_a2cff2668740be5e0a157d01504b2c96c}} 
+{\bfseries Analyzer\+Federate} (std\+::wstring \&\&name, std\+::wstring \&\&type, std\+::wstring \&\&F\+O\+Mname, std\+::wstring \&\&ip=L\char`\"{}localhost\char`\"{}, std\+::wstring \&\&fname=L\char`\"{}U\+P\+IM\char`\"{}) noexcept
+\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_a6988ae60609a3c6896e82dd5fe686a3f}\label{classUPIM_1_1AnalyzerFederate_a6988ae60609a3c6896e82dd5fe686a3f}} 
+{\bfseries Analyzer\+Federate} (const \hyperlink{classUPIM_1_1AnalyzerFederate}{Analyzer\+Federate} \&armfed)=delete
+\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_a45a32bfc4cc0d96cc357f087c49ac9e9}\label{classUPIM_1_1AnalyzerFederate_a45a32bfc4cc0d96cc357f087c49ac9e9}} 
+{\bfseries Analyzer\+Federate} (\hyperlink{classUPIM_1_1AnalyzerFederate}{Analyzer\+Federate} \&\&armfed)=delete
+\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_a45f55de47d9c01dbc0cfb6c6c720468e}\label{classUPIM_1_1AnalyzerFederate_a45f55de47d9c01dbc0cfb6c6c720468e}} 
+\hyperlink{classUPIM_1_1AnalyzerFederate}{Analyzer\+Federate} \& {\bfseries operator=} (const \hyperlink{classUPIM_1_1AnalyzerFederate}{Analyzer\+Federate} \&armfed)=delete
+\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_a7a99cb3ffd058b0f5b464709f34f3b58}\label{classUPIM_1_1AnalyzerFederate_a7a99cb3ffd058b0f5b464709f34f3b58}} 
+\hyperlink{classUPIM_1_1AnalyzerFederate}{Analyzer\+Federate} \& {\bfseries operator=} (\hyperlink{classUPIM_1_1AnalyzerFederate}{Analyzer\+Federate} \&\&armfed)=delete
+\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_a3571c652ed499791a3f3bdcdcd3de1fc}\label{classUPIM_1_1AnalyzerFederate_a3571c652ed499791a3f3bdcdcd3de1fc}} 
+virtual void \hyperlink{classUPIM_1_1AnalyzerFederate_a3571c652ed499791a3f3bdcdcd3de1fc}{Run\+Federate} () override
+\begin{DoxyCompactList}\small\item\em Run\+Federate The main loop of federate. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_a9199cd6e423070a9b5909ae809b10320}\label{classUPIM_1_1AnalyzerFederate_a9199cd6e423070a9b5909ae809b10320}} 
+virtual void {\bfseries Set\+Window} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_adcaf8b2b60dac3f366cbf8b8afd930e0}\label{classUPIM_1_1AnalyzerFederate_adcaf8b2b60dac3f366cbf8b8afd930e0}} 
+std\+::unique\+\_\+ptr$<$ \hyperlink{classUPIM_1_1GRAPH_1_1MainWindow}{G\+R\+A\+P\+H\+::\+Main\+Window} $>$ {\bfseries \+\_\+\+Main\+Window}
+\item 
+\mbox{\Hypertarget{classUPIM_1_1AnalyzerFederate_ad84f50b762042e4462bf4cce6aba07bb}\label{classUPIM_1_1AnalyzerFederate_ad84f50b762042e4462bf4cce6aba07bb}} 
+std\+::unordered\+\_\+map$<$ std\+::wstring, \hyperlink{classUPIM_1_1DATA_1_1DataFederate}{D\+A\+T\+A\+::\+Data\+Federate} $>$ {\bfseries \+\_\+federates}
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Analyzer.\+hpp\item 
+Analyzer.\+cpp\end{DoxyCompactItemize}

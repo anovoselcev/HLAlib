@@ -4,7 +4,6 @@
 #include "UPIM.hpp"
 #include "DataFederate.hpp"
 #include "MainWindow.hpp"
-#include <QTreeWidget>
 
 namespace UPIM{
 

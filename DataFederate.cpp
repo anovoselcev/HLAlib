@@ -13,23 +13,23 @@ namespace UPIM{
         DataFederate::DataFederate(QString&& name, QString&& type, QString&& semantic) noexcept:
 					_name(move(name)), _type(move(type)), _semantic(move(semantic)) {}
 
-		void DataFederate::SetAttributes(const unordered_set<DataAttribute,DataAttributeHash>& attributes) noexcept{
+        void DataFederate::SetAttributes(const unordered_set<DataAttribute,DataAttributeHash>& attributes) noexcept{
 			_attributes = attributes;
 		}
 
-		void DataFederate::AddAttribute(const DataAttribute& attr) noexcept{
-			_attributes.insert(attr);
-		}
+        void DataFederate::AddAttribute(const DataAttribute& attr) noexcept{
+            _attributes.insert(attr);
+        }
 
-		void DataFederate::AddAttribute(DataAttribute&& attr) noexcept{
-			_attributes.insert(move(attr));
+        void DataFederate::AddAttribute(DataAttribute&& attr) noexcept{
+            _attributes.insert(move(attr));
 		}
 
         void DataFederate::SetParameters(const unordered_set<QString>& parameters) noexcept{
             //_parameters = parameters;
 		}
 
-		void DataFederate::SetAttributes(unordered_set<DataAttribute,DataAttributeHash>&& attributes) noexcept{
+        void DataFederate::SetAttributes(unordered_set<DataAttribute,DataAttributeHash>&& attributes) noexcept{
 			_attributes = move(attributes);
 		}
 
@@ -43,9 +43,9 @@ namespace UPIM{
 
         QString DataFederate::GetSemantic() const noexcept{return _semantic;}
 
-		unordered_set<DataAttribute,DataAttributeHash>& DataFederate::GetAttributes() noexcept {return _attributes;}
+        unordered_set<DataAttribute,DataAttributeHash>& DataFederate::GetAttributes() noexcept {return _attributes;}
 
-		const unordered_set<DataAttribute,DataAttributeHash>& DataFederate::GetAttributes() const noexcept {return _attributes;}
+        const unordered_set<DataAttribute,DataAttributeHash>& DataFederate::GetAttributes() const noexcept {return _attributes;}
 
 		size_t DataFederate::GetAttributeHash() const noexcept{
 			size_t res = 0;
@@ -56,12 +56,12 @@ namespace UPIM{
 			return res%_attributes.max_bucket_count();
 		}
 
-		size_t DataFederateHash::operator ()(const DataFederate& fed) const{
+        size_t DataFederateHash::operator ()(const DataFederate& fed) const{
             size_t h1 = qHash(fed.GetName());
             size_t h2 = qHash(fed.GetType());
             size_t h3 = qHash(fed.GetSemantic());
-			size_t h4 = fed.GetAttributeHash();
-			return h3+h2*199+h4*199*199+h1*199*199*199;
+            size_t h4 = fed.GetAttributeHash();
+            return h3+h2*211+h4*211*211+h1*211*211*211;
 		}
 
 		bool operator==(const DataFederate& lhs, const DataFederate& rhs){

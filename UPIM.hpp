@@ -14,11 +14,8 @@
 #include <RTI/time/HLAinteger64Interval.h>
 #include <RTI/encoding/BasicDataElements.h>
 
-#include <iostream>
 #include <unordered_map>
-#include <unordered_set>
 #include <vector>
-#include <unistd.h>
 
 
 namespace UPIM{
@@ -36,7 +33,7 @@ namespace UPIM{
 
 /**
 * @brief UPIMFederate
-* Default constructor
+* Default constructor, initialization nothing
 */
 		UPIMFederate() noexcept;
 
@@ -47,7 +44,7 @@ namespace UPIM{
 * @param FOMname
 * @param ip
 * @param fname
-* Constructor with full gapes (lvalue)
+* Full-gapes constructor with lvalue, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), IP addres of CRC(_host_IP_address) and name of federation (_federation_name)
 */
 		UPIMFederate(const std::wstring& name,
 					  const std::wstring& type,
@@ -63,7 +60,7 @@ namespace UPIM{
 * @param FOMname
 * @param ip
 * @param fname
-* Constructor with full gapes (rvalue)
+* Full-gapes constructor with move, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), IP addres of CRC(_host_IP_address) and name of federation (_federation_name)
 */
 		UPIMFederate(std::wstring&& name,
 					  std::wstring&& type,
@@ -108,10 +105,7 @@ namespace UPIM{
 
 /**
 * @brief ConnectRRTI
-* Set basic parameters for HLA federate.
-* Read FOM, connect to RRTI, create/join federation.
-* Call Init and Run
-* Use only to lvalue class samples
+* Connect to RTI. In order to connect we need to create federation based on FOM (isn't nessary, if federation already exist) and join there. After that federate initialized in RTI and go to the his main loop. Use only to lvalue class samples
 */
 		void ConnectRRTI() &;
 
@@ -155,13 +149,16 @@ namespace UPIM{
 * @brief SetMapOfObjectsAndAttributes
 * Set default map of Objects and Attribute of basic federate (lvalue version)
 */
-        virtual void SetMapOfObjectsAndAttributes(const std::unordered_map<std::wstring,std::vector<std::wstring>>&) noexcept;
+        virtual void SetSubscribeMapOfObjectsAndAttributes(const std::unordered_map<std::wstring,std::vector<std::wstring>>&) noexcept;
 
+        virtual void SetPublishMapOfAttributes(const std::vector<std::wstring>&) noexcept;
+
+        virtual void SetPublishMapOfAttributes(std::vector<std::wstring>&&) noexcept;
 /**
 * @brief SetMapOfObjectsAndAttributes
 * Set default map of Objects and Attribute of basic federate (rvalue version)
 */
-        virtual void SetMapOfObjectsAndAttributes(std::unordered_map<std::wstring,std::vector<std::wstring>>&&) noexcept;
+        virtual void SetSubscribeMapOfObjectsAndAttributes(std::unordered_map<std::wstring,std::vector<std::wstring>>&&) noexcept;
 
 /**
 * @brief SetMapOfInteractionsAndParameters
@@ -187,22 +184,20 @@ namespace UPIM{
 /**
 * @brief MakeRTIambassador
 * @return std::unique_ptr<rti1516e::RTIambassador>
-* Make RRTI-ambassador - the object for interaction with RRTI
+* Create RTIambassador pointer(unique_ptr) object, that provide access to RTI services
 */
         virtual std::unique_ptr<rti1516e::RTIambassador> MakeRTIambassador() const;
 
 /**
 * @brief Init
-* Call other Init.. methods
+* Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate.
 */
 		virtual void Init();
 
 
 /**
 * @brief InitClassesAndAttributes
-* Set the _ObjectNames to _externObjectClasses
-* Set the _ObjectNames to _AttributesMap
-* Set the _ObjectNames to _externAttributesSet
+* Initializerd federate object and his attributes indicated in _AttributeNames and environmental objects and attributes indicated in _ObjectNames
 */
 		virtual void InitClassesAndAttributes();
 
@@ -294,42 +289,52 @@ namespace UPIM{
 			}
 		};
 
-
-/**
-* Determining parameters of federate
-* @brief _federate_name
+//Determining parameters of federate
+/** @brief _federate_name
 * Name of federate
-* @brief _federate_type
-* Type of federate
-* @brief _FOMname
-* Path to FOM
-* @brief _host_IP_address
-* IP address of CRC
-* @brief _federation_name
-* Name of Federation
 */
 		std::wstring _federate_name;
+/** @brief _federate_type
+* Type of federate
+*/
 		std::wstring _federate_type;
+/** @brief _FOMname
+* Path to FOM
+*/
 		std::wstring _FOMname;
+/** @brief _host_IP_address
+* IP address of CRC
+*/
 		std::wstring _host_IP_address;
+/** @brief _federation_name
+* Name of Federation
+*/
 		std::wstring _federation_name;
 
-/** Federate work flags
- * @brief _f_name_reserve
- * Flag of succes name reservation
- * @brief _f_connect
- * Flag of succes connect to RTI
- * @brief _f_time
- * Flag of succes time set up
- * @brief _f_start
- * Flag of succes start
- * @brief _callback_mode
- * RTI mode
+
+
+
+
+//Federate work flags
+/** @brief _f_name_reserve
+* Flag of succes name reservation
 */
 		bool _f_name_reserve = false;
+/** @brief _f_connect
+* Flag of succes connect to RTI
+*/
 		bool _f_connect      = false;
+/** @brief _f_time
+* Flag of succes time set up
+*/
 		bool _f_time         = false;
+/** @brief _f_start
+* Flag of succes start
+*/
 		bool _f_start        = false;
+/** @brief _callback_mode
+* RTI mode
+*/
 		rti1516e::CallbackModel _callback_mode = rti1516e::HLA_IMMEDIATE;
 
 /**
@@ -341,16 +346,17 @@ namespace UPIM{
 /**
 * Self Object Class and Object Instance
 * @brief _MyClass
-* @brief _MyInstanceID
+*/
+/**@brief _MyInstanceID
 */
 		rti1516e::ObjectClassHandle _MyClass;
 		rti1516e::ObjectInstanceHandle _MyInstanceID;
 
 /**
-* @brief _externObjectClasses
+* @brief _ObjectClasses
 * Hash-map of extern Object Classes [ClassName,ClassID]
 */
-		std::unordered_map<std::wstring,rti1516e::ObjectClassHandle> _externObjectClasses;
+        std::unordered_map<std::wstring,rti1516e::ObjectClassHandle> _ObjectClasses;
 
 /**
 * @brief _InteractionClasses
@@ -399,8 +405,10 @@ namespace UPIM{
 /**
 * Time Regulation Parameters
 * @brief _TimeFactory
-* @brief _Time
-* @brief _TimeInterval
+*/
+/** @brief _Time
+ */
+/**@brief _TimeInterval
 */
 		mutable std::unique_ptr<rti1516e::LogicalTimeFactory> _TimeFactory;
 		rti1516e::HLAfloat64Time      _Time;
@@ -411,8 +419,9 @@ namespace UPIM{
 * @brief _ObjectsNames
 * @brief _InteractionsNames
 */
-		mutable std::unordered_map<std::wstring,std::vector<std::wstring>> _ObjectsNames;
-		mutable std::unordered_map<std::wstring,std::vector<std::wstring>> _InteractionsNames;
+        mutable std::vector<std::wstring> _AttributeNames;
+        mutable std::unordered_map<std::wstring,std::vector<std::wstring>> _ObjectsNames;
+        mutable std::unordered_map<std::wstring,std::vector<std::wstring>> _InteractionsNames;
 	};
 }
 #endif

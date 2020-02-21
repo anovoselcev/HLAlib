@@ -1,7 +1,7 @@
 #ifndef DATAFEDERATE_HPP
 #define DATAFEDERATE_HPP 1
-#include <unordered_set>
 
+#include <unordered_set>
 #include "DataAttribute.hpp"
 
 namespace UPIM{
@@ -32,7 +32,7 @@ namespace UPIM{
             DataFederate& operator=(DataFederate&&) = default;
 
 //Init lvalue set of federate attributes
-			void SetAttributes(const std::unordered_set<DataAttribute,DataAttributeHash>& attributes) noexcept;
+            void SetAttributes(const std::unordered_set<DataAttribute,DataAttributeHash>& attributes) noexcept;
 
 //Init lvalue set of federate parameters
             void SetParameters(const std::unordered_set<QString>& parameters) noexcept;
@@ -44,10 +44,10 @@ namespace UPIM{
             void SetParameters(std::unordered_set<QString>&& parameters) noexcept;
 
 //Add lvalue attribute to the federate set
-			void AddAttribute(const DataAttribute& attr) noexcept;
+            void AddAttribute(const DataAttribute& attr) noexcept;
 
 //Add rvalue attribute to the federate set
-			void AddAttribute(DataAttribute&& attr) noexcept;
+            void AddAttribute(DataAttribute&& attr) noexcept;
 
 //Get federate name
             QString GetName() const noexcept;
@@ -59,10 +59,10 @@ namespace UPIM{
             QString GetSemantic() const noexcept;
 
 //Get set of Attributes to change
-			std::unordered_set<DataAttribute,DataAttributeHash>& GetAttributes() noexcept;
+            std::unordered_set<DataAttribute,DataAttributeHash>& GetAttributes() noexcept;
 
 //Get set of Attributes const
-			const std::unordered_set<DataAttribute,DataAttributeHash>& GetAttributes() const noexcept;
+            const std::unordered_set<DataAttribute,DataAttributeHash>& GetAttributes() const noexcept;
 
 //Get Hash of Attributes set
             size_t GetAttributeHash() const noexcept;
@@ -76,14 +76,14 @@ namespace UPIM{
 //Other information about federate
             QString _semantic;
 //Set of Federate's Attributes
-			std::unordered_set<DataAttribute,DataAttributeHash> _attributes;
+            std::unordered_set<DataAttribute,DataAttributeHash> _attributes;
 //Set of Federate's Parameters
             std::unordered_set<std::wstring> _parameters;
 		};
 
 //Hasher for federate
 		struct DataFederateHash{
-			size_t operator()(const DataFederate& fed) const;
+            size_t operator()(const DataFederate& fed) const;
 		};
 
 //Equality operator to federates
