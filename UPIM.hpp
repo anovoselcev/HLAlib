@@ -73,7 +73,7 @@ namespace UPIM{
 * @brief ~UPIMFederate
 * Destructor of basic federate
 */
-		~UPIMFederate();
+        virtual ~UPIMFederate();
 
 /**
 * @brief UPIMFederate
@@ -107,7 +107,7 @@ namespace UPIM{
 * @brief ConnectRRTI
 * Connect to RTI. In order to connect we need to create federation based on FOM (isn't nessary, if federation already exist) and join there. After that federate initialized in RTI and go to the his main loop. Use only to lvalue class samples
 */
-		void ConnectRRTI() &;
+        virtual void ConnectRRTI() &;
 
 /**
 * @brief GetName

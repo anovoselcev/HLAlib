@@ -4,6 +4,8 @@
 #include "UPIM.hpp"
 #include "DataFederate.hpp"
 #include "MainWindow.hpp"
+#include "include_sup/BasicData.hpp"
+
 
 namespace UPIM{
 
@@ -49,6 +51,8 @@ namespace UPIM{
         virtual void SetWindow();
 
 	protected:
+
+        void UpdateAttributes() const override;
 
 //Pointer to the main widget
         std::unique_ptr<GRAPH::MainWindow> _MainWindow;

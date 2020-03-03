@@ -1,7 +1,6 @@
 #ifndef DATAATTRIBUTE_HPP
 #define DATAATTRIBUTE_HPP 1
 
-#include <boost/optional.hpp>
 #include <QVariant>
 
 namespace UPIM{
@@ -46,6 +45,10 @@ namespace UPIM{
    //Get other info about attribute
             QString GetSemantic() const noexcept;
 
+            bool operator==(const DataAttribute& other) const noexcept;
+
+            bool operator<(const DataAttribute& other) const noexcept;
+
 		private:
 
 //Attribute name
@@ -53,13 +56,12 @@ namespace UPIM{
 //Owner name
             QString _owner = "";
 //Attribute value
-            boost::optional<QVariant> _value;
+            QVariant _value;
 //Other info about attribute
             QString _semantic = "";
 		};
 
-//Equality operator for Attributes
-		bool operator==(const DataAttribute& lhs, const DataAttribute&rhs);
+
 
 //Hasher for Attribute
 		struct DataAttributeHash{

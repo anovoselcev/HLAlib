@@ -1,5 +1,5 @@
 #include "DataFederate.hpp"
-
+#include <algorithm>
 namespace UPIM{
 	namespace DATA{
 

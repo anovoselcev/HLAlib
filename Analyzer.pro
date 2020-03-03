@@ -22,7 +22,11 @@ SOURCES += \
     Analyzer.cpp\
     UPIM.cpp\
     DataAttribute.cpp\
-    DataFederate.cpp
+    DataFederate.cpp\
+    src_sup/BasicException.cpp \
+    src_sup/BasicTypes.cpp\
+    src_sup/BasicData.cpp \
+    src_sup/Tools.cpp
 
 HEADERS += \
     Analyzer.hpp\
@@ -30,7 +34,14 @@ HEADERS += \
     UPIM.hpp\
     DataAttribute.hpp\
     DataFederate.hpp \
-    profile.hpp
+    include_sup/BasicConverter.hpp \
+    include_sup/BasicData.hpp \
+    include_sup/BasicException.hpp \
+    include_sup/BasicTemplates.hpp \
+    include_sup/BasicTypes.hpp \
+    include_sup/Tools.hpp \
+    profile.hpp \
+    include_sup/* \
 
 FORMS += mainwindow.ui\
 

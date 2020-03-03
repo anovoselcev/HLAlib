@@ -16,25 +16,24 @@ namespace UPIM{
 
         QString DataAttribute::GetOwner() const noexcept{return _owner;}
 
-        QVariant DataAttribute::GetValue() const noexcept{return _value.value();}
+        QVariant DataAttribute::GetValue() const noexcept{return _value;}
 
-        QVariant& DataAttribute::GetValue() noexcept {return _value.value();}
+        QVariant& DataAttribute::GetValue() noexcept {return _value;}
 
         QString DataAttribute::GetSemantic() const noexcept{return _semantic;}
 
-		bool operator==(const DataAttribute& lhs, const DataAttribute&rhs){
-			try{
-				return lhs.GetName() == rhs.GetName() && lhs.GetOwner() == rhs.GetOwner() && lhs.GetSemantic() == rhs.GetSemantic() && lhs.GetValue() == rhs.GetValue();
-			}
-			catch(exception&){
-				return false;
-			}
-		}
+        bool DataAttribute::operator==(const DataAttribute &other) const noexcept{
+            return other.GetName() == _name && other.GetOwner() == _owner && other.GetSemantic() == _semantic && other.GetValue() == _value;
+        }
+
+        bool DataAttribute::operator<(const DataAttribute &other) const noexcept{
+            return _value < other.GetValue() && _name < other.GetName() && _owner < other.GetOwner() && _semantic < other.GetSemantic();
+        }
 
         size_t DataAttributeHash::operator ()(const DataAttribute& attr) const{
             size_t h1 = qHash(attr.GetName());
             size_t h2 = qHash(attr.GetOwner());
-            size_t h3 = attr.GetValue().Hash;
+            size_t h3 = qHash(attr.GetValue().toChar());
             size_t h4 = qHash(attr.GetSemantic());
             return h4+h3*199+h2*199*199+h1*199*199*199;
 		}
