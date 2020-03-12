@@ -26,11 +26,11 @@ namespace UPIM{
 					 const std::wstring& fname = L"UPIM") noexcept;
 
 //Full-gapes rvalue constructor
-		AnalyzerFederate(std::wstring&& name,
-					 std::wstring&& type,
-					 std::wstring&& FOMname,
-					 std::wstring&& ip = L"localhost",
-					 std::wstring&& fname = L"UPIM") noexcept;
+        AnalyzerFederate(std::wstring&& name,
+                     std::wstring&& type,
+                     std::wstring&& FOMname,
+                     std::wstring&& ip = L"localhost",
+                     std::wstring&& fname = L"UPIM") noexcept;
 
 //Copy constructor
 		AnalyzerFederate(const AnalyzerFederate& armfed) = delete;
@@ -53,6 +53,14 @@ namespace UPIM{
 	protected:
 
         void UpdateAttributes() const override;
+
+        void reflectAttributeValues(rti1516e::ObjectInstanceHandle theObject,
+                                                      const rti1516e::AttributeHandleValueMap &theAttributeValues,
+                                                      const rti1516e::VariableLengthData &theUserSuppliedTag,
+                                                      rti1516e::OrderType sentOrder,
+                                                      rti1516e::TransportationType theType,
+                                                      rti1516e::SupplementalReflectInfo theReflectInfo)
+        throw (rti1516e::FederateInternalError);
 
 //Pointer to the main widget
         std::unique_ptr<GRAPH::MainWindow> _MainWindow;

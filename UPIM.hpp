@@ -46,11 +46,11 @@ namespace UPIM{
 * @param fname
 * Full-gapes constructor with lvalue, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), IP addres of CRC(_host_IP_address) and name of federation (_federation_name)
 */
-		UPIMFederate(const std::wstring& name,
-					  const std::wstring& type,
-					  const std::wstring& FOMname,
-					  const std::wstring& ip = L"localhost",
-					  const std::wstring& fname = L"UPIM") noexcept;
+        UPIMFederate(const std::wstring& name,
+                      const std::wstring& type,
+                      const std::wstring& FOMname,
+                      const std::wstring& ip = L"localhost",
+                      const std::wstring& fname = L"UPIM") noexcept;
 
 
  /**
@@ -62,11 +62,11 @@ namespace UPIM{
 * @param fname
 * Full-gapes constructor with move, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), IP addres of CRC(_host_IP_address) and name of federation (_federation_name)
 */
-		UPIMFederate(std::wstring&& name,
-					  std::wstring&& type,
-					  std::wstring&& FOMname,
-					  std::wstring&& ip = L"localhost",
-					  std::wstring&& fname = L"UPIM") noexcept;
+        UPIMFederate(std::wstring&& name,
+                      std::wstring&& type,
+                      std::wstring&& FOMname,
+                      std::wstring&& ip = L"localhost",
+                      std::wstring&& fname = L"UPIM") noexcept;
 
 
  /**

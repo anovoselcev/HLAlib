@@ -14,29 +14,29 @@ namespace UPIM{
 
 
 //Full-gapes constructor with copy, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), IP addres of CRC(_host_IP_address) and name of federation (_federation_name)
-	UPIMFederate::UPIMFederate(const wstring& name,
-								  const wstring& type,
-								  const wstring& FOMname,
-								  const wstring& ip,
-								  const wstring& fname) noexcept:
-										_federate_name(name),
-										_federate_type(type),
-										_FOMname(FOMname),
-										_host_IP_address(ip),
-										_federation_name(fname){}
+    UPIMFederate::UPIMFederate(const wstring& name,
+                                  const wstring& type,
+                                  const wstring& FOMname,
+                                  const wstring& ip,
+                                  const wstring& fname) noexcept:
+                                        _federate_name(name),
+                                        _federate_type(type),
+                                        _FOMname(FOMname),
+                                        _host_IP_address(ip),
+                                        _federation_name(fname){}
 
 
 //Full-gapes constructor with move, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), IP addres of CRC(_host_IP_address) and name of federation (_federation_name)
-	UPIMFederate::UPIMFederate(wstring&& name,
-								  wstring&& type,
-							  	  wstring&& FOMname,
-							  	  wstring&& ip,
-								  wstring&& fname) noexcept:
-									  	 _federate_name(move(name)),
-										 _federate_type(move(type)),
-										 _FOMname(move(FOMname)),
-										 _host_IP_address(move(ip)),
-										 _federation_name(move(fname)){}
+    UPIMFederate::UPIMFederate(wstring&& name,
+                                  wstring&& type,
+                                  wstring&& FOMname,
+                                  wstring&& ip,
+                                  wstring&& fname) noexcept:
+                                         _federate_name(move(name)),
+                                         _federate_type(move(type)),
+                                         _FOMname(move(FOMname)),
+                                         _host_IP_address(move(ip)),
+                                         _federation_name(move(fname)){}
 
 
 

@@ -16,16 +16,16 @@
 namespace HLA {
 
 template <class T, unsigned mem, bool blLE=true>
-  class Simple: public ClassForRTI <T,mem>{
+  class SimpleData: public ClassForRTI <T,mem>{
     public:
 
-      Simple() {
+      SimpleData() {
         m_data=0;
       }
 
-      Simple(Simple& obj);
+      SimpleData(SimpleData& obj);
 
-      Simple(const T& obj) {
+      SimpleData(const T& obj) {
         m_data = obj;
         if (!blLE) changeENDIAN(m_data);
       }
@@ -39,7 +39,7 @@ template <class T, unsigned mem, bool blLE=true>
 
       void getData(void* input_data, unsigned long size){
         if (sizeof(T)!=size) {
-          std::stringstream wstrOut;
+          std::ostringstream wstrOut;
           wstrOut
               << L"Размер данных не совпал. Должно прийти " << (unsigned)sizeof(T)
               << L" пришло " << size << L" байт";
@@ -72,7 +72,7 @@ template <class T, unsigned mem, bool blLE=true>
 
       void setData(void* ptrDest, unsigned long inSize){
         if (sizeof(T)!=inSize) {
-          std::stringstream wstrOut;
+          std::ostringstream wstrOut;
           wstrOut
               << L"Размер данных не совпал. Должно прийти " << (unsigned)sizeof(T)
               << L" пришло " << inSize << L" байт";
@@ -98,13 +98,13 @@ template <class T, unsigned mem, bool blLE=true>
 
       unsigned getsize() {return sizeof(T);}
 
-      void get(const Simple<T,mem,blLE>& obj) {
+      void get(const SimpleData<T,mem,blLE>& obj) {
         if (this != &obj) {
           m_data = obj.m_data;
         }
       }
 
-      Simple<T,mem,blLE> &operator = (const T& obj) {
+      SimpleData<T,mem,blLE> &operator = (const T& obj) {
         m_data=obj;
         if (!blLE) Tools::changeENDIAN(m_data);
         return *this;
@@ -121,17 +121,17 @@ template <class T, unsigned mem, bool blLE=true>
     };
 
     template <class T, unsigned mem, bool blLE>
-    Simple<T,mem,blLE>::Simple(Simple& obj):ClassForRTI<T,mem>(obj) {
+    SimpleData<T,mem,blLE>::SimpleData(SimpleData& obj):ClassForRTI<T,mem>(obj) {
       if (this != &obj) {
         obj.setData(&m_data);
       }
     }
 
     template <class T, unsigned mem, bool blLE>
-    void Simple<T,mem,blLE>::getDataFromRTI(rti1516e::VariableLengthData const &obj){
+    void SimpleData<T,mem,blLE>::getDataFromRTI(rti1516e::VariableLengthData const &obj){
       unsigned size = (unsigned)obj.size();
       if (sizeof(T)!=size) {
-        std::stringstream wstrOut;
+        std::ostringstream wstrOut;
         wstrOut
             << L"Размер данных не совпал. Должно прийти " << (unsigned)sizeof(T)
             << L" пришло " << size << L" байт";
@@ -141,22 +141,22 @@ template <class T, unsigned mem, bool blLE=true>
       memcpy(&m_data, obj.data(), size);
     }
 
-    using RTIinteger16BE    = Simple<Integer16BE, 2, false>;
-    using RTIinteger32BE    = Simple<Integer32BE, 4, false>;
-    using RTIinteger64BE    = Simple<Integer64BE, 8, false>;
-    using RTIoctetPairBE    = Simple<OctetPairBE, 2, false>;
-    using RTIfloat32BE      = Simple<Float32BE, 4, false>;
-    using RTIfloat64BE      = Simple<Float64BE, 8, false>;
-    using RTIoctet          = Simple<Octet, 1, true>;
-    using RTIbyte           = Simple<Byte, 1, true>;
-    using RTIinteger16LE    = Simple<Integer16LE, 2, true>;
-    using RTIinteger32LE    = Simple<Integer32LE, 4, true>;
-    using RTIinteger64LE    = Simple<Integer64LE, 8, true>;
-    using RTIoctetPairLE    = Simple<OctetPairLE, 2, true>;
-    using RTIfloat32LE      = Simple<Float32LE, 4, true>;
-    using RTIfloat64LE      = Simple<Float64LE, 8, true>;
-    using RTIUnsignedShort  = Simple<UnsignedShort, 2, true>;
-    using RTIUnsigned32LE   = Simple<Unsigned32LE, 4, true> ;
-    using RTIUnsigned64LE   = Simple<Unsigned64LE, 8, true>;
+    using RTIinteger16BE    = SimpleData<Integer16BE, 2, false>;
+    using RTIinteger32BE    = SimpleData<Integer32BE, 4, false>;
+    using RTIinteger64BE    = SimpleData<Integer64BE, 8, false>;
+    using RTIoctetPairBE    = SimpleData<OctetPairBE, 2, false>;
+    using RTIfloat32BE      = SimpleData<Float32BE, 4, false>;
+    using RTIfloat64BE      = SimpleData<Float64BE, 8, false>;
+    using RTIoctet          = SimpleData<Octet, 1, true>;
+    using RTIbyte           = SimpleData<Byte, 1, true>;
+    using RTIinteger16LE    = SimpleData<Integer16LE, 2, true>;
+    using RTIinteger32LE    = SimpleData<Integer32LE, 4, true>;
+    using RTIinteger64LE    = SimpleData<Integer64LE, 8, true>;
+    using RTIoctetPairLE    = SimpleData<OctetPairLE, 2, true>;
+    using RTIfloat32LE      = SimpleData<Float32LE, 4, true>;
+    using RTIfloat64LE      = SimpleData<Float64LE, 8, true>;
+    using RTIUnsignedShort  = SimpleData<UnsignedShort, 2, true>;
+    using RTIUnsigned32LE   = SimpleData<Unsigned32LE, 4, true> ;
+    using RTIUnsigned64LE   = SimpleData<Unsigned64LE, 8, true>;
   }
 #endif // BASICCONVERTER_HPP

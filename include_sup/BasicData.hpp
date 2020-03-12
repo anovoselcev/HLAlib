@@ -15,7 +15,7 @@
 
 #include "include_sup/BasicConverter.hpp"
 
-  namespace HLA {
+namespace HLA {
 
     template <class RTI_Representation, class Type, unsigned m_OBV>
     class RTIEnum : public ClassForRTI <Type,m_OBV>
