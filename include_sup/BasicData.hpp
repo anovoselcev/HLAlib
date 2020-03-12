@@ -248,6 +248,7 @@ namespace HLA {
     using RTIunicodeString = RTIASCIIstringType<unicodeString>;
     using RTIASCIIstring = RTIASCIIstringType<>;
     using RTIEIMS_UTF8string = RTIASCIIstringType<>;
+    using RTIstring = RTIASCIIstringType<>;
 
     using RTIboolean = RTIEnum<RTIinteger32BE, Boolean, 4>;
 
@@ -585,13 +586,13 @@ namespace HLA {
 
 
     template <class T_FOM, class T_MOD, unsigned uiDim, unsigned m_OBV>
-    class RTIFixedArray : public ClassForRTI <FixedArray<T_MOD,uiDim>, m_OBV>{
+    class RTIFixedArray : public ClassForRTI <std::array<T_MOD,uiDim>, m_OBV>{
       RTIFixedArray & operator = (const RTIFixedArray &/*fixedArray*/) {
         return *this;
       }
     public:
 
-      RTIFixedArray(const RTIFixedArray &fixedArray): ClassForRTI<FixedArray<T_MOD,uiDim>, m_OBV>(fixedArray) {
+      RTIFixedArray(const RTIFixedArray &fixedArray): ClassForRTI<std::array<T_MOD,uiDim>, m_OBV>(fixedArray) {
       }
 
       RTIFixedArray() {
@@ -599,7 +600,7 @@ namespace HLA {
         m_uiSizeData = 0;
       }
 
-      RTIFixedArray(FixedArray<T_MOD,uiDim> &inData) {
+      RTIFixedArray(std::array<T_MOD,uiDim> &inData) {
         ptrData = nullptr;
         m_uiSizeData = 0;
         get(inData);
@@ -631,7 +632,7 @@ namespace HLA {
         memcpy(reinterpret_cast<void*>(ptrData), input_data,m_uiSizeData);
       }
 
-      void get(FixedArray<T_MOD,uiDim> const & inData) {
+      void get(std::array<T_MOD,uiDim> const & inData) {
         unsigned uiSizeEl, uiSizeData, P;
         T_FOM tmpFOMobj;
         m_uiSizeData = 0;
@@ -705,7 +706,7 @@ namespace HLA {
         return m_uiSizeData;
       }
 
-      void set (FixedArray<T_MOD,uiDim>& obj){
+      void set (std::array<T_MOD,uiDim>& obj){
         unsigned uiSizeEl, P;
         T_FOM objFOM;
         unsigned uiSizeData = 0;

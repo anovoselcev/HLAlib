@@ -32,22 +32,22 @@ namespace HLA {
     std::string _ExceptionMessage;
   };
 
-  #define EXCEPTION(A)                                        \
-    class A : public ExceptionForRTI                                 \
-    {                                                             \
-      public:                                                     \
+  #define EXCEPTION(A)                                        			\
+    class A : public ExceptionForRTI                                 	\
+    {                                                             		\
+      public:                                                     		\
       A (const std::string& strEx)    : ExceptionForRTI(strEx) {};      \
-      A (const wchar_t *const& wchEx) : ExceptionForRTI(wchEx) {};   \
-      A (const std::wstring& wstrEx)  : ExceptionForRTI(wstrEx) {};   \
+      A (const wchar_t *const& wchEx) : ExceptionForRTI(wchEx) {};   	\
+      A (const std::wstring& wstrEx)  : ExceptionForRTI(wstrEx) {};   	\
     };
 
-  #define EXCEPTION_2_ARGS(A, STR)                            \
-    class A : public ExceptionForRTI                                 \
-    {                                                             \
-      public:                                                     \
-      A (const std::string& strEx=std::string("")) : ExceptionForRTI(STR+strEx) {};  \
-      A (const wchar_t *const& wchEx)              : ExceptionForRTI(wchEx)  {};  \
-      A (const std::wstring& wstrEx)               : ExceptionForRTI(wstrEx)  {};  \
+  #define EXCEPTION_2_ARGS(A, STR)                            						\
+    class A : public ExceptionForRTI                                 				\
+    {                                                             					\
+      public:                                                     					\
+      A (const std::string& strEx=std::string("")) : ExceptionForRTI(STR+strEx) {}; \
+      A (const wchar_t *const& wchEx)              : ExceptionForRTI(wchEx)  {};  	\
+      A (const std::wstring& wstrEx)               : ExceptionForRTI(wstrEx)  {};  	\
     };
 
   EXCEPTION_2_ARGS(EndOfFile, "Достигнут конец файла")

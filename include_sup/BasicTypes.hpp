@@ -18,10 +18,8 @@
 #endif
 
 #include <RTI/RTI1516.h>
-
-#ifndef WIN32
 namespace HLA {
-
+#ifndef WIN32
     using Integer16BE = int16_t;
     using Integer32BE = int32_t;
     using Integer64BE = int64_t;
@@ -45,42 +43,44 @@ namespace HLA {
     using Unsignedinteger32BE = uint32_t;
     using Unsignedinteger64BE = uint64_t;
     #else
-    using Integer16BE = __int16;
-    using Integer32BE = __int32;
-    using Integer64BE = __int64;
-    using OctetPairBE = unsigned __int16;
-    using Float32BE   = float;
-    using Float64BE   = double;
+    typedef __int16 Integer16BE;
+    typedef __int32 Integer32BE;
+    typedef __int64 Integer64BE;
+    typedef unsigned __int16 OctetPairBE;
+    typedef float Float32BE;
+    typedef double Float64BE;
 
-    using Octet         = unsigned char;
-    using Byte          = unsigned char;
-    using Integer16LE   = __int16;
-    using Integer32LE   = __int32;
-    using OctetPairLE   = unsigned __int16;
-    using Float32LE     = float;
-    using Float64LE     = double;
-    using UnsignedShort = unsigned __int16;
-    using Unsigned32LE  = unsigned __int32;
-    using Unsigned64LE  = unsigned __int64;
+    typedef unsigned char Octet;
+    typedef unsigned char Byte;
+    typedef __int16 Integer16LE;
+    typedef __int32 Integer32LE;
+    typedef __int64 Integer64LE;
+    typedef unsigned __int16 OctetPairLE;
+    typedef float Float32LE;
+    typedef double Float64LE;
+    typedef unsigned __int16 UnsignedShort;
+    typedef unsigned __int32 Unsigned32LE;
+    typedef unsigned __int64 Unsigned64LE;
 
-    using Unsignedinteger16BE = unsigned __int16;
-    using Unsignedinteger32BE = unsigned __int32;
-    using Unsignedinteger64BE = unsigned __int64;
+    typedef unsigned __int16 Unsignedinteger16BE;
+    typedef unsigned __int32 Unsignedinteger32BE;
+    typedef unsigned __int64 Unsignedinteger64BE;
     #endif
 
 
     using ASCIIchar     = Octet;
+    using Char          = char;
     using unicodeChar   = OctetPairBE;
     using Integer64Time = Integer64BE;
     using Float64Time   = Float64BE;
 
     using ASCIIstring = std::string;
+    using String = std::string;
 
     enum Boolean : Integer32BE {
       HLAfalse = 0,
       HLAtrue = 1
     };
-
     void initializeStep(int64_t step);
 
     void initializeMOD(Octet&);

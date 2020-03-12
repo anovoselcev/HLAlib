@@ -33,7 +33,7 @@ namespace UPIM{
         size_t DataAttributeHash::operator ()(const DataAttribute& attr) const{
             size_t h1 = qHash(attr.GetName());
             size_t h2 = qHash(attr.GetOwner());
-            size_t h3 = qHash(attr.GetValue().toChar());
+            size_t h3 = qHash(attr.GetValue().toByteArray());
             size_t h4 = qHash(attr.GetSemantic());
             return h4+h3*199+h2*199*199+h1*199*199*199;
 		}

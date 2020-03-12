@@ -20,7 +20,8 @@ template <class T, unsigned mem, bool blLE=true>
     public:
 
       SimpleData() {
-        m_data=0;
+        //if(std::is_same<T,ASCIIstring>::value)
+            m_data=0;
       }
 
       SimpleData(SimpleData& obj);
@@ -158,5 +159,8 @@ template <class T, unsigned mem, bool blLE=true>
     using RTIUnsignedShort  = SimpleData<UnsignedShort, 2, true>;
     using RTIUnsigned32LE   = SimpleData<Unsigned32LE, 4, true> ;
     using RTIUnsigned64LE   = SimpleData<Unsigned64LE, 8, true>;
+    using RTIchar           = SimpleData<Char,2,true>;
+    using RTIunicodeChar    = SimpleData<unicodeChar,2,true>;
+    using RTIASCIIchar      = SimpleData<ASCIIchar,2,true>;
   }
 #endif // BASICCONVERTER_HPP
