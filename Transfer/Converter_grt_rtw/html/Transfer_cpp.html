@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="./js/coder_app.js"></script>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="./rtwreport_utils.js"></script>
+<script type="text/javascript" src="./rtwannotate.js"></script>
+<link rel="stylesheet" type="text/css" href="./css/coder_app.css"/>
+</head>
+<body onload="srcFileOnload();">
+<pre id="code">
+<table class="code" id="codeTbl">
+<tr name="1" id="1">
+<td><a id="l1" class='ln'>1</a></td><td><span class="pp">#include "Transfer.hpp"</span></td></tr>
+<tr name="2" id="2">
+<td><a id="l2" class='ln'>2</a></td><td><span class="kw">namespace</span> <a id="2c11" class="tk">UPIM</a> <span class="br">{</span></td></tr>
+<tr name="3" id="3">
+<td><a id="l3" class='ln'>3</a></td><td>    <span class="kw">using</span> <span class="kw">namespace</span>  <a id="3c22" class="tk">rti1516e</a>;</td></tr>
+<tr name="4" id="4">
+<td><a id="l4" class='ln'>4</a></td><td>    <a id="4c5" class="tk">Transfer</a>::<a id="4c15" class="tk">Transfer</a>() <a id="4c26" class="tk">noexcept</a><span class="br">{</span><span class="br">}</span></td></tr>
+<tr name="5" id="5">
+<td><a id="l5" class='ln'>5</a></td><td></td></tr>
+<tr name="6" id="6">
+<td><a id="l6" class='ln'>6</a></td><td>    <a id="6c5" class="tk">Transfer</a>::<a id="6c15" class="tk">Transfer</a>(<span class="kw">const</span> <a id="6c30" class="tk">std</a>::<a id="6c35" class="tk">wstring</a><a id="6c42" class="tk">&amp;</a> <a id="6c44" class="tk">name</a>,</td></tr>
+<tr name="7" id="7">
+<td><a id="l7" class='ln'>7</a></td><td>                             <span class="kw">const</span> <a id="7c36" class="tk">std</a>::<a id="7c41" class="tk">wstring</a><a id="7c48" class="tk">&amp;</a> <a id="7c50" class="tk">type</a>,</td></tr>
+<tr name="8" id="8">
+<td><a id="l8" class='ln'>8</a></td><td>                             <span class="kw">const</span> <a id="8c36" class="tk">std</a>::<a id="8c41" class="tk">wstring</a><a id="8c48" class="tk">&amp;</a> <a id="8c50" class="tk">FOMname</a>,</td></tr>
+<tr name="9" id="9">
+<td><a id="l9" class='ln'>9</a></td><td>                             <span class="kw">const</span> <a id="9c36" class="tk">std</a>::<a id="9c41" class="tk">wstring</a><a id="9c48" class="tk">&amp;</a> <a id="9c50" class="tk">ip</a>,</td></tr>
+<tr name="10" id="10">
+<td><a id="l10" class='ln'>10</a></td><td>                             <span class="kw">const</span> <a id="10c36" class="tk">std</a>::<a id="10c41" class="tk">wstring</a><a id="10c48" class="tk">&amp;</a> <a id="10c50" class="tk">fname</a>) <a id="10c57" class="tk">noexcept</a><a id="10c65" class="tk">:</a></td></tr>
+<tr name="11" id="11">
+<td><a id="l11" class='ln'>11</a></td><td>                                   <a id="11c36" class="tk">UPIMFederate</a>(<a id="11c49" class="tk">name</a>,<a id="11c54" class="tk">type</a>,<a id="11c59" class="tk">FOMname</a>,<a id="11c67" class="tk">ip</a>,<a id="11c70" class="tk">fname</a>)<span class="br">{</span><span class="br">}</span></td></tr>
+<tr name="12" id="12">
+<td><a id="l12" class='ln'>12</a></td><td></td></tr>
+<tr name="13" id="13">
+<td><a id="l13" class='ln'>13</a></td><td></td></tr>
+<tr name="14" id="14">
+<td><a id="l14" class='ln'>14</a></td><td>    <a id="14c5" class="tk">Transfer</a>::<a id="14c15" class="tk">Transfer</a>(<a id="14c24" class="tk">std</a>::<a id="14c29" class="tk">wstring</a><a id="14c36" class="tk">&amp;&amp;</a> <a id="14c39" class="tk">name</a>,</td></tr>
+<tr name="15" id="15">
+<td><a id="l15" class='ln'>15</a></td><td>                             <a id="15c30" class="tk">std</a>::<a id="15c35" class="tk">wstring</a><a id="15c42" class="tk">&amp;&amp;</a> <a id="15c45" class="tk">type</a>,</td></tr>
+<tr name="16" id="16">
+<td><a id="l16" class='ln'>16</a></td><td>                             <a id="16c30" class="tk">std</a>::<a id="16c35" class="tk">wstring</a><a id="16c42" class="tk">&amp;&amp;</a> <a id="16c45" class="tk">FOMname</a>,</td></tr>
+<tr name="17" id="17">
+<td><a id="l17" class='ln'>17</a></td><td>                             <a id="17c30" class="tk">std</a>::<a id="17c35" class="tk">wstring</a><a id="17c42" class="tk">&amp;&amp;</a> <a id="17c45" class="tk">ip</a>,</td></tr>
+<tr name="18" id="18">
+<td><a id="l18" class='ln'>18</a></td><td>                             <a id="18c30" class="tk">std</a>::<a id="18c35" class="tk">wstring</a><a id="18c42" class="tk">&amp;&amp;</a> <a id="18c45" class="tk">fname</a>) <a id="18c52" class="tk">noexcept</a><a id="18c60" class="tk">:</a></td></tr>
+<tr name="19" id="19">
+<td><a id="l19" class='ln'>19</a></td><td>                                    <a id="19c37" class="tk">UPIMFederate</a>(<a id="19c50" class="tk">std</a>::<a id="19c55" class="tk">move</a>(<a id="19c60" class="tk">name</a>),<a id="19c66" class="tk">std</a>::<a id="19c71" class="tk">move</a>(<a id="19c76" class="tk">type</a>),<a id="19c82" class="tk">std</a>::<a id="19c87" class="tk">move</a>(<a id="19c92" class="tk">FOMname</a>),<a id="19c101" class="tk">std</a>::<a id="19c106" class="tk">move</a>(<a id="19c111" class="tk">ip</a>),<a id="19c115" class="tk">std</a>::<a id="19c120" class="tk">move</a>(<a id="19c125" class="tk">fname</a>))<span class="br">{</span><span class="br">}</span></td></tr>
+<tr name="20" id="20">
+<td><a id="l20" class='ln'>20</a></td><td></td></tr>
+<tr name="21" id="21">
+<td><a id="l21" class='ln'>21</a></td><td>    <span class="kw">void</span> <a id="21c10" class="tk">Transfer</a>::<a id="21c20" class="tk">SendToRTI</a>(<span class="kw">double</span> <a id="21c37" class="tk">value</a>)<span class="br">{</span></td></tr>
+<tr name="22" id="22">
+<td><a id="l22" class='ln'>22</a></td><td>        <a id="22c9" class="tk">VariableLengthData</a> <a id="22c28" class="tk">v1</a>,<a id="22c31" class="tk">v2</a>,<a id="22c34" class="tk">v3</a>;</td></tr>
+<tr name="23" id="23">
+<td><a id="l23" class='ln'>23</a></td><td>        <a id="23c9" class="tk">Staff</a> <a id="23c15" class="tk">d</a>,<a id="23c17" class="tk">p</a>;</td></tr>
+<tr name="24" id="24">
+<td><a id="l24" class='ln'>24</a></td><td>        <a id="24c9" class="tk">RTIStaff</a> <a id="24c18" class="tk">s</a>;</td></tr>
+<tr name="25" id="25">
+<td><a id="l25" class='ln'>25</a></td><td>        <a id="25c9" class="tk">d</a>.<a id="25c11" class="tk">f</a> = <a id="25c15" class="tk">value</a>;</td></tr>
+<tr name="26" id="26">
+<td><a id="l26" class='ln'>26</a></td><td>        <a id="26c9" class="tk">d</a>.<a id="26c11" class="tk">b</a> = false;</td></tr>
+<tr name="27" id="27">
+<td><a id="l27" class='ln'>27</a></td><td>        <a id="27c9" class="tk">s</a>.<a id="27c11" class="tk">get</a>(<a id="27c15" class="tk">d</a>);</td></tr>
+<tr name="28" id="28">
+<td><a id="l28" class='ln'>28</a></td><td>        <a id="28c9" class="tk">s</a>.<a id="28c11" class="tk">setDataToRTI</a>(<a id="28c24" class="tk">v1</a>);</td></tr>
+<tr name="29" id="29">
+<td><a id="l29" class='ln'>29</a></td><td>        <a id="29c9" class="tk">RTIStaff</a> <a id="29c18" class="tk">r</a>;</td></tr>
+<tr name="30" id="30">
+<td><a id="l30" class='ln'>30</a></td><td>        <a id="30c9" class="tk">r</a>.<a id="30c11" class="tk">getDataFromRTI</a>(<a id="30c26" class="tk">v1</a>);</td></tr>
+<tr name="31" id="31">
+<td><a id="l31" class='ln'>31</a></td><td>        <a id="31c9" class="tk">r</a>.<a id="31c11" class="tk">set</a>(<a id="31c15" class="tk">p</a>);</td></tr>
+<tr name="32" id="32">
+<td><a id="l32" class='ln'>32</a></td><td>        <a id="32c9" class="tk">AttributeHandleValueMap</a> <a id="32c33" class="tk">m</a>;</td></tr>
+<tr name="33" id="33">
+<td><a id="l33" class='ln'>33</a></td><td>        <a id="33c9" class="tk">m</a>[<a id="33c11" class="tk">_AttributesMap</a>[<a id="33c26" class="tk">_MyClass</a>][L"Aim"]] = <a id="33c47" class="tk">v1</a>;</td></tr>
+<tr name="34" id="34">
+<td><a id="l34" class='ln'>34</a></td><td>        <a id="34c9" class="tk">HLA</a>::<a id="34c14" class="tk">RTIASCIIstring</a> <a id="34c29" class="tk">str</a>;</td></tr>
+<tr name="35" id="35">
+<td><a id="l35" class='ln'>35</a></td><td>        <a id="35c9" class="tk">HLA</a>::<a id="35c14" class="tk">Vector</a><a id="35c20" class="tk">&lt;</a><a id="35c21" class="tk">HLA</a>::<a id="35c26" class="tk">Float64BE</a><a id="35c35" class="tk">&gt;</a> <a id="35c37" class="tk">vec</a>(1'000'00,1.2);</td></tr>
+<tr name="36" id="36">
+<td><a id="l36" class='ln'>36</a></td><td>        <a id="36c9" class="tk">HLA</a>::<a id="36c14" class="tk">RTIvariableArray</a><a id="36c30" class="tk">&lt;</a><a id="36c31" class="tk">HLA</a>::<a id="36c36" class="tk">RTIfloat64BE</a>,<a id="36c49" class="tk">HLA</a>::<a id="36c54" class="tk">Float64BE</a><a id="36c63" class="tk">&gt;</a> <a id="36c65" class="tk">varr</a>;</td></tr>
+<tr name="37" id="37">
+<td><a id="l37" class='ln'>37</a></td><td>        <a id="37c9" class="tk">HLA</a>::<a id="37c14" class="tk">RTIFixedArray</a><a id="37c27" class="tk">&lt;</a><a id="37c28" class="tk">HLA</a>::<a id="37c33" class="tk">RTIchar</a>,<a id="37c41" class="tk">HLA</a>::<a id="37c46" class="tk">Char</a>,1'000'00,2<a id="37c61" class="tk">&gt;</a> <a id="37c63" class="tk">arr</a>;</td></tr>
+<tr name="38" id="38">
+<td><a id="l38" class='ln'>38</a></td><td>        <a id="38c9" class="tk">varr</a>.<a id="38c14" class="tk">get</a>(<a id="38c18" class="tk">vec</a>);</td></tr>
+<tr name="39" id="39">
+<td><a id="l39" class='ln'>39</a></td><td>        <a id="39c9" class="tk">varr</a>.<a id="39c14" class="tk">setDataToRTI</a>(<a id="39c27" class="tk">v2</a>);</td></tr>
+<tr name="40" id="40">
+<td><a id="l40" class='ln'>40</a></td><td>        <a id="40c9" class="tk">m</a>[<a id="40c11" class="tk">_AttributesMap</a>[<a id="40c26" class="tk">_MyClass</a>][L"Var"]] = <a id="40c47" class="tk">v2</a>;</td></tr>
+<tr name="41" id="41">
+<td><a id="l41" class='ln'>41</a></td><td>        <a id="41c9" class="tk">HLA</a>::<a id="41c14" class="tk">Array</a><a id="41c19" class="tk">&lt;</a><a id="41c20" class="tk">HLA</a>::<a id="41c25" class="tk">Char</a>,1'000'00<a id="41c38" class="tk">&gt;</a> <a id="41c40" class="tk">a</a>;</td></tr>
+<tr name="42" id="42">
+<td><a id="l42" class='ln'>42</a></td><td>        <a id="42c9" class="tk">a</a>.<a id="42c11" class="tk">fill</a>('2');</td></tr>
+<tr name="43" id="43">
+<td><a id="l43" class='ln'>43</a></td><td>        <a id="43c9" class="tk">arr</a>.<a id="43c13" class="tk">get</a>(<a id="43c17" class="tk">a</a>);</td></tr>
+<tr name="44" id="44">
+<td><a id="l44" class='ln'>44</a></td><td>        <a id="44c9" class="tk">arr</a>.<a id="44c13" class="tk">setDataToRTI</a>(<a id="44c26" class="tk">v3</a>);</td></tr>
+<tr name="45" id="45">
+<td><a id="l45" class='ln'>45</a></td><td>        <a id="45c9" class="tk">m</a>[<a id="45c11" class="tk">_AttributesMap</a>[<a id="45c26" class="tk">_MyClass</a>][L"Ar"]] = <a id="45c46" class="tk">v3</a>;</td></tr>
+<tr name="46" id="46">
+<td><a id="l46" class='ln'>46</a></td><td>         <a id="46c10" class="tk">_rtiAmbassador</a>-&gt;<a id="46c26" class="tk">updateAttributeValues</a>(<a id="46c48" class="tk">_MyInstanceID</a>,<a id="46c62" class="tk">m</a>,<a id="46c64" class="tk">VariableLengthData</a>());</td></tr>
+<tr name="47" id="47">
+<td><a id="l47" class='ln'>47</a></td><td>    <span class="br">}</span></td></tr>
+<tr name="48" id="48">
+<td><a id="l48" class='ln'>48</a></td><td></td></tr>
+<tr name="49" id="49">
+<td><a id="l49" class='ln'>49</a></td><td>    <span class="kw">void</span> <a id="49c10" class="tk">Transfer</a>::<a id="49c20" class="tk">reflectAttributeValues</a>(<a id="49c43" class="tk">rti1516e</a>::<a id="49c53" class="tk">ObjectInstanceHandle</a> <a id="49c74" class="tk">theObject</a>,</td></tr>
+<tr name="50" id="50">
+<td><a id="l50" class='ln'>50</a></td><td>                                              <span class="kw">const</span> <a id="50c53" class="tk">rti1516e</a>::<a id="50c63" class="tk">AttributeHandleValueMap</a> <a id="50c87" class="tk">&amp;</a><a id="50c88" class="tk">theAttributeValues</a>,</td></tr>
+<tr name="51" id="51">
+<td><a id="l51" class='ln'>51</a></td><td>                                              <span class="kw">const</span> <a id="51c53" class="tk">rti1516e</a>::<a id="51c63" class="tk">VariableLengthData</a> <a id="51c82" class="tk">&amp;</a><a id="51c83" class="tk">theUserSuppliedTag</a>,</td></tr>
+<tr name="52" id="52">
+<td><a id="l52" class='ln'>52</a></td><td>                                              <a id="52c47" class="tk">rti1516e</a>::<a id="52c57" class="tk">OrderType</a> <a id="52c67" class="tk">sentOrder</a>,</td></tr>
+<tr name="53" id="53">
+<td><a id="l53" class='ln'>53</a></td><td>                                              <a id="53c47" class="tk">rti1516e</a>::<a id="53c57" class="tk">TransportationType</a> <a id="53c76" class="tk">theType</a>,</td></tr>
+<tr name="54" id="54">
+<td><a id="l54" class='ln'>54</a></td><td>                                              <a id="54c47" class="tk">rti1516e</a>::<a id="54c57" class="tk">SupplementalReflectInfo</a> <a id="54c81" class="tk">theReflectInfo</a>)</td></tr>
+<tr name="55" id="55">
+<td><a id="l55" class='ln'>55</a></td><td>    <span class="kw">throw</span> (<a id="55c12" class="tk">rti1516e</a>::<a id="55c22" class="tk">FederateInternalError</a>)<span class="br">{</span></td></tr>
+<tr name="56" id="56">
+<td><a id="l56" class='ln'>56</a></td><td>        <a id="56c9" class="tk">Staff</a> <a id="56c15" class="tk">d</a>;</td></tr>
+<tr name="57" id="57">
+<td><a id="l57" class='ln'>57</a></td><td>        <a id="57c9" class="tk">RTIStaff</a> <a id="57c18" class="tk">t</a>;</td></tr>
+<tr name="58" id="58">
+<td><a id="l58" class='ln'>58</a></td><td>        <a id="58c9" class="tk">HLA</a>::<a id="58c14" class="tk">RTIvariableArray</a><a id="58c30" class="tk">&lt;</a><a id="58c31" class="tk">HLA</a>::<a id="58c36" class="tk">RTIfloat64BE</a>,<a id="58c49" class="tk">HLA</a>::<a id="58c54" class="tk">Float64BE</a><a id="58c63" class="tk">&gt;</a> <a id="58c65" class="tk">varr</a>;</td></tr>
+<tr name="59" id="59">
+<td><a id="l59" class='ln'>59</a></td><td>        <a id="59c9" class="tk">HLA</a>::<a id="59c14" class="tk">RTIFixedArray</a><a id="59c27" class="tk">&lt;</a><a id="59c28" class="tk">HLA</a>::<a id="59c33" class="tk">RTIchar</a>,<a id="59c41" class="tk">HLA</a>::<a id="59c46" class="tk">Char</a>,1'000'00,2<a id="59c61" class="tk">&gt;</a> <a id="59c63" class="tk">arr</a>;</td></tr>
+<tr name="60" id="60">
+<td><a id="l60" class='ln'>60</a></td><td>        <a id="60c9" class="tk">HLA</a>::<a id="60c14" class="tk">Vector</a><a id="60c20" class="tk">&lt;</a><a id="60c21" class="tk">HLA</a>::<a id="60c26" class="tk">Float64BE</a><a id="60c35" class="tk">&gt;</a> <a id="60c37" class="tk">vec</a>;</td></tr>
+<tr name="61" id="61">
+<td><a id="l61" class='ln'>61</a></td><td>        <a id="61c9" class="tk">HLA</a>::<a id="61c14" class="tk">Array</a><a id="61c19" class="tk">&lt;</a><a id="61c20" class="tk">HLA</a>::<a id="61c25" class="tk">Char</a>,1'000'00<a id="61c38" class="tk">&gt;</a> <a id="61c40" class="tk">a</a>;</td></tr>
+<tr name="62" id="62">
+<td><a id="l62" class='ln'>62</a></td><td>        <a id="62c9" class="tk">t</a>.<a id="62c11" class="tk">getDataFromRTI</a>(<a id="62c26" class="tk">theAttributeValues</a>.<a id="62c45" class="tk">find</a>(<a id="62c50" class="tk">_AttributesMap</a>[<a id="62c65" class="tk">_MyClass</a>][L"Aim"])-&gt;<a id="62c85" class="tk">second</a>);</td></tr>
+<tr name="63" id="63">
+<td><a id="l63" class='ln'>63</a></td><td>        <a id="63c9" class="tk">varr</a>.<a id="63c14" class="tk">getDataFromRTI</a>(<a id="63c29" class="tk">theAttributeValues</a>.<a id="63c48" class="tk">find</a>(<a id="63c53" class="tk">_AttributesMap</a>[<a id="63c68" class="tk">_MyClass</a>][L"Var"])-&gt;<a id="63c88" class="tk">second</a>);</td></tr>
+<tr name="64" id="64">
+<td><a id="l64" class='ln'>64</a></td><td>        <a id="64c9" class="tk">arr</a>.<a id="64c13" class="tk">getDataFromRTI</a>(<a id="64c28" class="tk">theAttributeValues</a>.<a id="64c47" class="tk">find</a>(<a id="64c52" class="tk">_AttributesMap</a>[<a id="64c67" class="tk">_MyClass</a>][L"Ar"])-&gt;<a id="64c86" class="tk">second</a>);</td></tr>
+<tr name="65" id="65">
+<td><a id="l65" class='ln'>65</a></td><td>        <a id="65c9" class="tk">t</a>.<a id="65c11" class="tk">set</a>(<a id="65c15" class="tk">d</a>);</td></tr>
+<tr name="66" id="66">
+<td><a id="l66" class='ln'>66</a></td><td>        <a id="66c9" class="tk">varr</a>.<a id="66c14" class="tk">set</a>(<a id="66c18" class="tk">vec</a>);</td></tr>
+<tr name="67" id="67">
+<td><a id="l67" class='ln'>67</a></td><td>        <a id="67c9" class="tk">arr</a>.<a id="67c13" class="tk">set</a>(<a id="67c17" class="tk">a</a>);</td></tr>
+<tr name="68" id="68">
+<td><a id="l68" class='ln'>68</a></td><td>        <span class="ct">//std::wcout &lt;&lt; std::wstring(d.s.data()) &lt;&lt; " " &lt;&lt; wchar_t(d.c) &lt;&lt; std::endl;</span></td></tr>
+<tr name="69" id="69">
+<td><a id="l69" class='ln'>69</a></td><td>        <a id="69c9" class="tk">std</a>::<a id="69c14" class="tk">wcout</a> <a id="69c20" class="tk">&lt;&lt;</a> <a id="69c23" class="tk">vec</a>[0] <a id="69c30" class="tk">&lt;&lt;</a> " " <a id="69c37" class="tk">&lt;&lt;</a> <a id="69c40" class="tk">vec</a>[3] <a id="69c47" class="tk">&lt;&lt;</a> " " <a id="69c54" class="tk">&lt;&lt;</a> <a id="69c57" class="tk">vec</a>.<a id="69c61" class="tk">size</a>() <a id="69c68" class="tk">&lt;&lt;</a> <a id="69c71" class="tk">std</a>::<a id="69c76" class="tk">endl</a>;</td></tr>
+<tr name="70" id="70">
+<td><a id="l70" class='ln'>70</a></td><td>        <a id="70c9" class="tk">std</a>::<a id="70c14" class="tk">wcout</a> <a id="70c20" class="tk">&lt;&lt;</a> <a id="70c23" class="tk">a</a>[0] <a id="70c28" class="tk">&lt;&lt;</a> " " <a id="70c35" class="tk">&lt;&lt;</a> <a id="70c38" class="tk">a</a>[33] <a id="70c44" class="tk">&lt;&lt;</a> <a id="70c47" class="tk">std</a>::<a id="70c52" class="tk">endl</a>;</td></tr>
+<tr name="71" id="71">
+<td><a id="l71" class='ln'>71</a></td><td>    <span class="br">}</span></td></tr>
+<tr name="72" id="72">
+<td><a id="l72" class='ln'>72</a></td><td></td></tr>
+<tr name="73" id="73">
+<td><a id="l73" class='ln'>73</a></td><td>    <span class="kw">void</span> <a id="73c10" class="tk">RTIStaff</a>::<a id="73c20" class="tk">getDataMax</a>(<span class="kw">void</span><a id="73c35" class="tk">*</a> <a id="73c37" class="tk">ptrSource</a>, <span class="kw">unsigned</span> <span class="kw">long</span> <a id="73c62" class="tk">uiMaxSize</a>)<span class="br">{</span></td></tr>
+<tr name="74" id="74">
+<td><a id="l74" class='ln'>74</a></td><td>        <a id="74c9" class="tk">HLA</a>::<a id="74c14" class="tk">RTIbyte</a>  <a id="74c23" class="tk">field0</a>;</td></tr>
+<tr name="75" id="75">
+<td><a id="l75" class='ln'>75</a></td><td>        <a id="75c9" class="tk">HLA</a>::<a id="75c14" class="tk">RTIfloat64BE</a> <a id="75c27" class="tk">field1</a>;</td></tr>
+<tr name="76" id="76">
+<td><a id="l76" class='ln'>76</a></td><td>        <a id="76c9" class="tk">HLA</a>::<a id="76c14" class="tk">RTIinteger16BE</a>  <a id="76c30" class="tk">field2</a>;</td></tr>
+<tr name="77" id="77">
+<td><a id="l77" class='ln'>77</a></td><td>        <a id="77c9" class="tk">HLA</a>::<a id="77c14" class="tk">RTIstring</a> <a id="77c24" class="tk">field3</a>;</td></tr>
+<tr name="78" id="78">
+<td><a id="l78" class='ln'>78</a></td><td>        <a id="78c9" class="tk">HLA</a>::<a id="78c14" class="tk">RTIchar</a> <a id="78c22" class="tk">field4</a>;</td></tr>
+<tr name="79" id="79">
+<td><a id="l79" class='ln'>79</a></td><td>        <span class="kw">unsigned</span> <a id="79c18" class="tk">offset</a> = 0;</td></tr>
+<tr name="80" id="80">
+<td><a id="l80" class='ln'>80</a></td><td>        <span class="ct">// Определяем размер поля данных</span></td></tr>
+<tr name="81" id="81">
+<td><a id="l81" class='ln'>81</a></td><td>        <a id="81c9" class="tk">F_offset</a><a id="81c17" class="tk">&lt;</a> <a id="81c19" class="tk">HLA</a>::<a id="81c24" class="tk">RTIbyte</a>, <a id="81c33" class="tk">HLA</a>::<a id="81c38" class="tk">RTIfloat64BE</a> <a id="81c51" class="tk">&gt;</a>(<a id="81c53" class="tk">field0</a>,<a id="81c60" class="tk">field1</a>,<a id="81c67" class="tk">offset</a>,<a id="81c74" class="tk">ptrSource</a>,<a id="81c84" class="tk">uiMaxSize</a>);</td></tr>
+<tr name="82" id="82">
+<td><a id="l82" class='ln'>82</a></td><td>        <a id="82c9" class="tk">F_offset</a><a id="82c17" class="tk">&lt;</a> <a id="82c19" class="tk">HLA</a>::<a id="82c24" class="tk">RTIfloat64BE</a>, <a id="82c38" class="tk">HLA</a>::<a id="82c43" class="tk">RTIinteger16BE</a> <a id="82c58" class="tk">&gt;</a>(<a id="82c60" class="tk">field1</a>,<a id="82c67" class="tk">field2</a>,<a id="82c74" class="tk">offset</a>,<a id="82c81" class="tk">ptrSource</a>,<a id="82c91" class="tk">uiMaxSize</a>);</td></tr>
+<tr name="83" id="83">
+<td><a id="l83" class='ln'>83</a></td><td>        <a id="83c9" class="tk">F_offset</a><a id="83c17" class="tk">&lt;</a> <a id="83c19" class="tk">HLA</a>::<a id="83c24" class="tk">RTIinteger16BE</a>, <a id="83c40" class="tk">HLA</a>::<a id="83c45" class="tk">RTIstring</a> <a id="83c55" class="tk">&gt;</a>(<a id="83c57" class="tk">field2</a>,<a id="83c64" class="tk">field3</a>,<a id="83c71" class="tk">offset</a>,<a id="83c78" class="tk">ptrSource</a>,<a id="83c88" class="tk">uiMaxSize</a>);</td></tr>
+<tr name="84" id="84">
+<td><a id="l84" class='ln'>84</a></td><td>        <a id="84c9" class="tk">F_offset</a><a id="84c17" class="tk">&lt;</a> <a id="84c19" class="tk">HLA</a>::<a id="84c24" class="tk">RTIstring</a>, <a id="84c35" class="tk">HLA</a>::<a id="84c40" class="tk">RTIchar</a> <a id="84c48" class="tk">&gt;</a>(<a id="84c50" class="tk">field3</a>,<a id="84c57" class="tk">field4</a>,<a id="84c64" class="tk">offset</a>,<a id="84c71" class="tk">ptrSource</a>,<a id="84c81" class="tk">uiMaxSize</a>);</td></tr>
+<tr name="85" id="85">
+<td><a id="l85" class='ln'>85</a></td><td>        <a id="85c9" class="tk">F_offsetLast</a><a id="85c21" class="tk">&lt;</a> <a id="85c23" class="tk">HLA</a>::<a id="85c28" class="tk">RTIchar</a> <a id="85c36" class="tk">&gt;</a>(<a id="85c38" class="tk">field4</a>,<a id="85c45" class="tk">offset</a>,<a id="85c52" class="tk">ptrSource</a>,<span class="kw">static_cast</span><a id="85c73" class="tk">&lt;</a><span class="kw">unsigned</span><a id="85c82" class="tk">&gt;</a>(<a id="85c84" class="tk">uiMaxSize</a>));</td></tr>
+<tr name="86" id="86">
+<td><a id="l86" class='ln'>86</a></td><td></td></tr>
+<tr name="87" id="87">
+<td><a id="l87" class='ln'>87</a></td><td>        <span class="ct">// Создаем новое поле данных и копируем туда данные;</span></td></tr>
+<tr name="88" id="88">
+<td><a id="l88" class='ln'>88</a></td><td></td></tr>
+<tr name="89" id="89">
+<td><a id="l89" class='ln'>89</a></td><td>        <span class="kw">if</span> (<a id="89c13" class="tk">ptrData</a><a id="89c20" class="tk">!=</a><a id="89c22" class="tk">nullptr</a>) <span class="kw">delete</span>[] <a id="89c40" class="tk">ptrData</a>;</td></tr>
+<tr name="90" id="90">
+<td><a id="l90" class='ln'>90</a></td><td>        <a id="90c9" class="tk">m_uiSizeData</a> = <a id="90c24" class="tk">offset</a>;</td></tr>
+<tr name="91" id="91">
+<td><a id="l91" class='ln'>91</a></td><td>        <a id="91c9" class="tk">ptrData</a> = <span class="kw">new</span> <a id="91c23" class="tk">HLA</a>::<a id="91c28" class="tk">Octet</a>[<a id="91c34" class="tk">m_uiSizeData</a>];</td></tr>
+<tr name="92" id="92">
+<td><a id="l92" class='ln'>92</a></td><td>        <a id="92c9" class="tk">memcpy</a>(<a id="92c16" class="tk">ptrData</a>, <a id="92c25" class="tk">ptrSource</a>, <a id="92c36" class="tk">m_uiSizeData</a>);</td></tr>
+<tr name="93" id="93">
+<td><a id="l93" class='ln'>93</a></td><td>    <span class="br">}</span></td></tr>
+<tr name="94" id="94">
+<td><a id="l94" class='ln'>94</a></td><td></td></tr>
+<tr name="95" id="95">
+<td><a id="l95" class='ln'>95</a></td><td>    <span class="kw">void</span> <a id="95c10" class="tk">RTIStaff</a>::<a id="95c20" class="tk">get</a>(<a id="95c24" class="tk">Staff</a> <span class="kw">const</span> <a id="95c36" class="tk">&amp;</a><a id="95c37" class="tk">obj</a>)<span class="br">{</span></td></tr>
+<tr name="96" id="96">
+<td><a id="l96" class='ln'>96</a></td><td>        <a id="96c9" class="tk">HLA</a>::<a id="96c14" class="tk">RTIbyte</a>  <a id="96c23" class="tk">field0</a>;</td></tr>
+<tr name="97" id="97">
+<td><a id="l97" class='ln'>97</a></td><td>        <a id="97c9" class="tk">HLA</a>::<a id="97c14" class="tk">RTIfloat64BE</a> <a id="97c27" class="tk">field1</a>;</td></tr>
+<tr name="98" id="98">
+<td><a id="l98" class='ln'>98</a></td><td>        <a id="98c9" class="tk">HLA</a>::<a id="98c14" class="tk">RTIinteger16BE</a>  <a id="98c30" class="tk">field2</a>;</td></tr>
+<tr name="99" id="99">
+<td><a id="l99" class='ln'>99</a></td><td>        <a id="99c9" class="tk">HLA</a>::<a id="99c14" class="tk">RTIstring</a> <a id="99c24" class="tk">field3</a>;</td></tr>
+<tr name="100" id="100">
+<td><a id="l100" class='ln'>100</a></td><td>        <a id="100c9" class="tk">HLA</a>::<a id="100c14" class="tk">RTIchar</a> <a id="100c22" class="tk">field4</a>;</td></tr>
+<tr name="101" id="101">
+<td><a id="l101" class='ln'>101</a></td><td>        <span class="kw">unsigned</span> <a id="101c18" class="tk">offset</a> = 0, <a id="101c30" class="tk">P</a>, <a id="101c33" class="tk">uiSize</a>, <a id="101c41" class="tk">mmOBV</a>;</td></tr>
+<tr name="102" id="102">
+<td><a id="l102" class='ln'>102</a></td><td>        <a id="102c9" class="tk">m_uiSizeData</a>=0;</td></tr>
+<tr name="103" id="103">
+<td><a id="l103" class='ln'>103</a></td><td>        <span class="ct">// 0-ое поле</span></td></tr>
+<tr name="104" id="104">
+<td><a id="l104" class='ln'>104</a></td><td>        <a id="104c9" class="tk">field0</a>.<a id="104c16" class="tk">get</a>(<a id="104c20" class="tk">obj</a>.<a id="104c24" class="tk">b</a>);</td></tr>
+<tr name="105" id="105">
+<td><a id="l105" class='ln'>105</a></td><td>        <a id="105c9" class="tk">uiSize</a> = <a id="105c18" class="tk">field0</a>.<a id="105c25" class="tk">getsize</a>();</td></tr>
+<tr name="106" id="106">
+<td><a id="l106" class='ln'>106</a></td><td></td></tr>
+<tr name="107" id="107">
+<td><a id="l107" class='ln'>107</a></td><td>        <span class="ct">// 1-ое поле</span></td></tr>
+<tr name="108" id="108">
+<td><a id="l108" class='ln'>108</a></td><td>        <a id="108c9" class="tk">field1</a>.<a id="108c16" class="tk">get</a>(<a id="108c20" class="tk">obj</a>.<a id="108c24" class="tk">f</a>);</td></tr>
+<tr name="109" id="109">
+<td><a id="l109" class='ln'>109</a></td><td>        <a id="109c9" class="tk">mmOBV</a> = <a id="109c17" class="tk">field1</a>.<a id="109c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="110" id="110">
+<td><a id="l110" class='ln'>110</a></td><td>        <a id="110c9" class="tk">P</a> = <a id="110c13" class="tk">HLA</a>::<a id="110c18" class="tk">Tools</a>::<a id="110c25" class="tk">getPendingBytes</a>(<a id="110c41" class="tk">offset</a><a id="110c47" class="tk">+</a><a id="110c48" class="tk">uiSize</a>,<a id="110c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="111" id="111">
+<td><a id="l111" class='ln'>111</a></td><td>        <a id="111c9" class="tk">offset</a> <a id="111c16" class="tk">+=</a> <a id="111c19" class="tk">uiSize</a><a id="111c25" class="tk">+</a><a id="111c26" class="tk">P</a>;</td></tr>
+<tr name="112" id="112">
+<td><a id="l112" class='ln'>112</a></td><td>        <a id="112c9" class="tk">uiSize</a> = <a id="112c18" class="tk">field1</a>.<a id="112c25" class="tk">getsize</a>();</td></tr>
+<tr name="113" id="113">
+<td><a id="l113" class='ln'>113</a></td><td>        <span class="ct">// 2-ое поле</span></td></tr>
+<tr name="114" id="114">
+<td><a id="l114" class='ln'>114</a></td><td>        <a id="114c9" class="tk">field2</a>.<a id="114c16" class="tk">get</a>(<a id="114c20" class="tk">obj</a>.<a id="114c24" class="tk">i</a>);</td></tr>
+<tr name="115" id="115">
+<td><a id="l115" class='ln'>115</a></td><td>        <a id="115c9" class="tk">mmOBV</a> = <a id="115c17" class="tk">field2</a>.<a id="115c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="116" id="116">
+<td><a id="l116" class='ln'>116</a></td><td>        <a id="116c9" class="tk">P</a> = <a id="116c13" class="tk">HLA</a>::<a id="116c18" class="tk">Tools</a>::<a id="116c25" class="tk">getPendingBytes</a>(<a id="116c41" class="tk">offset</a><a id="116c47" class="tk">+</a><a id="116c48" class="tk">uiSize</a>,<a id="116c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="117" id="117">
+<td><a id="l117" class='ln'>117</a></td><td>        <a id="117c9" class="tk">offset</a> <a id="117c16" class="tk">+=</a> <a id="117c19" class="tk">uiSize</a><a id="117c25" class="tk">+</a><a id="117c26" class="tk">P</a>;</td></tr>
+<tr name="118" id="118">
+<td><a id="l118" class='ln'>118</a></td><td>        <a id="118c9" class="tk">uiSize</a> = <a id="118c18" class="tk">field2</a>.<a id="118c25" class="tk">getsize</a>();</td></tr>
+<tr name="119" id="119">
+<td><a id="l119" class='ln'>119</a></td><td>        <span class="ct">// 3-e поле</span></td></tr>
+<tr name="120" id="120">
+<td><a id="l120" class='ln'>120</a></td><td>        <a id="120c9" class="tk">field3</a>.<a id="120c16" class="tk">get</a>(<a id="120c20" class="tk">obj</a>.<a id="120c24" class="tk">s</a>);</td></tr>
+<tr name="121" id="121">
+<td><a id="l121" class='ln'>121</a></td><td>        <a id="121c9" class="tk">mmOBV</a> = <a id="121c17" class="tk">field3</a>.<a id="121c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="122" id="122">
+<td><a id="l122" class='ln'>122</a></td><td>        <a id="122c9" class="tk">P</a> = <a id="122c13" class="tk">HLA</a>::<a id="122c18" class="tk">Tools</a>::<a id="122c25" class="tk">getPendingBytes</a>(<a id="122c41" class="tk">offset</a><a id="122c47" class="tk">+</a><a id="122c48" class="tk">uiSize</a>,<a id="122c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="123" id="123">
+<td><a id="l123" class='ln'>123</a></td><td>        <a id="123c9" class="tk">offset</a> <a id="123c16" class="tk">+=</a> <a id="123c19" class="tk">uiSize</a><a id="123c25" class="tk">+</a><a id="123c26" class="tk">P</a>;</td></tr>
+<tr name="124" id="124">
+<td><a id="l124" class='ln'>124</a></td><td>        <a id="124c9" class="tk">uiSize</a> = <a id="124c18" class="tk">field3</a>.<a id="124c25" class="tk">getsize</a>();</td></tr>
+<tr name="125" id="125">
+<td><a id="l125" class='ln'>125</a></td><td>        <span class="ct">// 4-ое поле</span></td></tr>
+<tr name="126" id="126">
+<td><a id="l126" class='ln'>126</a></td><td>        <a id="126c9" class="tk">field4</a>.<a id="126c16" class="tk">get</a>(<a id="126c20" class="tk">obj</a>.<a id="126c24" class="tk">c</a>);</td></tr>
+<tr name="127" id="127">
+<td><a id="l127" class='ln'>127</a></td><td>        <a id="127c9" class="tk">mmOBV</a> = <a id="127c17" class="tk">field3</a>.<a id="127c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="128" id="128">
+<td><a id="l128" class='ln'>128</a></td><td>        <a id="128c9" class="tk">P</a> = <a id="128c13" class="tk">HLA</a>::<a id="128c18" class="tk">Tools</a>::<a id="128c25" class="tk">getPendingBytes</a>(<a id="128c41" class="tk">offset</a><a id="128c47" class="tk">+</a><a id="128c48" class="tk">uiSize</a>,<a id="128c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="129" id="129">
+<td><a id="l129" class='ln'>129</a></td><td>        <a id="129c9" class="tk">offset</a> <a id="129c16" class="tk">+=</a> <a id="129c19" class="tk">uiSize</a><a id="129c25" class="tk">+</a><a id="129c26" class="tk">P</a>;</td></tr>
+<tr name="130" id="130">
+<td><a id="l130" class='ln'>130</a></td><td>        <a id="130c9" class="tk">uiSize</a> = <a id="130c18" class="tk">field4</a>.<a id="130c25" class="tk">getsize</a>();</td></tr>
+<tr name="131" id="131">
+<td><a id="l131" class='ln'>131</a></td><td></td></tr>
+<tr name="132" id="132">
+<td><a id="l132" class='ln'>132</a></td><td>        <a id="132c9" class="tk">offset</a> <a id="132c16" class="tk">+=</a> <a id="132c19" class="tk">uiSize</a>;</td></tr>
+<tr name="133" id="133">
+<td><a id="l133" class='ln'>133</a></td><td>        <a id="133c9" class="tk">m_uiSizeData</a> = <a id="133c24" class="tk">offset</a>;</td></tr>
+<tr name="134" id="134">
+<td><a id="l134" class='ln'>134</a></td><td>        <span class="kw">if</span> (<a id="134c13" class="tk">ptrData</a><a id="134c20" class="tk">!=</a><a id="134c22" class="tk">nullptr</a>) <span class="kw">delete</span>[] <a id="134c40" class="tk">ptrData</a>;</td></tr>
+<tr name="135" id="135">
+<td><a id="l135" class='ln'>135</a></td><td>        <a id="135c9" class="tk">ptrData</a> = <span class="kw">new</span> <a id="135c23" class="tk">HLA</a>::<a id="135c28" class="tk">Octet</a>[<a id="135c34" class="tk">m_uiSizeData</a>];</td></tr>
+<tr name="136" id="136">
+<td><a id="l136" class='ln'>136</a></td><td>        <a id="136c9" class="tk">offset</a> = 0;</td></tr>
+<tr name="137" id="137">
+<td><a id="l137" class='ln'>137</a></td><td>        <span class="ct">// 0-ое поле</span></td></tr>
+<tr name="138" id="138">
+<td><a id="l138" class='ln'>138</a></td><td>        <a id="138c9" class="tk">uiSize</a> = <a id="138c18" class="tk">field0</a>.<a id="138c25" class="tk">getsize</a>();</td></tr>
+<tr name="139" id="139">
+<td><a id="l139" class='ln'>139</a></td><td>        <a id="139c9" class="tk">field0</a>.<a id="139c16" class="tk">setData</a>(<a id="139c24" class="tk">ptrData</a><a id="139c31" class="tk">+</a><a id="139c32" class="tk">offset</a>,<a id="139c39" class="tk">uiSize</a>);</td></tr>
+<tr name="140" id="140">
+<td><a id="l140" class='ln'>140</a></td><td>        <span class="ct">// 1-ое поле</span></td></tr>
+<tr name="141" id="141">
+<td><a id="l141" class='ln'>141</a></td><td>        <a id="141c9" class="tk">mmOBV</a> = <a id="141c17" class="tk">field1</a>.<a id="141c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="142" id="142">
+<td><a id="l142" class='ln'>142</a></td><td>        <a id="142c9" class="tk">P</a> = <a id="142c13" class="tk">HLA</a>::<a id="142c18" class="tk">Tools</a>::<a id="142c25" class="tk">getPendingBytes</a>(<a id="142c41" class="tk">offset</a><a id="142c47" class="tk">+</a><a id="142c48" class="tk">uiSize</a>,<a id="142c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="143" id="143">
+<td><a id="l143" class='ln'>143</a></td><td>        <a id="143c9" class="tk">offset</a> <a id="143c16" class="tk">+=</a> <a id="143c19" class="tk">uiSize</a><a id="143c25" class="tk">+</a><a id="143c26" class="tk">P</a>;</td></tr>
+<tr name="144" id="144">
+<td><a id="l144" class='ln'>144</a></td><td>        <a id="144c9" class="tk">uiSize</a> = <a id="144c18" class="tk">field1</a>.<a id="144c25" class="tk">getsize</a>();</td></tr>
+<tr name="145" id="145">
+<td><a id="l145" class='ln'>145</a></td><td>        <a id="145c9" class="tk">field1</a>.<a id="145c16" class="tk">setData</a>(<a id="145c24" class="tk">ptrData</a><a id="145c31" class="tk">+</a><a id="145c32" class="tk">offset</a>,<a id="145c39" class="tk">uiSize</a>);</td></tr>
+<tr name="146" id="146">
+<td><a id="l146" class='ln'>146</a></td><td>        <span class="ct">// 2-ое поле</span></td></tr>
+<tr name="147" id="147">
+<td><a id="l147" class='ln'>147</a></td><td>        <a id="147c9" class="tk">mmOBV</a> = <a id="147c17" class="tk">field2</a>.<a id="147c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="148" id="148">
+<td><a id="l148" class='ln'>148</a></td><td>        <a id="148c9" class="tk">P</a> = <a id="148c13" class="tk">HLA</a>::<a id="148c18" class="tk">Tools</a>::<a id="148c25" class="tk">getPendingBytes</a>(<a id="148c41" class="tk">offset</a><a id="148c47" class="tk">+</a><a id="148c48" class="tk">uiSize</a>,<a id="148c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="149" id="149">
+<td><a id="l149" class='ln'>149</a></td><td>        <a id="149c9" class="tk">offset</a> <a id="149c16" class="tk">+=</a> <a id="149c19" class="tk">uiSize</a><a id="149c25" class="tk">+</a><a id="149c26" class="tk">P</a>;</td></tr>
+<tr name="150" id="150">
+<td><a id="l150" class='ln'>150</a></td><td>        <a id="150c9" class="tk">uiSize</a> = <a id="150c18" class="tk">field2</a>.<a id="150c25" class="tk">getsize</a>();</td></tr>
+<tr name="151" id="151">
+<td><a id="l151" class='ln'>151</a></td><td>        <a id="151c9" class="tk">field2</a>.<a id="151c16" class="tk">setData</a>(<a id="151c24" class="tk">ptrData</a><a id="151c31" class="tk">+</a><a id="151c32" class="tk">offset</a>,<a id="151c39" class="tk">uiSize</a>);</td></tr>
+<tr name="152" id="152">
+<td><a id="l152" class='ln'>152</a></td><td>        <span class="ct">// 3-е поле</span></td></tr>
+<tr name="153" id="153">
+<td><a id="l153" class='ln'>153</a></td><td>        <a id="153c9" class="tk">mmOBV</a> = <a id="153c17" class="tk">field3</a>.<a id="153c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="154" id="154">
+<td><a id="l154" class='ln'>154</a></td><td>        <a id="154c9" class="tk">P</a> = <a id="154c13" class="tk">HLA</a>::<a id="154c18" class="tk">Tools</a>::<a id="154c25" class="tk">getPendingBytes</a>(<a id="154c41" class="tk">offset</a><a id="154c47" class="tk">+</a><a id="154c48" class="tk">uiSize</a>,<a id="154c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="155" id="155">
+<td><a id="l155" class='ln'>155</a></td><td>        <a id="155c9" class="tk">offset</a> <a id="155c16" class="tk">+=</a> <a id="155c19" class="tk">uiSize</a><a id="155c25" class="tk">+</a><a id="155c26" class="tk">P</a>;</td></tr>
+<tr name="156" id="156">
+<td><a id="l156" class='ln'>156</a></td><td>        <a id="156c9" class="tk">uiSize</a> = <a id="156c18" class="tk">field3</a>.<a id="156c25" class="tk">getsize</a>();</td></tr>
+<tr name="157" id="157">
+<td><a id="l157" class='ln'>157</a></td><td>        <a id="157c9" class="tk">field3</a>.<a id="157c16" class="tk">setData</a>(<a id="157c24" class="tk">ptrData</a><a id="157c31" class="tk">+</a><a id="157c32" class="tk">offset</a>,<a id="157c39" class="tk">uiSize</a>);</td></tr>
+<tr name="158" id="158">
+<td><a id="l158" class='ln'>158</a></td><td>        <span class="ct">// 4-ое поле</span></td></tr>
+<tr name="159" id="159">
+<td><a id="l159" class='ln'>159</a></td><td>        <a id="159c9" class="tk">mmOBV</a> = <a id="159c17" class="tk">field4</a>.<a id="159c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="160" id="160">
+<td><a id="l160" class='ln'>160</a></td><td>        <a id="160c9" class="tk">P</a> = <a id="160c13" class="tk">HLA</a>::<a id="160c18" class="tk">Tools</a>::<a id="160c25" class="tk">getPendingBytes</a>(<a id="160c41" class="tk">offset</a><a id="160c47" class="tk">+</a><a id="160c48" class="tk">uiSize</a>,<a id="160c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="161" id="161">
+<td><a id="l161" class='ln'>161</a></td><td>        <a id="161c9" class="tk">offset</a> <a id="161c16" class="tk">+=</a> <a id="161c19" class="tk">uiSize</a><a id="161c25" class="tk">+</a><a id="161c26" class="tk">P</a>;</td></tr>
+<tr name="162" id="162">
+<td><a id="l162" class='ln'>162</a></td><td>        <a id="162c9" class="tk">uiSize</a> = <a id="162c18" class="tk">field4</a>.<a id="162c25" class="tk">getsize</a>();</td></tr>
+<tr name="163" id="163">
+<td><a id="l163" class='ln'>163</a></td><td>        <a id="163c9" class="tk">field4</a>.<a id="163c16" class="tk">setData</a>(<a id="163c24" class="tk">ptrData</a><a id="163c31" class="tk">+</a><a id="163c32" class="tk">offset</a>,<a id="163c39" class="tk">uiSize</a>);</td></tr>
+<tr name="164" id="164">
+<td><a id="l164" class='ln'>164</a></td><td>    <span class="br">}</span></td></tr>
+<tr name="165" id="165">
+<td><a id="l165" class='ln'>165</a></td><td></td></tr>
+<tr name="166" id="166">
+<td><a id="l166" class='ln'>166</a></td><td>    <span class="kw">void</span> <a id="166c10" class="tk">RTIStaff</a>::<a id="166c20" class="tk">set</a>(<a id="166c24" class="tk">Staff</a> <a id="166c30" class="tk">&amp;</a><a id="166c31" class="tk">obj</a>)<span class="br">{</span></td></tr>
+<tr name="167" id="167">
+<td><a id="l167" class='ln'>167</a></td><td>        <a id="167c9" class="tk">HLA</a>::<a id="167c14" class="tk">RTIbyte</a>  <a id="167c23" class="tk">field0</a>;</td></tr>
+<tr name="168" id="168">
+<td><a id="l168" class='ln'>168</a></td><td>        <a id="168c9" class="tk">HLA</a>::<a id="168c14" class="tk">RTIfloat64BE</a> <a id="168c27" class="tk">field1</a>;</td></tr>
+<tr name="169" id="169">
+<td><a id="l169" class='ln'>169</a></td><td>        <a id="169c9" class="tk">HLA</a>::<a id="169c14" class="tk">RTIinteger16BE</a>  <a id="169c30" class="tk">field2</a>;</td></tr>
+<tr name="170" id="170">
+<td><a id="l170" class='ln'>170</a></td><td>        <a id="170c9" class="tk">HLA</a>::<a id="170c14" class="tk">RTIstring</a> <a id="170c24" class="tk">field3</a>;</td></tr>
+<tr name="171" id="171">
+<td><a id="l171" class='ln'>171</a></td><td>        <a id="171c9" class="tk">HLA</a>::<a id="171c14" class="tk">RTIchar</a> <a id="171c22" class="tk">field4</a>;</td></tr>
+<tr name="172" id="172">
+<td><a id="l172" class='ln'>172</a></td><td>        <span class="ct">//********************************************</span></td></tr>
+<tr name="173" id="173">
+<td><a id="l173" class='ln'>173</a></td><td>        <span class="kw">unsigned</span> <a id="173c18" class="tk">offset</a> = 0, <a id="173c30" class="tk">P</a>, <a id="173c33" class="tk">uiSize</a>, <a id="173c41" class="tk">mmOBV</a>;</td></tr>
+<tr name="174" id="174">
+<td><a id="l174" class='ln'>174</a></td><td>        <span class="ct">//********************************************</span></td></tr>
+<tr name="175" id="175">
+<td><a id="l175" class='ln'>175</a></td><td>        <span class="ct">// 0-ое поле</span></td></tr>
+<tr name="176" id="176">
+<td><a id="l176" class='ln'>176</a></td><td>        <a id="176c9" class="tk">field0</a>.<a id="176c16" class="tk">getDataMax</a>(<a id="176c27" class="tk">ptrData</a><a id="176c34" class="tk">+</a><a id="176c35" class="tk">offset</a>,<a id="176c42" class="tk">m_uiSizeData</a><a id="176c54" class="tk">-</a><a id="176c55" class="tk">offset</a>);</td></tr>
+<tr name="177" id="177">
+<td><a id="l177" class='ln'>177</a></td><td>        <a id="177c9" class="tk">field0</a>.<a id="177c16" class="tk">set</a>(<a id="177c20" class="tk">obj</a>.<a id="177c24" class="tk">b</a>);</td></tr>
+<tr name="178" id="178">
+<td><a id="l178" class='ln'>178</a></td><td>        <a id="178c9" class="tk">uiSize</a> = <a id="178c18" class="tk">field0</a>.<a id="178c25" class="tk">getsize</a>();</td></tr>
+<tr name="179" id="179">
+<td><a id="l179" class='ln'>179</a></td><td>        <span class="ct">// 1-ое поле</span></td></tr>
+<tr name="180" id="180">
+<td><a id="l180" class='ln'>180</a></td><td>        <a id="180c9" class="tk">mmOBV</a> = <a id="180c17" class="tk">field1</a>.<a id="180c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="181" id="181">
+<td><a id="l181" class='ln'>181</a></td><td>        <a id="181c9" class="tk">P</a> = <a id="181c13" class="tk">HLA</a>::<a id="181c18" class="tk">Tools</a>::<a id="181c25" class="tk">getPendingBytes</a>(<a id="181c41" class="tk">offset</a><a id="181c47" class="tk">+</a><a id="181c48" class="tk">uiSize</a>,<a id="181c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="182" id="182">
+<td><a id="l182" class='ln'>182</a></td><td>        <a id="182c9" class="tk">offset</a> <a id="182c16" class="tk">+=</a> <a id="182c19" class="tk">uiSize</a><a id="182c25" class="tk">+</a><a id="182c26" class="tk">P</a>;</td></tr>
+<tr name="183" id="183">
+<td><a id="l183" class='ln'>183</a></td><td>        <a id="183c9" class="tk">field1</a>.<a id="183c16" class="tk">getDataMax</a>(<a id="183c27" class="tk">ptrData</a><a id="183c34" class="tk">+</a><a id="183c35" class="tk">offset</a>,<a id="183c42" class="tk">m_uiSizeData</a><a id="183c54" class="tk">-</a><a id="183c55" class="tk">offset</a>);</td></tr>
+<tr name="184" id="184">
+<td><a id="l184" class='ln'>184</a></td><td>        <a id="184c9" class="tk">field1</a>.<a id="184c16" class="tk">set</a>(<a id="184c20" class="tk">obj</a>.<a id="184c24" class="tk">f</a>);</td></tr>
+<tr name="185" id="185">
+<td><a id="l185" class='ln'>185</a></td><td>        <a id="185c9" class="tk">uiSize</a> = <a id="185c18" class="tk">field1</a>.<a id="185c25" class="tk">getsize</a>();</td></tr>
+<tr name="186" id="186">
+<td><a id="l186" class='ln'>186</a></td><td>        <span class="ct">// 2-ое поле</span></td></tr>
+<tr name="187" id="187">
+<td><a id="l187" class='ln'>187</a></td><td>        <a id="187c9" class="tk">mmOBV</a> = <a id="187c17" class="tk">field2</a>.<a id="187c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="188" id="188">
+<td><a id="l188" class='ln'>188</a></td><td>        <a id="188c9" class="tk">P</a> = <a id="188c13" class="tk">HLA</a>::<a id="188c18" class="tk">Tools</a>::<a id="188c25" class="tk">getPendingBytes</a>(<a id="188c41" class="tk">offset</a><a id="188c47" class="tk">+</a><a id="188c48" class="tk">uiSize</a>,<a id="188c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="189" id="189">
+<td><a id="l189" class='ln'>189</a></td><td>        <a id="189c9" class="tk">offset</a> <a id="189c16" class="tk">+=</a> <a id="189c19" class="tk">uiSize</a><a id="189c25" class="tk">+</a><a id="189c26" class="tk">P</a>;</td></tr>
+<tr name="190" id="190">
+<td><a id="l190" class='ln'>190</a></td><td>        <a id="190c9" class="tk">field2</a>.<a id="190c16" class="tk">getDataMax</a>(<a id="190c27" class="tk">ptrData</a><a id="190c34" class="tk">+</a><a id="190c35" class="tk">offset</a>,<a id="190c42" class="tk">m_uiSizeData</a><a id="190c54" class="tk">-</a><a id="190c55" class="tk">offset</a>);</td></tr>
+<tr name="191" id="191">
+<td><a id="l191" class='ln'>191</a></td><td>        <a id="191c9" class="tk">field2</a>.<a id="191c16" class="tk">set</a>(<a id="191c20" class="tk">obj</a>.<a id="191c24" class="tk">i</a>);</td></tr>
+<tr name="192" id="192">
+<td><a id="l192" class='ln'>192</a></td><td>        <a id="192c9" class="tk">uiSize</a> = <a id="192c18" class="tk">field2</a>.<a id="192c25" class="tk">getsize</a>();</td></tr>
+<tr name="193" id="193">
+<td><a id="l193" class='ln'>193</a></td><td>        <span class="ct">// 3-е поле</span></td></tr>
+<tr name="194" id="194">
+<td><a id="l194" class='ln'>194</a></td><td>        <a id="194c9" class="tk">mmOBV</a> = <a id="194c17" class="tk">field3</a>.<a id="194c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="195" id="195">
+<td><a id="l195" class='ln'>195</a></td><td>        <a id="195c9" class="tk">P</a> = <a id="195c13" class="tk">HLA</a>::<a id="195c18" class="tk">Tools</a>::<a id="195c25" class="tk">getPendingBytes</a>(<a id="195c41" class="tk">offset</a><a id="195c47" class="tk">+</a><a id="195c48" class="tk">uiSize</a>,<a id="195c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="196" id="196">
+<td><a id="l196" class='ln'>196</a></td><td>        <a id="196c9" class="tk">offset</a> <a id="196c16" class="tk">+=</a> <a id="196c19" class="tk">uiSize</a><a id="196c25" class="tk">+</a><a id="196c26" class="tk">P</a>;</td></tr>
+<tr name="197" id="197">
+<td><a id="l197" class='ln'>197</a></td><td>        <a id="197c9" class="tk">field3</a>.<a id="197c16" class="tk">getDataMax</a>(<a id="197c27" class="tk">ptrData</a><a id="197c34" class="tk">+</a><a id="197c35" class="tk">offset</a>,<a id="197c42" class="tk">m_uiSizeData</a><a id="197c54" class="tk">-</a><a id="197c55" class="tk">offset</a>);</td></tr>
+<tr name="198" id="198">
+<td><a id="l198" class='ln'>198</a></td><td>        <a id="198c9" class="tk">field3</a>.<a id="198c16" class="tk">set</a>(<a id="198c20" class="tk">obj</a>.<a id="198c24" class="tk">s</a>);</td></tr>
+<tr name="199" id="199">
+<td><a id="l199" class='ln'>199</a></td><td>        <a id="199c9" class="tk">uiSize</a> = <a id="199c18" class="tk">field3</a>.<a id="199c25" class="tk">getsize</a>();</td></tr>
+<tr name="200" id="200">
+<td><a id="l200" class='ln'>200</a></td><td>        <span class="ct">// 4-ое поле</span></td></tr>
+<tr name="201" id="201">
+<td><a id="l201" class='ln'>201</a></td><td>        <a id="201c9" class="tk">mmOBV</a> = <a id="201c17" class="tk">field4</a>.<a id="201c24" class="tk">getOctetBoundary</a>();</td></tr>
+<tr name="202" id="202">
+<td><a id="l202" class='ln'>202</a></td><td>        <a id="202c9" class="tk">P</a> = <a id="202c13" class="tk">HLA</a>::<a id="202c18" class="tk">Tools</a>::<a id="202c25" class="tk">getPendingBytes</a>(<a id="202c41" class="tk">offset</a><a id="202c47" class="tk">+</a><a id="202c48" class="tk">uiSize</a>,<a id="202c55" class="tk">mmOBV</a>);</td></tr>
+<tr name="203" id="203">
+<td><a id="l203" class='ln'>203</a></td><td>        <a id="203c9" class="tk">offset</a> <a id="203c16" class="tk">+=</a> <a id="203c19" class="tk">uiSize</a><a id="203c25" class="tk">+</a><a id="203c26" class="tk">P</a>;</td></tr>
+<tr name="204" id="204">
+<td><a id="l204" class='ln'>204</a></td><td>        <a id="204c9" class="tk">field4</a>.<a id="204c16" class="tk">getDataMax</a>(<a id="204c27" class="tk">ptrData</a><a id="204c34" class="tk">+</a><a id="204c35" class="tk">offset</a>,<a id="204c42" class="tk">m_uiSizeData</a><a id="204c54" class="tk">-</a><a id="204c55" class="tk">offset</a>);</td></tr>
+<tr name="205" id="205">
+<td><a id="l205" class='ln'>205</a></td><td>        <a id="205c9" class="tk">field4</a>.<a id="205c16" class="tk">set</a>(<a id="205c20" class="tk">obj</a>.<a id="205c24" class="tk">c</a>);</td></tr>
+<tr name="206" id="206">
+<td><a id="l206" class='ln'>206</a></td><td>        <a id="206c9" class="tk">uiSize</a> = <a id="206c18" class="tk">field4</a>.<a id="206c25" class="tk">getsize</a>();</td></tr>
+<tr name="207" id="207">
+<td><a id="l207" class='ln'>207</a></td><td>    <span class="br">}</span></td></tr>
+<tr name="208" id="208">
+<td><a id="l208" class='ln'>208</a></td><td></td></tr>
+<tr name="209" id="209">
+<td><a id="l209" class='ln'>209</a></td><td></td></tr>
+<tr name="210" id="210">
+<td><a id="l210" class='ln'>210</a></td><td></td></tr>
+<tr name="211" id="211">
+<td><a id="l211" class='ln'>211</a></td><td></td></tr>
+<tr name="212" id="212">
+<td><a id="l212" class='ln'>212</a></td><td><span class="br">}</span></td></tr>
+<tr name="213" id="213">
+<td><a id="l213" class='ln'>213</a></td><td></td></tr>
+</table>
+</pre>
+</body>
+</html>
