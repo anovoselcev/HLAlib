@@ -1,10 +1,10 @@
 #ifndef ANALYZER_HPP
 #define ANALYZER_HPP 1
 
-#include "UPIM.hpp"
+#include "../UPIM/UPIM.hpp"
 #include "DataFederate.hpp"
 #include "MainWindow.hpp"
-#include "include_sup/BasicData.hpp"
+#include "../HLA-Data/include/BasicData.hpp"
 
 
 namespace UPIM{
@@ -49,6 +49,8 @@ namespace UPIM{
 
 //Create and init widget
         virtual void SetWindow();
+
+        void Update(double value=0);
 
 	protected:
 

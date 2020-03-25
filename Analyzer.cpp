@@ -178,6 +178,33 @@ namespace UPIM{
         SetWindow();
 	}
 
+    void AnalyzerFederate::Update(double value){
+        VariableLengthData v1,v2,v3;
+        Staff d;
+
+        RTIStaff s;
+        d.f = value;
+        d.b = false;
+        s.get(d);
+        s.setDataToRTI(v1);
+        AttributeHandleValueMap m;
+        m[_AttributesMap[_MyClass][L"Aim"]] = v1;
+
+        HLA::RTIASCIIstring str;
+        HLA::Vector<HLA::Float64BE> vec(1000,4.121);
+        HLA::RTIvariableArray<HLA::RTIfloat64BE,HLA::Float64BE> varr;
+        HLA::RTIFixedArray<HLA::RTIchar,HLA::Char,1000,2> arr;
+        varr.get(vec);
+        varr.setDataToRTI(v2);
+        m[_AttributesMap[_MyClass][L"Var"]] = v2;
+        HLA::Array<HLA::Char,1'000> a;
+        a.fill('a');
+        arr.get(a);
+        arr.setDataToRTI(v3);
+        m[_AttributesMap[_MyClass][L"Ar"]] = v3;
+         _rtiAmbassador->updateAttributeValues(_MyInstanceID,m,VariableLengthData());
+    }
+
 	void AnalyzerFederate::SetWindow(){
 //        std::default_random_engine e;
 //        std::uniform_int_distribution<int> dU(0,10);
@@ -213,36 +240,7 @@ namespace UPIM{
         _MainWindow->show();
 ////        qDebug() <<"Load factor = "<< _federates.load_factor() << endl;
        _MainWindow->SetInitialMap(_federates);
-       VariableLengthData v1,v2,v3;
-       Staff d,p;
-       //v.setData(d,20);
-
-       RTIStaff s;
-       d.f = 200.13213;
-       d.b = false;
-       s.get(d);
-       s.setDataToRTI(v1);
-       RTIStaff r;
-       r.getDataFromRTI(v1);
-       r.set(p);
-       qDebug() << p.b << " " << p.f << " " << QString::fromStdString(p.s) << endl;
-       AttributeHandleValueMap m;
-       m[_AttributesMap[_MyClass][L"Aim"]] = v1;
-       qDebug() << v1.data() << endl;
-
-       HLA::RTIASCIIstring str;
-       std::vector<HLA::Char> vec(100,'2');
-       HLA::RTIvariableArray<HLA::RTIchar,HLA::Char> varr;
-       HLA::RTIFixedArray<HLA::RTIchar,HLA::Char,100,2> arr;
-       varr.get(vec);
-       varr.setDataToRTI(v2);
-       m[_AttributesMap[_MyClass][L"Var"]] = v2;
-       std::array<HLA::Char,100> a;
-       a.fill('2');
-       arr.get(a);
-       arr.setDataToRTI(v3);
-       m[_AttributesMap[_MyClass][L"Ar"]] = v3;
-        _rtiAmbassador->updateAttributeValues(_MyInstanceID,m,VariableLengthData());
+       Update();
 	}
 
     void AnalyzerFederate::UpdateAttributes() const {
@@ -256,20 +254,23 @@ namespace UPIM{
                                                   TransportationType theType,
                                                   SupplementalReflectInfo theReflectInfo)
     throw (FederateInternalError){
-        Staff d;
-        RTIStaff t;
-        HLA::RTIvariableArray<HLA::RTIchar,HLA::Char> varr;
-        HLA::RTIFixedArray<HLA::RTIchar,HLA::Char,100,2> arr;
-        std::vector<HLA::Char> vec;
-        std::array<HLA::Char,100> a;
-        t.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Aim"])->second);
-        varr.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Var"])->second);
-        arr.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Ar"])->second);
-        t.set(d);
-        varr.set(vec);
-        arr.set(a);
-        qDebug()<< QString::fromStdString(d.s) <<" "<< d.c <<endl;
-        qDebug() << vec[0] <<" "<<vec[3] << " " << vec.size() << endl;
-        qDebug() << a[0] << " " << a[33] <<endl;
+        if(_f_start){
+            Staff d;
+            RTIStaff t;
+            HLA::RTIvariableArray<HLA::RTIfloat64BE,HLA::Float64BE> varr;
+            HLA::RTIFixedArray<HLA::RTIchar,HLA::Char,1000,2> arr;
+            HLA::Vector<HLA::Float64BE> vec;
+            HLA::Array<HLA::Char,1000> a;
+            t.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Aim"])->second);
+            varr.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Var"])->second);
+            arr.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Ar"])->second);
+            t.set(d);
+            varr.set(vec);
+            arr.set(a);
+            qDebug()<< QString::fromStdString(d.s) <<" "<< d.c << " " << d.f << endl;
+            qDebug() << vec[0] <<" "<<vec[3] << " " << vec.size() << endl;
+            qDebug() << a[0] << " " << a[33] <<endl;
+            Update(-d.f/4);
+        }
     }
 }

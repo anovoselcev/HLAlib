@@ -29,6 +29,7 @@ namespace UPIM{
             ~MainWindow();
 
         private:
+            //bad
             std::unique_ptr<Ui::MainWindow>                                                                                      _ui;
             std::unordered_map<QString, std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash>                                      _typesMap;
             std::unordered_map<QString, std::unique_ptr<QTreeWidgetItem>,DATA::QStringHash>                                      _namesMap;

@@ -3,7 +3,7 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++14
-QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV -pthread -O2
+QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV -pthread
 LIBS += -pthread
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -20,28 +20,19 @@ SOURCES += \
     MainWindow.cpp \
     main.cpp \
     Analyzer.cpp\
-    UPIM.cpp\
+    ../UPIM/UPIM.cpp\
     DataAttribute.cpp\
     DataFederate.cpp\
-    src_sup/BasicException.cpp \
-    src_sup/BasicTypes.cpp\
-    src_sup/BasicData.cpp \
-    src_sup/Tools.cpp
+    ../HLA-Data/src/*
 
 HEADERS += \
     Analyzer.hpp\
     MainWindow.hpp \
-    UPIM.hpp\
+    ../UPIM/UPIM.hpp\
     DataAttribute.hpp\
     DataFederate.hpp \
-    include_sup/BasicConverter.hpp \
-    include_sup/BasicData.hpp \
-    include_sup/BasicException.hpp \
-    include_sup/BasicTemplates.hpp \
-    include_sup/BasicTypes.hpp \
-    include_sup/Tools.hpp \
+    ../HLA-Data/include/*\
     profile.hpp \
-    include_sup/* \
 
 FORMS += mainwindow.ui\
 
