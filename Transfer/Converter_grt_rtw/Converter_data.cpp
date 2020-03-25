@@ -1,5 +1,5 @@
 /*
- * Converter_private.h
+ * Converter_data.cpp
  *
  * Academic License - for use in teaching, academic research, and meeting
  * course requirements at degree granting institutions only.  Not for
@@ -18,17 +18,15 @@
  * Validation result: Not run
  */
 
-#ifndef RTW_HEADER_Converter_private_h_
-#define RTW_HEADER_Converter_private_h_
-#include "rtwtypes.h"
-#include "multiword_types.h"
+#include "Converter.h"
+#include "Converter_private.h"
 
-extern void TransferBlock_Start_wrapper(const real_T *Param1, const int_T
-  p_width0);
-extern void TransferBlock_Outputs_wrapper(const real_T *X,
-  real_T *Y,
-  const real_T *Param1, const int_T p_width0);
-extern void TransferBlock_Terminate_wrapper(const real_T *Param1, const int_T
-  p_width0);
-
-#endif                                 /* RTW_HEADER_Converter_private_h_ */
+/* Constant parameters (default storage) */
+const ConstP_Converter_T Converter_ConstP = {
+  /* Pooled Parameter (Expression: 1)
+   * Referenced by:
+   *   '<Root>/Constant'
+   *   '<Root>/C//C++ Code Block'
+   */
+  1.0
+};

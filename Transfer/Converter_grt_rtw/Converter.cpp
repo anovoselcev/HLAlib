@@ -7,9 +7,9 @@
  *
  * Code generation for model "Converter".
  *
- * Model version              : 1.47
+ * Model version              : 1.72
  * Simulink Coder version : 9.2 (R2019b) 18-Jul-2019
- * C++ source code generated on : Tue Mar 24 19:04:58 2020
+ * C++ source code generated on : Wed Mar 25 15:58:19 2020
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -30,8 +30,9 @@ void ConverterModelClass::step()
    */
   Converter_B.Add = Converter_DW.Delay_DSTATE + 1.0;
 
-  /* S-Function (ConverterNew): '<Root>/C//C++ Code Block' */
-  ConverterNew_Outputs_wrapper(&Converter_B.Add, &Converter_B.CCCodeBlock);
+  /* S-Function (TransferBlock): '<Root>/C//C++ Code Block' */
+  TransferBlock_Outputs_wrapper(&Converter_B.Add, &Converter_B.CCCodeBlock,
+    &Converter_ConstP.pooled2, 1);
 
   /* Update for Delay: '<Root>/Delay' */
   Converter_DW.Delay_DSTATE = Converter_B.CCCodeBlock;
@@ -50,10 +51,10 @@ void ConverterModelClass::initialize()
   (void) std::memset(static_cast<void *>(&Converter_DW), 0,
                      sizeof(DW_Converter_T));
 
-  /* Start for S-Function (ConverterNew): '<Root>/C//C++ Code Block' */
+  /* Start for S-Function (TransferBlock): '<Root>/C//C++ Code Block' */
 
   /* S-Function Block: <Root>/C//C++ Code Block */
-  ConverterNew_Start_wrapper();
+  TransferBlock_Start_wrapper(&Converter_ConstP.pooled2, 1);
 
   /* InitializeConditions for Delay: '<Root>/Delay' */
   Converter_DW.Delay_DSTATE = 0.0;
@@ -62,10 +63,10 @@ void ConverterModelClass::initialize()
 /* Model terminate function */
 void ConverterModelClass::terminate()
 {
-  /* Terminate for S-Function (ConverterNew): '<Root>/C//C++ Code Block' */
+  /* Terminate for S-Function (TransferBlock): '<Root>/C//C++ Code Block' */
 
   /* S-Function Block: <Root>/C//C++ Code Block */
-  ConverterNew_Terminate_wrapper();
+  TransferBlock_Terminate_wrapper(&Converter_ConstP.pooled2, 1);
 }
 
 /* Constructor */

@@ -31,7 +31,7 @@ UPIM::Transfer* fed;
  * Start function
  *
  */
-void ConverterNew_Start_wrapper(void)
+void TransferBlock_Start_wrapper(const real_T *Param1, const int_T p_width0)
 {
 /* %%%-SFUNWIZ_wrapper_Start_Changes_BEGIN --- EDIT HERE TO _END */
 /*
@@ -49,8 +49,9 @@ fed->ConnectRRTI();
  * Output function
  *
  */
-void ConverterNew_Outputs_wrapper(const real_T *X,
-			real_T *Y)
+void TransferBlock_Outputs_wrapper(const real_T *X,
+			real_T *Y,
+			const real_T *Param1, const int_T p_width0)
 {
 /* %%%-SFUNWIZ_wrapper_Outputs_Changes_BEGIN --- EDIT HERE TO _END */
 /* This sample sets the output equal to the input
@@ -61,7 +62,8 @@ void ConverterNew_Outputs_wrapper(const real_T *X,
       y1[0].im = u1[0].im;
  */
 Y[0]=X[0]+1;
-//sleep(1000000);
+sleep(1);
+std::wcout << *Param1 << std::endl;
 fed->SendToRTI(Y[0]);
 /* %%%-SFUNWIZ_wrapper_Outputs_Changes_END --- EDIT HERE TO _BEGIN */
 }
@@ -70,7 +72,7 @@ fed->SendToRTI(Y[0]);
  * Terminate function
  *
  */
-void ConverterNew_Terminate_wrapper(void)
+void TransferBlock_Terminate_wrapper(const real_T *Param1, const int_T p_width0)
 {
 /* %%%-SFUNWIZ_wrapper_Terminate_Changes_BEGIN --- EDIT HERE TO _END */
 /*

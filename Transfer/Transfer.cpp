@@ -32,13 +32,13 @@ namespace UPIM {
         AttributeHandleValueMap m;
         m[_AttributesMap[_MyClass][L"Aim"]] = v1;
         HLA::RTIASCIIstring str;
-        HLA::Vector<HLA::Float64BE> vec(1'000'00,1.2);
+        HLA::Vector<HLA::Float64BE> vec(1000,1.2);
         HLA::RTIvariableArray<HLA::RTIfloat64BE,HLA::Float64BE> varr;
-        HLA::RTIFixedArray<HLA::RTIchar,HLA::Char,1'000'00,2> arr;
+        HLA::RTIFixedArray<HLA::RTIchar,HLA::Char,1000,2> arr;
         varr.get(vec);
         varr.setDataToRTI(v2);
         m[_AttributesMap[_MyClass][L"Var"]] = v2;
-        HLA::Array<HLA::Char,1'000'00> a;
+        HLA::Array<HLA::Char,1000> a;
         a.fill('2');
         arr.get(a);
         arr.setDataToRTI(v3);
@@ -53,21 +53,23 @@ namespace UPIM {
                                               rti1516e::TransportationType theType,
                                               rti1516e::SupplementalReflectInfo theReflectInfo)
     throw (rti1516e::FederateInternalError){
-        Staff d;
-        RTIStaff t;
-        HLA::RTIvariableArray<HLA::RTIfloat64BE,HLA::Float64BE> varr;
-        HLA::RTIFixedArray<HLA::RTIchar,HLA::Char,1'000'00,2> arr;
-        HLA::Vector<HLA::Float64BE> vec;
-        HLA::Array<HLA::Char,1'000'00> a;
-        t.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Aim"])->second);
-        varr.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Var"])->second);
-        arr.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Ar"])->second);
-        t.set(d);
-        varr.set(vec);
-        arr.set(a);
-        //std::wcout << std::wstring(d.s.data()) << " " << wchar_t(d.c) << std::endl;
-        std::wcout << vec[0] << " " << vec[3] << " " << vec.size() << std::endl;
-        std::wcout << a[0] << " " << a[33] << std::endl;
+        if(_f_start){
+            Staff d;
+            RTIStaff t;
+            HLA::RTIvariableArray<HLA::RTIfloat64BE,HLA::Float64BE> varr;
+            HLA::RTIFixedArray<HLA::RTIchar,HLA::Char,1000,2> arr;
+            HLA::Vector<HLA::Float64BE> vec;
+            HLA::Array<HLA::Char,1000> a;
+            t.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Aim"])->second);
+            varr.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Var"])->second);
+            arr.getDataFromRTI(theAttributeValues.find(_AttributesMap[_MyClass][L"Ar"])->second);
+            t.set(d);
+            varr.set(vec);
+            arr.set(a);
+            std::wcout << HLA::Tools::widen(d.s) << " " << static_cast<wchar_t>(d.c) << " " << d.f << std::endl;
+            std::wcout << vec[0] << " " << vec[3] << " " << vec.size() << std::endl;
+            std::wcout << a[0] << " " << a[33] << std::endl;
+        }
     }
 
     void RTIStaff::getDataMax(void* ptrSource, unsigned long uiMaxSize){
@@ -205,8 +207,4 @@ namespace UPIM {
         field4.set(obj.c);
         uiSize = field4.getsize();
     }
-
-
-
-
 }
