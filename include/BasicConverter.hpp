@@ -12,12 +12,13 @@
 #include <RTI/RTI1516.h>
 #include "BasicTypes.hpp"
 #include "BasicTemplates.hpp"
-
 namespace HLA {
 
 template <class T, unsigned mem, bool blLE=true>
   class SimpleData: public ClassForRTI <T,mem>{
     public:
+
+      using type = T;
 
       SimpleData() {
             m_data=0;

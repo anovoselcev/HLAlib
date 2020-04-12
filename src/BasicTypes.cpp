@@ -192,4 +192,3 @@ std::ostream &operator <<(std::ostream& outStream, Boolean dat) {
   return outStream;
 }
 }
-

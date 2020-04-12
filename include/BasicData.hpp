@@ -7,9 +7,6 @@
 #pragma warning(disable: 4482)
 #endif
 
-#include <string.h>
-#include <iostream>
-
 #include <RTI/RTI1516.h>
 
 #include "BasicConverter.hpp"
@@ -133,6 +130,8 @@ namespace HLA {
     template <class T2=ASCIIstring>
     class RTIASCIIstringType : public ClassForRTI<T2,1> {
     public:
+
+      using type = T2;
 
       RTIASCIIstringType() {
         unsigned lenth = 0;
@@ -272,11 +271,9 @@ namespace HLA {
     using RTIunicodeString = RTIASCIIstringType<unicodeString>;
     using RTIASCIIstring = RTIASCIIstringType<>;
     using RTIEIMS_UTF8string = RTIASCIIstringType<>;
-    using RTIstring = RTIASCIIstringType<>;
-
+    using RTIstring = RTIASCIIstringType<String>;
+    using RTIwstring = RTIASCIIstringType<Wstring>;
     using RTIboolean = RTIEnum<RTIinteger32BE, Boolean, 4>;
-
-
     void initializeMOD (ASCIIstring & data);
 
 
@@ -288,6 +285,9 @@ namespace HLA {
       }
 
     public:
+
+      using type = T_MOD;
+
       RTIvariableArray(const RTIvariableArray &variableArray):ClassForRTI<Vector<T_MOD>,m_OBV>(variableArray) {}
 
       RTIvariableArray() {
@@ -610,6 +610,8 @@ namespace HLA {
       }
     public:
 
+      using type = T_MOD;
+
       RTIFixedArray(const RTIFixedArray &fixedArray): ClassForRTI<Array<T_MOD,uiDim>, m_OBV>(fixedArray) {
       }
 
@@ -784,6 +786,9 @@ for (unsigned i=0; i<uiDim; i++) {
     protected:
       Octet* ptrData;
     public:
+
+      using type = T_MOD;
+
       unsigned m_uiSizeData;
 
       BaseRTIFixedRecord() : ClassForRTI<T_MOD, OBV>() {
@@ -817,6 +822,7 @@ for (unsigned i=0; i<uiDim; i++) {
           throw ex;
         }
       }
+
       void setData(void* ptrDest, unsigned long inSize){
         if (m_uiSizeData!=inSize) {
           std::stringstream wstrOut;
@@ -834,6 +840,7 @@ for (unsigned i=0; i<uiDim; i++) {
             throw ex;
         }
       }
+
       unsigned setData(void* ptrDest){
         if (ptrData!=nullptr)  {
           memcpy(ptrDest, ptrData, m_uiSizeData);
@@ -843,12 +850,15 @@ for (unsigned i=0; i<uiDim; i++) {
         }
         return m_uiSizeData;
       }
+
       void getDataFromRTI(rti1516e::VariableLengthData const &obj){
         getDataMax(const_cast<void*>(obj.data()),static_cast<unsigned long>(obj.size()));
       }
+
       void getData(void* ptrSource, unsigned long inSize){
         getDataMax(ptrSource,inSize);
       }
+
       void getDataMax(void* , unsigned long ){}
 
       unsigned getsize(){return m_uiSizeData;}
@@ -871,8 +881,159 @@ for (unsigned i=0; i<uiDim; i++) {
         offset += uiSize;
       }
 
+      template<typename FieldType>
+      void auto_offset(unsigned &offset, void* ptrSource, unsigned uiMaxSize,FieldType& field){
+          F_offsetLast<FieldType>(field,offset,ptrSource,static_cast<unsigned>(uiMaxSize));
+          if (ptrData!=nullptr) delete[] ptrData;
+            m_uiSizeData = offset;
+            ptrData = new HLA::Octet[m_uiSizeData];
+            memcpy(ptrData, ptrSource, m_uiSizeData);
+      }
+
+      template<typename Field1, typename Field2, typename ...Fields>
+      void auto_offset(unsigned &offset, void* ptrSource, unsigned uiMaxSize,Field1& field1,Field2& field2,Fields&... fields){
+        F_offset< Field1, Field2 >(field1,field2,offset,ptrSource,uiMaxSize);
+        auto_offset(offset, ptrSource,uiMaxSize,field2,fields...);
+      }
+
+      template<bool first = true, typename Field>
+      void auto_geter_first(unsigned& offset, unsigned& uiSize, Field& field,typename Field::type const & t){
+          field.get(t);
+          unsigned P,mmOBV;
+          if(!first){
+            mmOBV = field.getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
+          }
+          uiSize = field.getsize();
+          offset+=uiSize;
+          m_uiSizeData = offset;
+          if(ptrData!=nullptr) delete[] ptrData;
+          ptrData = new HLA::Octet[m_uiSizeData];
+          offset = 0;
+      }
+
+      template<bool first = true, typename Field, typename ...Fields>
+      void auto_geter_first(unsigned& offset, unsigned& uiSize, Field& field,typename Field::type const & t, Fields&... fields){
+          field.get(t);
+          unsigned P,mmOBV;
+          if(!first){
+            mmOBV = field.getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
+          }
+          uiSize = field.getsize();
+          auto_geter_first<false>(offset,uiSize,fields...);
+      }
+
+      template<bool first = true, typename Field>
+      void auto_geter_second(unsigned& offset, unsigned& uiSize, Field& field){
+          unsigned P, mmOBV;
+          if(!first){
+            mmOBV = field.getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
+          }
+          uiSize = field.getsize();
+          field.setData(ptrData+offset,uiSize);
+      }
+
+      template<bool first = true, typename Field, typename ...Fields>
+      void auto_geter_second(unsigned& offset, unsigned& uiSize, Field& field, Fields&... fields){
+          uiSize = field.getsize();
+          field.setData(ptrData+offset,uiSize);
+          unsigned P,mmOBV;
+          if(!first){
+            mmOBV = field.getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
+          }
+          auto_geter_second<false>(offset,uiSize,fields...);
+      }
+
+      template<bool first = true, typename Field>
+      void auto_seter(unsigned& offset, unsigned& uiSize, Field& field,typename Field::type& t){
+          unsigned P, mmOBV;
+          if(!first){
+            mmOBV = field.getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
+        }
+        field.getDataMax(ptrData+offset,m_uiSizeData-offset);
+        field.set(t);
+        uiSize = field.getsize();
+      }
+
+      template<bool first = true, typename Field, typename ...Fields>
+      void auto_seter(unsigned& offset, unsigned& uiSize, Field& field,typename Field::type& t, Fields&... fields){
+          unsigned P, mmOBV;
+          if(!first){
+              mmOBV = field.getOctetBoundary();
+              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+              offset += uiSize+P;
+          }
+          field.getDataMax(ptrData+offset,m_uiSizeData-offset);
+          field.set(t);
+          uiSize = field.getsize();
+          auto_seter<false>(offset,uiSize,fields...);
+      }
     };
-  }
+
+ //Casters
+    template<typename RTItype, unsigned OBV = 8>
+    rti1516e::VariableLengthData cast_to_rti(std::vector<typename RTItype::type>& t){
+        RTIvariableArray<RTItype,typename RTItype::type,OBV> conv;
+        rti1516e::VariableLengthData v;
+        conv.get(t);
+        conv.setDataToRTI(v);
+        return v;
+   }
+
+    template<typename RTItype, unsigned OBV>
+    std::vector<typename RTItype::type> cast_from_rti(const rti1516e::VariableLengthData& v){
+        std::vector<typename RTItype::type> t;
+        RTIvariableArray<RTItype, typename RTItype::type, OBV> conv;
+        conv.getDataFromRTI(v);
+        conv.set(t);
+        return std::move(t);
+    }
+
+    template<typename RTItype, unsigned Size, unsigned OBV = 8>
+    rti1516e::VariableLengthData cast_to_rti(std::array<typename RTItype::type,Size>& t){
+        RTIFixedArray<RTItype,typename RTItype::type, Size, OBV> conv;
+        rti1516e::VariableLengthData v;
+        conv.get(t);
+        conv.setDataToRTI(v);
+        return v;
+    }
+
+    template<typename RTItype, unsigned Size, unsigned OBV>
+    typename std::array<typename RTItype::type, Size> cast_from_rti(const rti1516e::VariableLengthData& v){
+        RTIFixedArray<RTItype,typename RTItype::type, Size, OBV> conv;
+        std::array<RTItype, Size> t;
+        conv.getDataFromRTI(v);
+        conv.set(t);
+        return std::move(t);
+    }
+
+    template<typename RTItype>
+    rti1516e::VariableLengthData cast_to_rti(typename RTItype::type& t){
+        RTItype conv;
+        rti1516e::VariableLengthData v;
+        conv.get(t);
+        conv.setDataToRTI(v);
+        return v;
+    }
+
+    template<typename RTItype>
+    typename RTItype::type cast_from_rti(const rti1516e::VariableLengthData& v){
+        RTItype conv;
+        typename RTItype::type t;
+        conv.getDataFromRTI(v);
+        conv.set(t);
+        return t;
+    }
+}
 
 template <class T_el>
 void initializeMOD (std::vector<T_el> & data) {
@@ -887,6 +1048,8 @@ void initializeMOD(HLA::FixedArray<T_MOD,dim>& data) {
     initializeMOD(data[i]);
   }
 }
+
+
 
 
 void initializeMOD(rti1516e::FederateHandle& data);

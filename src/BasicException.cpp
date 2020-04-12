@@ -22,7 +22,8 @@ namespace HLA {
   }
 
   const std::wstring ExceptionForRTI::whatWstr( ) const {
-    std::wstring tmp = Tools::widen(_ExceptionMessage);
+    std::wstring tmp;
+    tmp.assign(_ExceptionMessage.begin(),_ExceptionMessage.end());
     return tmp;
   }
 
