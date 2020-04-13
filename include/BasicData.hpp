@@ -274,7 +274,6 @@ namespace HLA {
     using RTIstring = RTIASCIIstringType<String>;
     using RTIwstring = RTIASCIIstringType<Wstring>;
     using RTIboolean = RTIEnum<RTIinteger32BE, Boolean, 4>;
-    void initializeMOD (ASCIIstring & data);
 
 
     template <class T_FOM, class T_MOD, unsigned m_OBV=1>
@@ -492,116 +491,6 @@ namespace HLA {
         }
       }
     };
-
-    template<typename T, unsigned dim>
-    class FixedArray : public std::array<T, dim> {};
-
-    template <class T_MOD, unsigned dim>
-    class HLAfixedArray {
-    public:
-
-      T_MOD & operator[](unsigned ind) {
-        if (ind <dim) {
-          return data[ind];
-        } else {
-          return data[0];
-        }
-      }
-
-      T_MOD const & operator[](unsigned ind) const {
-        if (ind <dim) {
-          return data[ind];
-        }
-        return data[0];
-      }
-
-      void set(HLAfixedArray &obj) {
-        if (obj.dimension() == dim) {
-          memcpy(data, &obj, sizeof(dim*sizeof(T_MOD)));
-        }
-      }
-
-      void set(std::vector<T_MOD> &obj) {
-        if (obj.size() == dim) {
-          obj.copy(data,dim);
-        }
-      }
-
-      void set(const T_MOD* ptrObj) {
-        for (unsigned i=0; i<dim; i++) {
-          data[i] = ptrObj[i];
-        }
-      }
-
-      void set(std::string const &obj)  {
-        if (sizeof(T_MOD) == 1 && (unsigned)obj.size() == dim) {
-          for (unsigned i=0; i<dim; i++) {
-            data[i]= (T_MOD)obj[i];
-          }
-        }
-      }
-
-      void get(HLAfixedArray &obj) const{
-        memcpy(&obj, data, sizeof(dim*sizeof(T_MOD)));
-      }
-
-      void get(std::vector<T_MOD> &obj)  const{
-        for (unsigned i=0; i<dim; i++) {
-          obj.push_back(data[i]);
-        }
-      }
-      void get(void* obj)  const{
-        memcpy((void*)obj, (void*)&data[0], dim*sizeof(T_MOD));
-      }
-
-      void get(std::string &obj)  const{
-        if (sizeof(T_MOD) == 1) {
-          obj.clear();
-          for (unsigned i=0; i<dim; i++) {
-            obj.push_back(data[i]);
-          }
-        }
-      }
-      friend std::ofstream& operator << (std::ofstream &StreamOut, HLAfixedArray const & obj) {
-        for (unsigned i=0; i<dim; i++) {
-          StreamOut << obj[i] << " ";
-        }
-        return StreamOut;
-      }
-
-      friend std::ifstream& operator << (std::ifstream &StreamInput, HLAfixedArray & obj) {
-        for (unsigned i=0; i<dim; i++) {
-          StreamInput >> obj[i];
-        }
-        return StreamInput;
-      }
-
-      unsigned dimension() {return dim;}
-    private:
-      T_MOD data[dim];
-    };
-
-
-    template <class T_MOD, unsigned dim>
-    int readMOD(std::ifstream &File, HLA::FixedArray<T_MOD,dim>& data) {
-      int retCod = 1;
-      for (unsigned i=0; i<dim; i++) {
-        retCod = readMOD(File,data[i]);
-        if (retCod != 1) return retCod;
-      }
-      return retCod;
-    }
-
-    template <class T_MOD, unsigned dim>
-    int writeMOD(std::ifstream &File, HLA::FixedArray<T_MOD,dim> const &data) {
-      int retCod = 1;
-      for (unsigned i=0; i<dim; i++) {
-        retCod = writeMOD(File,data[i]);
-        if (retCod != 1) return retCod;
-      }
-      return retCod;
-    }
-
 
     template <class T_FOM, class T_MOD, unsigned uiDim, unsigned m_OBV>
     class RTIFixedArray : public ClassForRTI <Array<T_MOD,uiDim>, m_OBV>{
@@ -1035,30 +924,4 @@ for (unsigned i=0; i<uiDim; i++) {
     }
 }
 
-template <class T_el>
-void initializeMOD (std::vector<T_el> & data) {
-  T_el el;
-  initializeMOD(el);
-  data.assign(4,el);
-}
-
-template <class T_MOD, unsigned dim>
-void initializeMOD(HLA::FixedArray<T_MOD,dim>& data) {
-  for (unsigned i=0; i<dim; i++) {
-    initializeMOD(data[i]);
-  }
-}
-
-
-
-
-void initializeMOD(rti1516e::FederateHandle& data);
-void initializeMOD(rti1516e::ObjectClassHandle& data);
-void initializeMOD(rti1516e::InteractionClassHandle& data);
-void initializeMOD(rti1516e::ObjectInstanceHandle& data);
-void initializeMOD(rti1516e::AttributeHandle& data);
-void initializeMOD(rti1516e::ParameterHandle& data);
-void initializeMOD(rti1516e::DimensionHandle& data);
-void initializeMOD(rti1516e::MessageRetractionHandle& data);
-void initializeMOD(rti1516e::RegionHandle& data);
 #endif // BASICDATA_HPP

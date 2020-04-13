@@ -88,56 +88,5 @@ namespace HLA {
       HLAfalse = 0,
       HLAtrue = 1
     };
-    void initializeStep(int64_t step);
-
-    void initializeMOD(Octet&);
-    void initializeMOD(Integer16LE&);
-    void initializeMOD(Integer32LE&);
-    void initializeMOD(Integer64LE&);
-    void initializeMOD(UnsignedShort&);
-    void initializeMOD(Unsignedinteger32BE&);
-    void initializeMOD(Unsignedinteger64BE&);
-    void initializeMOD(Float32LE&);
-    void initializeMOD(Float64LE&);
-    void initializeMOD(Boolean&data);
-    void initializeMOD(ASCIIstring& data);
-
-
-    std::ostream& operator << (std::ostream& outStream, Octet dat);
-    std::ostream& operator << (std::ostream& outStream, Boolean dat);
-
-    std::istream& operator >> (std::istream &StreamInput, Octet & obj);
-
-    int readMOD(std::ifstream &File, char* data, size_t size);
-    int readMOD(std::ifstream &File, Byte &data);
-    int readMOD(std::ifstream &File, Integer16LE &data);
-    int readMOD(std::ifstream &File, Integer32LE &data);
-    int readMOD(std::ifstream &File, Integer64LE &data);
-    int readMOD(std::ifstream &File, Float32LE &data);
-    int readMOD(std::ifstream &File, Float64LE &data);
-    int readMOD(std::ifstream &File, UnsignedShort &data);
-    int readMOD(std::ifstream &File, Unsignedinteger32BE &data);
-    int readMOD(std::ifstream &File, Unsignedinteger64BE &data);
-    int readMOD(std::ifstream &File, ASCIIstring &data);
-
-    int writeMOD(std::ofstream &File, const Octet& data);
-    int writeMOD(std::ofstream &File, Integer16LE const &data);
-    int writeMOD(std::ofstream &File, Integer32LE const &data);
-    int writeMOD(std::ofstream &File, Integer64LE const &data);
-    int writeMOD(std::ofstream &File, Float32LE const &data);
-    int writeMOD(std::ofstream &File, Float64LE const &data);
-    int writeMOD(std::ofstream &File, UnsignedShort const &data);
-    int writeMOD(std::ofstream &File, Unsignedinteger32BE const &data);
-    int writeMOD(std::ofstream &File, Unsignedinteger64BE const &data);
-    int writeMOD(std::ofstream &File, ASCIIstring const & data);
-
-    enum UPDATE_TYPE_BASE {
-      UPDATE_TYPE_UNKNOWN     = -1,
-      UPDATE_TYPE_STATIC      = 0,
-      UPDATE_TYPE_CONDITIONAL = 1,
-      UPDATE_TYPE_PERIODIC	  = 2
-    };
-
-    std::wstring getUPDATE_TYPE_Name(UPDATE_TYPE_BASE en);
 }
 #endif // BASICTYPES_HPP
