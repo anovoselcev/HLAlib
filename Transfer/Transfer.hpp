@@ -23,6 +23,9 @@ namespace UPIM {
 
         void SendToRTI(double value);
     private:
+
+        void ParameterProcess();
+
         void reflectAttributeValues(rti1516e::ObjectInstanceHandle theObject,
                                                       const rti1516e::AttributeHandleValueMap &theAttributeValues,
                                                       const rti1516e::VariableLengthData &theUserSuppliedTag,
@@ -30,7 +33,18 @@ namespace UPIM {
                                                       rti1516e::TransportationType theType,
                                                       rti1516e::SupplementalReflectInfo theReflectInfo)
         throw (rti1516e::FederateInternalError);
+
+         void receiveInteraction (
+           rti1516e::InteractionClassHandle theInteraction,
+           rti1516e::ParameterHandleValueMap const & theParameterValues,
+           rti1516e::VariableLengthData const & theUserSuppliedTag,
+           rti1516e::OrderType sentOrder,
+           rti1516e::TransportationType theType,
+           rti1516e::SupplementalReceiveInfo theReceiveInfo)
+           throw (
+              rti1516e::FederateInternalError);
     };
+
 
     class Staff{
     public:

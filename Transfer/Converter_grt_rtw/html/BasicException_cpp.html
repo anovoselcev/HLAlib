@@ -59,33 +59,35 @@
 <tr name="24" id="24">
 <td><a id="l24" class='ln'>24</a></td><td>  <span class="kw">const</span> <a id="24c9" class="tk">std</a>::<a id="24c14" class="tk">wstring</a> <a id="24c22" class="tk">ExceptionForRTI</a>::<a id="24c39" class="tk">whatWstr</a>( ) <span class="kw">const</span> <span class="br">{</span></td></tr>
 <tr name="25" id="25">
-<td><a id="l25" class='ln'>25</a></td><td>    <a id="25c5" class="tk">std</a>::<a id="25c10" class="tk">wstring</a> <a id="25c18" class="tk">tmp</a> = <a id="25c24" class="tk">Tools</a>::<a id="25c31" class="tk">widen</a>(<a id="25c37" class="tk">_ExceptionMessage</a>);</td></tr>
+<td><a id="l25" class='ln'>25</a></td><td>    <a id="25c5" class="tk">std</a>::<a id="25c10" class="tk">wstring</a> <a id="25c18" class="tk">tmp</a>;</td></tr>
 <tr name="26" id="26">
-<td><a id="l26" class='ln'>26</a></td><td>    <span class="kw">return</span> <a id="26c12" class="tk">tmp</a>;</td></tr>
+<td><a id="l26" class='ln'>26</a></td><td>    <a id="26c5" class="tk">tmp</a>.<a id="26c9" class="tk">assign</a>(<a id="26c16" class="tk">_ExceptionMessage</a>.<a id="26c34" class="tk">begin</a>(),<a id="26c42" class="tk">_ExceptionMessage</a>.<a id="26c60" class="tk">end</a>());</td></tr>
 <tr name="27" id="27">
-<td><a id="l27" class='ln'>27</a></td><td>  <span class="br">}</span></td></tr>
+<td><a id="l27" class='ln'>27</a></td><td>    <span class="kw">return</span> <a id="27c12" class="tk">tmp</a>;</td></tr>
 <tr name="28" id="28">
-<td><a id="l28" class='ln'>28</a></td><td></td></tr>
+<td><a id="l28" class='ln'>28</a></td><td>  <span class="br">}</span></td></tr>
 <tr name="29" id="29">
-<td><a id="l29" class='ln'>29</a></td><td>  <a id="29c3" class="tk">std</a>::<a id="29c8" class="tk">string</a> <a id="29c15" class="tk">ExceptionForRTI</a>::<a id="29c32" class="tk">getstring</a>() <span class="br">{</span></td></tr>
+<td><a id="l29" class='ln'>29</a></td><td></td></tr>
 <tr name="30" id="30">
-<td><a id="l30" class='ln'>30</a></td><td>    <span class="kw">return</span> <a id="30c12" class="tk">_ExceptionMessage</a>;</td></tr>
+<td><a id="l30" class='ln'>30</a></td><td>  <a id="30c3" class="tk">std</a>::<a id="30c8" class="tk">string</a> <a id="30c15" class="tk">ExceptionForRTI</a>::<a id="30c32" class="tk">getstring</a>() <span class="br">{</span></td></tr>
 <tr name="31" id="31">
-<td><a id="l31" class='ln'>31</a></td><td>  <span class="br">}</span></td></tr>
+<td><a id="l31" class='ln'>31</a></td><td>    <span class="kw">return</span> <a id="31c12" class="tk">_ExceptionMessage</a>;</td></tr>
 <tr name="32" id="32">
-<td><a id="l32" class='ln'>32</a></td><td>  <span class="kw">const</span> <a id="32c9" class="tk">ExceptionForRTI</a> <a id="32c25" class="tk">&amp;</a> <a id="32c27" class="tk">ExceptionForRTI</a>::<span class="kw">operator</span> <a id="32c53" class="tk">+</a> (<a id="32c56" class="tk">ExceptionForRTI</a> <a id="32c72" class="tk">&amp;</a><a id="32c73" class="tk">obj</a>) <span class="br">{</span></td></tr>
+<td><a id="l32" class='ln'>32</a></td><td>  <span class="br">}</span></td></tr>
 <tr name="33" id="33">
-<td><a id="l33" class='ln'>33</a></td><td>    <a id="33c5" class="tk">_ExceptionMessage</a> = <a id="33c25" class="tk">_ExceptionMessage</a> <a id="33c43" class="tk">+</a> <a id="33c45" class="tk">obj</a>.<a id="33c49" class="tk">getstring</a>();</td></tr>
+<td><a id="l33" class='ln'>33</a></td><td>  <span class="kw">const</span> <a id="33c9" class="tk">ExceptionForRTI</a> <a id="33c25" class="tk">&amp;</a> <a id="33c27" class="tk">ExceptionForRTI</a>::<span class="kw">operator</span> <a id="33c53" class="tk">+</a> (<a id="33c56" class="tk">ExceptionForRTI</a> <a id="33c72" class="tk">&amp;</a><a id="33c73" class="tk">obj</a>) <span class="br">{</span></td></tr>
 <tr name="34" id="34">
-<td><a id="l34" class='ln'>34</a></td><td>    <span class="kw">return</span> <a id="34c12" class="tk">*</a><span class="kw">this</span>;</td></tr>
+<td><a id="l34" class='ln'>34</a></td><td>    <a id="34c5" class="tk">_ExceptionMessage</a> = <a id="34c25" class="tk">_ExceptionMessage</a> <a id="34c43" class="tk">+</a> <a id="34c45" class="tk">obj</a>.<a id="34c49" class="tk">getstring</a>();</td></tr>
 <tr name="35" id="35">
-<td><a id="l35" class='ln'>35</a></td><td>  <span class="br">}</span></td></tr>
+<td><a id="l35" class='ln'>35</a></td><td>    <span class="kw">return</span> <a id="35c12" class="tk">*</a><span class="kw">this</span>;</td></tr>
 <tr name="36" id="36">
-<td><a id="l36" class='ln'>36</a></td><td></td></tr>
+<td><a id="l36" class='ln'>36</a></td><td>  <span class="br">}</span></td></tr>
 <tr name="37" id="37">
-<td><a id="l37" class='ln'>37</a></td><td><span class="br">}</span></td></tr>
+<td><a id="l37" class='ln'>37</a></td><td></td></tr>
 <tr name="38" id="38">
-<td><a id="l38" class='ln'>38</a></td><td></td></tr>
+<td><a id="l38" class='ln'>38</a></td><td><span class="br">}</span></td></tr>
+<tr name="39" id="39">
+<td><a id="l39" class='ln'>39</a></td><td></td></tr>
 </table>
 </pre>
 </body>

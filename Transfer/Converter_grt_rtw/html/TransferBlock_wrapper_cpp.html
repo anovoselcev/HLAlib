@@ -91,15 +91,15 @@
 <tr name="40" id="40">
 <td><a id="l40" class='ln'>40</a></td><td><a id="40c1" class="tk">std</a>::<a id="40c6" class="tk">wcout</a> <a id="40c12" class="tk">&lt;&lt;</a> L"Im in Start" <a id="40c30" class="tk">&lt;&lt;</a> <a id="40c33" class="tk">std</a>::<a id="40c38" class="tk">endl</a>;</td></tr>
 <tr name="41" id="41">
-<td><a id="l41" class='ln'>41</a></td><td><a id="41c1" class="tk">fed</a> = <span class="kw">new</span> <a id="41c11" class="tk">UPIM</a>::<a id="41c17" class="tk">Transfer</a>(L"Fed",L"Laser",L"/home/k-110-04/QtWork/HLA/FOMS/TimeModel.xml");</td></tr>
+<td><a id="l41" class='ln'>41</a></td><td><a id="41c1" class="tk">fed</a> = <span class="kw">new</span> <a id="41c11" class="tk">UPIM</a>::<a id="41c17" class="tk">Transfer</a>(L"Transfer1",L"Transfer",L"/home/k-110-04/QtWork/HLA/FOMS/ARMfom.xml");</td></tr>
 <tr name="42" id="42">
-<td><a id="l42" class='ln'>42</a></td><td><a id="42c1" class="tk">fed</a>-&gt;<a id="42c6" class="tk">SetPublishMapOfAttributes</a>(<span class="br">{</span>L"Angle", L"Aim", L"Var",L"Ar"<span class="br">}</span>);</td></tr>
+<td><a id="l42" class='ln'>42</a></td><td><a id="42c1" class="tk">fed</a>-&gt;<a id="42c6" class="tk">SetPublishListOfAttributes</a>(<span class="br">{</span>L"Value", L"Class", L"Vector",L"Array"<span class="br">}</span>);</td></tr>
 <tr name="43" id="43">
-<td><a id="l43" class='ln'>43</a></td><td><a id="43c1" class="tk">fed</a>-&gt;<a id="43c6" class="tk">SetSubscribeMapOfObjectsAndAttributes</a>(<span class="br">{</span><span class="br">{</span>L"Aircraft",<span class="br">{</span>L"Speed",L"Name"<span class="br">}</span><span class="br">}</span>,<span class="br">{</span>L"Laser",<span class="br">{</span>L"Angle",L"Aim",L"Var",L"Ar"<span class="br">}</span><span class="br">}</span><span class="br">}</span>);</td></tr>
+<td><a id="l43" class='ln'>43</a></td><td><a id="43c1" class="tk">fed</a>-&gt;<a id="43c6" class="tk">SetSubscribeMapOfObjectsAndAttributes</a>(<span class="br">{</span><span class="br">{</span>L"ARM",<span class="br">{</span>L"Name"<span class="br">}</span><span class="br">}</span><span class="br">}</span>);</td></tr>
 <tr name="44" id="44">
-<td><a id="l44" class='ln'>44</a></td><td><a id="44c1" class="tk">fed</a>-&gt;<a id="44c6" class="tk">SetMapOfInteractionsAndParameters</a>(<span class="br">{</span><span class="br">{</span>L"Communication",<span class="br">{</span>L"Message"<span class="br">}</span><span class="br">}</span><span class="br">}</span>);</td></tr>
+<td><a id="l44" class='ln'>44</a></td><td><a id="44c1" class="tk">fed</a>-&gt;<a id="44c6" class="tk">SetMapOfInteractionsAndParameters</a>(<span class="br">{</span><span class="br">{</span>L"ARMaction",<span class="br">{</span>L"Button",L"Tumbler"<span class="br">}</span><span class="br">}</span><span class="br">}</span>);</td></tr>
 <tr name="45" id="45">
-<td><a id="l45" class='ln'>45</a></td><td><a id="45c1" class="tk">fed</a>-&gt;<a id="45c6" class="tk">ConnectRRTI</a>();</td></tr>
+<td><a id="l45" class='ln'>45</a></td><td><a id="45c1" class="tk">fed</a>-&gt;<a id="45c6" class="tk">ConnectRTI</a>();</td></tr>
 <tr name="46" id="46">
 <td><a id="l46" class='ln'>46</a></td><td><span class="ct">/* %%%-SFUNWIZ_wrapper_Start_Changes_END --- EDIT HERE TO _BEGIN */</span></td></tr>
 <tr name="47" id="47">
@@ -141,47 +141,43 @@
 <tr name="65" id="65">
 <td><a id="l65" class='ln'>65</a></td><td><a id="65c1" class="tk">sleep</a>(1);</td></tr>
 <tr name="66" id="66">
-<td><a id="l66" class='ln'>66</a></td><td><a id="66c1" class="tk">std</a>::<a id="66c6" class="tk">wcout</a> <a id="66c12" class="tk">&lt;&lt;</a> <a id="66c15" class="tk">*</a><a id="66c16" class="tk">Param1</a> <a id="66c23" class="tk">&lt;&lt;</a> <a id="66c26" class="tk">std</a>::<a id="66c31" class="tk">endl</a>;</td></tr>
+<td><a id="l66" class='ln'>66</a></td><td><span class="ct">/* %%%-SFUNWIZ_wrapper_Outputs_Changes_END --- EDIT HERE TO _BEGIN */</span></td></tr>
 <tr name="67" id="67">
-<td><a id="l67" class='ln'>67</a></td><td><a id="67c1" class="tk">fed</a>-&gt;<a id="67c6" class="tk">SendToRTI</a>(<a id="67c16" class="tk">Y</a>[0]);</td></tr>
+<td><a id="l67" class='ln'>67</a></td><td><span class="br">}</span></td></tr>
 <tr name="68" id="68">
-<td><a id="l68" class='ln'>68</a></td><td><span class="ct">/* %%%-SFUNWIZ_wrapper_Outputs_Changes_END --- EDIT HERE TO _BEGIN */</span></td></tr>
+<td><a id="l68" class='ln'>68</a></td><td></td></tr>
 <tr name="69" id="69">
-<td><a id="l69" class='ln'>69</a></td><td><span class="br">}</span></td></tr>
+<td><a id="l69" class='ln'>69</a></td><td><span class="ct">/*</span></td></tr>
 <tr name="70" id="70">
-<td><a id="l70" class='ln'>70</a></td><td></td></tr>
+<td><a id="l70" class='ln'>70</a></td><td><span class="ct"> * Terminate function</span></td></tr>
 <tr name="71" id="71">
-<td><a id="l71" class='ln'>71</a></td><td><span class="ct">/*</span></td></tr>
+<td><a id="l71" class='ln'>71</a></td><td><span class="ct"> *</span></td></tr>
 <tr name="72" id="72">
-<td><a id="l72" class='ln'>72</a></td><td><span class="ct"> * Terminate function</span></td></tr>
+<td><a id="l72" class='ln'>72</a></td><td><span class="ct"> */</span></td></tr>
 <tr name="73" id="73">
-<td><a id="l73" class='ln'>73</a></td><td><span class="ct"> *</span></td></tr>
+<td><a id="l73" class='ln'>73</a></td><td><span class="kw">void</span> <a id="73c6" class="tk">TransferBlock_Terminate_wrapper</a>(<span class="kw">const</span> <a id="73c44" class="tk">real_T</a> <a id="73c51" class="tk">*</a><a id="73c52" class="tk">Param1</a>, <span class="kw">const</span> <a id="73c66" class="tk">int_T</a> <a id="73c72" class="tk">p_width0</a>)</td></tr>
 <tr name="74" id="74">
-<td><a id="l74" class='ln'>74</a></td><td><span class="ct"> */</span></td></tr>
+<td><a id="l74" class='ln'>74</a></td><td><span class="br">{</span></td></tr>
 <tr name="75" id="75">
-<td><a id="l75" class='ln'>75</a></td><td><span class="kw">void</span> <a id="75c6" class="tk">TransferBlock_Terminate_wrapper</a>(<span class="kw">const</span> <a id="75c44" class="tk">real_T</a> <a id="75c51" class="tk">*</a><a id="75c52" class="tk">Param1</a>, <span class="kw">const</span> <a id="75c66" class="tk">int_T</a> <a id="75c72" class="tk">p_width0</a>)</td></tr>
+<td><a id="l75" class='ln'>75</a></td><td><span class="ct">/* %%%-SFUNWIZ_wrapper_Terminate_Changes_BEGIN --- EDIT HERE TO _END */</span></td></tr>
 <tr name="76" id="76">
-<td><a id="l76" class='ln'>76</a></td><td><span class="br">{</span></td></tr>
+<td><a id="l76" class='ln'>76</a></td><td><span class="ct">/*</span></td></tr>
 <tr name="77" id="77">
-<td><a id="l77" class='ln'>77</a></td><td><span class="ct">/* %%%-SFUNWIZ_wrapper_Terminate_Changes_BEGIN --- EDIT HERE TO _END */</span></td></tr>
+<td><a id="l77" class='ln'>77</a></td><td><span class="ct"> * Custom Terminate code goes here.</span></td></tr>
 <tr name="78" id="78">
-<td><a id="l78" class='ln'>78</a></td><td><span class="ct">/*</span></td></tr>
+<td><a id="l78" class='ln'>78</a></td><td><span class="ct"> */</span></td></tr>
 <tr name="79" id="79">
-<td><a id="l79" class='ln'>79</a></td><td><span class="ct"> * Custom Terminate code goes here.</span></td></tr>
+<td><a id="l79" class='ln'>79</a></td><td><a id="79c1" class="tk">std</a>::<a id="79c6" class="tk">wcout</a> <a id="79c12" class="tk">&lt;&lt;</a> L"Im in Terminate" <a id="79c34" class="tk">&lt;&lt;</a> <a id="79c37" class="tk">std</a>::<a id="79c42" class="tk">endl</a>;</td></tr>
 <tr name="80" id="80">
-<td><a id="l80" class='ln'>80</a></td><td><span class="ct"> */</span></td></tr>
+<td><a id="l80" class='ln'>80</a></td><td><span class="kw">delete</span> <a id="80c8" class="tk">fed</a>;</td></tr>
 <tr name="81" id="81">
-<td><a id="l81" class='ln'>81</a></td><td><a id="81c1" class="tk">std</a>::<a id="81c6" class="tk">wcout</a> <a id="81c12" class="tk">&lt;&lt;</a> L"Im in Terminate" <a id="81c34" class="tk">&lt;&lt;</a> <a id="81c37" class="tk">std</a>::<a id="81c42" class="tk">endl</a>;</td></tr>
+<td><a id="l81" class='ln'>81</a></td><td><span class="ct">/* %%%-SFUNWIZ_wrapper_Terminate_Changes_END --- EDIT HERE TO _BEGIN */</span></td></tr>
 <tr name="82" id="82">
-<td><a id="l82" class='ln'>82</a></td><td><span class="kw">delete</span> <a id="82c8" class="tk">fed</a>;</td></tr>
+<td><a id="l82" class='ln'>82</a></td><td><span class="br">}</span></td></tr>
 <tr name="83" id="83">
-<td><a id="l83" class='ln'>83</a></td><td><span class="ct">/* %%%-SFUNWIZ_wrapper_Terminate_Changes_END --- EDIT HERE TO _BEGIN */</span></td></tr>
+<td><a id="l83" class='ln'>83</a></td><td></td></tr>
 <tr name="84" id="84">
-<td><a id="l84" class='ln'>84</a></td><td><span class="br">}</span></td></tr>
-<tr name="85" id="85">
-<td><a id="l85" class='ln'>85</a></td><td></td></tr>
-<tr name="86" id="86">
-<td><a id="l86" class='ln'>86</a></td><td></td></tr>
+<td><a id="l84" class='ln'>84</a></td><td></td></tr>
 </table>
 </pre>
 </body>

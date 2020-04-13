@@ -38,11 +38,11 @@ void TransferBlock_Start_wrapper(const real_T *Param1, const int_T p_width0)
  * Custom Start code goes here.
  */
 std::wcout << L"Im in Start" << std::endl;
-fed = new UPIM::Transfer(L"Fed",L"Laser",L"/home/k-110-04/QtWork/HLA/FOMS/TimeModel.xml");
-fed->SetPublishMapOfAttributes({L"Angle", L"Aim", L"Var",L"Ar"});
-fed->SetSubscribeMapOfObjectsAndAttributes({{L"Aircraft",{L"Speed",L"Name"}},{L"Laser",{L"Angle",L"Aim",L"Var",L"Ar"}}});
-fed->SetMapOfInteractionsAndParameters({{L"Communication",{L"Message"}}});
-fed->ConnectRRTI();
+fed = new UPIM::Transfer(L"Transfer1",L"Transfer",L"/home/k-110-04/QtWork/HLA/FOMS/ARMfom.xml");
+fed->SetPublishListOfAttributes({L"Value", L"Class", L"Vector",L"Array"});
+fed->SetSubscribeMapOfObjectsAndAttributes({{L"ARM",{L"Name"}}});
+fed->SetMapOfInteractionsAndParameters({{L"ARMaction",{L"Button",L"Tumbler"}}});
+fed->ConnectRTI();
 /* %%%-SFUNWIZ_wrapper_Start_Changes_END --- EDIT HERE TO _BEGIN */
 }
 /*
@@ -63,8 +63,6 @@ void TransferBlock_Outputs_wrapper(const real_T *X,
  */
 Y[0]=X[0]+1;
 sleep(1);
-std::wcout << *Param1 << std::endl;
-fed->SendToRTI(Y[0]);
 /* %%%-SFUNWIZ_wrapper_Outputs_Changes_END --- EDIT HERE TO _BEGIN */
 }
 
