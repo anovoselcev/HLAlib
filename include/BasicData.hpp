@@ -870,7 +870,7 @@ for (unsigned i=0; i<uiDim; i++) {
 
  //Casters
     template<typename RTItype, unsigned OBV = 8>
-    rti1516e::VariableLengthData cast_to_rti(std::vector<typename RTItype::type>& t){
+    rti1516e::VariableLengthData cast_to_rti(const std::vector<typename RTItype::type>& t){
         RTIvariableArray<RTItype,typename RTItype::type,OBV> conv;
         rti1516e::VariableLengthData v;
         conv.get(t);
@@ -888,7 +888,7 @@ for (unsigned i=0; i<uiDim; i++) {
     }
 
     template<typename RTItype, unsigned Size, unsigned OBV = 8>
-    rti1516e::VariableLengthData cast_to_rti(std::array<typename RTItype::type,Size>& t){
+    rti1516e::VariableLengthData cast_to_rti(const std::array<typename RTItype::type,Size>& t){
         RTIFixedArray<RTItype,typename RTItype::type, Size, OBV> conv;
         rti1516e::VariableLengthData v;
         conv.get(t);
@@ -906,7 +906,7 @@ for (unsigned i=0; i<uiDim; i++) {
     }
 
     template<typename RTItype>
-    rti1516e::VariableLengthData cast_to_rti(typename RTItype::type& t){
+    rti1516e::VariableLengthData cast_to_rti(const typename RTItype::type& t){
         RTItype conv;
         rti1516e::VariableLengthData v;
         conv.get(t);
