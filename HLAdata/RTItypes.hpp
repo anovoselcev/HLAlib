@@ -1,5 +1,5 @@
-#ifndef BASICCONVERTER_HPP
-#define BASICCONVERTER_HPP
+#ifndef RTITYPES_HPP
+#define RTITYPES_HPP
 #ifdef WIN32
 #pragma warning(disable: 4251)
 #pragma warning(disable: 4786)
@@ -182,4 +182,4 @@ namespace HLA {
             return t;
         }
   }
-#endif // BASICCONVERTER_HPP
+#endif // RTITYPES_HPP

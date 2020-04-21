@@ -1,5 +1,5 @@
-#ifndef MODELMUTEX_HPP
-#define MODELMUTEX_HPP
+#ifndef MODELGUARD_HPP
+#define MODELGUARD_HPP
 #include <mutex>
 
 namespace HLA {
@@ -29,4 +29,4 @@ namespace HLA {
     };
 }
 
-#endif // MODELMUTEX_HPP
+#endif // MODELGUARD_HPP
