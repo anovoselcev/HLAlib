@@ -23,7 +23,7 @@ SOURCES += \
     BaseFederate.cpp \
     HLAdata/BasicException.cpp \
     HLAdata/Tools.cpp \
-    ModelMutex.cpp
+    ModelGuard.cpp
 
 HEADERS += \
     BaseFederate.hpp \
@@ -38,7 +38,7 @@ HEADERS += \
     HLAdata/RTItypes.hpp \
     HLAdata/RTIvector.hpp \
     HLAdata/Tools.hpp \
-    ModelMutex.hpp
+    ModelGuard.hpp
 
 # Default rules for deployment.
 unix {

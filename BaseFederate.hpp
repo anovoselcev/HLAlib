@@ -525,7 +525,7 @@ namespace HLA{
         mutable std::unordered_map<std::wstring,std::vector<std::wstring>> _ObjectsNames;
         mutable std::unordered_map<std::wstring,std::vector<std::wstring>> _InteractionsNames;
 
-        friend class ModelMutex;
+        friend class ModelGuard;
     };
 
 
