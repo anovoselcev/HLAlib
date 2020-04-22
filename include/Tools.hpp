@@ -3,42 +3,11 @@
 #define FUNCTION_COMMON_API
 /////////////////////////////////
 #include <cstdint>
-#ifdef WIN32
-//#include <winsock2.h>
-//#include <Windows.h>
-#include <direct.h>
-#include <string.h>
-#else
-#include <sys/timeb.h>
-#include <sys/time.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <time.h>
-#endif // WIN32
-
-#ifdef WIN32
-#include <conio.h>
-#else
-#include <termios.h>
-#include <unistd.h>
-#include <sys/utsname.h>
-#endif
-
+#include <sstream>
 #include <stdlib.h>
 #include <errno.h>
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <map>
-#include <chrono>
-#include <algorithm>
+#include <string>
 
-#ifndef _USE_MATH_DEFINES
-#define _USE_MATH_DEFINES
-#endif
-#include <cmath>
 namespace HLA {
 
   namespace Tools {

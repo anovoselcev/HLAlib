@@ -1,21 +1,4 @@
 #include "../include/Tools.hpp"
-#include <locale>
-#include <vector>
-#include <algorithm>
-
-#ifndef WIN32
-#include <sys/time.h>
-#include <unistd.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <sys/socket.h>
-#else
-#include <mbstring.h>
-#include <sys/timeb.h>
-#include <time.h>
-#include <stdio.h>
-#endif
 
 using namespace std;
 

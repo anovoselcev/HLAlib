@@ -7,9 +7,10 @@
 #pragma warning(disable: 4482)
 #endif
 #include<exception>
-#include<string>
 #include"Tools.hpp"
+
 namespace HLA {
+
   class ExceptionForRTI : public std::exception {
   public:
     ExceptionForRTI(const std::exception& Ex);

@@ -53,39 +53,6 @@ namespace HLA {
     //Set Data to object, it prepare Variable Length Data to RTI
       virtual void setDataToRTI(rti1516e::VariableLengthData &obj) = 0;
 
-      void writeData(std::ofstream &OutStream){
-        rti1516e::VariableLengthData obj;
-        size_t obj_size;
-        if (OutStream.is_open()) {
-          setDataToRTI(obj);
-          obj_size = obj.size();
-          OutStream.write(static_cast<char*>(static_cast<void*>(&obj_size)), sizeof(size_t));
-          OutStream.write(static_cast<const char*>(obj.data()), static_cast<std::streamsize>(obj_size));
-        } else {
-          throw ExceptionForRTI("Файл не открыт");
-        }
-      }
-
-      void readData(std::ifstream &InputStream){
-        size_t obj_size;
-        char* ptrData = nullptr;
-        try {
-          if (InputStream.is_open()) {
-            InputStream.read(static_cast<char*>(static_cast<void*>(&obj_size)),sizeof(size_t));
-            ptrData = new char[obj_size];
-            InputStream.read(ptrData,static_cast<std::streamsize>(obj_size));
-            getData(ptrData,static_cast<unsigned long>(obj_size));
-            delete []ptrData;
-          } else {
-            throw ExceptionForRTI("Файл не открыт");
-          }
-        } catch (ExceptionForRTI &ex) {
-          if (ptrData != nullptr) {
-            delete []ptrData;
-          }
-          throw ex;
-        }
-      }
     //Set data to ptrDest with fixed size
       virtual void setData(void* ptrDest, unsigned long inSize) = 0;
     //Set data to ptrDest

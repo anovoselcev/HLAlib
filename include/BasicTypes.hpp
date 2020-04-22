@@ -10,14 +10,8 @@
 
 #include <string.h>
 #include <stdio.h>
-#include <ios>
-#include <iostream>
 #include <vector>
 #include <array>
-#include <fstream>
-#ifndef WIN32
-#include <sys/time.h>
-#endif
 
 #include <RTI/RTI1516.h>
 namespace HLA {
@@ -76,7 +70,6 @@ namespace HLA {
     using Integer64Time = Integer64BE;
     using Float64Time   = Float64BE;
 
-    using ASCIIstring = std::string;
     using String = std::string;
     using Wstring = std::wstring;
     template<typename T>
