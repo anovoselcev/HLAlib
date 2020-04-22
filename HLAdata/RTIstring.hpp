@@ -5,15 +5,15 @@
 #include "RTItypes.hpp"
 
 namespace HLA {
-    template <class T2>
-    class BaseRTIstring : public ClassForRTI<T2,1> {
+    template <class StringType>
+    class BaseRTIstring : public ClassForRTI<StringType,1> {
     public:
 
-      using type = T2;
+      using type = StringType;
 
       BaseRTIstring() {
         unsigned lenth = 0;
-        m_str = std::string(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
       }
 
       void get(BaseRTIstring const &str) {
@@ -24,37 +24,37 @@ namespace HLA {
           m_str = std::move(str);
       }
 
-      BaseRTIstring(std::string const &str) {
+      BaseRTIstring(StringType const &str) {
         unsigned lenth = static_cast<unsigned>(str.length());
         Tools::changeENDIAN(lenth);
-        m_str = std::string(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
         m_str += str;
       }
 
-      BaseRTIstring(std::string&& str) {
+      BaseRTIstring(StringType&& str) {
         unsigned lenth = static_cast<unsigned>(str.length());
         Tools::changeENDIAN(lenth);
-        m_str = std::string(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
         m_str += std::move(str);
       }
 
-      virtual void get(std::string const &str){
+      virtual void get(StringType const &str){
         unsigned lenth = static_cast<unsigned>(str.length());
         Tools::changeENDIAN(lenth);
-        m_str = std::string(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
         m_str += str;
       }
 
-      virtual void get(std::string&& str){
+      virtual void get(StringType&& str){
         unsigned lenth = static_cast<unsigned>(str.length());
         Tools::changeENDIAN(lenth);
-        m_str = std::string(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
         m_str += std::move(str);
       }
 
       void getDataFromRTI(rti1516e::VariableLengthData const &obj){
         unsigned iq = static_cast<unsigned>(obj.size());
-        m_str = std::string(reinterpret_cast<const char*>(obj.data()),iq);
+        m_str = StringType(reinterpret_cast<const char*>(obj.data()),iq);
       }
 
       void getData(void* ptrSource, unsigned long inSize){
@@ -62,15 +62,12 @@ namespace HLA {
         memcpy(&_size, ptrSource, 4);
         Tools::changeENDIAN(_size);
         if (_size!=inSize-4) {
-          std::stringstream wstrOut;
-          wstrOut
-              << L"Размер данных не совпал. Должно прийти " << getsize()
-              << L" пришло " << inSize << L" байт";
 
-          ExceptionForRTI ex(wstrOut.str());
+          ExceptionForRTI ex(L"Размер данных не совпал. Должно прийти " + std::to_wstring(getsize())
+                              + L" пришло " + std::to_wstring(inSize) + L" байт");
           throw ex;
         }
-        m_str = std::string(reinterpret_cast<char*>(ptrSource),_size+4);
+        m_str = StringType(reinterpret_cast<char*>(ptrSource),_size+4);
 
       }
 
@@ -79,21 +76,18 @@ namespace HLA {
         memcpy(&_size, ptrSource, 4);
         Tools::changeENDIAN(_size);
         if (_size > inSize-4) {
-          std::stringstream wstrOut;
-          wstrOut
-              << L"Размер данных не совпал. Должно прийти " << getsize()
-              << L" пришло " << inSize << L" байт";
 
-          ExceptionForRTI ex(wstrOut.str());
+          ExceptionForRTI ex(L"Размер данных не совпал. Должно прийти " + std::to_wstring(getsize())
+                             + L" пришло " + std::to_wstring(inSize) + L" байт");
           throw ex;
         }
-        m_str = std::string(reinterpret_cast<char*>(ptrSource),_size+4);
+        m_str = StringType(reinterpret_cast<char*>(ptrSource),_size+4);
       }
 
-      void get(T2& ModelStr) {
+      void get(StringType& ModelStr) {
         unsigned lenth = static_cast<unsigned>(ModelStr.length());
         Tools::changeENDIAN(lenth);
-        m_str = std::string(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
         m_str += ModelStr;
       }
 
@@ -103,12 +97,8 @@ namespace HLA {
 
       void setData(void* ptrDest, unsigned long inSize) /*noexcept(false)*/ {
         if (getsize()!=inSize) {
-            std::stringstream wstrOut;
-            wstrOut
-                << L"Размер данных не совпал. Должно прийти " << getsize()
-                << L" пришло " << inSize << L" байт";
-
-            ExceptionForRTI ex(wstrOut.str());
+            ExceptionForRTI ex(L"Размер данных не совпал. Должно прийти " + std::to_wstring(getsize())
+                               + L" пришло " + std::to_wstring(inSize) + L" байт");
             throw ex;
         }
         memcpy(ptrDest, reinterpret_cast<char*>(&m_str[0]), inSize);
@@ -119,8 +109,8 @@ namespace HLA {
         return getsize();
       }
 
-      void set(T2& ModelStr) {
-        ModelStr = std::string(&m_str[4], m_str.size()-4);
+      void set(StringType& ModelStr) {
+        ModelStr = StringType(&m_str[4], m_str.size()-4);
       }
 
       unsigned getsize() {
@@ -130,11 +120,9 @@ namespace HLA {
       unsigned getOctetBoundary() {return 1;}
 
     private:
-      std::string m_str;
+      StringType m_str;
     };
 
-    using unicodeString = Vector<unicodeChar>;
-    using RTIunicodeString = BaseRTIstring<unicodeString>;
     using RTIstring = BaseRTIstring<String>;
     using RTIwstring = BaseRTIstring<Wstring>;
 }
