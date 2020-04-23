@@ -196,10 +196,10 @@ namespace HLA{
     template<typename RTItype, unsigned Size, unsigned OBV>
     typename std::array<typename RTItype::type, Size> cast_from_rti(const rti1516e::VariableLengthData& v){
         RTIarray<RTItype,typename RTItype::type, Size, OBV> conv;
-        std::array<RTItype, Size> t;
+        std::array<typename RTItype::type, Size> t;
         conv.getDataFromRTI(v);
         conv.set(t);
-        return std::move(t);
+        return t;
     }
 }
 #endif // RTIARRAY_HPP

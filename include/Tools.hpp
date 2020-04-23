@@ -30,9 +30,13 @@ namespace HLA {
 
     unsigned getPendingBytes(unsigned uiElementSize, unsigned OctetBoundaryValue);
 
-    std::wstring widen(std::string& s);
+    std::wstring widen(const std::string& s);
 
     std::wstring widen(std::string&& s);
+
+    std::string unwiden(const std::wstring& s);
+
+    std::string unwiden(std::wstring&& s);
 
   }
 }

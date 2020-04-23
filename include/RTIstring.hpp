@@ -4,107 +4,97 @@
 
 #include "RTItypes.hpp"
 
+#include <type_traits>
+#include<iostream>
 namespace HLA {
-    template <class StringType>
-    class BaseRTIstring : public ClassForRTI<StringType,1> {
+    template <class StringType,
+              class symb = typename std::conditional<std::is_same<StringType,std::string>::value,char,wchar_t>::type,
+              int OBV = sizeof (symb),
+              int unit = 4>
+    class BaseRTIstring : public ClassForRTI<StringType,OBV> {
     public:
 
-      using type = StringType;
+        using type = StringType;
 
       BaseRTIstring() {
         unsigned lenth = 0;
-        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<symb*>(&lenth),unit);
       }
 
       void get(BaseRTIstring const &str) {
         m_str = str;
       }
 
-      void get(BaseRTIstring&& str){
-          m_str = std::move(str);
-      }
-
       BaseRTIstring(StringType const &str) {
         unsigned lenth = static_cast<unsigned>(str.length());
         Tools::changeENDIAN(lenth);
-        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<symb*>(&lenth),unit);
         m_str += str;
-      }
-
-      BaseRTIstring(StringType&& str) {
-        unsigned lenth = static_cast<unsigned>(str.length());
-        Tools::changeENDIAN(lenth);
-        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
-        m_str += std::move(str);
       }
 
       virtual void get(StringType const &str){
         unsigned lenth = static_cast<unsigned>(str.length());
         Tools::changeENDIAN(lenth);
-        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<symb*>(&lenth),unit);
         m_str += str;
       }
 
-      virtual void get(StringType&& str){
-        unsigned lenth = static_cast<unsigned>(str.length());
-        Tools::changeENDIAN(lenth);
-        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
-        m_str += std::move(str);
-      }
-
-      void getDataFromRTI(rti1516e::VariableLengthData const &obj){
+      void getDataFromRTI(rti1516e::VariableLengthData const &obj) /*noexcept(false)*/ {
         unsigned iq = static_cast<unsigned>(obj.size());
-        m_str = StringType(reinterpret_cast<const char*>(obj.data()),iq);
+        m_str = StringType(reinterpret_cast<const symb*>(obj.data()),iq/OBV);
       }
-
-      void getData(void* ptrSource, unsigned long inSize){
+      void getData(void* ptrSource, unsigned long inSize) /*noexcept(false)*/{
         unsigned _size;
-        memcpy(&_size, ptrSource, 4);
+        memcpy(&_size, ptrSource, unit);
         Tools::changeENDIAN(_size);
-        if (_size!=inSize-4) {
+        if (_size!=inSize-unit) {
 
-          ExceptionForRTI ex(L"Размер данных не совпал. Должно прийти " + std::to_wstring(getsize())
-                              + L" пришло " + std::to_wstring(inSize) + L" байт");
+          ExceptionForRTI ex(L"Размер данных не совпал. Должно прийти " + std::to_wstring(getsize()) +
+                             L" пришло " + std::to_wstring(inSize) + L" байт. In String getData");
           throw ex;
         }
-        m_str = StringType(reinterpret_cast<char*>(ptrSource),_size+4);
+        m_str = StringType(reinterpret_cast<symb*>(ptrSource),_size+unit);
 
       }
 
-      void getDataMax(void* ptrSource, unsigned long inSize){
+      void getDataMax(void* ptrSource, unsigned long inSize) /*noexcept(false)*/
+      {
         unsigned _size;
-        memcpy(&_size, ptrSource, 4);
+        memcpy(&_size, ptrSource, unit);
+        //std::wcout << _size << std::endl;
         Tools::changeENDIAN(_size);
-        if (_size > inSize-4) {
 
-          ExceptionForRTI ex(L"Размер данных не совпал. Должно прийти " + std::to_wstring(getsize())
-                             + L" пришло " + std::to_wstring(inSize) + L" байт");
+
+        if (_size > inSize-unit) {
+          ExceptionForRTI ex(L"Размер данных не совпал. Должно прийти " + std::to_wstring(getsize()) +
+                             L" пришло " + std::to_wstring(inSize) + L" байт. In String getDataMax");
           throw ex;
         }
-        m_str = StringType(reinterpret_cast<char*>(ptrSource),_size+4);
+        m_str = StringType(reinterpret_cast<symb*>(ptrSource),_size+unit);
       }
 
       void get(StringType& ModelStr) {
         unsigned lenth = static_cast<unsigned>(ModelStr.length());
         Tools::changeENDIAN(lenth);
-        m_str = StringType(reinterpret_cast<char*>(&lenth),4);
+        m_str = StringType(reinterpret_cast<symb*>(&lenth),unit);
         m_str += ModelStr;
       }
 
-      void setDataToRTI(rti1516e::VariableLengthData &data){
-        data.setData(reinterpret_cast<char*>(&m_str[0]), static_cast<unsigned long>(m_str.size()));
+      void setDataToRTI(rti1516e::VariableLengthData &data) /*noexcept(false)*/ {
+        data.setData(reinterpret_cast<symb*>(&m_str[0]), static_cast<unsigned long>(m_str.size()*OBV));
       }
 
       void setData(void* ptrDest, unsigned long inSize) /*noexcept(false)*/ {
         if (getsize()!=inSize) {
-            ExceptionForRTI ex(L"Размер данных не совпал. Должно прийти " + std::to_wstring(getsize())
-                               + L" пришло " + std::to_wstring(inSize) + L" байт");
-            throw ex;
+
+          ExceptionForRTI ex(L"Размер данных не совпал. Должно прийти " + std::to_wstring(getsize()) +
+                             L" пришло " + std::to_wstring(inSize) + L" байт. In String SetData");
+          throw ex;
         }
-        memcpy(ptrDest, reinterpret_cast<char*>(&m_str[0]), inSize);
+        memcpy(ptrDest, reinterpret_cast<symb*>(&m_str[0]), inSize);
       }
 
-      unsigned setData(void* ptrDest)  {
+      unsigned setData(void* ptrDest) /*noexcept(false)*/ {
         memcpy(ptrDest, &m_str[0], getsize());
         return getsize();
       }
@@ -114,14 +104,14 @@ namespace HLA {
       }
 
       unsigned getsize() {
-        return static_cast<unsigned>(m_str.size());
+        return static_cast<unsigned>(m_str.size())*OBV;
       }
+      unsigned getOctetBoundary() {return OBV;}
 
-      unsigned getOctetBoundary() {return 1;}
 
     private:
       StringType m_str;
-    };
+};
 
     using RTIstring = BaseRTIstring<String>;
     using RTIwstring = BaseRTIstring<Wstring>;

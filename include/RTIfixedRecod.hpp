@@ -165,14 +165,14 @@ namespace HLA {
 
       template<bool first = true, typename Field, typename ...Fields>
       void auto_geter_second(unsigned& offset, unsigned& uiSize, Field& field, Fields&... fields){
-          uiSize = field.getsize();
-          field.setData(ptrData+offset,uiSize);
           unsigned P,mmOBV;
           if(!first){
             mmOBV = field.getOctetBoundary();
             P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
             offset += uiSize+P;
           }
+          uiSize = field.getsize();
+          field.setData(ptrData+offset,uiSize);
           auto_geter_second<false>(offset,uiSize,fields...);
       }
 
