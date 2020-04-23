@@ -116,3 +116,4 @@ void TestRTIarray(){
     TestArrayWstring();
 }
 #endif // TESTRTIARRAY_HPP
+//
