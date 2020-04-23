@@ -260,10 +260,9 @@ namespace HLA{
             }
             _cond.notify_one();
             std::this_thread::sleep_for(std::chrono::milliseconds(_modeling_step));
-            thread AttributeTread(&BaseFederate::AttributeProcess,this);
             thread ParametersThread(&BaseFederate::ParameterProcess,this);
             ParametersThread.detach();
-            AttributeTread.join();
+            AttributeProcess();
             UpdateAttributes();
         }
     }

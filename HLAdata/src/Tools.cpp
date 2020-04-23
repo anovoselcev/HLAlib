@@ -1,4 +1,4 @@
-#include "Tools.hpp"
+#include "../include/Tools.hpp"
 
 using namespace std;
 
@@ -76,10 +76,32 @@ namespace HLA {
       return PendingBytes;
     }
 
-    std::wstring widen(std::string& s){
-        std::wstring ws;
-        ws.assign(s.begin(),s.end());
-        return ws;
+    std::wstring widen( const std::string& in)
+    {
+      std::wstring out;
+#ifdef WIN32
+      int iSize = (int)in.size()+1;
+      std::vector<WCHAR> s2(iSize);// room for 100 characters
+      //...
+      MultiByteToWideChar(
+            CP_UTF8,
+            //CP_THREAD_ACP, // code page
+            0, // character-type options
+            in.c_str(), // string to std::map
+            (int)in.length(), // number of bytes in string
+            &s2[0], // wide-character buffer (must use std::vector here!)
+          iSize // size of buffer
+          );
+      out = &s2[0]; // Assign std::vector cont
+#else
+      unsigned n;
+      n = mbstowcs(NULL,in.c_str(),0)+1;
+      wchar_t* wch_t = new wchar_t[n];
+      n = mbstowcs(wch_t,in.c_str(),n);
+      out = wch_t;
+      delete []wch_t;
+#endif
+      return out;
     }
 
     std::wstring widen(std::string&& s){
@@ -88,5 +110,14 @@ namespace HLA {
         return ws;
     }
 
+    std::string unwiden(const std::wstring & s){
+        std::string str(s.begin(),s.end());
+        return str;
+    }
+
+    std::string unwiden(std::wstring&& s){
+        std::string str(s.begin(),s.end());
+        return str;
   }
+}
 }
