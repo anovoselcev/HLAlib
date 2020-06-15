@@ -27,8 +27,8 @@ namespace HLA {
         time_t seconds = time(nullptr);
         tm* timeinfo = localtime(&seconds);
         std::wostringstream os;
-        os <<L">>" <<asctime(timeinfo) << L": " << _stream.str() << L'\n';
-        _stream.clear();
+        os << L">>" << asctime(timeinfo) << L": " << _stream.str() << L'\n';
+        _stream.str(L"");
         _file << os.str();
         return *this;
     }
@@ -39,7 +39,7 @@ namespace HLA {
             time_t seconds = time(nullptr);
             tm* timeinfo = localtime(&seconds);
             std::wostringstream os;
-            os << asctime(timeinfo) << ": " << _stream.str() << '\n';
+            os << L">>" << asctime(timeinfo) << ": " << _stream.str() << L'\n';
             _stream.clear();
             _file << os.str();
         }

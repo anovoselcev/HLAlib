@@ -101,7 +101,7 @@ namespace HLA{
         try{
     //After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
             _rtiAmbassador->joinFederationExecution(_federate_name,_federation_name);
-            log << L"INFO:" << L"Connect done" << Logger::Flush();
+            log << L"INFO:" << L"Connect of" << _federate_name <<  L"done" << Logger::Flush();
         }
         catch(...){
             log << L"ERROR:" << L"Can't join" << Logger::Flush();
@@ -115,7 +115,7 @@ namespace HLA{
     // (other types and attributes indicated in _ObjectsNames) and their connections for this federate
             Init();
 
-            log << L"INFO:" << L"Init done" << Logger::Flush();
+            log << L"INFO:" << L"Init of" << _federate_name << L"done" << Logger::Flush();
         }
         catch(RTIinternalError& e){
             log << L"ERROR:" << L"Error in Init() with" << e.what() << Logger::Flush();
@@ -282,8 +282,8 @@ namespace HLA{
     void BaseFederate::SendParameters() const{}
 
     void BaseFederate::ThreadModeling(){
-        Logger log(_log_filename);
         while(_f_modeling){
+            Logger log(_log_filename);
             {
                 lock_guard<mutex> guard(_smutex);
                 _state = State::DOING;

@@ -2,7 +2,6 @@
 #define RTIVECTOR_HPP
 
 #include "BasicTemplates.hpp"
-#include "profile.hpp"
 namespace HLA {
 
     template <class T_FOM, class T_MOD, unsigned m_OBV=1>

@@ -27,7 +27,6 @@ SOURCES += \
     ModelGuard.cpp
 
 HEADERS += \
-    BaseFederate.hpp \
     HLAdata/BasicException.hpp \
     HLAdata/BasicTemplates.hpp \
     HLAdata/BasicTypes.hpp \
@@ -35,7 +34,7 @@ HEADERS += \
     HLAdata/Tools.hpp \
     Logger.hpp \
     ModelGuard.hpp \
-    TestFederate.hpp
+    *Federate.hpp
 
 # Default rules for deployment.
 unix {
