@@ -1,4 +1,4 @@
-#include "../include/BasicException.hpp"
+#include "BasicException.hpp"
 
 namespace HLA {
 
@@ -9,11 +9,11 @@ namespace HLA {
   }
 
   ExceptionForRTI::ExceptionForRTI(const wchar_t *const& wchEx) {
-    _ExceptionMessage = Tools::UTF16toUTF8(std::wstring(wchEx));
+    _ExceptionMessage = Tools::unwiden(std::wstring(wchEx));
   }
 
   ExceptionForRTI::ExceptionForRTI(const std::wstring& wstrEx) {
-    _ExceptionMessage = Tools::UTF16toUTF8(wstrEx);
+    _ExceptionMessage = Tools::unwiden(wstrEx);
   }
 
 

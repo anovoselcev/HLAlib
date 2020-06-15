@@ -1,13 +1,9 @@
 #ifndef BASICEXCEPTION_HPP
 #define BASICEXCEPTION_HPP
-#ifdef WIN32
-#pragma warning(disable: 4251)
-#pragma warning(disable: 4786)
-#pragma warning(disable: 4290)
-#pragma warning(disable: 4482)
-#endif
+
 #include<exception>
 #include"Tools.hpp"
+#include <memory.h>
 
 namespace HLA {
 

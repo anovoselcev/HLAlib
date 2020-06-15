@@ -3,19 +3,35 @@
 
 namespace HLA {
 
+ModelGuard::ModelGuard(){}
+
     ModelGuard::ModelGuard(BaseFederate* fed) : _federate(fed){
-        if(_federate!=nullptr){
+        _start = std::chrono::steady_clock::now();
+        if(_federate!=nullptr)
             lock = std::unique_lock<std::mutex>(_federate->_smutex);
-            _federate->_cond.wait(lock,[this]{
-                return _federate->_f_state;
-            });
-            _federate->_f_state = false;
-        }
         else
             throw std::runtime_error("Nullptr federate");
+
+        if(_federate->_mode == ModelMode::THREADING)
+            ThreadModelingControl();
+        else
+            FollowModelingControl();
     }
 
     ModelGuard::~ModelGuard(){
         lock.unlock();
+    }
+
+    void ModelGuard::ThreadModelingControl(){
+        _federate->_cond.wait(lock,[this]{
+            return _federate->_state==State::DOING;
+        });
+        _federate->_state = State::PROCESSING;
+    }
+
+    void ModelGuard::FollowModelingControl(){
+        _federate->_state = State::PROCESSING;
+        _federate->FollowModeling();
+        _federate->_last_time = std::chrono::steady_clock::now();
     }
 }

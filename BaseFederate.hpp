@@ -5,14 +5,27 @@
 #include <RTI/NullFederateAmbassador.h>
 
 #include <unordered_map>
-#include <vector>
-#include <memory>
 #include <thread>
 #include <queue>
-#include <mutex>
 #include <condition_variable>
 
 namespace HLA{
+
+    enum class ModelMode{
+        FOLLOWING = 0,
+        THREADING = 1
+    };
+
+    enum class State{
+        PREPARE      = 0,
+        NAMERESERVED = 1,
+        CONNECTED    = 2,
+        STARTED      = 3,
+        PROCESSING   = 4,
+        DOING        = 5,
+        EXIT         = -1
+    };
+
 /**
 * @brief The BaseFederate class
 * Basic federate
@@ -57,7 +70,7 @@ namespace HLA{
                      std::wstring&& type,
                      std::wstring&& FOMname,
                      std::wstring&& fname,
-                      std::wstring&& ip = L"localhost") noexcept;
+                     std::wstring&& ip = L"localhost") noexcept;
 
  /**
 * @brief ~BaseFederate
@@ -97,123 +110,154 @@ namespace HLA{
 * @brief ConnectRRTI
 * Connect to RTI. In order to connect we need to create federation based on FOM (isn't nessary, if federation already exist) and join there. After that federate initialized in RTI and go to the his main loop. Use only to lvalue class samples
 */
-        virtual void ConnectRTI() &;
+         bool ConnectRTI();
 
 /**
 * @brief operator ()
 * @param step
 * Operator that run federate with modelin_step in milliseconds = step like functional object
 */
-        virtual void operator()(int step=100) &;
+        virtual bool operator()(int step=100);
 
 /**
 * @brief GetName
 * @return std::wstring
 */
-        virtual std::wstring GetName() const noexcept;
+        const std::wstring GetName() const noexcept;
 
 /**
 * @brief GetType
 * @return std::wstring
 */
-        virtual std::wstring GetType() const noexcept;
+        const std::wstring GetType() const noexcept;
 
 /**
 * @brief GetFederation
 * @return std::wstring
 */
-        virtual std::wstring GetFederation() const noexcept;
+        const std::wstring GetFederation() const noexcept;
 
 /**
 * @brief GetFOMpath
 * @return std::wstring
 */
-        virtual std::wstring GetFOMpath() const noexcept;
+        const std::wstring GetFOMpath() const noexcept;
 
 /**
 * @brief GetIP
 * @return std::wstring
 */
-        virtual std::wstring GetIP() const noexcept;
+        const std::wstring GetIP() const noexcept;
 
 /**
 * @brief GetCallbackMode
 * @return std::wstring
 */
-        virtual std::wstring GetCallbackMode() const noexcept;
+        rti1516e::CallbackModel GetCallbackMode() const noexcept;
+
+
+        ModelMode GetModelMode() const noexcept;
+
+        State GetState() const noexcept;
 
 /**
 * @brief SetMapOfObjectsAndAttributes
 * Set default map of Objects and Attribute of basic federate (lvalue version)
 */
-        virtual void SetSubscribeMapOfObjectsAndAttributes(const std::unordered_map<std::wstring,std::vector<std::wstring>>&) noexcept;
+        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(const std::unordered_map<std::wstring,std::vector<std::wstring>>&) noexcept;
 
 /**
 * @brief SetMapOfObjectsAndAttributes
 * Set default map of Objects and Attribute of basic federate (rvalue version)
 */
-        virtual void SetSubscribeMapOfObjectsAndAttributes(std::unordered_map<std::wstring,std::vector<std::wstring>>&&) noexcept;
+        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(std::unordered_map<std::wstring,std::vector<std::wstring>>&&) noexcept;
 
 /**
 * @brief SetPublishListOfAttributes
 * Set list of attributes for publish (lvalue version)
 */
-        virtual void SetPublishListOfAttributes(const std::vector<std::wstring>&) noexcept;
+        BaseFederate& SetPublishListOfAttributes(const std::vector<std::wstring>&) noexcept;
 
 /**
 * @brief SetPublishListOfAttributes
 * Set list of attributes for publish (rvalue version)
 */
-        virtual void SetPublishListOfAttributes(std::vector<std::wstring>&&) noexcept;
+        BaseFederate& SetPublishListOfAttributes(std::vector<std::wstring>&&) noexcept;
 
 
 /**
 * @brief SetMapOfInteractionsAndParameters
 * Set default map of Interactions and Parameters of basic federate (lvalue version)
 */
-        virtual void SetMapOfInteractionsAndParameters(const std::unordered_map<std::wstring,std::vector<std::wstring>>&) noexcept;
+        BaseFederate& SetMapOfInteractionsAndParameters(const std::unordered_map<std::wstring,std::vector<std::wstring>>&) noexcept;
 
 /**
 * @brief SetMapOfInteractionsAndParameters
 * Set default map of Interactions and Parameters of basic federate (rvalue version)
 */
-        virtual void SetMapOfInteractionsAndParameters(std::unordered_map<std::wstring,std::vector<std::wstring>>&&) noexcept;
+        BaseFederate& SetMapOfInteractionsAndParameters(std::unordered_map<std::wstring,std::vector<std::wstring>>&&) noexcept;
 
 /**
 * @brief SetModelingStep
 * @param _step
 * Set modeling step in milliseconds
 */
-        virtual void SetModelingStep(int _step) noexcept;
+        BaseFederate& SetModelingStep(int _step) noexcept;
 
+
+        BaseFederate& SetModelMode(ModelMode mode) noexcept;
 /**
 * @brief SetSyncCallbackMode
 * Change Callback mode to Synchronize, default Asynchronize
 */
-        virtual void SetSyncCallbackMode(bool) noexcept;
+         BaseFederate& SetSyncCallbackMode(bool) noexcept;
+
+         BaseFederate& SetLogFileName(const std::string&) noexcept;
+
+         BaseFederate& SetLogFileName(std::string&&) noexcept;
 
 
-    protected:
+    private:
+/**
+* @brief The ObjectClassHash struct
+* Hash for Object Class
+*/
+        struct ObjectClassHash{
+            size_t operator()(const rti1516e::ObjectClassHandle& _Object) const noexcept{
+                return _Object.hash();
+            }
+        };
+
+/**
+* @brief The InteractionClassHash struct
+* Hash for Interaction Class
+*/
+        struct InteractionClassHash{
+            size_t operator()(const rti1516e::InteractionClassHandle& _Interaction) const noexcept{
+                return _Interaction.hash();
+            }
+        };
 
 /**
 * @brief MakeRTIambassador
 * @return std::unique_ptr<rti1516e::RTIambassador>
 * Create RTIambassador pointer(unique_ptr) object, that provide access to RTI services
 */
-        virtual std::unique_ptr<rti1516e::RTIambassador> MakeRTIambassador() const;
+        std::unique_ptr<rti1516e::RTIambassador> MakeRTIambassador() const &;
 
 /**
 * @brief Init
 * Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate.
 */
-        virtual void Init();
+        void Init();
 
 
 /**
 * @brief InitClassesAndAttributes
 * Initializerd federate object and his attributes indicated in _AttributeNames and environmental objects and attributes indicated in _ObjectNames
 */
-        virtual void InitClassesAndAttributes();
+        void InitClassesAndAttributes(std::unordered_map<rti1516e::ObjectClassHandle,rti1516e::AttributeHandleSet,ObjectClassHash>&,
+                                              rti1516e::AttributeHandleSet&);
 
 
 /**
@@ -221,39 +265,40 @@ namespace HLA{
 * Set the _InteractionsNames to _InteractionClasses
 * Set the _InteractionsNames to _ParametersMap
 */
-        virtual void InitInteractionsAndParameters();
+        void InitInteractionsAndParameters();
 
 /**
 * @brief SubscribeAttributes
 * Call RTI to subscribe on Objects and Attributes from _externAttributesSet
 */
-        virtual void SubscribeAttributes();
+        void SubscribeAttributes(std::unordered_map<rti1516e::ObjectClassHandle,rti1516e::AttributeHandleSet,ObjectClassHash>&);
 
 /**
 * @brief PublishAttributes
 * Call RTI to publish the _MyClass with his attributes
 */
-        virtual void PublishAttributes();
+        void PublishAttributes(rti1516e::AttributeHandleSet&);
 
 /**
 * @brief SubscribeParameters
 * Call RTI to subscribe on Interactions and Parameters from _ParametersMap
 */
-        virtual void SubscribeParameters();
+        void SubscribeParameters();
 
 /**
 * @brief PublishParameters
 * Call RTI to publish the Interactions and Parameters from _ParametersMap
 */
-        virtual void PublishParameters();
+        void PublishParameters();
 
 /**
 * @brief RegisterName
 * Call RTI to reserve and register federate name - _federate_name and init this object as _MyInstanceID
 */
-        virtual void RegisterName();
+        void RegisterName();
 
 
+    protected:
 /**
 * @brief RunFederate
 * The main loop of federate ( default: empty method without loop)
@@ -276,7 +321,9 @@ namespace HLA{
  * @brief Modeling
  * Main function of modeling that sleep for modeling step and after that process queue of attributes and parameters and update attributes
  */
-        virtual void Modeling();
+        virtual void ThreadModeling();
+
+        virtual void FollowModeling();
 
  /**
  * @brief AttributeProcess
@@ -336,25 +383,7 @@ namespace HLA{
                                          rti1516e::SupplementalReceiveInfo theReceiveInfo)
         throw (rti1516e::FederateInternalError) override;
 
-/**
-* @brief The ObjectClassHash struct
-* Hash for Object Class
-*/
-        struct ObjectClassHash{
-            size_t operator()(const rti1516e::ObjectClassHandle& _Object) const noexcept{
-                return _Object.hash();
-            }
-        };
 
-/**
-* @brief The InteractionClassHash struct
-* Hash for Interaction Class
-*/
-        struct InteractionClassHash{
-            size_t operator()(const rti1516e::InteractionClassHandle& _Interaction) const noexcept{
-                return _Interaction.hash();
-            }
-        };
 
 //Determining parameters of federate
 /** @brief _federate_name
@@ -369,48 +398,29 @@ namespace HLA{
 * Path to FOM
 */
         const std::wstring _FOMname;
-/** @brief _host_IP_address
-* IP address of CRC
-*/
-        const std::wstring _host_IP_address;
+
 /** @brief _federation_name
 * Name of Federation
 */
         const std::wstring _federation_name;
 
+/** @brief _host_IP_address
+* IP address of CRC
+*/
+        const std::wstring _host_IP_address;
 
 
+        std::string _log_filename = "LogFile";
 
+        State _state = State::PREPARE;
 
-//Federate work flags
-/** @brief _f_name_reserve
-* Flag of succes name reservation
-*/
-        bool _f_name_reserve = false;
-/** @brief _f_connect
-* Flag of succes connect to RTI
-*/
-        bool _f_connect      = false;
-/** @brief _f_time
-* Flag of succes time set up
-*/
-        bool _f_time         = false;
-/** @brief _f_start
-* Flag of succes start
-*/
-        bool _f_start        = false;
+        ModelMode _mode = ModelMode::THREADING;
 /**
 * @brief _f_modeling
 * Flag of modeling execution
 */
         bool _f_modeling     = false;
 
-/**
-* @brief _f_state
-* Flag of launch main thread if ModelMutex using
-*/
-
-        bool _f_state        = false;
 
 /** @brief _callback_mode
 * RTI sync run mode
@@ -423,6 +433,8 @@ namespace HLA{
 */
 
         std::condition_variable _cond;
+
+
 /**
 * @brief _rtiAmbassador
 * Pointer for RTI-ambassador object
@@ -468,18 +480,6 @@ namespace HLA{
         std::unordered_map<rti1516e::InteractionClassHandle,std::unordered_map<std::wstring,rti1516e::ParameterHandle>,InteractionClassHash> _ParametersMap;
 
 /**
-* @brief _externAttributesSet
-* Hash-map of extern Object Classes and their Attributes Hash-set [ClassID,AttributeSet]
-*/
-        std::unordered_map<rti1516e::ObjectClassHandle,rti1516e::AttributeHandleSet,ObjectClassHash> _externAttributesSet;
-
-/**
-* @brief _aPublishSetId
-* Attribute Set of Self Attributes
-*/
-        rti1516e::AttributeHandleSet _aPublishSet;
-
-/**
 * @brief _qAttributes
 * Queue of reflected attributes
 */
@@ -515,6 +515,8 @@ namespace HLA{
 * Value of modeling step in milliseconds
 */
         int _modeling_step = 100;
+
+        std::chrono::time_point<std::chrono::steady_clock> _last_time;
 
 /**
 *Configs for Objects and Interaction Maps

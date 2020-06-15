@@ -23,6 +23,7 @@ SOURCES += \
     BaseFederate.cpp \
     HLAdata/BasicException.cpp \
     HLAdata/Tools.cpp \
+    Logger.cpp \
     ModelGuard.cpp
 
 HEADERS += \
@@ -30,15 +31,11 @@ HEADERS += \
     HLAdata/BasicException.hpp \
     HLAdata/BasicTemplates.hpp \
     HLAdata/BasicTypes.hpp \
-    HLAdata/HLAdata.hpp \
-    HLAdata/RTIarray.hpp \
-    HLAdata/RTIenum.hpp \
-    HLAdata/RTIfixedRecod.hpp \
-    HLAdata/RTIstring.hpp \
-    HLAdata/RTItypes.hpp \
-    HLAdata/RTIvector.hpp \
+    HLAdata/HLA*.hpp\
     HLAdata/Tools.hpp \
-    ModelGuard.hpp
+    Logger.hpp \
+    ModelGuard.hpp \
+    TestFederate.hpp
 
 # Default rules for deployment.
 unix {

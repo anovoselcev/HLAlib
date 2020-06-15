@@ -4,12 +4,12 @@
 
 namespace HLA {
 
-    class BaseFederate;
+class BaseFederate;
 
     class ModelGuard{
     public:
 
-        ModelGuard() = delete;
+        ModelGuard();
 
         ModelGuard(BaseFederate*);
 
@@ -23,9 +23,16 @@ namespace HLA {
 
         ModelGuard& operator=(ModelGuard&&) = delete;
 
-    private:
+
+    protected:
+
+        void ThreadModelingControl();
+
+        void FollowModelingControl();
+
         BaseFederate* _federate = nullptr;
         std::unique_lock<std::mutex> lock;
+        std::chrono::time_point<std::chrono::steady_clock> _start;
     };
 }
 

@@ -5,15 +5,17 @@
 #include "TestRTIvector.hpp"
 #include "TestSimpleData.hpp"
 #include "TestRTIarray.hpp"
+#include "TestHLAenum.hpp"
 using namespace std;
 
 int main()
 {
     TestRunner tr;
     RUN_TEST(tr, TestSimpleData);
-    RUN_TEST(tr, TestRTIfixedRecord);
-    RUN_TEST(tr, TestRTIstring);
-    RUN_TEST(tr, TestRTIvector);
-    RUN_TEST(tr, TestRTIarray);
+    RUN_TEST(tr, TestfixedRecord);
+    RUN_TEST(tr, Teststring);
+    RUN_TEST(tr, Testvector);
+    RUN_TEST(tr, Testarray);
+    RUN_TEST(tr, TestEnum);
     return 0;
 }
