@@ -151,70 +151,81 @@ namespace HLA{
 
 /**
 * @brief GetCallbackMode
-* @return std::wstring
+* @return rti1516e::CallbackModel
 */
         rti1516e::CallbackModel GetCallbackMode() const noexcept;
 
-
+/**
+* @brief GetModelMode
+* @return ModelMode
+*/
         ModelMode GetModelMode() const noexcept;
 
+/**
+* @brief GetState
+* @return State
+*/
         State GetState() const noexcept;
 
 /**
 * @brief SetMapOfObjectsAndAttributes
 * Set default map of Objects and Attribute of basic federate (lvalue version)
 */
-        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(const std::unordered_map<std::wstring,std::vector<std::wstring>>&) noexcept;
+        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(const std::unordered_map<std::wstring,std::vector<std::wstring>>& objects_attributes_map) noexcept;
 
 /**
 * @brief SetMapOfObjectsAndAttributes
 * Set default map of Objects and Attribute of basic federate (rvalue version)
 */
-        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(std::unordered_map<std::wstring,std::vector<std::wstring>>&&) noexcept;
+        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(std::unordered_map<std::wstring,std::vector<std::wstring>>&& objects_attributes_map) noexcept;
 
 /**
 * @brief SetPublishListOfAttributes
 * Set list of attributes for publish (lvalue version)
 */
-        BaseFederate& SetPublishListOfAttributes(const std::vector<std::wstring>&) noexcept;
+        BaseFederate& SetPublishListOfAttributes(const std::vector<std::wstring>& attribute_list) noexcept;
 
 /**
 * @brief SetPublishListOfAttributes
 * Set list of attributes for publish (rvalue version)
 */
-        BaseFederate& SetPublishListOfAttributes(std::vector<std::wstring>&&) noexcept;
+        BaseFederate& SetPublishListOfAttributes(std::vector<std::wstring>&& attribute_list) noexcept;
 
 
 /**
 * @brief SetMapOfInteractionsAndParameters
 * Set default map of Interactions and Parameters of basic federate (lvalue version)
 */
-        BaseFederate& SetMapOfInteractionsAndParameters(const std::unordered_map<std::wstring,std::vector<std::wstring>>&) noexcept;
+        BaseFederate& SetMapOfInteractionsAndParameters(const std::unordered_map<std::wstring,std::vector<std::wstring>>& interations_parameters_map) noexcept;
 
 /**
 * @brief SetMapOfInteractionsAndParameters
 * Set default map of Interactions and Parameters of basic federate (rvalue version)
 */
-        BaseFederate& SetMapOfInteractionsAndParameters(std::unordered_map<std::wstring,std::vector<std::wstring>>&&) noexcept;
+        BaseFederate& SetMapOfInteractionsAndParameters(std::unordered_map<std::wstring,std::vector<std::wstring>>&& interations_parameters_map) noexcept;
 
 /**
 * @brief SetModelingStep
 * @param _step
 * Set modeling step in milliseconds
 */
-        BaseFederate& SetModelingStep(int _step) noexcept;
+        BaseFederate& SetModelingStep(int step) noexcept;
 
-
+/**
+* @brief SetModelMode
+* @param mode
+* @return
+*/
         BaseFederate& SetModelMode(ModelMode mode) noexcept;
 /**
 * @brief SetSyncCallbackMode
 * Change Callback mode to Synchronize, default Asynchronize
 */
-         BaseFederate& SetSyncCallbackMode(bool) noexcept;
+         BaseFederate& SetSyncCallbackMode(bool is_sync) noexcept;
 
-         BaseFederate& SetLogFileName(const std::string&) noexcept;
+         BaseFederate& SetLogFileName(const std::string& log_filename) noexcept;
 
-         BaseFederate& SetLogFileName(std::string&&) noexcept;
+         BaseFederate& SetLogFileName(std::string&& log_filenmae) noexcept;
 
 
     private:
