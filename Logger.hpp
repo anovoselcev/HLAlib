@@ -7,15 +7,19 @@ namespace HLA {
 
     class Logger{
     public:
-        Logger(const std::string&);
+        Logger(const std::string& log_filename);
 
-        Logger(std::string&&);
+        Logger(std::string&& log_filename);
 
         ~Logger();
 
-        Logger& operator<<(const std::wstring&);
+        Logger& operator<<(const std::wstring& info);
 
-        Logger& operator<<(std::wstring&&);
+        Logger& operator<<(std::wstring&& info);
+
+        Logger& operator<<(int info);
+
+        Logger& operator<<(double info);
 
         struct Flush{
             Flush();

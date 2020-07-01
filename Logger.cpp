@@ -21,6 +21,16 @@ namespace HLA {
         return *this;
     }
 
+    Logger& Logger::operator<<(int info){
+        _stream << std::to_wstring(info) +  L' ';
+        return *this;
+    }
+
+    Logger& Logger::operator<<(double info){
+        _stream << std::to_wstring(info) + L' ';
+        return *this;
+    }
+
     Logger::Flush::Flush(){}
 
     Logger& Logger::operator<<(Flush){

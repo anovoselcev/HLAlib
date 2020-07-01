@@ -334,6 +334,10 @@ namespace HLA{
  */
         virtual void ThreadModeling();
 
+/**
+* @brief FollowModeling
+*/
+
         virtual void FollowModeling();
 
  /**
@@ -420,11 +424,19 @@ namespace HLA{
 */
         const std::wstring _host_IP_address;
 
-
+/**
+* @brief _log_filename
+*/
         std::string _log_filename = "LogFile";
 
+/**
+* @brief _state
+*/
         State _state = State::PREPARE;
 
+/**
+* @brief _mode
+*/
         ModelMode _mode = ModelMode::THREADING;
 /**
 * @brief _f_modeling

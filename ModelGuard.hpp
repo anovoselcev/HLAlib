@@ -11,7 +11,7 @@ class BaseFederate;
 
         ModelGuard();
 
-        ModelGuard(BaseFederate*);
+        ModelGuard(BaseFederate* federate_ptr);
 
         ~ModelGuard();
 

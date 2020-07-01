@@ -5,14 +5,14 @@
 #include <assert.h>
 
 
-constexpr int step = 2000;
+constexpr int step = 200;
 
 using namespace std;
 
-void NewThreadFederate(wstring&& name, int delay){
+void  NewThreadFederate(wstring&& name, int delay){
     auto fed = std::make_unique<ThreadFederate>(name,L"../HLA-Federate-Test/SampleFOM.xml");
     fed->SetPublishListOfAttributes({L"Name"}).
-            SetSubscribeMapOfObjectsAndAttributes({{L"Following",{L"Name"}}}).
+            SetSubscribeMapOfObjectsAndAttributes({{L"Following",{L"Name",L"Attr1",L"Attr2"}}}).
             SetModelingStep(step).
             ConnectRTI();
     while(true){
@@ -24,7 +24,7 @@ void NewThreadFederate(wstring&& name, int delay){
 
             auto time = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count();
             std::wcout << fed->_other << L"        " << time << std::endl;
-            assert((time < (step + 50))||(time > (step-50)));
+            assert((time < (step*1.05))||(time > (step*0.95)));
         }
         else
             fed->firstly=false;
@@ -33,7 +33,7 @@ void NewThreadFederate(wstring&& name, int delay){
 void NewFollowFederate(wstring&& name, int delay){
     auto fed = std::make_unique<FollowFederate>(name,L"../HLA-Federate-Test/SampleFOM.xml");
     fed->SetPublishListOfAttributes({L"Name"}).
-            SetSubscribeMapOfObjectsAndAttributes({{L"Threading",{L"Name"}}}).
+            SetSubscribeMapOfObjectsAndAttributes({{L"Threading",{L"Name",L"Attr1",L"Attr2"}}}).
             SetModelingStep(step).
             ConnectRTI();
     while(true){
@@ -42,9 +42,10 @@ void NewFollowFederate(wstring&& name, int delay){
         this_thread::sleep_for(chrono::milliseconds(delay));
         HLA::ModelGuard guard(fed.get());
         if(!fed->firstly){
-            assert((fed->_other==L"Fed1")||(fed->_other==L"Fed3"));
+            //assert((fed->_other==L"Fed1")||(fed->_other==L"Fed3"));
             auto time = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count();
-            assert((time < (step + 50))||(time > (step-50)));
+            std::wcout << fed->_other << L"        " << time << std::endl;
+            assert((time < (step*1.05))||(time > (step*0.95)));
         }
         else
             fed->firstly=false;
@@ -53,10 +54,18 @@ void NewFollowFederate(wstring&& name, int delay){
 
 int main()
 {
-    std::thread th1(NewThreadFederate,L"Fed1",1500);
-    this_thread::sleep_for(chrono::milliseconds(10));
-    std::thread th2(NewFollowFederate, L"Fed2",700);
-    NewFollowFederate(L"Fed3",100);
+    std::thread th1(NewThreadFederate,L"Fed1",150);
+    this_thread::sleep_for(chrono::milliseconds(5));
+    std::thread th2(NewFollowFederate, L"Fed2",70);
+    this_thread::sleep_for(chrono::milliseconds(5));
+    std::thread th3(NewThreadFederate,L"Fed3",110);
+    this_thread::sleep_for(chrono::milliseconds(5));
+    std::thread th4(NewThreadFederate,L"Fed4",133);
+    this_thread::sleep_for(chrono::milliseconds(5));
+    std::thread th5(NewFollowFederate, L"Fed5",120);
+    this_thread::sleep_for(chrono::milliseconds(5));
+    std::thread th6(NewThreadFederate,L"Fed6",199);
+    NewFollowFederate(L"Fed7",100);
 
 
 

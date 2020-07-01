@@ -30,26 +30,62 @@
                 <name>Threading</name>
                 <sharing>Neither</sharing>
                     <attribute>
-                    <name>Name</name>
-                    <dataType>HLAunicodeString</dataType>
-                    <updateType>Conditional</updateType>
-                    <ownership>DivestAcquire</ownership>
-                    <sharing>Neither</sharing>
-                    <transportation>HLAreliable</transportation>
-                    <order>Receive</order>
+                        <name>Name</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
+                    </attribute>
+                    <attribute>
+                        <name>Attr1</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
+                    </attribute>
+                    <attribute>
+                        <name>Attr2</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
                     </attribute>
             </objectClass>
             <objectClass>
                 <name>Following</name>
                 <sharing>Neither</sharing>
                     <attribute>
-                    <name>Name</name>
-                    <dataType>HLAunicodeString</dataType>
-                    <updateType>Conditional</updateType>
-                    <ownership>DivestAcquire</ownership>
-                    <sharing>Neither</sharing>
-                    <transportation>HLAreliable</transportation>
-                    <order>Receive</order>
+                        <name>Name</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
+                    </attribute>
+                    <attribute>
+                        <name>Attr1</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
+                    </attribute>
+                    <attribute>
+                        <name>Attr2</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
                     </attribute>
             </objectClass>
         </objectClass>

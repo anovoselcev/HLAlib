@@ -62,7 +62,7 @@ namespace HLA{
             _rtiAmbassador = MakeRTIambassador();
         }
         catch(RTIinternalError){
-            log << L"ERROR:" << L"Can't create RTIambassador" << Logger::Flush();
+            log << L"ERROR:" << _federate_name << L"Can't create RTIambassador" << Logger::Flush();
             return false;
         }
 
@@ -74,7 +74,7 @@ namespace HLA{
                 _rtiAmbassador->connect(*this,_callback_mode,L"crcAddress="+_host_IP_address);
         }
         catch(...){
-            log << L"ERROR:" L"Cant connect" << Logger::Flush();
+            log << L"ERROR:" << _federate_name << L"Cant connect" << Logger::Flush();
             return false;
         }
 
@@ -85,16 +85,16 @@ namespace HLA{
     //If federation already exist we catch exception(FederationExecutionAlreadyExists) and do nothing
         catch(FederationExecutionAlreadyExists&){}
         catch(ErrorReadingFDD&){
-            log << L"ERROR:" << L"Cant read FOM" << Logger::Flush();
+            log << L"ERROR:" << _federate_name << L"Cant read FOM" << Logger::Flush();
             return false;
         }
         catch(CouldNotOpenFDD&){
-            log << L"ERROR:" << L"Cant open FOM" << Logger::Flush();
+            log << L"ERROR:" << _federate_name << L"Cant open FOM" << Logger::Flush();
             return false;
         }
 
         catch(...){
-            log << L"ERROR:" <<  L"Cant create federation" << Logger::Flush();
+            log << L"ERROR:" << _federate_name << L"Cant create federation" << Logger::Flush();
             return false;
         }
 
@@ -104,7 +104,7 @@ namespace HLA{
             log << L"INFO:" << L"Connect of" << _federate_name <<  L"done" << Logger::Flush();
         }
         catch(...){
-            log << L"ERROR:" << L"Can't join" << Logger::Flush();
+            log << L"ERROR:" << _federate_name << L"Can't join" << Logger::Flush();
             return false;
         }
 
@@ -118,7 +118,7 @@ namespace HLA{
             log << L"INFO:" << L"Init of" << _federate_name << L"done" << Logger::Flush();
         }
         catch(RTIinternalError& e){
-            log << L"ERROR:" << L"Error in Init() with" << e.what() << Logger::Flush();
+            log << L"ERROR:" << _federate_name << L"Error in Init() with" << e.what() << Logger::Flush();
             return false;
         }
 
@@ -133,7 +133,7 @@ namespace HLA{
             RunFederate();
         }
         catch(RTIinternalError& e){
-            log << L"ERROR:" << L"Error in Run() with" << e.what() << Logger::Flush();
+            log << L"ERROR:" << _federate_name << L"Error in Run() with" << e.what() << Logger::Flush();
             return false;
         }
         return true;
@@ -287,11 +287,11 @@ namespace HLA{
             {
                 lock_guard<mutex> guard(_smutex);
                 _state = State::DOING;
-                log << L"INFO:" << L"Begin of threading modeling step - doing" << Logger::Flush();
+                log << L"INFO:" << _federate_name << L"Begin of threading modeling step - doing" << Logger::Flush();
             }
             _cond.notify_one();
             std::this_thread::sleep_for(std::chrono::milliseconds(_modeling_step));
-            log << L"INFO:" << L"End of threading modeling step - proccessing" << Logger::Flush();
+            log << L"INFO:" << _federate_name << L"End of threading modeling step - proccessing" << Logger::Flush();
             UpdateAttributes();
             thread ParametersThread(&BaseFederate::ParameterProcess,this);
             ParametersThread.detach();
@@ -305,12 +305,12 @@ namespace HLA{
         auto step = chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(_modeling_step));
         if((step - dur).count()>0)
             this_thread::sleep_for(chrono::milliseconds(step - dur));
-        log << L"INFO:" << L"End of following modeling step - proccessing" << Logger::Flush();
+        log << L"INFO:" << _federate_name << L"End of following modeling step - proccessing" << Logger::Flush();
         UpdateAttributes();
         ParameterProcess();
         AttributeProcess();
         _state = State::DOING;
-        log << L"INFO:" << L"Begin of following modeling step - doing" << Logger::Flush();
+        log << L"INFO:" << _federate_name << L"Begin of following modeling step - doing" << Logger::Flush();
     }
 
     void BaseFederate::AttributeProcess(){

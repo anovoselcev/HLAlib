@@ -1,7 +1,7 @@
 CONFIG -= qt
 
 TEMPLATE = lib
-CONFIG += staticlib
+#CONFIG += staticlib
 
 CONFIG += c++14
 
