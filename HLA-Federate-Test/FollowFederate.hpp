@@ -16,7 +16,7 @@ public:
         HLA::BaseFederate(name,L"Following",FOM,L"Test"){
         _mode = HLA::ModelMode::FOLLOWING;
     }
-    std::wstring _other=L"";
+    std::wstring _other=L"-";
     bool firstly = true;
 
 protected:

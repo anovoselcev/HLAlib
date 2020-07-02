@@ -17,7 +17,7 @@ public:
         _mode = HLA::ModelMode::THREADING;
     }
 
-    std::wstring _other=L"";
+    std::wstring _other=L"-";
     bool firstly = true;
 
 protected:

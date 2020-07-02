@@ -527,52 +527,68 @@ namespace HLA{
 * Queue of reflected attributes with transport information
 */
         std::queue<CallbackAttributesInformation> _qAttributes;
+
 /**
 * @brief _qParameters
 * Queue of recived parameters with transport information
 */
         std::queue<CallbackParametersInformation> _qParameters;
+
 /**
 * @brief _amutex
 * Mutex for attributes queue
 */
         mutable std::mutex _amutex;
+
 /**
 * @brief _pmutex
 * Mutex for parameters queue
 */
         mutable std::mutex _pmutex;
+
 /**
 * @brief _smutex
 * Mutex for _f_state when ModelMutex using
 */
 
         mutable std::mutex _smutex;
+
 /**
 * @brief _modeling_thread
 * Thread of modeling that process all HLA interface
 */
         std::thread _modeling_thread;
+
 /**
 * @brief _modeling_step
 * Value of modeling step in milliseconds
 */
         int _modeling_step = 100;
 
+/**
+* @brief _last_time
+*/
         std::chrono::time_point<std::chrono::steady_clock> _last_time;
 
 /**
-*Configs for Objects and Interaction Maps
+* @brief _AttributeNames
+*/
+        std::vector<std::wstring> _AttributeNames;
+
+/**
 * @brief _ObjectsNames
+*/
+        std::unordered_map<std::wstring,std::vector<std::wstring>> _ObjectsNames;
+
+/**
 * @brief _InteractionsNames
 */
-        mutable std::vector<std::wstring> _AttributeNames;
-        mutable std::unordered_map<std::wstring,std::vector<std::wstring>> _ObjectsNames;
-        mutable std::unordered_map<std::wstring,std::vector<std::wstring>> _InteractionsNames;
+        std::unordered_map<std::wstring,std::vector<std::wstring>> _InteractionsNames;
 
+/**
+*
+*/
         friend class ModelGuard;
     };
-
-
 }
 #endif // BASEFEDERATE_HPP
