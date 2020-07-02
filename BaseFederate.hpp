@@ -222,8 +222,18 @@ namespace HLA{
 */
          BaseFederate& SetSyncCallbackMode(bool is_sync) noexcept;
 
+/**
+* @brief SetLogFileName
+* @param log_filename
+* @return
+*/
          BaseFederate& SetLogFileName(const std::string& log_filename) noexcept;
 
+/**
+* @brief SetLogFileName
+* @param log_filenmae
+* @return
+*/
          BaseFederate& SetLogFileName(std::string&& log_filenmae) noexcept;
 
 
@@ -247,6 +257,17 @@ namespace HLA{
                 return _Interaction.hash();
             }
         };
+/**
+* @brief The CallbackInformation struct
+*/
+        template<typename T>
+        struct CallbackInformation{
+            rti1516e::VariableLengthData info;
+            T data;
+        };
+
+        using CallbackAttributesInformation = CallbackInformation<rti1516e::AttributeHandleValueMap>;
+        using CallbackParametersInformation = CallbackInformation<rti1516e::ParameterHandleValueMap>;
 
 /**
 * @brief MakeRTIambassador
@@ -503,14 +524,14 @@ namespace HLA{
 
 /**
 * @brief _qAttributes
-* Queue of reflected attributes
+* Queue of reflected attributes with transport information
 */
-        std::queue<rti1516e::AttributeHandleValueMap> _qAttributes;
+        std::queue<CallbackAttributesInformation> _qAttributes;
 /**
 * @brief _qParameters
-* Queue of recived parameters
+* Queue of recived parameters with transport information
 */
-        std::queue<rti1516e::ParameterHandleValueMap> _qParameters;
+        std::queue<CallbackParametersInformation> _qParameters;
 /**
 * @brief _amutex
 * Mutex for attributes queue

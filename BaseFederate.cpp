@@ -410,27 +410,27 @@ namespace HLA{
 
     void BaseFederate::reflectAttributeValues(ObjectInstanceHandle,
                                         const AttributeHandleValueMap &theAttributeValues,
-                                        const VariableLengthData &,
+                                        const VariableLengthData & info,
                                         OrderType ,
                                         TransportationType ,
                                         SupplementalReflectInfo)
     throw (FederateInternalError){
         if(_state >= State::STARTED){
             lock_guard<mutex> guard(_amutex);
-            _qAttributes.push(theAttributeValues);
+            _qAttributes.push({info,theAttributeValues});
         }
     }
 
     void BaseFederate::receiveInteraction (InteractionClassHandle,
                                      ParameterHandleValueMap const & theParameterValues,
-                                     VariableLengthData const &,
+                                     VariableLengthData const & info,
                                      OrderType,
                                      TransportationType,
                                      SupplementalReceiveInfo)
     throw (FederateInternalError){
         if(_state >= State::STARTED){
             lock_guard<mutex> guard(_pmutex);
-            _qParameters.push(theParameterValues);
+            _qParameters.push({info,theParameterValues});
         }
     }
 }

@@ -34,7 +34,7 @@ protected:
         std::lock_guard<std::mutex> guard(_amutex);
         while(!_qAttributes.empty()){
             auto& message = _qAttributes.front();
-            _other = HLA::cast_from_rti<HLA::Wstring>(message.find(_AttributesMap[_ObjectClasses[L"Following"]][L"Name"])->second);
+            _other = HLA::cast_from_rti<HLA::Wstring>(message.data.find(_AttributesMap[_ObjectClasses[L"Following"]][L"Name"])->second);
             _qAttributes.pop();
         }
     }
