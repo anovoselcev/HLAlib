@@ -56,15 +56,15 @@ int main()
 {
     std::thread th1(NewThreadFederate,L"Fed1",150);
     this_thread::sleep_for(chrono::milliseconds(5));
-    std::thread th2(NewFollowFederate, L"Fed2",70);
-    this_thread::sleep_for(chrono::milliseconds(5));
-    std::thread th3(NewThreadFederate,L"Fed3",110);
-    this_thread::sleep_for(chrono::milliseconds(5));
-    std::thread th4(NewThreadFederate,L"Fed4",133);
-    this_thread::sleep_for(chrono::milliseconds(5));
-    std::thread th5(NewFollowFederate, L"Fed5",120);
-    this_thread::sleep_for(chrono::milliseconds(5));
-    std::thread th6(NewThreadFederate,L"Fed6",199);
+//    std::thread th2(NewFollowFederate, L"Fed2",70);
+//    this_thread::sleep_for(chrono::milliseconds(5));
+//    std::thread th3(NewThreadFederate,L"Fed3",110);
+//    this_thread::sleep_for(chrono::milliseconds(5));
+//    std::thread th4(NewThreadFederate,L"Fed4",133);
+//    this_thread::sleep_for(chrono::milliseconds(5));
+//    std::thread th5(NewFollowFederate, L"Fed5",120);
+//    this_thread::sleep_for(chrono::milliseconds(5));
+//    std::thread th6(NewThreadFederate,L"Fed6",199);
     NewFollowFederate(L"Fed7",100);
 
 

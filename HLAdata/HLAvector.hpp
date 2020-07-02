@@ -5,7 +5,7 @@
 namespace HLA {
 
     template <class T_FOM, class T_MOD, unsigned m_OBV=1>
-    class Vector : public ClassForRTI<std::vector<T_MOD>,m_OBV>
+    class Vector final: public ClassForRTI<std::vector<T_MOD>,m_OBV>
     {
       Vector& operator = (const Vector &) {
         return *this;

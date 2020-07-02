@@ -6,7 +6,7 @@
 namespace HLA {
 
     template <class T, unsigned mem, bool blLE=true>
-      class SimpleData: public ClassForRTI <T,mem>{
+      class SimpleData final: public ClassForRTI <T,mem>{
         public:
 
           using type = T;
@@ -34,11 +34,11 @@ namespace HLA {
           }
 
           void getDataFromRTI(rti1516e::VariableLengthData const &obj){
-              unsigned size = (unsigned)obj.size();
+              unsigned size = obj.size();
               if (sizeof(T)!=size) {
                 std::ostringstream wstrOut;
                 wstrOut
-                    << L"Размер данных не совпал. Должно прийти " << (unsigned)sizeof(T)
+                    << L"Размер данных не совпал. Должно прийти " << sizeof(T)
                     << L" пришло " << size << L" байт";
                 ExceptionForRTI ex(wstrOut.str());
                 throw ex;

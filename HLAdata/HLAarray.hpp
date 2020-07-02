@@ -6,7 +6,7 @@
 namespace HLA{
 
     template <class T_FOM, class T_MOD, size_t uiDim, unsigned m_OBV>
-    class Array : public ClassForRTI <std::array<T_MOD,uiDim>, m_OBV>{
+    class Array final: public ClassForRTI <std::array<T_MOD,uiDim>, m_OBV>{
       Array & operator = (const Array &/*fixedArray*/) {
         return *this;
       }

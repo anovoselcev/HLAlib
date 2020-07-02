@@ -24,9 +24,10 @@ protected:
 
     void UpdateAttributes() const override{
         rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Wstring>(_federate_name);
+        rti1516e::VariableLengthData type = HLA::cast_to_rti<HLA::Wstring>(_federate_type);
         rti1516e::AttributeHandleValueMap map;
         map[_AttributesMap.at(_MyClass).at(L"Name")] = v;
-        _rtiAmbassador->updateAttributeValues(_MyInstanceID,map,rti1516e::VariableLengthData());
+        _rtiAmbassador->updateAttributeValues(_MyInstanceID,map,type);
     }
 
     void AttributeProcess() override{

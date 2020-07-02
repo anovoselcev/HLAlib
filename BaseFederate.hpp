@@ -1,7 +1,6 @@
 #ifndef BASEFEDERATE_HPP
 #define BASEFEDERATE_HPP
 #include <RTI/RTI1516.h>
-#include <RTI/RTIambassadorFactory.h>
 #include <RTI/NullFederateAmbassador.h>
 
 #include <unordered_map>
@@ -452,7 +451,7 @@ namespace HLA{
 
 /**
 * @brief _cond
-* Condition variable that check _f_state and launch main thread if ModelMutex using
+* Condition variable that check _state and launch main thread if ModelGuard using
 */
 
         std::condition_variable _cond;
