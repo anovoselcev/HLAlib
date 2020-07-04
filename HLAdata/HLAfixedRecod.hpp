@@ -106,7 +106,7 @@ namespace HLA {
       }
 
       template<typename FieldType>
-      void auto_offset(unsigned &offset, void* ptrSource, unsigned uiMaxSize,FieldType& field){
+      void auto_offset(unsigned &offset, void* ptrSource, unsigned long uiMaxSize,FieldType& field){
           F_offsetLast<FieldType>(field,offset,ptrSource,static_cast<unsigned>(uiMaxSize));
           if (ptrData!=nullptr) delete[] ptrData;
             m_uiSizeData = offset;
@@ -115,7 +115,7 @@ namespace HLA {
       }
 
       template<typename Field1, typename Field2, typename ...Fields>
-      void auto_offset(unsigned &offset, void* ptrSource, unsigned uiMaxSize,Field1& field1,Field2& field2,Fields&... fields){
+      void auto_offset(unsigned &offset, void* ptrSource, unsigned long uiMaxSize,Field1& field1,Field2& field2,Fields&... fields){
         F_offset< Field1, Field2 >(field1,field2,offset,ptrSource,uiMaxSize);
         auto_offset(offset, ptrSource,uiMaxSize,field2,fields...);
       }

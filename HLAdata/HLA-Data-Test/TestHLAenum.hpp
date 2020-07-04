@@ -2,6 +2,7 @@
 #define TESTHLAENUM_HPP
 #include "../HLAenum.hpp"
 #include "test_runner.hpp"
+#include "profile.hpp"
 
 
 enum class Bin{
@@ -97,6 +98,7 @@ void TestExitCode(){
 }
 
 void TestEnum(){
+    LOG_DURATION("Enum")
     TestBin();
     TestCompare();
     TestTaste();

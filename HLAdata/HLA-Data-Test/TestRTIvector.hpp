@@ -31,7 +31,7 @@ void TestVectorInt32(){
 }
 
 void TestVectorInt64(){
-    std::vector<int64_t> v1(100,5000);
+    std::vector<int64_t> v1(100,5'000);
     rti1516e::VariableLengthData vd1 = HLA::cast_to_rti<HLA::Integer64BE,8>(v1);
     std::vector<int64_t> v2 = HLA::cast_from_rti<HLA::Integer64BE,8>(vd1);
     ASSERT_EQUAL(v1,v2)
@@ -96,7 +96,7 @@ void TestVectorWstring(){
 
 void TestBigIntVector(){
     LOG_DURATION("Big_vector")
-    std::vector<int> v1(100000);
+    std::vector<int> v1(1'000'000);
     for(int i = 0; i< v1.size();i++)
         v1[i] = i;
     rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Integer32BE,4>(v1);

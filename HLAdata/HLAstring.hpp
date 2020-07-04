@@ -9,7 +9,7 @@ namespace HLA {
               class symb = typename std::conditional<std::is_same<StringType,std::string>::value,char,wchar_t>::type,
               int OBV = sizeof (symb),
               int unit = 4>
-    class BaseHLAstring final: public ClassForRTI<StringType,OBV> {
+    class BaseHLAstring : public ClassForRTI<StringType,OBV> {
     public:
 
         using type = StringType;

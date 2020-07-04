@@ -106,11 +106,11 @@ void TestArrayWstring(){
 }
 
 void TestBigIntArray(){
-    std::array<int,10000> a1;
+    std::array<int,1'000'000> a1;
     for(int i = 0; i< a1.size();i++)
         a1[i] = i;
-    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Integer32BE,10000,4>(a1);
-    std::array<int,10000> a2 = HLA::cast_from_rti<HLA::Integer32BE,10000,4>(v);
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Integer32BE,1'000'000,4>(a1);
+    std::array<int,1'000'000> a2 = HLA::cast_from_rti<HLA::Integer32BE,1'000'000,4>(v);
     ASSERT_EQUAL(a1,a2)
 }
 
