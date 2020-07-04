@@ -381,6 +381,13 @@ namespace HLA{
         throw (rti1516e::FederateInternalError) override;
 
 /**
+* @brief objectInstanceNameReservationFailed
+* @param theObjectInstanceName
+*/
+        virtual void objectInstanceNameReservationFailed(const std::wstring &theObjectInstanceName)
+        throw (rti1516e::FederateInternalError) override;
+
+/**
 * @brief reflectAttributeValues
 * @param theObject
 * @param theAttributeValues

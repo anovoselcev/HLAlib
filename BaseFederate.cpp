@@ -1,6 +1,7 @@
 #include "BaseFederate.hpp"
 #include "Logger.hpp"
 #include <chrono>
+#include <iostream>
 
 namespace HLA{
 
@@ -12,15 +13,15 @@ namespace HLA{
     BaseFederate::BaseFederate() noexcept{}
 
     BaseFederate::BaseFederate(const wstring& name,
-                                     const wstring& type,
-                                     const wstring& FOMname,
-                                     const wstring& fname,
-                                     const wstring& ip) noexcept:
-                                           _federate_name(name),
-                                           _federate_type(type),
-                                           _FOMname(FOMname),
-                                           _federation_name(fname),
-                                           _host_IP_address(ip){}
+                               const wstring& type,
+                               const wstring& FOMname,
+                               const wstring& fname,
+                               const wstring& ip) noexcept:
+                                        _federate_name(name),
+                                        _federate_type(type),
+                                        _FOMname(FOMname),
+                                        _federation_name(fname),
+                                        _host_IP_address(ip){}
 
 
    //Full-gapes constructor with move, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), IP addres of CRC(_host_IP_address) and name of federation (_federation_name)
@@ -43,8 +44,8 @@ namespace HLA{
         _state = State::EXIT;
         Logger log(_log_filename);
         log <<L"INFO:"<< _federate_name << L"disconnect from" << _host_IP_address << Logger::Flush();
-
     }
+
 //Create RTIambassador pointer(unique_ptr) object, that provide access to RTI services
     unique_ptr<RTIambassador> BaseFederate::MakeRTIambassador() const &{
         unique_ptr<RTIambassadorFactory> rtiAmbassadorFactory = std::make_unique<RTIambassadorFactory>();
@@ -78,12 +79,14 @@ namespace HLA{
             return false;
         }
 
+
         try{
     //Try to create federation with name (_federation_name) and rules in FOM (look _FOMname)
             _rtiAmbassador->createFederationExecution(_federation_name, _FOMname);
         }
     //If federation already exist we catch exception(FederationExecutionAlreadyExists) and do nothing
         catch(FederationExecutionAlreadyExists&){}
+
         catch(ErrorReadingFDD&){
             log << L"ERROR:" << _federate_name << L"Cant read FOM" << Logger::Flush();
             return false;
@@ -98,6 +101,7 @@ namespace HLA{
             return false;
         }
 
+    //This waste 1 seconds, it's the biggest comand in this function (more than 50ths)
         try{
     //After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
             _rtiAmbassador->joinFederationExecution(_federate_name,_federation_name);
@@ -123,7 +127,6 @@ namespace HLA{
         }
 
         try{
-
     //Run the main loop of federate
             _f_modeling = true;
             if(_mode == ModelMode::THREADING)
@@ -174,7 +177,7 @@ namespace HLA{
 
 //Initializerd federate object and his attributes and environmental objects and attributes indicated in _ObjectNames
     void BaseFederate::InitClassesAndAttributes(unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash>& _externAttributesSet,
-                                                      AttributeHandleSet& _aPublishSet){
+                                                AttributeHandleSet& _aPublishSet){
 
     //Initializerd our federate object(_MyClass) from FOM refer to _federate_type
         _MyClass = _rtiAmbassador->getObjectClassHandle(_federate_type);
@@ -237,8 +240,6 @@ namespace HLA{
     //Send to RTI request to subscribe on Object(x.first) and his Attribute Set (x.second)
     //It get opportunity to recive information about updates of object's attribute set in reflectAttributeValues
             _rtiAmbassador->subscribeObjectClassAttributes(x.first,x.second);
-
-        _externAttributesSet.clear();
     }
 
 //Send to RTI set of attributes which federate publish
@@ -269,7 +270,7 @@ namespace HLA{
         _rtiAmbassador->reserveObjectInstanceName(_federate_name);
         auto start = chrono::steady_clock::now();
         auto dur = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now()-start).count();
-        while(_state!=State::NAMERESERVED || dur<=3000){
+        while(_state!=State::NAMERESERVED || dur<=1000){
             dur = chrono::duration_cast<std::chrono::microseconds>(chrono::steady_clock::now()-start).count();
         }
           _MyInstanceID = _rtiAmbassador->registerObjectInstance(_MyClass, _federate_name);
@@ -290,7 +291,7 @@ namespace HLA{
                 log << L"INFO:" << _federate_name << L"Begin of threading modeling step - doing" << Logger::Flush();
             }
             _cond.notify_one();
-            std::this_thread::sleep_for(std::chrono::milliseconds(_modeling_step));
+            this_thread::sleep_for(chrono::milliseconds(_modeling_step));
             log << L"INFO:" << _federate_name << L"End of threading modeling step - proccessing" << Logger::Flush();
             UpdateAttributes();
             thread ParametersThread(&BaseFederate::ParameterProcess,this);
@@ -403,17 +404,27 @@ namespace HLA{
         return *this;
     }
 
-    void BaseFederate::objectInstanceNameReservationSucceeded(std::wstring const &)
+    void BaseFederate::objectInstanceNameReservationSucceeded(wstring const & name)
     throw (FederateInternalError){
+        Logger log(_log_filename);
+        log << L"INFO:" << _federate_name << L"Reserved" << name << Logger::Flush();
         _state = State::NAMERESERVED;
     }
 
+    void BaseFederate::objectInstanceNameReservationFailed(const wstring & name)
+    throw (FederateInternalError){
+        Logger log(_log_filename);
+        log << L"ERROR:" << _federate_name << L"Can't Reserved" << name << Logger::Flush();
+        _state = State::EXIT;
+    }
+
+
     void BaseFederate::reflectAttributeValues(ObjectInstanceHandle,
-                                        const AttributeHandleValueMap &theAttributeValues,
-                                        const VariableLengthData & info,
-                                        OrderType ,
-                                        TransportationType ,
-                                        SupplementalReflectInfo)
+                                              const AttributeHandleValueMap &theAttributeValues,
+                                              const VariableLengthData & info,
+                                              OrderType ,
+                                              TransportationType ,
+                                              SupplementalReflectInfo)
     throw (FederateInternalError){
         if(_state >= State::STARTED){
             lock_guard<mutex> guard(_amutex);
