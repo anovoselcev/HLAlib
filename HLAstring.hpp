@@ -1,31 +1,29 @@
 #ifndef RTISTRING_HPP
 #define RTISTRING_HPP
-#include <RTI/RTI1516.h>
 
-#include "RTItypes.hpp"
+#include "BasicTemplates.hpp"
 
 #include <type_traits>
-#include<iostream>
 namespace HLA {
     template <class StringType,
               class symb = typename std::conditional<std::is_same<StringType,std::string>::value,char,wchar_t>::type,
               int OBV = sizeof (symb),
               int unit = 4>
-    class BaseRTIstring : public ClassForRTI<StringType,OBV> {
+    class BaseHLAstring : public ClassForRTI<StringType,OBV> {
     public:
 
         using type = StringType;
 
-      BaseRTIstring() {
+      BaseHLAstring() {
         unsigned lenth = 0;
         m_str = StringType(reinterpret_cast<symb*>(&lenth),unit);
       }
 
-      void get(BaseRTIstring const &str) {
+      void get(BaseHLAstring const &str) {
         m_str = str;
       }
 
-      BaseRTIstring(StringType const &str) {
+      BaseHLAstring(StringType const &str) {
         unsigned lenth = static_cast<unsigned>(str.length());
         Tools::changeENDIAN(lenth);
         m_str = StringType(reinterpret_cast<symb*>(&lenth),unit);
@@ -61,7 +59,6 @@ namespace HLA {
       {
         unsigned _size;
         memcpy(&_size, ptrSource, unit);
-        //std::wcout << _size << std::endl;
         Tools::changeENDIAN(_size);
 
 
@@ -113,7 +110,7 @@ namespace HLA {
       StringType m_str;
 };
 
-    using RTIstring = BaseRTIstring<String>;
-    using RTIwstring = BaseRTIstring<Wstring>;
+    using String = BaseHLAstring<std::string>;
+    using Wstring = BaseHLAstring<std::wstring>;
 }
 #endif // RTISTRING_HPP

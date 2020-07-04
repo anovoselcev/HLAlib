@@ -1,37 +1,36 @@
 #ifndef RTIFIXEDRECOD_HPP
 #define RTIFIXEDRECOD_HPP
-#include <RTI/RTI1516.h>
 
-#include "RTItypes.hpp"
+#include "BasicTemplates.hpp"
 
 namespace HLA {
 
-    template <class T_MOD, unsigned OBV>
-    class BaseRTIFixedRecord : public ClassForRTI <T_MOD, OBV> {
+    template <class T_MOD, unsigned OBV = 8>
+    class BaseFixedRecord : public ClassForRTI <T_MOD, OBV> {
     protected:
-      Octet* ptrData;
+      Octet_* ptrData;
     public:
 
       using type = T_MOD;
 
       unsigned m_uiSizeData;
 
-      BaseRTIFixedRecord() : ClassForRTI<T_MOD, OBV>() {
+      BaseFixedRecord() : ClassForRTI<T_MOD, OBV>() {
         ptrData=nullptr;
         m_uiSizeData = 0;
       }
 
-      BaseRTIFixedRecord(const BaseRTIFixedRecord &fixedRecord) : ClassForRTI<T_MOD, OBV>(fixedRecord) {
+      BaseFixedRecord(const BaseFixedRecord &fixedRecord) : ClassForRTI<T_MOD, OBV>(fixedRecord) {
       }
 
-      virtual ~BaseRTIFixedRecord() {
+      virtual ~BaseFixedRecord() {
         if (ptrData!=nullptr) {
           delete[] ptrData;
           ptrData=nullptr;
         }
       }
 
-      virtual void get(BaseRTIFixedRecord &obj) {
+      virtual void get(BaseFixedRecord &obj) {
         rti1516e::VariableLengthData data;
         if (this != &obj) {
           obj.setDataToRTI(data);
@@ -111,7 +110,7 @@ namespace HLA {
           F_offsetLast<FieldType>(field,offset,ptrSource,static_cast<unsigned>(uiMaxSize));
           if (ptrData!=nullptr) delete[] ptrData;
             m_uiSizeData = offset;
-            ptrData = new HLA::Octet[m_uiSizeData];
+            ptrData = new HLA::Octet_[m_uiSizeData];
             memcpy(ptrData, ptrSource, m_uiSizeData);
       }
 
@@ -134,7 +133,7 @@ namespace HLA {
           offset+=uiSize;
           m_uiSizeData = offset;
           if(ptrData!=nullptr) delete[] ptrData;
-          ptrData = new HLA::Octet[m_uiSizeData];
+          ptrData = new HLA::Octet_[m_uiSizeData];
           offset = 0;
       }
 

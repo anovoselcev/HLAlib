@@ -1,35 +1,34 @@
 #ifndef RTIARRAY_HPP
 #define RTIARRAY_HPP
-#include <RTI/RTI1516.h>
 
-#include "RTItypes.hpp"
+#include "BasicTemplates.hpp"
 
 namespace HLA{
 
-    template <class T_FOM, class T_MOD, unsigned uiDim, unsigned m_OBV>
-    class RTIarray : public ClassForRTI <Array<T_MOD,uiDim>, m_OBV>{
-      RTIarray & operator = (const RTIarray &/*fixedArray*/) {
+    template <class T_FOM, class T_MOD, size_t uiDim, unsigned m_OBV>
+    class Array : public ClassForRTI <std::array<T_MOD,uiDim>, m_OBV>{
+      Array & operator = (const Array &/*fixedArray*/) {
         return *this;
       }
     public:
 
       using type = T_MOD;
 
-      RTIarray(const RTIarray &fixedArray): ClassForRTI<Array<T_MOD,uiDim>, m_OBV>(fixedArray) {
+      Array(const Array &fixedArray): ClassForRTI<std::array<T_MOD,uiDim>, m_OBV>(fixedArray) {
       }
 
-      RTIarray() {
+      Array() {
         ptrData = nullptr;
         m_uiSizeData = 0;
       }
 
-      RTIarray(Array<T_MOD,uiDim> &inData) {
+      Array(std::array<T_MOD,uiDim> &inData) {
         ptrData = nullptr;
         m_uiSizeData = 0;
         get(inData);
       }
 
-      virtual ~RTIarray() {
+      virtual ~Array() {
         if (ptrData!=nullptr) {
           delete[] ptrData;
           ptrData=nullptr;
@@ -45,25 +44,25 @@ namespace HLA{
         chekSize(input_data, inSize);
 
         if (ptrData!=nullptr) delete[] ptrData;
-        ptrData = new Octet[m_uiSizeData];
+        ptrData = new Octet_[m_uiSizeData];
         memcpy(reinterpret_cast<void*>(ptrData), input_data,m_uiSizeData);
       }
 
       void getDataMax(void* input_data, unsigned long inSize){
         chekSize(input_data, inSize);
         if (ptrData!=nullptr) delete[] ptrData;
-        ptrData = new Octet[m_uiSizeData];
+        ptrData = new Octet_[m_uiSizeData];
         memcpy(reinterpret_cast<void*>(ptrData), input_data,m_uiSizeData);
       }
 
-      void get(Array<T_MOD,uiDim> const & inData) {
+      void get(std::array<T_MOD,uiDim> const & inData) {
        // LOG_DURATION("Get Array")
         unsigned uiSizeEl, uiSizeData, P;
         T_FOM tmpFOMobj;
         m_uiSizeData = 0;
         uiSizeData = 0;
         uiSizeEl = 0;
-        for (unsigned i=0; i<uiDim-1; i++) {
+        for (size_t i=0; i<uiDim-1; i++) {
           tmpFOMobj.get(inData[i]);
           uiSizeEl = tmpFOMobj.getsize();
           P = Tools::getPendingBytes(uiSizeEl,m_OBV);
@@ -73,9 +72,9 @@ namespace HLA{
         uiSizeEl = tmpFOMobj.getsize();
         m_uiSizeData = uiSizeData + uiSizeEl;
         if (ptrData!=nullptr) delete[] ptrData;
-        ptrData = new Octet[m_uiSizeData];
+        ptrData = new Octet_[m_uiSizeData];
         uiSizeData=0;
-        for (unsigned i=0; i<uiDim-1; i++) {
+        for (size_t i=0; i<uiDim-1; i++) {
           tmpFOMobj.get(inData[i]);
           uiSizeEl = tmpFOMobj.setData(ptrData+uiSizeData);
           P = Tools::getPendingBytes(uiSizeEl,m_OBV);
@@ -85,11 +84,11 @@ namespace HLA{
         uiSizeEl = tmpFOMobj.setData(ptrData+uiSizeData);
       }
 
-      void get (RTIarray<T_FOM,T_MOD,uiDim,m_OBV>& obj) {
+      void get (Array<T_FOM,T_MOD,uiDim,m_OBV>& obj) {
         if (this != &obj) {
           m_uiSizeData = obj.m_uiSizeData;
           if (ptrData!=nullptr) delete[] ptrData;
-          ptrData = new Octet[m_uiSizeData];
+          ptrData = new Octet_[m_uiSizeData];
           obj.setData(ptrData,m_uiSizeData);
         }
       }
@@ -132,7 +131,7 @@ namespace HLA{
         return m_uiSizeData;
       }
 
-      void set (Array<T_MOD,uiDim>& obj){
+      void set (std::array<T_MOD,uiDim>& obj){
         //LOG_DURATION("Set Array")
         unsigned uiSizeEl, P;
         T_FOM objFOM;
@@ -153,7 +152,7 @@ namespace HLA{
       unsigned getOctetBoundary(){return m_OBV;}
 
     private:
-      Octet* ptrData;
+      Octet_* ptrData;
       unsigned m_uiSizeData;
 
       void chekSize(void* input_data, unsigned long inSize){
@@ -184,19 +183,19 @@ namespace HLA{
       }
     };
 
-    template<typename RTItype, unsigned Size, unsigned OBV = 8>
-    rti1516e::VariableLengthData cast_to_rti(const std::array<typename RTItype::type,Size>& t){
-        RTIarray<RTItype,typename RTItype::type, Size, OBV> conv;
+    template<typename HLAtype, unsigned Size, unsigned OBV = 8>
+    rti1516e::VariableLengthData cast_to_rti(const std::array<typename HLAtype::type,Size>& t){
+        Array<HLAtype,typename HLAtype::type, Size, OBV> conv;
         rti1516e::VariableLengthData v;
         conv.get(t);
         conv.setDataToRTI(v);
         return v;
     }
 
-    template<typename RTItype, unsigned Size, unsigned OBV>
-    typename std::array<typename RTItype::type, Size> cast_from_rti(const rti1516e::VariableLengthData& v){
-        RTIarray<RTItype,typename RTItype::type, Size, OBV> conv;
-        std::array<typename RTItype::type, Size> t;
+    template<typename HLAtype, unsigned Size, unsigned OBV>
+    typename std::array<typename HLAtype::type, Size> cast_from_rti(const rti1516e::VariableLengthData& v){
+        Array<HLAtype,typename HLAtype::type, Size, OBV> conv;
+        std::array<typename HLAtype::type, Size> t;
         conv.getDataFromRTI(v);
         conv.set(t);
         return t;

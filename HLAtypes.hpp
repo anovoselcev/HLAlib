@@ -1,16 +1,8 @@
 #ifndef RTITYPES_HPP
 #define RTITYPES_HPP
-#ifdef WIN32
-#pragma warning(disable: 4251)
-#pragma warning(disable: 4786)
-#pragma warning(disable: 4290)
-#pragma warning(disable: 4482)
-#endif
-#define FUNCTION_COMMON_API
 
-#include <RTI/RTI1516.h>
-#include "BasicTypes.hpp"
 #include "BasicTemplates.hpp"
+
 namespace HLA {
 
     template <class T, unsigned mem, bool blLE=true>
@@ -23,7 +15,11 @@ namespace HLA {
                 m_data=0;
           }
 
-          SimpleData(const SimpleData& obj);
+          SimpleData(const SimpleData& obj){
+              if (this != &obj) {
+                obj.setData(&m_data);
+              }
+            }
 
           SimpleData(SimpleData&& obj) = default;
 
@@ -37,7 +33,18 @@ namespace HLA {
             if (!blLE) Tools::changeENDIAN(m_data);
           }
 
-          void getDataFromRTI(rti1516e::VariableLengthData const &obj);
+          void getDataFromRTI(rti1516e::VariableLengthData const &obj){
+              unsigned size = (unsigned)obj.size();
+              if (sizeof(T)!=size) {
+                std::ostringstream wstrOut;
+                wstrOut
+                    << L"Размер данных не совпал. Должно прийти " << (unsigned)sizeof(T)
+                    << L" пришло " << size << L" байт";
+                ExceptionForRTI ex(wstrOut.str());
+                throw ex;
+              }
+              memcpy(&m_data, obj.data(), size);
+          }
 
           void getData(void* input_data, unsigned long size){
             if (sizeof(T)!=size) {
@@ -106,7 +113,7 @@ namespace HLA {
             }
           }
 
-          SimpleData<T,mem,blLE>& operator = (const T& obj) {
+          SimpleData<T,mem,blLE>& operator = (const T & obj) {
             m_data=obj;
             if (!blLE) Tools::changeENDIAN(m_data);
             return *this;
@@ -122,61 +129,41 @@ namespace HLA {
           T& getOrg() {return m_data;}
         };
 
-        template <class T, unsigned mem, bool blLE>
-        SimpleData<T,mem,blLE>::SimpleData(const SimpleData& obj):ClassForRTI<T,mem>(obj) {
-          if (this != &obj) {
-            obj.setData(&m_data);
-          }
-        }
 
-        template <class T, unsigned mem, bool blLE>
-        void SimpleData<T,mem,blLE>::getDataFromRTI(rti1516e::VariableLengthData const &obj){
-          unsigned size = (unsigned)obj.size();
-          if (sizeof(T)!=size) {
-            std::ostringstream wstrOut;
-            wstrOut
-                << L"Размер данных не совпал. Должно прийти " << (unsigned)sizeof(T)
-                << L" пришло " << size << L" байт";
-            ExceptionForRTI ex(wstrOut.str());
-            throw ex;
-          }
-          memcpy(&m_data, obj.data(), size);
-        }
 
-        using RTIinteger16BE    = SimpleData<Integer16BE, 2, false>;
-        using RTIinteger32BE    = SimpleData<Integer32BE, 4, false>;
-        using RTIinteger64BE    = SimpleData<Integer64BE, 8, false>;
-        using RTIoctetPairBE    = SimpleData<OctetPairBE, 2, false>;
-        using RTIfloat32BE      = SimpleData<Float32BE, 4, false>;
-        using RTIfloat64BE      = SimpleData<Float64BE, 8, false>;
-        using RTIoctet          = SimpleData<Octet, 1, true>;
-        using RTIbyte           = SimpleData<Byte, 1, true>;
-        using RTIinteger16LE    = SimpleData<Integer16LE, 2, true>;
-        using RTIinteger32LE    = SimpleData<Integer32LE, 4, true>;
-        using RTIinteger64LE    = SimpleData<Integer64LE, 8, true>;
-        using RTIoctetPairLE    = SimpleData<OctetPairLE, 2, true>;
-        using RTIfloat32LE      = SimpleData<Float32LE, 4, true>;
-        using RTIfloat64LE      = SimpleData<Float64LE, 8, true>;
-        using RTIUnsignedShort  = SimpleData<UnsignedShort, 2, true>;
-        using RTIUnsigned32LE   = SimpleData<Unsigned32LE, 4, true> ;
-        using RTIUnsigned64LE   = SimpleData<Unsigned64LE, 8, true>;
-        using RTIchar           = SimpleData<Char,2,true>;
-        using RTIunicodeChar    = SimpleData<unicodeChar,2,true>;
-        using RTIASCIIchar      = SimpleData<ASCIIchar,2,true>;
+        using Integer16BE    = SimpleData<int16_t, 2, false>;
+        using Integer32BE    = SimpleData<int, 4, false>;
+        using Integer64BE    = SimpleData<int64_t, 8, false>;
+        using OctetPairBE    = SimpleData<uint16_t, 2, false>;
+        using Float32BE      = SimpleData<float, 4, false>;
+        using Float64BE      = SimpleData<double, 8, false>;
+        using Octet          = SimpleData<Octet_, 1, true>;
+        using Byte           = SimpleData<bool, 1, true>;
+        using Integer16LE    = SimpleData<int16_t, 2, true>;
+        using Integer32LE    = SimpleData<int, 4, true>;
+        using Integer64LE    = SimpleData<int64_t, 8, true>;
+        using OctetPairLE    = SimpleData<uint16_t, 2, true>;
+        using Float32LE      = SimpleData<float, 4, true>;
+        using Float64LE      = SimpleData<double, 8, true>;
+        using UnsignedShort  = SimpleData<uint16_t, 2, true>;
+        using Unsigned32LE   = SimpleData<uint32_t, 4, true> ;
+        using Unsigned64LE   = SimpleData<uint64_t, 8, true>;
+        using Char           = SimpleData<char,2,true>;
+        using Wchar          = SimpleData<wchar_t, 4, true>;
 
-        template<typename RTItype>
-        rti1516e::VariableLengthData cast_to_rti(const typename RTItype::type& t){
-            RTItype conv;
+        template<typename HLAtype>
+        rti1516e::VariableLengthData cast_to_rti(const typename HLAtype::type& t){
+            HLAtype conv;
             rti1516e::VariableLengthData v;
             conv.get(t);
             conv.setDataToRTI(v);
             return v;
         }
 
-        template<typename RTItype>
-        typename RTItype::type cast_from_rti(const rti1516e::VariableLengthData& v){
-            RTItype conv;
-            typename RTItype::type t;
+        template<typename HLAtype>
+        typename HLAtype::type cast_from_rti(const rti1516e::VariableLengthData& v){
+            HLAtype conv;
+            typename HLAtype::type t;
             conv.getDataFromRTI(v);
             conv.set(t);
             return t;

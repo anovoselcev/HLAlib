@@ -16,7 +16,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = 
 CFLAGS        = -pipe -O2 -Wall -W -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -DRRTI -DFED_AMBASSADOR -DRRTI_EV -pthread -O2 -std=gnu++1y -Wall -W -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -DRRTI -DFED_AMBASSADOR -DRRTI_EV -O2 -std=gnu++1y -Wall -W -fPIC $(DEFINES)
 INCPATH       = -I../HLA-Data-Test -I. -I../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010 -I../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010 -I../../../../Qt/5.12.5/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/k-110-04/Qt/5.12.5/gcc_64/bin/qmake
 DEL_FILE      = rm -f
@@ -40,7 +40,7 @@ DISTNAME      = HLA-Data-Test1.0.0
 DISTDIR = /home/k-110-04/QtWork/HLA/HLA-Data/build-HLA-Data-Test-Desktop_Qt_5_12_5_GCC_64bit-Release/.tmp/HLA-Data-Test1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1
-LIBS          = $(SUBLIBS) -pthread -L/home/k-110-04/QtWork/HLA/HLA-Data/HLA-Data-Test/../../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lrti1516e -lfedtime1516e   
+LIBS          = $(SUBLIBS) -L/home/k-110-04/QtWork/HLA/HLA-Data/HLA-Data-Test/../../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lrti1516e -lfedtime1516e   
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -53,8 +53,8 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../HLA-Data-Test/main.cpp \
-		../src/BasicException.cpp \
-		../src/Tools.cpp 
+		../BasicException.cpp \
+		../Tools.cpp 
 OBJECTS       = main.o \
 		BasicException.o \
 		Tools.o
@@ -230,15 +230,26 @@ DIST          = ../../../../Qt/5.12.5/gcc_64/mkspecs/features/spec_pre.prf \
 		../../../../Qt/5.12.5/gcc_64/mkspecs/features/exceptions.prf \
 		../../../../Qt/5.12.5/gcc_64/mkspecs/features/yacc.prf \
 		../../../../Qt/5.12.5/gcc_64/mkspecs/features/lex.prf \
-		../HLA-Data-Test/HLA-Data-Test.pro ../include/* \
+		../HLA-Data-Test/HLA-Data-Test.pro ../BasicException.hpp \
+		../BasicTemplates.hpp \
+		../HLAarray.hpp \
+		../HLAdata.hpp \
+		../HLAenum.hpp \
+		../HLAfixedRecod.hpp \
+		../HLAstring.hpp \
+		../HLAtypes.hpp \
+		../HLAvector.hpp \
+		../Tools.hpp \
 		TestBaseRTIstring.hpp \
+		TestHLAenum.hpp \
 		TestRTIarray.hpp \
 		TestRTIvector.hpp \
 		TestSimpleData.hpp \
 		TetsRTIfixedRecord.hpp \
+		profile.hpp \
 		test_runner.hpp ../HLA-Data-Test/main.cpp \
-		../src/BasicException.cpp \
-		../src/Tools.cpp
+		../BasicException.cpp \
+		../Tools.cpp
 QMAKE_TARGET  = HLA-Data-Test
 DESTDIR       = 
 TARGET        = HLA-Data-Test
@@ -648,7 +659,11 @@ compiler_clean:
 
 main.o: ../HLA-Data-Test/main.cpp ../HLA-Data-Test/test_runner.hpp \
 		../HLA-Data-Test/TetsRTIfixedRecord.hpp \
-		../include/RTIfixedRecod.hpp \
+		../HLA-Data-Test/profile.hpp \
+		../HLAfixedRecod.hpp \
+		../BasicTemplates.hpp \
+		../BasicException.hpp \
+		../Tools.hpp \
 		../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010/RTI/RTI1516.h \
 		../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010/RTI/SpecificConfig.h \
 		../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010/RTI/Enums.h \
@@ -663,32 +678,40 @@ main.o: ../HLA-Data-Test/main.cpp ../HLA-Data-Test/test_runner.hpp \
 		../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010/RTI/FederateAmbassador.h \
 		../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010/RTI/RTIambassador.h \
 		../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010/RTI/RTIambassadorFactory.h \
-		../include/RTItypes.hpp \
-		../include/BasicTypes.hpp \
-		../include/BasicTemplates.hpp \
-		../include/BasicException.hpp \
-		../include/Tools.hpp \
-		../include/RTIstring.hpp \
+		../HLAstring.hpp \
+		../HLAtypes.hpp \
 		../HLA-Data-Test/TestBaseRTIstring.hpp \
 		../HLA-Data-Test/TestRTIvector.hpp \
-		../include/RTIvector.hpp \
+		../HLAvector.hpp \
 		../HLA-Data-Test/TestSimpleData.hpp \
 		../HLA-Data-Test/TestRTIarray.hpp \
-		../include/RTIarray.hpp
+		../HLAarray.hpp \
+		../HLA-Data-Test/TestHLAenum.hpp \
+		../HLAenum.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../HLA-Data-Test/main.cpp
 
-BasicException.o: ../src/BasicException.cpp ../include/BasicException.hpp \
-		../include/Tools.hpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o BasicException.o ../src/BasicException.cpp
+BasicException.o: ../BasicException.cpp ../BasicException.hpp \
+		../Tools.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o BasicException.o ../BasicException.cpp
 
-Tools.o: ../src/Tools.cpp ../include/Tools.hpp
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Tools.o ../src/Tools.cpp
+Tools.o: ../Tools.cpp ../Tools.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Tools.o ../Tools.cpp
 
 ####### Install
 
-install:  FORCE
+install_target: first FORCE
+	@test -d $(INSTALL_ROOT)/home/k-110-04/Qt/5.12.5/gcc_64/plugins/generic || mkdir -p $(INSTALL_ROOT)/home/k-110-04/Qt/5.12.5/gcc_64/plugins/generic
+	-$(QINSTALL_PROGRAM) $(QMAKE_TARGET) $(INSTALL_ROOT)/home/k-110-04/Qt/5.12.5/gcc_64/plugins/generic/$(QMAKE_TARGET)
+	-$(STRIP) $(INSTALL_ROOT)/home/k-110-04/Qt/5.12.5/gcc_64/plugins/generic/$(QMAKE_TARGET)
 
-uninstall:  FORCE
+uninstall_target: FORCE
+	-$(DEL_FILE) $(INSTALL_ROOT)/home/k-110-04/Qt/5.12.5/gcc_64/plugins/generic/$(QMAKE_TARGET)
+	-$(DEL_DIR) $(INSTALL_ROOT)/home/k-110-04/Qt/5.12.5/gcc_64/plugins/generic/ 
+
+
+install: install_target  FORCE
+
+uninstall: uninstall_target  FORCE
 
 FORCE:
 
