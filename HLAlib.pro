@@ -21,8 +21,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     BaseFederate.cpp \
-    HLA-Simulink/HLAblock_grt_rtw/HLAblock.cpp \
-    HLA-Simulink/HLAblock_grt_rtw/HLAblock_data.cpp \
     HLA-Simulink/SimFederate/SimFederate.cpp \
     HLA-Simulink/SimFederate/main.cpp \
     HLA-Simulink/TransferBlock.cpp \
@@ -33,12 +31,6 @@ SOURCES += \
     ModelGuard.cpp
 
 HEADERS += \
-    HLA-Simulink/HLAblock_grt_rtw/HLAblock.h \
-    HLA-Simulink/HLAblock_grt_rtw/HLAblock_private.h \
-    HLA-Simulink/HLAblock_grt_rtw/HLAblock_types.h \
-    HLA-Simulink/HLAblock_grt_rtw/multiword_types.h \
-    HLA-Simulink/HLAblock_grt_rtw/rtmodel.h \
-    HLA-Simulink/HLAblock_grt_rtw/rtwtypes.h \
     HLA-Simulink/SimFederate/SimFederate.hpp \
     HLAdata/BasicException.hpp \
     HLAdata/BasicTemplates.hpp \
@@ -68,6 +60,8 @@ DEPENDPATH += $$PWD/../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DISTFILES += \
     HLA-Simulink/HLAblock \
     HLA-Simulink/HLAblock.slx \
+    HLA-Simulink/HLAblock.slx.autosave \
+    HLA-Simulink/HLAblock.slx.original \
     HLA-Simulink/HLAblock.slxc \
     HLA-Simulink/HLAblock_grt_rtw/HLAblock.mk \
     HLA-Simulink/HLAblock_grt_rtw/buildInfo.mat \
@@ -116,6 +110,7 @@ DISTFILES += \
     HLA-Simulink/HLAblock_grt_rtw/tmwinternal/simulink_cache.xml \
     HLA-Simulink/LogFile \
     HLA-Simulink/SFB__TransferBlock__SFB.mat \
+    HLA-Simulink/SimFederate/SimFederate.pro.user \
     HLA-Simulink/TransferBlock.mexa64 \
     HLA-Simulink/TransferBlock.tlc \
     HLA-Simulink/lrc_20200705_161414.671.log \
@@ -130,4 +125,5 @@ DISTFILES += \
     HLA-Simulink/slprj/sl_proj.tmw
 
 SUBDIRS += \
+    HLA-Simulink/SimFederate/SimFederate.pro \
     HLA-Simulink/SimFederate/SimFederate.pro
