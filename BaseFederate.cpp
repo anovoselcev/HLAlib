@@ -222,7 +222,7 @@ namespace HLA{
                                                      unordered_set<InteractionClassHandle, InteractionClassHash>& pub){
 
         sub.reserve(_InteractionsNames.size());
-        pub.reserve(_MyInteractions.size());
+        pub.reserve(_MyInteractionsNames.size());
         for(const auto&Interaction:_InteractionsNames){
         //Cache of Interaction Name
             auto& interactionName = Interaction.first;
@@ -238,7 +238,7 @@ namespace HLA{
                 _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter);
         }
 
-        for(const auto&Interaction:_MyInteractions){
+        for(const auto&Interaction:_MyInteractionsNames){
         //Cache of Interaction Name
             auto& interactionName = Interaction.first;
 
@@ -368,6 +368,31 @@ namespace HLA{
 
     State BaseFederate::GetState() const noexcept {return _state;}
 
+    JSON BaseFederate::MakeJSON(std::wstring filename){
+        std::string str;
+        str.assign(filename.begin(), filename.end());
+        wfstream file(move(str));
+        return Load(file);
+    }
+
+    BaseFederate& BaseFederate::LoadSOMFromJSON(const JSON& file){
+        const auto node         = file.GetRoot();
+        _AttributeNames         = JSON::ToVector(node->AsMap().at(L"PublishAttributes"));
+        _ObjectsNames           = JSON::ToMap(node->AsMap().at(L"SubscribeAttributes"));
+        _MyInteractionsNames    = JSON::ToMap(node->AsMap().at(L"PublishInteraction"));
+        _InteractionsNames      = JSON::ToMap(node->AsMap().at(L"SubscribeInteractions"));
+        return *this;
+    }
+
+    BaseFederate& BaseFederate::LoadSOMFromJSON(JSON&& file){
+        const auto node         = file.GetRoot();
+        _AttributeNames         = JSON::ToVector(node->AsMap().at(L"PublishAttributes"));
+        _ObjectsNames           = JSON::ToMap(node->AsMap().at(L"SubscribeAttributes"));
+        _MyInteractionsNames    = JSON::ToMap(node->AsMap().at(L"PublishInteraction"));
+        _InteractionsNames      = JSON::ToMap(node->AsMap().at(L"SubscribeInteractions"));
+        return *this;
+    }
+
     BaseFederate& BaseFederate::SetSubscribeMapOfObjectsAndAttributes(const NameMap& _map) noexcept{
         _ObjectsNames = _map;
         return *this;
@@ -400,11 +425,11 @@ namespace HLA{
 
 
     BaseFederate& BaseFederate::SetPublishMapOfInteractionAndParameters(const NameMap& map) noexcept{
-        _MyInteractions = map;
+        _MyInteractionsNames = map;
     }
 
     BaseFederate& BaseFederate::SetPublishMapOfInteractionAndParameters(NameMap&& map) noexcept{
-        _MyInteractions = move(map);
+        _MyInteractionsNames = move(map);
     }
 
     BaseFederate& BaseFederate::SetSyncCallbackMode(bool f)  noexcept{

@@ -3,7 +3,8 @@
 #include <RTI/RTI1516.h>
 #include <RTI/NullFederateAmbassador.h>
 
-#include <unordered_map>
+#include <Tools/JSON.hpp>
+
 #include <thread>
 #include <queue>
 #include <condition_variable>
@@ -204,6 +205,12 @@ private:
         using NameMap = std::unordered_map<std::wstring, std::vector<std::wstring>>;
         using NameList = std::vector<std::wstring>;
 public:
+
+        static JSON MakeJSON(std::wstring filename);
+
+        BaseFederate& LoadSOMFromJSON(const JSON& file);
+
+        BaseFederate& LoadSOMFromJSON(JSON&& file);
 /**
 * @brief SetMapOfObjectsAndAttributes
 * Set default map of Objects and Attribute of basic federate (lvalue version)
@@ -617,7 +624,7 @@ public:
 /**
 * @brief _MyInteractions
 */
-        NameMap _MyInteractions;
+        NameMap _MyInteractionsNames;
 
 /**
 * @brief _InteractionsNames

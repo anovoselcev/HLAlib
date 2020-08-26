@@ -24,7 +24,8 @@ SOURCES += \
     HLAdata/BasicException.cpp \
     HLAdata/Tools.cpp \
     Logger.cpp \
-    ModelGuard.cpp
+    ModelGuard.cpp\
+    Tools/JSON.cpp
 
 HEADERS += \
     HLAdata/BasicException.hpp \
@@ -34,7 +35,8 @@ HEADERS += \
     HLAdata/Tools.hpp \
     Logger.hpp \
     ModelGuard.hpp \
-    *Federate.hpp
+    *Federate.hpp \
+    Tools/JSON.hpp
 
 # Default rules for deployment.
 unix {
