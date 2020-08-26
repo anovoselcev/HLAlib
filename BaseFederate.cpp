@@ -3,6 +3,7 @@
 #include <chrono>
 #include <iostream>
 
+
 namespace HLA{
 
     using namespace std;
@@ -43,7 +44,7 @@ namespace HLA{
         lock_guard<mutex> guard(_smutex);
         _state = State::EXIT;
         Logger log(_log_filename);
-        log <<L"INFO:"<< _federate_name << L"disconnect from" << _host_IP_address << Logger::Flush();
+        log << L"INFO:"<< _federate_name << L"disconnect from" << _host_IP_address << Logger::Flush();
     }
 
 //Create RTIambassador pointer(unique_ptr) object, that provide access to RTI services
@@ -112,8 +113,8 @@ namespace HLA{
             return false;
         }
 
-    //If all connect steps finished we set connect flag to true value
-        _state = State::CONNECTED;
+        _state = State::CONNECTED;    //If all connect steps finished we set connect flag to true value
+
         try{
     //Initialized federate (it's object type in FOM and attributes), environment in federation
     // (other types and attributes indicated in _ObjectsNames) and their connections for this federate
@@ -127,8 +128,7 @@ namespace HLA{
         }
 
         try{
-    //Run the main loop of federate
-            _f_modeling = true;
+            _f_modeling = true;//Run the main loop of federate
             if(_mode == ModelMode::THREADING)
                 _modeling_thread = std::thread(&BaseFederate::ThreadModeling,this);
             else
@@ -154,6 +154,11 @@ namespace HLA{
         unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash> _externAttributesSet;
 
         AttributeHandleSet _aPublishSet;
+
+        unordered_set<InteractionClassHandle, InteractionClassHash> _SubscribeInteractionSet;
+
+        unordered_set<InteractionClassHandle, InteractionClassHash> _PublishInteractionSet;
+
     //Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
         InitClassesAndAttributes(_externAttributesSet, _aPublishSet);
 
@@ -164,11 +169,11 @@ namespace HLA{
         PublishAttributes(_aPublishSet);
 
     //Initializerd Interactions and there parameters indicated in FOM
-        InitInteractionsAndParameters();
+        InitInteractionsAndParameters(_SubscribeInteractionSet, _PublishInteractionSet);
 
-        SubscribeParameters();
+        SubscribeParameters(_SubscribeInteractionSet);
 
-        PublishParameters();
+        PublishParameters(_PublishInteractionSet);
 
         RegisterName();
 
@@ -197,11 +202,10 @@ namespace HLA{
             auto& objectName = Object.first;
 
         //Set table(_ObjectClasses) of objects like [TypeName, HLAobjectClass(something like link to FOM)]
-            _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);
+            //Cache of Object ID
+            auto& objectId = _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);
 
             for(const auto&Attribute:Object.second){
-            //Cache of Object ID
-                auto& objectId = _ObjectClasses[objectName];
 
             //Set table(_AttributesMap) of object's attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
                 _AttributesMap[objectId][Attribute] =_rtiAmbassador->getAttributeHandle(objectId,Attribute);
@@ -214,22 +218,38 @@ namespace HLA{
     }
 
 //Initializerd federate interactions and his parameters and environmental interactions and parameters indicated in _InteractionNames
-    void BaseFederate::InitInteractionsAndParameters(){
+    void BaseFederate::InitInteractionsAndParameters(unordered_set<InteractionClassHandle, InteractionClassHash>& sub,
+                                                     unordered_set<InteractionClassHandle, InteractionClassHash>& pub){
 
+        sub.reserve(_InteractionsNames.size());
+        pub.reserve(_MyInteractions.size());
         for(const auto&Interaction:_InteractionsNames){
         //Cache of Interaction Name
             auto& interactionName = Interaction.first;
 
         //Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)]
-            _InteractionClasses[interactionName] = _rtiAmbassador->getInteractionClassHandle(interactionName);
+              //Cache of InteractionId
+            auto& interactionId = _InteractionClasses[interactionName] = _rtiAmbassador->getInteractionClassHandle(interactionName);
 
-            for(const auto&Parameter:Interaction.second){
-            //Cache of InteractionId
-                auto& interactionId = _InteractionClasses[Interaction.first];
+            sub.insert(interactionId);
 
+            for(const auto&Parameter:Interaction.second)
             //Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
                 _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter);
-            }
+        }
+
+        for(const auto&Interaction:_MyInteractions){
+        //Cache of Interaction Name
+            auto& interactionName = Interaction.first;
+
+        //Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)]
+        //Cache of InteractionId
+            auto& interactionId = _InteractionClasses[interactionName] = _rtiAmbassador->getInteractionClassHandle(interactionName);
+            pub.insert(interactionId);
+
+            for(const auto&Parameter:Interaction.second)
+            //Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
+                _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter);
         }
     }
 
@@ -251,19 +271,19 @@ namespace HLA{
     }
 
 //Send to RTI set of partameters which federate want to recive
-    void BaseFederate::SubscribeParameters(){
-        for(const auto&x:_ParametersMap)
-        //Send to RTI request to subscribe on Interaction(x.first) and his Parameter Set (x.second)
+    void BaseFederate::SubscribeParameters(unordered_set<InteractionClassHandle, InteractionClassHash>& sub){
+        for(const auto&x:sub)
+        //Send to RTI request to subscribe on Interaction x
         //It get opportunity to recive information about updates of interaction's parameter set in reflectParameterValues
-            _rtiAmbassador->subscribeInteractionClass(x.first);
+            _rtiAmbassador->subscribeInteractionClass(x);
     }
 
 //Send to RTI set of parameters which federate publish
-    void BaseFederate::PublishParameters(){
-        for(const auto&x:_ParametersMap)
+    void BaseFederate::PublishParameters(unordered_set<InteractionClassHandle, InteractionClassHash>& pub){
+        for(const auto&x:pub)
         //Send to RTI request to publish parameters (_ParametersMap) of this federate
         //After that federate can provide information about updates of his parameters in RTI using sendInteraction
-            _rtiAmbassador->publishInteractionClass(x.first);
+            _rtiAmbassador->publishInteractionClass(x);
     }
 
     void BaseFederate::RegisterName(){
@@ -348,34 +368,43 @@ namespace HLA{
 
     State BaseFederate::GetState() const noexcept {return _state;}
 
-    BaseFederate& BaseFederate::SetSubscribeMapOfObjectsAndAttributes(const unordered_map<wstring,vector<wstring>>& _map) noexcept{
+    BaseFederate& BaseFederate::SetSubscribeMapOfObjectsAndAttributes(const NameMap& _map) noexcept{
         _ObjectsNames = _map;
         return *this;
     }
 
-    BaseFederate& BaseFederate::SetSubscribeMapOfObjectsAndAttributes(unordered_map<wstring,vector<wstring>>&& _map) noexcept{
+    BaseFederate& BaseFederate::SetSubscribeMapOfObjectsAndAttributes(NameMap&& _map) noexcept{
         _ObjectsNames = move(_map);
         return *this;
     }
 
-    BaseFederate& BaseFederate::SetPublishListOfAttributes(const vector<wstring>& attr)  noexcept{
+    BaseFederate& BaseFederate::SetPublishListOfAttributes(const NameList& attr)  noexcept{
         _AttributeNames = attr;
         return *this;
     }
 
-    BaseFederate& BaseFederate::SetPublishListOfAttributes(vector<wstring> &&attr)  noexcept{
+    BaseFederate& BaseFederate::SetPublishListOfAttributes(NameList &&attr)  noexcept{
         _AttributeNames = move(attr);
         return *this;
     }
 
-    BaseFederate& BaseFederate::SetMapOfInteractionsAndParameters(const unordered_map<wstring,vector<wstring>>& _map)  noexcept{
+    BaseFederate& BaseFederate::SetSubscribeMapOfInteractionsAndParameters(const NameMap& _map)  noexcept{
         _InteractionsNames = _map;
         return *this;
     }
 
-    BaseFederate& BaseFederate::SetMapOfInteractionsAndParameters(unordered_map<wstring,vector<wstring>>&& _map)  noexcept{
+    BaseFederate& BaseFederate::SetSubscribeMapOfInteractionsAndParameters(NameMap&& _map)  noexcept{
         _InteractionsNames = move(_map);
         return *this;
+    }
+
+
+    BaseFederate& BaseFederate::SetPublishMapOfInteractionAndParameters(const NameMap& map) noexcept{
+        _MyInteractions = map;
+    }
+
+    BaseFederate& BaseFederate::SetPublishMapOfInteractionAndParameters(NameMap&& map) noexcept{
+        _MyInteractions = move(map);
     }
 
     BaseFederate& BaseFederate::SetSyncCallbackMode(bool f)  noexcept{

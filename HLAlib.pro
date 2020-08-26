@@ -21,17 +21,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     BaseFederate.cpp \
-    HLA-Simulink/SimFederate/SimFederate.cpp \
-    HLA-Simulink/SimFederate/main.cpp \
-    HLA-Simulink/TransferBlock.cpp \
-    HLA-Simulink/TransferBlock_wrapper.cpp \
     HLAdata/BasicException.cpp \
     HLAdata/Tools.cpp \
     Logger.cpp \
     ModelGuard.cpp
 
 HEADERS += \
-    HLA-Simulink/SimFederate/SimFederate.hpp \
     HLAdata/BasicException.hpp \
     HLAdata/BasicTemplates.hpp \
     HLAdata/BasicTypes.hpp \

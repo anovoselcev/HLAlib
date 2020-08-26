@@ -76,7 +76,5 @@ int main()
 //    th6.detach();
     NewFollowFederate(L"Fed7",100);
 
-
-
     return 0;
 }

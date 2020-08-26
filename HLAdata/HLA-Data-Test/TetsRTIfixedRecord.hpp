@@ -193,11 +193,61 @@ void TestPerson(){
     ASSERT_EQUAL(p1.height,p2.height)
 }
 
+struct Button{
+    int push;
+    std::string name1;
+    std::string name2;
+};
+
+class HLAButton : public HLA::BaseFixedRecord<Button,8>{
+public:
+    void getDataMax(void *ptrSource, unsigned long uiMaxSize){
+        HLA::Integer32BE field0;
+        HLA::String field1;
+        HLA::String field2;
+        unsigned offset = 0;
+         auto_offset(offset,ptrSource,uiMaxSize,field0,field1,field2);
+    }
+
+    void get(const Button &obj){
+        HLA::Integer32BE field0;
+        HLA::String field1;
+        HLA::String field2;
+        unsigned offset = 0, uiSize;
+        m_uiSizeData=0;
+        auto_geter_first(offset,uiSize,field0,obj.push,
+                                       field1,obj.name1,
+                                       field2,obj.name2);
+
+        auto_geter_second(offset,uiSize,field0,field1,field2);
+    }
+
+    void set(Button &obj){
+        HLA::Integer32BE field0;
+        HLA::String field1;
+        HLA::String field2;
+        unsigned offset = 0, uiSize;
+        auto_seter(offset,uiSize,field0,obj.push,
+                   field1,obj.name1,
+                   field2,obj.name2);
+    }
+};
+
+void TestButton(){
+    Button b1 = {10,"Ivan","Ivanov"};
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLAButton>(b1);
+    Button b2 = HLA::cast_from_rti<HLAButton>(v);
+    ASSERT_EQUAL(b1.push,b2.push)
+    ASSERT_EQUAL(b1.name1,b2.name1)
+    ASSERT_EQUAL(b1.name2,b2.name2)
+}
+
 void TestfixedRecord(){
     LOG_DURATION("Fixed Record")
     TestPosition();
     TestBook();
     TestJuice();
     TestPerson();
+    TestButton();
 }
 #endif // TETSFIXEDRECORD_HPP

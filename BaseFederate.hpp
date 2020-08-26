@@ -7,6 +7,7 @@
 #include <thread>
 #include <queue>
 #include <condition_variable>
+#include <unordered_set>
 
 namespace HLA{
 
@@ -32,7 +33,6 @@ namespace HLA{
     class BaseFederate: public rti1516e::NullFederateAmbassador{
 
     public:
-
 
 /**
 * @brief BaseFederate
@@ -167,43 +167,6 @@ namespace HLA{
         State GetState() const noexcept;
 
 /**
-* @brief SetMapOfObjectsAndAttributes
-* Set default map of Objects and Attribute of basic federate (lvalue version)
-*/
-        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(const std::unordered_map<std::wstring,std::vector<std::wstring>>& objects_attributes_map) noexcept;
-
-/**
-* @brief SetMapOfObjectsAndAttributes
-* Set default map of Objects and Attribute of basic federate (rvalue version)
-*/
-        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(std::unordered_map<std::wstring,std::vector<std::wstring>>&& objects_attributes_map) noexcept;
-
-/**
-* @brief SetPublishListOfAttributes
-* Set list of attributes for publish (lvalue version)
-*/
-        BaseFederate& SetPublishListOfAttributes(const std::vector<std::wstring>& attribute_list) noexcept;
-
-/**
-* @brief SetPublishListOfAttributes
-* Set list of attributes for publish (rvalue version)
-*/
-        BaseFederate& SetPublishListOfAttributes(std::vector<std::wstring>&& attribute_list) noexcept;
-
-
-/**
-* @brief SetMapOfInteractionsAndParameters
-* Set default map of Interactions and Parameters of basic federate (lvalue version)
-*/
-        BaseFederate& SetMapOfInteractionsAndParameters(const std::unordered_map<std::wstring,std::vector<std::wstring>>& interations_parameters_map) noexcept;
-
-/**
-* @brief SetMapOfInteractionsAndParameters
-* Set default map of Interactions and Parameters of basic federate (rvalue version)
-*/
-        BaseFederate& SetMapOfInteractionsAndParameters(std::unordered_map<std::wstring,std::vector<std::wstring>>&& interations_parameters_map) noexcept;
-
-/**
 * @brief SetModelingStep
 * @param _step
 * Set modeling step in milliseconds
@@ -216,25 +179,81 @@ namespace HLA{
 * @return
 */
         BaseFederate& SetModelMode(ModelMode mode) noexcept;
+
 /**
 * @brief SetSyncCallbackMode
 * Change Callback mode to Synchronize, default Asynchronize
 */
-         BaseFederate& SetSyncCallbackMode(bool is_sync) noexcept;
+        BaseFederate& SetSyncCallbackMode(bool is_sync) noexcept;
 
 /**
 * @brief SetLogFileName
 * @param log_filename
 * @return
 */
-         BaseFederate& SetLogFileName(const std::string& log_filename) noexcept;
+        BaseFederate& SetLogFileName(const std::string& log_filename) noexcept;
 
 /**
 * @brief SetLogFileName
 * @param log_filenmae
 * @return
 */
-         BaseFederate& SetLogFileName(std::string&& log_filenmae) noexcept;
+        BaseFederate& SetLogFileName(std::string&& log_filenmae) noexcept;
+
+private:
+        using NameMap = std::unordered_map<std::wstring, std::vector<std::wstring>>;
+        using NameList = std::vector<std::wstring>;
+public:
+/**
+* @brief SetMapOfObjectsAndAttributes
+* Set default map of Objects and Attribute of basic federate (lvalue version)
+*/
+        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(const NameMap& objects_attributes_map) noexcept;
+
+/**
+* @brief SetMapOfObjectsAndAttributes
+* Set default map of Objects and Attribute of basic federate (rvalue version)
+*/
+        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(NameMap&& objects_attributes_map) noexcept;
+
+/**
+* @brief SetPublishListOfAttributes
+* Set list of attributes for publish (lvalue version)
+*/
+        BaseFederate& SetPublishListOfAttributes(const NameList& attribute_list) noexcept;
+
+/**
+* @brief SetPublishListOfAttributes
+* Set list of attributes for publish (rvalue version)
+*/
+        BaseFederate& SetPublishListOfAttributes(NameList&& attribute_list) noexcept;
+
+
+/**
+* @brief SetMapOfInteractionsAndParameters
+* Set default map of Interactions and Parameters of basic federate (lvalue version)
+*/
+        BaseFederate& SetSubscribeMapOfInteractionsAndParameters(const NameMap& interations_parameters_map) noexcept;
+
+/**
+* @brief SetMapOfInteractionsAndParameters
+* Set default map of Interactions and Parameters of basic federate (rvalue version)
+*/
+        BaseFederate& SetSubscribeMapOfInteractionsAndParameters(NameMap&& interations_parameters_map) noexcept;
+
+/**
+* @brief SetPublishMapOfInteractionAndParameters
+* @param interations_parameters_map
+* @return
+*/
+        BaseFederate& SetPublishMapOfInteractionAndParameters(const NameMap& interations_parameters_map) noexcept;
+
+/**
+* @brief SetPublishMapOfInteractionAndParameters
+* @param interations_parameters_map
+* @return
+*/
+        BaseFederate& SetPublishMapOfInteractionAndParameters(NameMap&& interations_parameters_map) noexcept;
 
 
     private:
@@ -269,6 +288,13 @@ namespace HLA{
         using CallbackAttributesInformation = CallbackInformation<rti1516e::AttributeHandleValueMap>;
         using CallbackParametersInformation = CallbackInformation<rti1516e::ParameterHandleValueMap>;
 
+        using ObjectHandleMap      = std::unordered_map<std::wstring, rti1516e::ObjectClassHandle>;
+        using InteractionHandleMap = std::unordered_map<std::wstring, rti1516e::InteractionClassHandle>;
+
+        using AttributeHandleMap = std::unordered_map<rti1516e::ObjectClassHandle, std::unordered_map<std::wstring, rti1516e::AttributeHandle>, ObjectClassHash>;
+        using ParameterHandleMap = std::unordered_map<rti1516e::InteractionClassHandle, std::unordered_map<std::wstring, rti1516e::ParameterHandle>, InteractionClassHash>;
+
+
 /**
 * @brief MakeRTIambassador
 * @return std::unique_ptr<rti1516e::RTIambassador>
@@ -296,7 +322,8 @@ namespace HLA{
 * Set the _InteractionsNames to _InteractionClasses
 * Set the _InteractionsNames to _ParametersMap
 */
-        void InitInteractionsAndParameters();
+        void InitInteractionsAndParameters(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&,
+                                           std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
 
 /**
 * @brief SubscribeAttributes
@@ -314,13 +341,13 @@ namespace HLA{
 * @brief SubscribeParameters
 * Call RTI to subscribe on Interactions and Parameters from _ParametersMap
 */
-        void SubscribeParameters();
+        void SubscribeParameters(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
 
 /**
 * @brief PublishParameters
 * Call RTI to publish the Interactions and Parameters from _ParametersMap
 */
-        void PublishParameters();
+        void PublishParameters(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
 
 /**
 * @brief RegisterName
@@ -508,26 +535,26 @@ namespace HLA{
 * @brief _ObjectClasses
 * Hash-map of extern Object Classes [ClassName,ClassID]
 */
-        std::unordered_map<std::wstring,rti1516e::ObjectClassHandle> _ObjectClasses;
+        ObjectHandleMap _ObjectClasses;
 
 /**
 * @brief _InteractionClasses
 * Hash-map of all Interaction Classes [ClassName,ClassID]
 */
-        std::unordered_map<std::wstring,rti1516e::InteractionClassHandle> _InteractionClasses;
+        InteractionHandleMap _InteractionClasses;
 
 /**
 * @brief _AttributesMap
 * Hash-map of all used Object Classes and their Attributes Hash-map [ClassID,[AttributeName,AttributeID]]
 */
-        std::unordered_map<rti1516e::ObjectClassHandle,std::unordered_map<std::wstring,rti1516e::AttributeHandle>,ObjectClassHash> _AttributesMap;
+        AttributeHandleMap _AttributesMap;
 
 //
 /**
 * @brief _ParametersMap
 * Hash-map of all used Interaction Classes and their Parameters Hash-map [ClassID,[ParameterName,ParameterID]]
 */
-        std::unordered_map<rti1516e::InteractionClassHandle,std::unordered_map<std::wstring,rti1516e::ParameterHandle>,InteractionClassHash> _ParametersMap;
+        ParameterHandleMap _ParametersMap;
 
 /**
 * @brief _qAttributes
@@ -580,17 +607,22 @@ namespace HLA{
 /**
 * @brief _AttributeNames
 */
-        std::vector<std::wstring> _AttributeNames;
+        NameList _AttributeNames;
 
 /**
 * @brief _ObjectsNames
 */
-        std::unordered_map<std::wstring,std::vector<std::wstring>> _ObjectsNames;
+        NameMap _ObjectsNames;
+
+/**
+* @brief _MyInteractions
+*/
+        NameMap _MyInteractions;
 
 /**
 * @brief _InteractionsNames
 */
-        std::unordered_map<std::wstring,std::vector<std::wstring>> _InteractionsNames;
+        NameMap _InteractionsNames;
 
 /**
 *
