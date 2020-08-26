@@ -118,9 +118,18 @@ namespace HLA {
     unordered_map<wstring, vector<wstring>> JSON::ToMap(shared_ptr<Node> node){
         unordered_map<wstring, vector<wstring>> result;
         auto map = node->AsMap();
+
         for(auto& p:map)
             result[p.first] = ToVector(p.second);
+
         return result;
+    }
+
+    JSON JSON::MakeJSON(wstring filename){
+        std::string str;
+        str.assign(filename.begin(), filename.end());
+        wfstream file(move(str));
+        return Load(file);
     }
 }
 

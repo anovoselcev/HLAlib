@@ -1,7 +1,6 @@
 #include "BaseFederate.hpp"
 #include "Logger.hpp"
 #include <chrono>
-#include <iostream>
 
 
 namespace HLA{
@@ -368,18 +367,11 @@ namespace HLA{
 
     State BaseFederate::GetState() const noexcept {return _state;}
 
-    JSON BaseFederate::MakeJSON(std::wstring filename){
-        std::string str;
-        str.assign(filename.begin(), filename.end());
-        wfstream file(move(str));
-        return Load(file);
-    }
-
     BaseFederate& BaseFederate::LoadSOMFromJSON(const JSON& file){
         const auto node         = file.GetRoot();
         _AttributeNames         = JSON::ToVector(node->AsMap().at(L"PublishAttributes"));
         _ObjectsNames           = JSON::ToMap(node->AsMap().at(L"SubscribeAttributes"));
-        _MyInteractionsNames    = JSON::ToMap(node->AsMap().at(L"PublishInteraction"));
+        _MyInteractionsNames    = JSON::ToMap(node->AsMap().at(L"PublishInteractions"));
         _InteractionsNames      = JSON::ToMap(node->AsMap().at(L"SubscribeInteractions"));
         return *this;
     }
@@ -388,7 +380,7 @@ namespace HLA{
         const auto node         = file.GetRoot();
         _AttributeNames         = JSON::ToVector(node->AsMap().at(L"PublishAttributes"));
         _ObjectsNames           = JSON::ToMap(node->AsMap().at(L"SubscribeAttributes"));
-        _MyInteractionsNames    = JSON::ToMap(node->AsMap().at(L"PublishInteraction"));
+        _MyInteractionsNames    = JSON::ToMap(node->AsMap().at(L"PublishInteractions"));
         _InteractionsNames      = JSON::ToMap(node->AsMap().at(L"SubscribeInteractions"));
         return *this;
     }

@@ -10,6 +10,7 @@ SOURCES += \
         ../HLAdata/Tools.cpp \
         ../Logger.cpp \
         ../ModelGuard.cpp \
+        ../Tools/JSON.cpp \
         main.cpp
 
 HEADERS += \
@@ -26,6 +27,7 @@ HEADERS += \
     ../HLAdata/Tools.hpp \
     ../Logger.hpp \
     ../ModelGuard.hpp \
+    ../Tools/JSON.hpp \
     FollowFederate.hpp \
     ThreadFederate.hpp
 unix {

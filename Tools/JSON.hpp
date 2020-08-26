@@ -5,6 +5,7 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+#include <fstream>
 
 namespace HLA {
 
@@ -30,6 +31,8 @@ namespace HLA {
     class JSON {
     public:
       explicit JSON(std::shared_ptr<Node> root);
+
+      static JSON MakeJSON(std::wstring);
 
       const std::shared_ptr<Node> GetRoot() const;
 

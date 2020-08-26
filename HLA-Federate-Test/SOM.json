@@ -1,0 +1,12 @@
+{
+    "PublishAttributes": 
+                        ["Name",
+                         "Attr1"],
+    "SubscribeAttributes" :
+                        {"Following" :
+                                        ["Name"]},
+    "PublishInteractions" : 
+                            {},
+    "SubscribeInteractions" :
+                            {}
+}

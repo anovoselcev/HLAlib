@@ -3,7 +3,7 @@
 #include <RTI/RTI1516.h>
 #include <RTI/NullFederateAmbassador.h>
 
-#include <Tools/JSON.hpp>
+#include "Tools/JSON.hpp"
 
 #include <thread>
 #include <queue>
@@ -205,8 +205,6 @@ private:
         using NameMap = std::unordered_map<std::wstring, std::vector<std::wstring>>;
         using NameList = std::vector<std::wstring>;
 public:
-
-        static JSON MakeJSON(std::wstring filename);
 
         BaseFederate& LoadSOMFromJSON(const JSON& file);
 
