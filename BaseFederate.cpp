@@ -35,6 +35,20 @@ namespace HLA{
                                       _FOMname(move(FOMname)),
                                       _federation_name(move(fname)),
                                       _host_IP_address(move(ip)){}
+
+    BaseFederate::BaseFederate(const JSON& file) :
+                                          _federate_name(file.GetRoot()->AsMap().at(L"Name")->AsWstring()),
+                                          _federate_type(file.GetRoot()->AsMap().at(L"Type")->AsWstring()),
+                                          _FOMname(file.GetRoot()->AsMap().at(L"FOMpath")->AsWstring()),
+                                          _federation_name(file.GetRoot()->AsMap().at(L"FederationName")->AsWstring()),
+                                          _host_IP_address(file.GetRoot()->AsMap().at(L"Address")->AsWstring()){}
+
+    BaseFederate::BaseFederate(JSON&& file) :
+                                          _federate_name(move(file.GetRoot()->AsMap().at(L"Name")->AsWstring())),
+                                          _federate_type(move(file.GetRoot()->AsMap().at(L"Type")->AsWstring())),
+                                          _FOMname(move(file.GetRoot()->AsMap().at(L"FOMpath")->AsWstring())),
+                                          _federation_name(move(file.GetRoot()->AsMap().at(L"FederationName")->AsWstring())),
+                                          _host_IP_address(move(file.GetRoot()->AsMap().at(L"Address")->AsWstring())){}
 //Destructor
     BaseFederate::~BaseFederate(){
         _f_modeling = false;
@@ -369,19 +383,25 @@ namespace HLA{
 
     BaseFederate& BaseFederate::LoadSOMFromJSON(const JSON& file){
         const auto node         = file.GetRoot();
-        _AttributeNames         = JSON::ToVector(node->AsMap().at(L"PublishAttributes"));
-        _ObjectsNames           = JSON::ToMap(node->AsMap().at(L"SubscribeAttributes"));
-        _MyInteractionsNames    = JSON::ToMap(node->AsMap().at(L"PublishInteractions"));
-        _InteractionsNames      = JSON::ToMap(node->AsMap().at(L"SubscribeInteractions"));
+        SetPublishListOfAttributes                (JSON::ToVector(node->AsMap().at(L"PublishAttributes")));
+        SetSubscribeMapOfObjectsAndAttributes     (JSON::ToMap(node->AsMap().at(L"SubscribeAttributes")));
+        SetPublishMapOfInteractionAndParameters   (JSON::ToMap(node->AsMap().at(L"PublishInteractions")));
+        SetSubscribeMapOfInteractionsAndParameters(JSON::ToMap(node->AsMap().at(L"SubscribeInteractions")));
+        SetModelingStep(node->AsMap().at(L"ModelingStep")->AsInt());
+        SetSyncCallbackMode(node->AsMap().at(L"CallbackMode")->AsInt());
+        SetModelMode(ModelMode(node->AsMap().at(L"ModelingMode")->AsInt()));
         return *this;
     }
 
     BaseFederate& BaseFederate::LoadSOMFromJSON(JSON&& file){
         const auto node         = file.GetRoot();
-        _AttributeNames         = JSON::ToVector(node->AsMap().at(L"PublishAttributes"));
-        _ObjectsNames           = JSON::ToMap(node->AsMap().at(L"SubscribeAttributes"));
-        _MyInteractionsNames    = JSON::ToMap(node->AsMap().at(L"PublishInteractions"));
-        _InteractionsNames      = JSON::ToMap(node->AsMap().at(L"SubscribeInteractions"));
+        SetPublishListOfAttributes                (JSON::ToVector(node->AsMap().at(L"PublishAttributes")));
+        SetSubscribeMapOfObjectsAndAttributes     (JSON::ToMap(node->AsMap().at(L"SubscribeAttributes")));
+        SetPublishMapOfInteractionAndParameters   (JSON::ToMap(node->AsMap().at(L"PublishInteractions")));
+        SetSubscribeMapOfInteractionsAndParameters(JSON::ToMap(node->AsMap().at(L"SubscribeInteractions")));
+        SetModelingStep(node->AsMap().at(L"ModelingStep")->AsInt());
+        SetSyncCallbackMode(node->AsMap().at(L"CallbackMode")->AsInt());
+        SetModelMode(ModelMode(node->AsMap().at(L"ModelingMode")->AsInt()));
         return *this;
     }
 

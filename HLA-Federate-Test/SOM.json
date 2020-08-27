@@ -1,4 +1,22 @@
 {
+    "Name" :
+                        "Name",
+    "Type" :            
+                        "Type",
+    "FOMpath" :
+                        "../HLA-Federate-Test/SampleFOM.xml",
+    "FederationName":
+                        "FederationName",
+    "Address":
+                        "address",
+    "ModelingStep" : 
+                        100,
+    "CallbackMode" : 
+                        1,
+                        
+    "ModelingMode" :
+                        0,
+    
     "PublishAttributes": 
                         ["Name",
                          "Attr1"],

@@ -11,8 +11,9 @@ using namespace std;
 
 void  NewThreadFederate(wstring&& name, int delay){
 
-    auto fed = std::make_unique<ThreadFederate>(name,L"../HLA-Federate-Test/SampleFOM.xml");
-    fed->   LoadSOMFromJSON(HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/HLAlib/HLA-Federate-Test/SOM.json")).
+    auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/HLAlib/HLA-Federate-Test/SOM.json");
+    auto fed = std::make_unique<ThreadFederate>(file);
+    fed->   LoadSOMFromJSON(file).
             SetModelingStep(step).
             ConnectRTI();
     auto begin = chrono::steady_clock::now();

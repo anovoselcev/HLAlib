@@ -72,6 +72,10 @@ namespace HLA{
                      std::wstring&& fname,
                      std::wstring&& ip = L"localhost") noexcept;
 
+        BaseFederate(const JSON& file);
+
+        BaseFederate(JSON&& file);
+
  /**
 * @brief ~BaseFederate
 * Destructor of basic federate

@@ -17,6 +17,9 @@ public:
         _mode = HLA::ModelMode::THREADING;
     }
 
+    ThreadFederate(HLA::JSON& file) :
+                   HLA::BaseFederate(file){}
+
     std::wstring _other=L"-";
     bool firstly = true;
 
