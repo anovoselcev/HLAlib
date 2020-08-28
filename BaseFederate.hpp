@@ -1,3 +1,11 @@
+//=========================================================================================
+/*
+ *  Written by Novoseltsev Artemy
+ * This program is free software.
+ * This program is distributed in the hope that it will be useful.
+*/
+//=========================================================================================
+
 #ifndef BASEFEDERATE_HPP
 #define BASEFEDERATE_HPP
 #include <RTI/RTI1516.h>
@@ -51,6 +59,12 @@ namespace HLA{
 * Basic federate of HLAlib, which provide easy API for Quick Federate Developing, based on NullFederateAmbassador (provided by HLA)
 */
     class BaseFederate: public rti1516e::NullFederateAmbassador{
+
+//=========================================================================================
+
+//          Public API
+
+//=========================================================================================
 
     public:
 
@@ -251,6 +265,12 @@ namespace HLA{
 * @return Sample reference of current Federate
 */
         BaseFederate& LoadSOMFromJSON(JSON&& file);
+
+//=========================================================================================
+
+//          Private Methods, structures and alias
+
+//=========================================================================================
 
 private:
 
@@ -498,6 +518,11 @@ private:
 */
         void RegisterName();
 
+//=========================================================================================
+
+//          Protected API and fields
+
+//=========================================================================================
 
     protected:
 /**
