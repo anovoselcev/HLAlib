@@ -1,27 +1,28 @@
 {
     "Name" :
-                        "Name",
+                        "First",
     "Type" :            
-                        "Type",
+                        "Following",
     "FOMpath" :
                         "../HLA-Federate-Test/SampleFOM.xml",
     "FederationName":
-                        "FederationName",
+                        "Test",
     "Address":
-                        "address",
+                        "localhost",
     "ModelingStep" : 
                         100,
     "CallbackMode" : 
-                        1,
+                        0,
                         
     "ModelingMode" :
                         0,
+    "LogFileName" :
+                        "LogFile",
     
     "PublishAttributes": 
-                        ["Name",
-                         "Attr1"],
+                        ["Name"],
     "SubscribeAttributes" :
-                        {"Following" :
+                        {"Threading" :
                                         ["Name"]},
     "PublishInteractions" : 
                             {},

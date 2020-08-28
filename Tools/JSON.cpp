@@ -4,43 +4,97 @@ namespace HLA {
 
     using namespace std;
 
-    Node::Node(vector<shared_ptr<Node>> array) : as_array(move(array)) {
-    }
+/**
+* @brief Node::Node
+* @param array
+*/
+    Node::Node(vector<shared_ptr<Node>> array) : as_array(move(array)) {}
 
-    Node::Node(unordered_map<wstring, shared_ptr<Node>> map) : as_map(move(map)){
-    }
+/**
+* @brief Node::Node
+* @param map
+*/
+    Node::Node(unordered_map<wstring, shared_ptr<Node>> map) : as_map(move(map)){}
 
-    Node::Node(int value) : as_int(value) {
-    }
+/**
+* @brief Node::Node
+* @param value
+*/
+    Node::Node(int value) : as_int(value) {}
 
-    Node::Node(wstring value) : as_wstring(move(value)) {
-    }
+/**
+* @brief Node::Node
+* @param value
+*/
+    Node::Node(wstring value) : as_wstring(move(value)) {}
 
+/**
+* @brief Node::AsVector
+* @return
+*/
     const vector<shared_ptr<Node>>& Node::AsVector() const {
       return as_array;
     }
 
+/**
+* @brief Node::AsMap
+* @return
+*/
     const unordered_map<wstring, shared_ptr<Node>>& Node::AsMap() const {
       return as_map;
     }
 
+/**
+* @brief Node::AsInt
+* @return
+*/
     int Node::AsInt() const {
       return as_int;
     }
 
+/**
+* @brief Node::AsWstring
+* @return
+*/
     const wstring& Node::AsWstring() const {
       return as_wstring;
     }
 
+/**
+* @brief Node::AsString
+* @return
+*/
+    const std::string& Node::AsString() const{
+        return as_string;
+    }
+
+/**
+* @brief JSON::JSON
+* @param root
+*/
     JSON::JSON(shared_ptr<Node> root) : root(move(root)) {
     }
 
+/**
+* @brief JSON::GetRoot
+* @return
+*/
     const shared_ptr<Node> JSON::GetRoot() const {
       return root;
     }
 
+/**
+* @brief LoadNode
+* @param input
+* @return
+*/
     shared_ptr<Node> LoadNode(wistream& input);
 
+/**
+* @brief LoadArray
+* @param input
+* @return
+*/
     shared_ptr<Node> LoadArray(wistream& input) {
       vector<shared_ptr<Node>> result;
 
@@ -54,6 +108,11 @@ namespace HLA {
       return make_shared<Node>(move(result));
     }
 
+/**
+* @brief LoadInt
+* @param input
+* @return
+*/
     shared_ptr<Node> LoadInt(wistream& input) {
       int result = 0;
       while (isdigit(input.peek())) {
@@ -63,12 +122,22 @@ namespace HLA {
       return make_shared<Node>(result);
     }
 
+/**
+* @brief LoadWstring
+* @param input
+* @return
+*/
     shared_ptr<Node> LoadWstring(wistream& input) {
       wstring line;
       getline(input, line, L'"');
       return make_shared<Node>(move(line));
     }
 
+/**
+* @brief LoadDict
+* @param input
+* @return
+*/
     shared_ptr<Node> LoadDict(wistream& input) {
       unordered_map<wstring, shared_ptr<Node>> result;
 
@@ -85,6 +154,11 @@ namespace HLA {
       return make_shared<Node>(move(result));
     }
 
+/**
+* @brief LoadNode
+* @param input
+* @return
+*/
     shared_ptr<Node> LoadNode(wistream& input) {
       wchar_t c;
       input >> c;
@@ -101,10 +175,20 @@ namespace HLA {
       }
     }
 
+/**
+* @brief Load
+* @param input
+* @return
+*/
     JSON Load(wistream& input) {
       return JSON{LoadNode(input)};
     }
 
+/**
+* @brief JSON::ToVector
+* @param node
+* @return
+*/
     vector<wstring> JSON::ToVector(shared_ptr<Node> node){
         vector<wstring> result;
         auto vect = node->AsVector();
@@ -115,6 +199,11 @@ namespace HLA {
         return result;
     }
 
+/**
+* @brief JSON::ToMap
+* @param node
+* @return
+*/
     unordered_map<wstring, vector<wstring>> JSON::ToMap(shared_ptr<Node> node){
         unordered_map<wstring, vector<wstring>> result;
         auto map = node->AsMap();
@@ -125,6 +214,11 @@ namespace HLA {
         return result;
     }
 
+/**
+* @brief JSON::MakeJSON
+* @param filename
+* @return
+*/
     JSON JSON::MakeJSON(wstring filename){
         std::string str;
         str.assign(filename.begin(), filename.end());

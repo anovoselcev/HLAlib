@@ -36,14 +36,14 @@ namespace HLA{
                                       _federation_name(move(fname)),
                                       _host_IP_address(move(ip)){}
 
-    BaseFederate::BaseFederate(const JSON& file) :
+    BaseFederate::BaseFederate(const JSON& file) noexcept :
                                           _federate_name(file.GetRoot()->AsMap().at(L"Name")->AsWstring()),
                                           _federate_type(file.GetRoot()->AsMap().at(L"Type")->AsWstring()),
                                           _FOMname(file.GetRoot()->AsMap().at(L"FOMpath")->AsWstring()),
                                           _federation_name(file.GetRoot()->AsMap().at(L"FederationName")->AsWstring()),
                                           _host_IP_address(file.GetRoot()->AsMap().at(L"Address")->AsWstring()){}
 
-    BaseFederate::BaseFederate(JSON&& file) :
+    BaseFederate::BaseFederate(JSON&& file) noexcept:
                                           _federate_name(move(file.GetRoot()->AsMap().at(L"Name")->AsWstring())),
                                           _federate_type(move(file.GetRoot()->AsMap().at(L"Type")->AsWstring())),
                                           _FOMname(move(file.GetRoot()->AsMap().at(L"FOMpath")->AsWstring())),
@@ -70,7 +70,7 @@ namespace HLA{
 //Connect to RTI. In order to connect we need to create federation based on FOM (isn't nessary, if federation already exist)
 // and join there. After that federate initialized in RTI and go to the his main loop.
 //Use only to lvalue class samples
-    bool BaseFederate::ConnectRTI() {
+    bool BaseFederate::ConnectRTI() & {
     //Initialized rtiAmbassador to call RTI servecies (look HLA::MakeRTIambassador)
         Logger log(_log_filename);
         try{
@@ -390,6 +390,7 @@ namespace HLA{
         SetModelingStep(node->AsMap().at(L"ModelingStep")->AsInt());
         SetSyncCallbackMode(node->AsMap().at(L"CallbackMode")->AsInt());
         SetModelMode(ModelMode(node->AsMap().at(L"ModelingMode")->AsInt()));
+        SetLogFileName(node->AsMap().at(L"LogFileName")->AsString());
         return *this;
     }
 
@@ -402,6 +403,7 @@ namespace HLA{
         SetModelingStep(node->AsMap().at(L"ModelingStep")->AsInt());
         SetSyncCallbackMode(node->AsMap().at(L"CallbackMode")->AsInt());
         SetModelMode(ModelMode(node->AsMap().at(L"ModelingMode")->AsInt()));
+        SetLogFileName(node->AsMap().at(L"LogFileName")->AsString());
         return *this;
     }
 

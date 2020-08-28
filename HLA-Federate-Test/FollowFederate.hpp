@@ -16,6 +16,8 @@ public:
         HLA::BaseFederate(name,L"Following",FOM,L"Test"){
         _mode = HLA::ModelMode::FOLLOWING;
     }
+    FollowFederate(HLA::JSON& file) :
+                   HLA::BaseFederate(file){}
     std::wstring _other=L"-";
     bool firstly = true;
 

@@ -11,10 +11,9 @@ using namespace std;
 
 void  NewThreadFederate(wstring&& name, int delay){
 
-    auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/HLAlib/HLA-Federate-Test/SOM.json");
+    auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/HLAlib/HLA-Federate-Test/ThreadingSOM.json");
     auto fed = std::make_unique<ThreadFederate>(file);
     fed->   LoadSOMFromJSON(file).
-            SetModelingStep(step).
             ConnectRTI();
     auto begin = chrono::steady_clock::now();
     while(chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - begin).count() < step*100){
@@ -30,13 +29,13 @@ void  NewThreadFederate(wstring&& name, int delay){
         }
         else
             fed->firstly=false;
+        std::wcout << fed->GetName() << L" recive " << fed->_other << std::endl;
     }
 }
 void NewFollowFederate(wstring&& name, int delay){
-    auto fed = std::make_unique<FollowFederate>(name,L"../HLA-Federate-Test/SampleFOM.xml");
-    fed->SetPublishListOfAttributes({L"Name"}).
-            SetSubscribeMapOfObjectsAndAttributes({{L"Threading",{L"Name",L"Attr1",L"Attr2"}}}).
-            SetModelingStep(step).
+    auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/HLAlib/HLA-Federate-Test/FollowingSOM.json");
+    auto fed = std::make_unique<FollowFederate>(file);
+    fed->   LoadSOMFromJSON(file).
             ConnectRTI();
     auto begin = chrono::steady_clock::now();
     while(chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - begin).count() < step*100){
@@ -52,6 +51,7 @@ void NewFollowFederate(wstring&& name, int delay){
         }
         else
             fed->firstly=false;
+        std::wcout << fed->GetName() << L" recive " << fed->_other << std::endl;
     }
 }
 
