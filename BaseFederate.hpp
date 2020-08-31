@@ -1,6 +1,6 @@
 //=========================================================================================
 /*
- *  Written by Novoseltsev Artemy
+ * Written by Novoseltsev Artemy
  * This program is free software.
  * This program is distributed in the hope that it will be useful.
 */
@@ -11,12 +11,12 @@
 #include <RTI/RTI1516.h>
 #include <RTI/NullFederateAmbassador.h>
 
-#include "Tools/JSON.hpp"
-
 #include <thread>
 #include <queue>
 #include <condition_variable>
 #include <unordered_set>
+
+#include "Tools/JSON.hpp"
 
 namespace HLA{
 
@@ -166,6 +166,7 @@ namespace HLA{
 /**
 * @brief ConnectRRTI
 * Connect to RTI. In order to connect we need to create federation based on FOM (isn't nessary, if federation already exist) and join there. After that federate initialized in RTI and go to the his main loop. Use only to lvalue class samples
+* @return flag of success execution
 */
          bool ConnectRTI() &;
 
@@ -560,13 +561,13 @@ private:
 
  /**
  * @brief AttributeProcess
- * Function that process queue of reflected attributes step by step in time order
+ * Function that process queue of reflected attributes step by step in time order, should be override
  */
         virtual void AttributeProcess();
 
 /**
 * @brief ParameterProcess
-* Function that process queue of recived parameters of interactions step by step in time order
+* Function that process queue of recived parameters of interactions step by step in time order, should be override
 */
         virtual void ParameterProcess();
 

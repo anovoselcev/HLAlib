@@ -2,8 +2,16 @@
 #define RTITYPES_HPP
 
 #include "BasicTemplates.hpp"
+#include <uchar.h>
 
 namespace HLA {
+
+    template<typename HLAtype>
+    rti1516e::VariableLengthData cast_to_rti(const typename HLAtype::type& t);
+
+    template<typename HLAtype>
+    typename HLAtype::type cast_from_rti(const rti1516e::VariableLengthData& v);
+
 
     template <class T, unsigned mem, bool blLE=true>
       class SimpleData: public ClassForRTI <T,mem>{
@@ -130,7 +138,6 @@ namespace HLA {
         };
 
 
-
         using Integer16BE    = SimpleData<int16_t, 2, false>;
         using Integer32BE    = SimpleData<int, 4, false>;
         using Integer64BE    = SimpleData<int64_t, 8, false>;
@@ -138,7 +145,7 @@ namespace HLA {
         using Float32BE      = SimpleData<float, 4, false>;
         using Float64BE      = SimpleData<double, 8, false>;
         using Octet          = SimpleData<Octet_, 1, true>;
-        using Byte           = SimpleData<bool, 1, true>;
+        using Bool           = SimpleData<bool, 1, true>;
         using Integer16LE    = SimpleData<int16_t, 2, true>;
         using Integer32LE    = SimpleData<int, 4, true>;
         using Integer64LE    = SimpleData<int64_t, 8, true>;
@@ -148,8 +155,12 @@ namespace HLA {
         using UnsignedShort  = SimpleData<uint16_t, 2, true>;
         using Unsigned32LE   = SimpleData<uint32_t, 4, true> ;
         using Unsigned64LE   = SimpleData<uint64_t, 8, true>;
-        using Char           = SimpleData<char,2,true>;
-        using Wchar          = SimpleData<wchar_t, 4, true>;
+        using UcharLE        = SimpleData<u_char, 1, true>;
+        using UcharBE        = SimpleData<u_char, 1, false>;
+        using CharLE         = SimpleData<char, 2, true>;
+        using CharBE         = SimpleData<char, 2, false>;
+        using WcharLE        = SimpleData<wchar_t, 4, true>;
+        using WcharBE        = SimpleData<wchar_t, 4, false>;
 
         template<typename HLAtype>
         rti1516e::VariableLengthData cast_to_rti(const typename HLAtype::type& t){

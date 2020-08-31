@@ -39,13 +39,13 @@ void TestInteger(){
 
 void TestBool(){
     bool b1 = true;
-    rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::Bool>(b1);
-    bool b2 = HLA::cast_from_rti<HLA::Bool>(v1);
+    rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::Byte>(b1);
+    bool b2 = HLA::cast_from_rti<HLA::Byte>(v1);
     ASSERT_EQUAL(b1,b2);
 
     bool b3 = false;
-    rti1516e::VariableLengthData v2 = HLA::cast_to_rti<HLA::Bool>(b3);
-    bool b4 = HLA::cast_from_rti<HLA::Bool>(v2);
+    rti1516e::VariableLengthData v2 = HLA::cast_to_rti<HLA::Byte>(b3);
+    bool b4 = HLA::cast_from_rti<HLA::Byte>(v2);
     ASSERT_EQUAL(b3,b4);
 }
 
@@ -75,38 +75,9 @@ void TestDouble(){
 
 void TestChar(){
     char ch1 = 'a';
-    rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::CharLE>(ch1);
-    char ch2 = HLA::cast_from_rti<HLA::CharLE>(v1);
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Char>(ch1);
+    char ch2 = HLA::cast_from_rti<HLA::Char>(v);
     ASSERT_EQUAL(ch1,ch2);
-
-    char ch3 = 'p';
-    rti1516e::VariableLengthData v2 = HLA::cast_to_rti<HLA::CharBE>(ch3);
-    char ch4 = HLA::cast_from_rti<HLA::CharLE>(v2);
-    ASSERT_EQUAL(ch3,ch4);
-}
-
-void TestWchar(){
-    wchar_t wch1 = L'a';
-    rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::WcharLE>(wch1);
-    wchar_t wch2 = HLA::cast_from_rti<HLA::WcharLE>(v1);
-    ASSERT_EQUAL(wch1,wch2);
-
-    wchar_t wch3 = L'p';
-    rti1516e::VariableLengthData v2 = HLA::cast_to_rti<HLA::WcharBE>(wch3);
-    wchar_t wch4 = HLA::cast_from_rti<HLA::WcharBE>(v2);
-    ASSERT_EQUAL(wch3,wch4);
-}
-
-void TestUchar(){
-    u_char uch1 = 'a';
-    rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::UcharLE>(uch1);
-    u_char uch2 = HLA::cast_from_rti<HLA::UcharLE>(v1);
-    ASSERT_EQUAL(uch1,uch2);
-
-    u_char uch3 = 'p';
-    rti1516e::VariableLengthData v2 = HLA::cast_to_rti<HLA::UcharBE>(uch3);
-    u_char uch4 = HLA::cast_from_rti<HLA::UcharBE>(v2);
-    ASSERT_EQUAL(uch3,uch4);
 }
 
 void TestSimpleData(){
@@ -116,7 +87,5 @@ void TestSimpleData(){
     TestInteger();
     TestBool();
     TestChar();
-    TestWchar();
-    TestUchar();
 }
 #endif // TESTSIMPLEDATA_HPP

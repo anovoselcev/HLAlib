@@ -9,9 +9,21 @@ namespace HLA{
     using namespace rti1516e;
 
 
-//Default constructor, initialization nothing
+/**
+ * @brief BaseFederate::BaseFederate
+ * Default constructor, initialization nothing specific
+ */
     BaseFederate::BaseFederate() noexcept{}
 
+/**
+* @brief BaseFederate::BaseFederate
+* @param name       Name of Federate
+* @param type       Type of federate, which match object in FOM
+* @param FOMname    Path to FOM file
+* @param fname      Name of Federation
+* @param ip         IP - address of CRC
+* Full-gapes constructor with lvalue, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), name of federation (_federation_name) and IP addres of CRC(_host_IP_address)
+*/
     BaseFederate::BaseFederate(const wstring& name,
                                const wstring& type,
                                const wstring& FOMname,
@@ -24,7 +36,15 @@ namespace HLA{
                                         _host_IP_address(ip){}
 
 
-   //Full-gapes constructor with move, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), IP addres of CRC(_host_IP_address) and name of federation (_federation_name)
+/**
+* @brief BaseFederate::BaseFederate
+* @param name       Name of Federate
+* @param type       Type of federate, which match object in FOM
+* @param FOMname    Path to FOM file
+* @param fname      Name of Federation
+* @param ip         IP - address of CRC
+* Full-gapes constructor with move, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), name of federation (_federation_name) and IP addres of CRC(_host_IP_address)
+*/
     BaseFederate::BaseFederate(wstring&& name,
                                wstring&& type,
                                wstring&& FOMname,
@@ -36,6 +56,16 @@ namespace HLA{
                                       _federation_name(move(fname)),
                                       _host_IP_address(move(ip)){}
 
+/**
+* @brief BaseFederate::BaseFederate
+* @param file JSON file with necessary parameters:
+* Name           : Name of Federate
+* Type           : Type of federate, which match object in FOM
+* FOMpath        : Path to FOM file
+* FederationName : Name of Federation
+* Address        : IP - address of CRC
+* Constructor for JSON file with lvalue reference
+*/
     BaseFederate::BaseFederate(const JSON& file) noexcept :
                                           _federate_name(file.GetRoot()->AsMap().at(L"Name")->AsWstring()),
                                           _federate_type(file.GetRoot()->AsMap().at(L"Type")->AsWstring()),
@@ -43,113 +73,167 @@ namespace HLA{
                                           _federation_name(file.GetRoot()->AsMap().at(L"FederationName")->AsWstring()),
                                           _host_IP_address(file.GetRoot()->AsMap().at(L"Address")->AsWstring()){}
 
+/**
+* @brief BaseFederate::BaseFederate
+* @param file JSON file with necessary parameters:
+* Name           : Name of Federate
+* Type           : Type of federate, which match object in FOM
+* FOMpath        : Path to FOM file
+* FederationName : Name of Federation
+* Address        : IP - address of CRC
+* Constructor for JSON file with rvalue reference
+*/
     BaseFederate::BaseFederate(JSON&& file) noexcept:
                                           _federate_name(move(file.GetRoot()->AsMap().at(L"Name")->AsWstring())),
                                           _federate_type(move(file.GetRoot()->AsMap().at(L"Type")->AsWstring())),
                                           _FOMname(move(file.GetRoot()->AsMap().at(L"FOMpath")->AsWstring())),
                                           _federation_name(move(file.GetRoot()->AsMap().at(L"FederationName")->AsWstring())),
                                           _host_IP_address(move(file.GetRoot()->AsMap().at(L"Address")->AsWstring())){}
-//Destructor
+/**
+* @brief BaseFederate::~BaseFederate
+* Destructor of basic federate, which set Federate State to EXIT
+*/
     BaseFederate::~BaseFederate(){
-        _f_modeling = false;
+        _f_modeling = false;                // Change flag to finish modeling
         if(_mode == ModelMode::THREADING)
-            _modeling_thread.join();
-        lock_guard<mutex> guard(_smutex);
-        _state = State::EXIT;
-        Logger log(_log_filename);
-        log << L"INFO:"<< _federate_name << L"disconnect from" << _host_IP_address << Logger::Flush();
+            _modeling_thread.join();        // Wait for end of thread
+        lock_guard<mutex> guard(_smutex);   // Lock state mutex
+        _state = State::EXIT;               // Set federate mutex to EXIT
+        Logger log(_log_filename);          // Create log writer
+        log << L"INFO:"                     // Write INFO message about disconnect
+            << _federate_name
+            << L"disconnect from"
+            << _host_IP_address
+            << Logger::Flush();
     }
 
-//Create RTIambassador pointer(unique_ptr) object, that provide access to RTI services
+/**
+* @brief BaseFederate::MakeRTIambassador
+* @return std::unique_ptr<rti1516e::RTIambassador>
+* Create RTIambassador pointer(unique_ptr) object, that provide access to RTI services
+*/
     unique_ptr<RTIambassador> BaseFederate::MakeRTIambassador() const &{
-        unique_ptr<RTIambassadorFactory> rtiAmbassadorFactory = std::make_unique<RTIambassadorFactory>();
-        unique_ptr<RTIambassador> _RtiAmbassador(rtiAmbassadorFactory->createRTIambassador());
+        unique_ptr<RTIambassadorFactory> rtiAmbassadorFactory = std::make_unique<RTIambassadorFactory>(); // Create Factory for RTIambassador
+        unique_ptr<RTIambassador> _RtiAmbassador(rtiAmbassadorFactory->createRTIambassador());            // Create RTIambassador
         return _RtiAmbassador;
     }
 
-//Connect to RTI. In order to connect we need to create federation based on FOM (isn't nessary, if federation already exist)
-// and join there. After that federate initialized in RTI and go to the his main loop.
-//Use only to lvalue class samples
+/**
+* @brief BaseFederate::ConnectRTI
+* Connect to RTI. In order to connect we need to create federation based on FOM (isn't nessary, if federation already exist) and join there. After that federate initialized in RTI and go to the his main loop. Use only to lvalue class samples
+* @return flag of success execution
+*/
     bool BaseFederate::ConnectRTI() & {
-    //Initialized rtiAmbassador to call RTI servecies (look HLA::MakeRTIambassador)
-        Logger log(_log_filename);
+
+        Logger log(_log_filename);                // Create log writer
         try{
-            _rtiAmbassador = MakeRTIambassador();
+            _rtiAmbassador = MakeRTIambassador(); // Initialized rtiAmbassador to call RTI servecies (look HLA::MakeRTIambassador)
         }
-        catch(RTIinternalError){
-            log << L"ERROR:" << _federate_name << L"Can't create RTIambassador" << Logger::Flush();
+        catch(RTIinternalError& e){               // Catch RTI runtime error
+            log << L"ERROR:"                      // Write ERROR message about runtime error
+                << _federate_name
+                << L"Can't create RTIambassador"
+                << e.what()
+                << Logger::Flush();
             return false;
         }
 
         try{
-    //Check the CRC address and callback RTI mode (sync, async) and using rtiAmbassador connect this federate to RTI
-            if(_host_IP_address == L"localhost")
-                _rtiAmbassador->connect(*this,_callback_mode);
+            if(_host_IP_address == L"localhost")                                               // Check the CRC address
+                _rtiAmbassador->connect(*this,_callback_mode);                                 // Using rtiAmbassador connect this federate to RTI from localhost
             else
-                _rtiAmbassador->connect(*this,_callback_mode,L"crcAddress="+_host_IP_address);
+                _rtiAmbassador->connect(*this,_callback_mode,L"crcAddress="+_host_IP_address); // Using rtiAmbassador connect this federate to RTI from _host_IP_address
         }
-        catch(...){
-            log << L"ERROR:" << _federate_name << L"Cant connect" << Logger::Flush();
+        catch(...){                                                                            // Catch some error
+            log << L"ERROR:"                                                                   // Write ERROR message about error
+                << _federate_name
+                << L"Cant connect"
+                << Logger::Flush();
             return false;
         }
 
 
         try{
-    //Try to create federation with name (_federation_name) and rules in FOM (look _FOMname)
-            _rtiAmbassador->createFederationExecution(_federation_name, _FOMname);
+            _rtiAmbassador->createFederationExecution(_federation_name, _FOMname); // Try to create federation with name (_federation_name) and rules in FOM (look _FOMname)
         }
-    //If federation already exist we catch exception(FederationExecutionAlreadyExists) and do nothing
-        catch(FederationExecutionAlreadyExists&){}
+        catch(FederationExecutionAlreadyExists&){}                                 // If federation already exist we catch exception(FederationExecutionAlreadyExists) and do nothing
 
-        catch(ErrorReadingFDD&){
-            log << L"ERROR:" << _federate_name << L"Cant read FOM" << Logger::Flush();
+        catch(ErrorReadingFDD& e){                                                 // Catch FOM reading runtime error
+            log << L"ERROR:"                                                       // Write ERROR message about FOM reading
+                << _federate_name
+                << L"Cant read FOM"
+                << e.what()
+                << Logger::Flush();
             return false;
         }
-        catch(CouldNotOpenFDD&){
-            log << L"ERROR:" << _federate_name << L"Cant open FOM" << Logger::Flush();
+        catch(CouldNotOpenFDD& e ){                                                // Catch FOM opening runtime error
+            log << L"ERROR:"                                                       // Write ERROR message about FOM opening
+                << _federate_name
+                << L"Cant open FOM"
+                << e.what()
+                << Logger::Flush();
             return false;
         }
 
-        catch(...){
-            log << L"ERROR:" << _federate_name << L"Cant create federation" << Logger::Flush();
+        catch(...){                                                                // Catch some error
+            log << L"ERROR:"                                                       // Write ERROR message about error
+                << _federate_name
+                << L"Cant create federation"
+                << Logger::Flush();
             return false;
         }
 
-    //This waste 1 seconds, it's the biggest comand in this function (more than 50ths)
+    // This waste 1 seconds, it's the biggest comand in this function (more than 50ths)
         try{
-    //After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
-            _rtiAmbassador->joinFederationExecution(_federate_name,_federation_name);
-            log << L"INFO:" << L"Connect of" << _federate_name <<  L"done" << Logger::Flush();
+            _rtiAmbassador->joinFederationExecution(_federate_name,_federation_name); // After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
+            log << L"INFO:"                                                           // Write INFO message about successfully connection
+                << L"Connect of"
+                << _federate_name
+                <<  L"done"
+                 << Logger::Flush();
         }
-        catch(...){
-            log << L"ERROR:" << _federate_name << L"Can't join" << Logger::Flush();
+        catch(...){                                                                  // Catch some error
+            log << L"ERROR:"                                                         // Write ERROR message about error
+                << _federate_name
+                << L"Can't join"
+                << Logger::Flush();
             return false;
         }
 
-        _state = State::CONNECTED;    //If all connect steps finished we set connect flag to true value
+        _state = State::CONNECTED;          // If all connect steps finished we set connect flag to true value
 
         try{
-    //Initialized federate (it's object type in FOM and attributes), environment in federation
-    // (other types and attributes indicated in _ObjectsNames) and their connections for this federate
-            Init();
+            Init();                         // Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate
 
-            log << L"INFO:" << L"Init of" << _federate_name << L"done" << Logger::Flush();
+            log << L"INFO:"                 // Write INFO message about successfull join
+                << L"Init of"
+                << _federate_name
+                << L"done"
+                << Logger::Flush();
         }
-        catch(RTIinternalError& e){
-            log << L"ERROR:" << _federate_name << L"Error in Init() with" << e.what() << Logger::Flush();
+        catch(RTIinternalError& e){         // Catch RTI runtime error
+            log << L"ERROR:"                // Write ERROR message about runtime error
+                << _federate_name
+                << L"Error in Init() with"
+                << e.what()
+                << Logger::Flush();
             return false;
         }
 
         try{
-            _f_modeling = true;//Run the main loop of federate
+            _f_modeling = true;                                                     // Run the main loop of federate
             if(_mode == ModelMode::THREADING)
-                _modeling_thread = std::thread(&BaseFederate::ThreadModeling,this);
+                _modeling_thread = std::thread(&BaseFederate::ThreadModeling,this); // Run Modeling Thread
             else
-                _last_time = chrono::steady_clock::now();
-            RunFederate();
+                _last_time = chrono::steady_clock::now();                           // Save last clock time
+            RunFederate();                                                          // Run the Federate main function (can be empty)
         }
         catch(RTIinternalError& e){
-            log << L"ERROR:" << _federate_name << L"Error in Run() with" << e.what() << Logger::Flush();
+            log << L"ERROR:"
+                << _federate_name
+                << L"Error in Run() with"
+                << e.what()
+                << Logger::Flush();
             return false;
         }
         return true;

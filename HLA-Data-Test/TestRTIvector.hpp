@@ -67,15 +67,15 @@ void TestVectorDouble(){
 
 void TestVectorBool(){
     std::vector<bool> v1 = {true,false};
-    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Bool,1>(v1);
-    std::vector<bool> v2 = HLA::cast_from_rti<HLA::Bool,1>(v);
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Byte,1>(v1);
+    std::vector<bool> v2 = HLA::cast_from_rti<HLA::Byte,1>(v);
     ASSERT_EQUAL(v1,v2);
 }
 
 void TestVectorChar(){
     std::vector<char> v1 = {'a','g','1'};
-    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::CharLE,1>(v1);
-    std::vector<char> v2 = HLA::cast_from_rti<HLA::CharLE,1>(v);
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Char,1>(v1);
+    std::vector<char> v2 = HLA::cast_from_rti<HLA::Char,1>(v);
     ASSERT_EQUAL(v1,v2)
 
 }

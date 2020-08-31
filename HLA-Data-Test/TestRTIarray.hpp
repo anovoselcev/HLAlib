@@ -78,15 +78,15 @@ void TestArrayDouble(){
 
 void TestArrayBool(){
     std::array<bool,2> v1 = {true,false};
-    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Bool,2,1>(v1);
-    std::array<bool,2> v2 = HLA::cast_from_rti<HLA::Bool,2,1>(v);
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Byte,2,1>(v1);
+    std::array<bool,2> v2 = HLA::cast_from_rti<HLA::Byte,2,1>(v);
     ASSERT_EQUAL(v1,v2);
 }
 
 void TestArrayChar(){
     std::array<char,3> v1 = {'a','g','1'};
-    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::CharLE,3,1>(v1);
-    std::array<char,3> v2 = HLA::cast_from_rti<HLA::CharLE,3,1>(v);
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Char,3,1>(v1);
+    std::array<char,3> v2 = HLA::cast_from_rti<HLA::Char,3,1>(v);
     ASSERT_EQUAL(v1,v2)
 
 }
