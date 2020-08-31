@@ -174,6 +174,7 @@ namespace HLA{
 * @brief operator ()
 * @param step Modeling Step in milliseconds
 * Operator that run federate with modelin_step in milliseconds = step like functional object
+* @return flag of success execution
 */
         virtual bool operator()(int step=100);
 

@@ -5,6 +5,12 @@
 
 namespace HLA{
 
+    template<typename HLAtype, unsigned Size, unsigned OBV>
+    rti1516e::VariableLengthData cast_to_rti(const std::array<typename HLAtype::type,Size>& t);
+
+    template<typename HLAtype, unsigned Size, unsigned OBV>
+    typename std::array<typename HLAtype::type, Size> cast_from_rti(const rti1516e::VariableLengthData& v);
+
     template <class T_FOM, class T_MOD, size_t uiDim, unsigned m_OBV>
     class Array : public ClassForRTI <std::array<T_MOD,uiDim>, m_OBV>{
       Array & operator = (const Array &/*fixedArray*/) {
@@ -183,7 +189,7 @@ namespace HLA{
       }
     };
 
-    template<typename HLAtype, unsigned Size, unsigned OBV = 8>
+    template<typename HLAtype, unsigned Size, unsigned OBV>
     rti1516e::VariableLengthData cast_to_rti(const std::array<typename HLAtype::type,Size>& t){
         Array<HLAtype,typename HLAtype::type, Size, OBV> conv;
         rti1516e::VariableLengthData v;

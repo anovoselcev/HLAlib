@@ -228,8 +228,8 @@ namespace HLA{
                 _last_time = chrono::steady_clock::now();                           // Save last clock time
             RunFederate();                                                          // Run the Federate main function (can be empty)
         }
-        catch(RTIinternalError& e){
-            log << L"ERROR:"
+        catch(RTIinternalError& e){                                                 // Catch RTI runtime error
+            log << L"ERROR:"                                                        // Write ERROR message about runtime error
                 << _federate_name
                 << L"Error in Run() with"
                 << e.what()
@@ -239,13 +239,21 @@ namespace HLA{
         return true;
     }
 
+/**
+* @brief BaseFederate::operator ()
+* @param step Modeling Step in milliseconds
+* Operator that run federate with modelin_step in milliseconds = step like functional object
+* @return flag of success execution
+*/
     bool BaseFederate::operator()(int step) {
         _modeling_step = step;
         return ConnectRTI();
     }
 
-//Initialized federate (it's object type in FOM and attributes), environment in federation
-// (other types and attributes indicated in _ObjectsNames) and their connections for this federate
+/**
+* @brief BaseFederate::Init
+* Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate.
+*/
     void BaseFederate::Init(){
 
         unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash> _externAttributesSet;

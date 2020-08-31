@@ -4,6 +4,12 @@
 #include "BasicTemplates.hpp"
 namespace HLA {
 
+    template<typename HLAtype, unsigned OBV>
+    rti1516e::VariableLengthData cast_to_rti(const std::vector<typename HLAtype::type>& t);
+
+    template<typename HLAtype, unsigned OBV>
+    std::vector<typename HLAtype::type> cast_from_rti(const rti1516e::VariableLengthData& v);
+
     template <class T_FOM, class T_MOD, unsigned m_OBV=1>
     class Vector : public ClassForRTI<std::vector<T_MOD>,m_OBV>
     {
