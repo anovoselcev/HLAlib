@@ -2,17 +2,13 @@
 #define TOOLS_HPP
 #define FUNCTION_COMMON_API
 /////////////////////////////////
-#include <cstdint>
+
 #include <sstream>
-#include <stdlib.h>
-#include <errno.h>
-#include <string>
+
 
 namespace HLA {
 
   namespace Tools {
-
-    std::string UTF16toUTF8(std::wstring const & in);
 
 
     template<class T> void changeENDIAN(T& value)
@@ -30,9 +26,13 @@ namespace HLA {
 
     unsigned getPendingBytes(unsigned uiElementSize, unsigned OctetBoundaryValue);
 
-    std::wstring widen(std::string& s);
+    std::wstring widen(const std::string& s);
 
     std::wstring widen(std::string&& s);
+
+    std::string unwiden(const std::wstring& s);
+
+    std::string unwiden(std::wstring&& s);
 
   }
 }

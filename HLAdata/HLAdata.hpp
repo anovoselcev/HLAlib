@@ -1,8 +1,9 @@
 #ifndef HLADATA_HPP
 #define HLADATA_HPP
-#include "RTIenum.hpp"
-#include "RTIstring.hpp"
-#include "RTIfixedRecod.hpp"
-#include "RTIvector.hpp"
-#include "RTIarray.hpp"
+#include "HLAstring.hpp"
+#include "HLAfixedRecod.hpp"
+#include "HLAvector.hpp"
+#include "HLAarray.hpp"
+#include "HLAtypes.hpp"
+#include "HLAenum.hpp"
 #endif // HLADATA_HPP

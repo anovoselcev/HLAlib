@@ -1,37 +1,36 @@
 #ifndef RTIFIXEDRECOD_HPP
 #define RTIFIXEDRECOD_HPP
-#include <RTI/RTI1516.h>
 
-#include "RTItypes.hpp"
+#include "BasicTemplates.hpp"
 
 namespace HLA {
 
-    template <class T_MOD, unsigned OBV>
-    class BaseRTIFixedRecord : public ClassForRTI <T_MOD, OBV> {
+    template <class T_MOD, unsigned OBV = 8>
+    class BaseFixedRecord : public ClassForRTI <T_MOD, OBV> {
     protected:
-      Octet* ptrData;
+      Octet_* ptrData;
     public:
 
       using type = T_MOD;
 
       unsigned m_uiSizeData;
 
-      BaseRTIFixedRecord() : ClassForRTI<T_MOD, OBV>() {
+      BaseFixedRecord() : ClassForRTI<T_MOD, OBV>() {
         ptrData=nullptr;
         m_uiSizeData = 0;
       }
 
-      BaseRTIFixedRecord(const BaseRTIFixedRecord &fixedRecord) : ClassForRTI<T_MOD, OBV>(fixedRecord) {
+      BaseFixedRecord(const BaseFixedRecord &fixedRecord) : ClassForRTI<T_MOD, OBV>(fixedRecord) {
       }
 
-      virtual ~BaseRTIFixedRecord() {
+      virtual ~BaseFixedRecord() {
         if (ptrData!=nullptr) {
           delete[] ptrData;
           ptrData=nullptr;
         }
       }
 
-      virtual void get(BaseRTIFixedRecord &obj) {
+      virtual void get(BaseFixedRecord &obj) {
         rti1516e::VariableLengthData data;
         if (this != &obj) {
           obj.setDataToRTI(data);
@@ -107,16 +106,16 @@ namespace HLA {
       }
 
       template<typename FieldType>
-      void auto_offset(unsigned &offset, void* ptrSource, unsigned uiMaxSize,FieldType& field){
+      void auto_offset(unsigned &offset, void* ptrSource, unsigned long uiMaxSize,FieldType& field){
           F_offsetLast<FieldType>(field,offset,ptrSource,static_cast<unsigned>(uiMaxSize));
           if (ptrData!=nullptr) delete[] ptrData;
             m_uiSizeData = offset;
-            ptrData = new HLA::Octet[m_uiSizeData];
+            ptrData = new HLA::Octet_[m_uiSizeData];
             memcpy(ptrData, ptrSource, m_uiSizeData);
       }
 
       template<typename Field1, typename Field2, typename ...Fields>
-      void auto_offset(unsigned &offset, void* ptrSource, unsigned uiMaxSize,Field1& field1,Field2& field2,Fields&... fields){
+      void auto_offset(unsigned &offset, void* ptrSource, unsigned long uiMaxSize,Field1& field1,Field2& field2,Fields&... fields){
         F_offset< Field1, Field2 >(field1,field2,offset,ptrSource,uiMaxSize);
         auto_offset(offset, ptrSource,uiMaxSize,field2,fields...);
       }
@@ -134,7 +133,7 @@ namespace HLA {
           offset+=uiSize;
           m_uiSizeData = offset;
           if(ptrData!=nullptr) delete[] ptrData;
-          ptrData = new HLA::Octet[m_uiSizeData];
+          ptrData = new HLA::Octet_[m_uiSizeData];
           offset = 0;
       }
 
@@ -165,14 +164,14 @@ namespace HLA {
 
       template<bool first = true, typename Field, typename ...Fields>
       void auto_geter_second(unsigned& offset, unsigned& uiSize, Field& field, Fields&... fields){
-          uiSize = field.getsize();
-          field.setData(ptrData+offset,uiSize);
           unsigned P,mmOBV;
           if(!first){
             mmOBV = field.getOctetBoundary();
             P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
             offset += uiSize+P;
           }
+          uiSize = field.getsize();
+          field.setData(ptrData+offset,uiSize);
           auto_geter_second<false>(offset,uiSize,fields...);
       }
 

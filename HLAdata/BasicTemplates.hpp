@@ -1,22 +1,12 @@
 #ifndef BASICTEMPLATES_HPP
 #define BASICTEMPLATES_HPP
-#ifdef WIN32
-#pragma warning(disable: 4251)
-#pragma warning(disable: 4786)
-#pragma warning(disable: 4290)
-#pragma warning(disable: 4482)
-#endif
 
-#ifdef WIN32
-#include <typeinfo>
-#endif
-#include <fstream>
 #include "BasicException.hpp"
 #include <RTI/RTI1516.h>
 
 namespace HLA {
 //Template for RTI presentation of Type with mem (Octet Boundary Value)
-    template <class Type, unsigned mem>
+    template <class Type, unsigned OBV>
     class ClassForRTI {
     public:
     //Default constructor
@@ -24,7 +14,7 @@ namespace HLA {
     //Destructor
       virtual ~ClassForRTI() {}
     //Copy constructor
-      ClassForRTI(const ClassForRTI<Type,mem>& obj) {
+      ClassForRTI(const ClassForRTI<Type,OBV>& obj) {
         rti1516e::VariableLengthData data;
         if (this != &obj) {
           obj.setDataToRTI(data);
@@ -32,7 +22,7 @@ namespace HLA {
         }
       }
     //Copy assigment operator
-      ClassForRTI<Type,mem>& operator = (ClassForRTI<Type,mem> & obj) {
+      ClassForRTI<Type,OBV>& operator = (ClassForRTI<Type,OBV> & obj) {
         rti1516e::VariableLengthData data;
         if (this != &obj) {
           obj.setDataToRTI(data);
@@ -49,43 +39,10 @@ namespace HLA {
     //Get object of Type to transform in Variable Data
       virtual void get(Type const &obj) = 0;
     //Copy
-      virtual void copy(ClassForRTI<Type,mem>& obj);
+      virtual void copy(ClassForRTI<Type,OBV>& obj);
     //Set Data to object, it prepare Variable Length Data to RTI
       virtual void setDataToRTI(rti1516e::VariableLengthData &obj) = 0;
 
-      void writeData(std::ofstream &OutStream){
-        rti1516e::VariableLengthData obj;
-        size_t obj_size;
-        if (OutStream.is_open()) {
-          setDataToRTI(obj);
-          obj_size = obj.size();
-          OutStream.write(static_cast<char*>(static_cast<void*>(&obj_size)), sizeof(size_t));
-          OutStream.write(static_cast<const char*>(obj.data()), static_cast<std::streamsize>(obj_size));
-        } else {
-          throw ExceptionForRTI("Файл не открыт");
-        }
-      }
-
-      void readData(std::ifstream &InputStream){
-        size_t obj_size;
-        char* ptrData = nullptr;
-        try {
-          if (InputStream.is_open()) {
-            InputStream.read(static_cast<char*>(static_cast<void*>(&obj_size)),sizeof(size_t));
-            ptrData = new char[obj_size];
-            InputStream.read(ptrData,static_cast<std::streamsize>(obj_size));
-            getData(ptrData,static_cast<unsigned long>(obj_size));
-            delete []ptrData;
-          } else {
-            throw ExceptionForRTI("Файл не открыт");
-          }
-        } catch (ExceptionForRTI &ex) {
-          if (ptrData != nullptr) {
-            delete []ptrData;
-          }
-          throw ex;
-        }
-      }
     //Set data to ptrDest with fixed size
       virtual void setData(void* ptrDest, unsigned long inSize) = 0;
     //Set data to ptrDest
@@ -95,17 +52,23 @@ namespace HLA {
 
       virtual unsigned getsize() = 0;
 
-      unsigned getOctetBoundary(){return mem;}
+      unsigned getOctetBoundary(){return OBV;}
     };
 
-    template <class Type, unsigned mem>
-    void ClassForRTI<Type, mem>::copy(ClassForRTI<Type,mem>& obj) {
+    template <class Type, unsigned OBV>
+    void ClassForRTI<Type, OBV>::copy(ClassForRTI<Type,OBV>& obj) {
       rti1516e::VariableLengthData data;
       if (this != &obj) {
         obj.setDataToRTI(data);
         this->getDataFromRTI(data);
       }
     }
+#ifndef WIN32
+    using  Octet_ = uint8_t;
+#else
+    using Octet_ = unsigned char;
+#endif
+
 
 }
 
