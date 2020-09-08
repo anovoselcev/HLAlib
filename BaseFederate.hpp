@@ -551,6 +551,7 @@ private:
        template<ModelMode>
 /**
 * @brief Modeling
+* Polymorphic Main function of modeling, look at specializations
 */
        void Modeling();
 
