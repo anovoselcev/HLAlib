@@ -221,11 +221,14 @@ namespace HLA{
         }
 
         try{
-            _f_modeling = true;                                                     // Run the main loop of federate
+            _f_modeling = true;                                                                     // Run the main loop of federate
             if(_mode == ModelMode::THREADING)
-                _modeling_thread = std::thread(&BaseFederate::ThreadModeling,this); // Run Modeling Thread
-            else
-                _last_time = chrono::steady_clock::now();                           // Save last clock time
+                _modeling_thread = std::thread(&BaseFederate::Modeling<ModelMode::THREADING>,this); // Run Modeling Thread
+            else if(_mode == ModelMode::FOLLOWING)
+                _last_time = chrono::steady_clock::now();// Save last clock time
+            else if(_mode == ModelMode::MANAGING){
+                //pass
+            }
             RunFederate();                                                          // Run the Federate main function (can be empty)
         }
         catch(RTIinternalError& e){                                                 // Catch RTI runtime error
@@ -407,7 +410,8 @@ namespace HLA{
 
     void BaseFederate::SendParameters() const{}
 
-    void BaseFederate::ThreadModeling(){
+    template<>
+    void BaseFederate::Modeling<ModelMode::THREADING>(){
         while(_f_modeling){
             Logger log(_log_filename);
             {
@@ -425,7 +429,8 @@ namespace HLA{
         }
     }
 
-    void BaseFederate::FollowModeling(){
+    template<>
+    void BaseFederate::Modeling<ModelMode::FOLLOWING>(){
         Logger log(_log_filename);
         auto dur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now()-_last_time);
         auto step = chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(_modeling_step));
@@ -437,6 +442,11 @@ namespace HLA{
         AttributeProcess();
         _state = State::DOING;
         log << L"INFO:" << _federate_name << L"Begin of following modeling step - doing" << Logger::Flush();
+    }
+
+    template<>
+    void BaseFederate::Modeling<ModelMode::MANAGING>(){
+
     }
 
     void BaseFederate::AttributeProcess(){
