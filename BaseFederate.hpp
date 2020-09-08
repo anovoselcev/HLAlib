@@ -506,13 +506,13 @@ private:
 * @brief SubscribeParameters
 * Call RTI to subscribe on Interactions and Parameters from _MyInteractionsNames
 */
-        void SubscribeParameters(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
+        void SubscribeInteractions(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
 
 /**
 * @brief PublishParameters
 * Call RTI to publish the Interactions and Parameters from _InteractionsNames
 */
-        void PublishParameters(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
+        void PublishInteractions(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
 
 /**
 * @brief RegisterName

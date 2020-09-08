@@ -112,5 +112,26 @@ namespace HLA {
 
     using String = BaseHLAstring<std::string>;
     using Wstring = BaseHLAstring<std::wstring>;
+
+template<>
+    rti1516e::VariableLengthData cast_to_rti<Wstring>(const typename std::wstring& t){
+        String conv;
+        std::string str;
+        str.assign(t.begin(), t.end());
+        rti1516e::VariableLengthData v;
+        conv.get(str);
+        conv.setDataToRTI(v);
+        return v;
+    }
+template<>
+    std::wstring cast_from_rti<Wstring>(const rti1516e::VariableLengthData& v){
+        String conv;
+        std::wstring t;
+        std::string str;
+        conv.getDataFromRTI(v);
+        conv.set(str);
+        t.assign(std::move(str.begin()), std::move(str.end()));
+        return t;
+    }
 }
 #endif // RTISTRING_HPP
