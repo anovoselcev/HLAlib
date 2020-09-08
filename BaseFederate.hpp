@@ -506,13 +506,13 @@ private:
 * @brief SubscribeParameters
 * Call RTI to subscribe on Interactions and Parameters from _MyInteractionsNames
 */
-        void SubscribeParameters(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
+        void SubscribeInteractions(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
 
 /**
 * @brief PublishParameters
 * Call RTI to publish the Interactions and Parameters from _InteractionsNames
 */
-        void PublishParameters(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
+        void PublishInteractions(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
 
 /**
 * @brief RegisterName
@@ -547,18 +547,12 @@ private:
 */
         virtual void SendParameters() const;
 
- /**
- * @brief Modeling
- * Main function of modeling that sleep in sub-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
- */
-        virtual void ThreadModeling();
 
+       template<ModelMode>
 /**
-* @brief FollowModeling
-* Main function of modeling that sleep in call-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
+* @brief Modeling
 */
-
-        virtual void FollowModeling();
+       void Modeling();
 
  /**
  * @brief AttributeProcess
@@ -811,5 +805,28 @@ private:
 */
         friend class ModelGuard;
     };
+
+
+    template<>
+/**
+* @brief BaseFederate::Modeling<ModelMode::THREADING>
+* Main function of modeling that sleep in sub-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
+*/
+    void BaseFederate::Modeling<ModelMode::THREADING>();
+
+
+    template<>
+/**
+* @brief BaseFederate::Modeling<ModelMode::FOLLOWING>
+* Main function of modeling that sleep in call-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
+*/
+    void BaseFederate::Modeling<ModelMode::FOLLOWING>();
+
+
+    template<>
+/**
+* @brief BaseFederate::Modeling<ModelMode::MANAGING>
+*/
+    void BaseFederate::Modeling<ModelMode::MANAGING>();
 }
 #endif // BASEFEDERATE_HPP

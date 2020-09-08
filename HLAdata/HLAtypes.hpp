@@ -162,22 +162,6 @@ namespace HLA {
         using WcharLE        = SimpleData<wchar_t, 4, true>;
         using WcharBE        = SimpleData<wchar_t, 4, false>;
 
-        template<typename HLAtype>
-        rti1516e::VariableLengthData cast_to_rti(const typename HLAtype::type& t){
-            HLAtype conv;
-            rti1516e::VariableLengthData v;
-            conv.get(t);
-            conv.setDataToRTI(v);
-            return v;
-        }
 
-        template<typename HLAtype>
-        typename HLAtype::type cast_from_rti(const rti1516e::VariableLengthData& v){
-            HLAtype conv;
-            typename HLAtype::type t;
-            conv.getDataFromRTI(v);
-            conv.set(t);
-            return t;
-        }
   }
 #endif // RTITYPES_HPP

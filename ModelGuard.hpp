@@ -1,10 +1,9 @@
 #ifndef MODELGUARD_HPP
 #define MODELGUARD_HPP
-#include <mutex>
+
+#include "BaseFederate.hpp"
 
 namespace HLA {
-
-class BaseFederate;
 
 /**
 * @brief The ModelGuard class
@@ -54,15 +53,8 @@ class BaseFederate;
 
     protected:
 
-/**
-* @brief ThreadModelingControl
-*/
-        void ThreadModelingControl();
-
-/**
-* @brief FollowModelingControl
-*/
-        void FollowModelingControl();
+        template<ModelMode>
+        void ModelingControl();
 
 /**
 * @brief _federate
@@ -79,6 +71,16 @@ class BaseFederate;
 */
         std::chrono::time_point<std::chrono::steady_clock> _start;
     };
+
+
+    template<>
+    void ModelGuard::ModelingControl<ModelMode::THREADING>();
+
+    template<>
+    void ModelGuard::ModelingControl<ModelMode::FOLLOWING>();
+
+    template<>
+    void ModelGuard::ModelingControl<ModelMode::MANAGING>();
 }
 
 #endif // MODELGUARD_HPP

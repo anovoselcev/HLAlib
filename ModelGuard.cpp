@@ -1,5 +1,4 @@
 #include "ModelGuard.hpp"
-#include "BaseFederate.hpp"
 
 namespace HLA {
 
@@ -20,9 +19,11 @@ namespace HLA {
             throw std::runtime_error("Nullptr federate");
 
         if(_federate->_mode == ModelMode::THREADING)
-            ThreadModelingControl();
-        else
-            FollowModelingControl();
+            ModelingControl<ModelMode::THREADING>();
+        else if(_federate->_mode == ModelMode::FOLLOWING)
+            ModelingControl<ModelMode::FOLLOWING>();
+        else if(_federate->_mode == ModelMode::MANAGING)
+            ModelingControl<ModelMode::MANAGING>();
     }
 
 /**
@@ -32,22 +33,23 @@ namespace HLA {
         lock.unlock();
     }
 
-/**
-* @brief ModelGuard::ThreadModelingControl
-*/
-    void ModelGuard::ThreadModelingControl(){
+    template<>
+    void ModelGuard::ModelingControl<ModelMode::THREADING>(){
         _federate->_cond.wait(lock,[this]{
             return _federate->_state==State::DOING;
         });
         _federate->_state = State::PROCESSING;
     }
 
-/**
-* @brief ModelGuard::FollowModelingControl
-*/
-    void ModelGuard::FollowModelingControl(){
+    template<>
+    void ModelGuard::ModelingControl<ModelMode::FOLLOWING>(){
         _federate->_state = State::PROCESSING;
-        _federate->FollowModeling();
+        _federate->Modeling<ModelMode::FOLLOWING>();
         _federate->_last_time = std::chrono::steady_clock::now();
+    }
+
+    template<>
+    void ModelGuard::ModelingControl<ModelMode::MANAGING>(){
+
     }
 }

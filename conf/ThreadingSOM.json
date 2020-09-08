@@ -1,10 +1,10 @@
 {
     "Name" :
-                        "First",
+                        "Second",
     "Type" :            
-                        "Following",
+                        "Threading",
     "FOMpath" :
-                        "../HLA-Federate-Test/SampleFOM.xml",
+                        "../conf/SampleFOM.xml",
     "FederationName":
                         "Test",
     "Address":
@@ -15,14 +15,15 @@
                         0,
                         
     "ModelingMode" :
-                        0,
+                        1,
     "LogFileName" :
                         "LogFile",
     
     "PublishAttributes": 
-                        ["Name"],
+                        ["Name",
+                         "Attr1"],
     "SubscribeAttributes" :
-                        {"Threading" :
+                        {"Following" :
                                         ["Name"]},
     "PublishInteractions" : 
                             {},

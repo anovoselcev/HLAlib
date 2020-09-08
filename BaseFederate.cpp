@@ -221,11 +221,14 @@ namespace HLA{
         }
 
         try{
-            _f_modeling = true;                                                     // Run the main loop of federate
+            _f_modeling = true;                                                                     // Run the main loop of federate
             if(_mode == ModelMode::THREADING)
-                _modeling_thread = std::thread(&BaseFederate::ThreadModeling,this); // Run Modeling Thread
-            else
-                _last_time = chrono::steady_clock::now();                           // Save last clock time
+                _modeling_thread = std::thread(&BaseFederate::Modeling<ModelMode::THREADING>,this); // Run Modeling Thread
+            else if(_mode == ModelMode::FOLLOWING)
+                _last_time = chrono::steady_clock::now();// Save last clock time
+            else if(_mode == ModelMode::MANAGING){
+                //pass
+            }
             RunFederate();                                                          // Run the Federate main function (can be empty)
         }
         catch(RTIinternalError& e){                                                 // Catch RTI runtime error
@@ -242,12 +245,12 @@ namespace HLA{
 /**
 * @brief BaseFederate::operator ()
 * @param step Modeling Step in milliseconds
-* Operator that run federate with modelin_step in milliseconds = step like functional object
+* Operator that run federate with modeling_step in milliseconds = step like functional object
 * @return flag of success execution
 */
     bool BaseFederate::operator()(int step) {
-        _modeling_step = step;
-        return ConnectRTI();
+        _modeling_step = step; // Set modeling step
+        return ConnectRTI();   // Call ConnecrRTI, look at ConnectRTI()
     }
 
 /**
@@ -256,73 +259,73 @@ namespace HLA{
 */
     void BaseFederate::Init(){
 
-        unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash> _externAttributesSet;
+        unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash> subscribeAttributesSet; // Hash table for subscribe objects and their attributes
 
-        AttributeHandleSet _aPublishSet;
+        AttributeHandleSet                                                  PublishSet;             // Set for publish attributes
 
-        unordered_set<InteractionClassHandle, InteractionClassHash> _SubscribeInteractionSet;
+        unordered_set<InteractionClassHandle, InteractionClassHash>         SubscribeInteractionSet;// Set for subscribe interactions
 
-        unordered_set<InteractionClassHandle, InteractionClassHash> _PublishInteractionSet;
+        unordered_set<InteractionClassHandle, InteractionClassHash>         PublishInteractionSet;  // Set for publish interactions
 
-    //Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
-        InitClassesAndAttributes(_externAttributesSet, _aPublishSet);
+        InitClassesAndAttributes(subscribeAttributesSet, PublishSet);                  // Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
 
-    //Send to RTI set of attributes which federate want to recive
-        SubscribeAttributes(_externAttributesSet);
+        SubscribeAttributes(subscribeAttributesSet);                                    // Send to RTI set of attributes which federate want to recive
 
-    //Send to RTI set of attributes which federate publish
-        PublishAttributes(_aPublishSet);
+        PublishAttributes(PublishSet);                                                  // Send to RTI set of attributes which federate publish
 
-    //Initializerd Interactions and there parameters indicated in FOM
-        InitInteractionsAndParameters(_SubscribeInteractionSet, _PublishInteractionSet);
+        InitInteractionsAndParameters(SubscribeInteractionSet, PublishInteractionSet); // Initializerd Interactions and there parameters indicated in FOM
 
-        SubscribeParameters(_SubscribeInteractionSet);
+        SubscribeInteractions(SubscribeInteractionSet);                                 // Send to RTI set of interactions which federate want to recive
 
-        PublishParameters(_PublishInteractionSet);
+        PublishInteractions(PublishInteractionSet);                                     // Send to RTI set of interactions which federate publish
 
-        RegisterName();
+        RegisterName();                                                                  // Register _federate_name in RTI
 
-        _state = State::STARTED;
+        _state = State::STARTED;                                                         // Set state flag to started state (ready to do)
     }
 
-//Initializerd federate object and his attributes and environmental objects and attributes indicated in _ObjectNames
-    void BaseFederate::InitClassesAndAttributes(unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash>& _externAttributesSet,
-                                                AttributeHandleSet& _aPublishSet){
+/**
+* @brief BaseFederate::InitClassesAndAttributes
+* @param _subscribeAttributesSet Hash table for subscribe objects and their attributes
+* @param _PublishSet Set for publish attributes
+* Initializerd federate object and his attributes and environmental objects and attributes indicated in _ObjectNames
+*/
+    void BaseFederate::InitClassesAndAttributes(unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash>& subscribeAttributesSet,
+                                                AttributeHandleSet& PublishSet){
 
-    //Initializerd our federate object(_MyClass) from FOM refer to _federate_type
-        _MyClass = _rtiAmbassador->getObjectClassHandle(_federate_type);
+        _MyClass = _rtiAmbassador->getObjectClassHandle(_federate_type); //Initializerd our federate object(_MyClass) from FOM refer to _federate_type
 
         for(const auto& Attribute:_AttributeNames){
-        //Set table(_AttributesMap) of this object attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
-            _AttributesMap[_MyClass][Attribute] = _rtiAmbassador->getAttributeHandle(_MyClass,Attribute);
 
-        //Insert federate attributes to Publish Set(_aPublishSetId)
-            _aPublishSet.insert(_AttributesMap[_MyClass][Attribute]);
+            _AttributesMap[_MyClass][Attribute] = _rtiAmbassador->getAttributeHandle(_MyClass,Attribute); // Set table(_AttributesMap) of this object attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
+
+            PublishSet.insert(_AttributesMap[_MyClass][Attribute]);                                       // Insert federate attributes to Publish Set(_aPublishSetId)
         }
 
-    //Initializerd environmental objects and attributes indicated in _ObjectNames and attributes of it federate
-        for(const auto&Object:_ObjectsNames){
+        for(const auto&Object:_ObjectsNames){ // Initializerd environmental objects and attributes indicated in _ObjectNames and attributes of it federate
 
-        //Cache of Object Name
-            auto& objectName = Object.first;
+            const auto& objectName = Object.first;                                                       // Cache of Object Name
 
-        //Set table(_ObjectClasses) of objects like [TypeName, HLAobjectClass(something like link to FOM)]
-            //Cache of Object ID
-            auto& objectId = _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);
+            const auto& objectId =
+                    _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);       // Set table(_ObjectClasses) of objects like [TypeName, HLAobjectClass(something like link to FOM)] and Cache Object ID
 
             for(const auto&Attribute:Object.second){
 
-            //Set table(_AttributesMap) of object's attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
-                _AttributesMap[objectId][Attribute] =_rtiAmbassador->getAttributeHandle(objectId,Attribute);
+                _AttributesMap[objectId][Attribute] =_rtiAmbassador->getAttributeHandle(objectId,Attribute); // Set table(_AttributesMap) of object's attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
 
-            //Insert extern attributes to Subscribe Set(_externAttributeSet)
-                _externAttributesSet[objectId].insert(_AttributesMap[objectId][Attribute]);
+                subscribeAttributesSet[objectId].insert(_AttributesMap[objectId][Attribute]);                // Insert extern attributes to Subscribe Set(_externAttributeSet)
 
             }
         }
     }
 
-//Initializerd federate interactions and his parameters and environmental interactions and parameters indicated in _InteractionNames
+
+/**
+* @brief BaseFederate::InitInteractionsAndParameters
+* @param sub
+* @param pub
+* Initializerd federate interactions and his parameters and environmental interactions and parameters indicated in _InteractionNames
+*/
     void BaseFederate::InitInteractionsAndParameters(unordered_set<InteractionClassHandle, InteractionClassHash>& sub,
                                                      unordered_set<InteractionClassHandle, InteractionClassHash>& pub){
 
@@ -376,7 +379,7 @@ namespace HLA{
     }
 
 //Send to RTI set of partameters which federate want to recive
-    void BaseFederate::SubscribeParameters(unordered_set<InteractionClassHandle, InteractionClassHash>& sub){
+    void BaseFederate::SubscribeInteractions(unordered_set<InteractionClassHandle, InteractionClassHash>& sub){
         for(const auto&x:sub)
         //Send to RTI request to subscribe on Interaction x
         //It get opportunity to recive information about updates of interaction's parameter set in reflectParameterValues
@@ -384,7 +387,7 @@ namespace HLA{
     }
 
 //Send to RTI set of parameters which federate publish
-    void BaseFederate::PublishParameters(unordered_set<InteractionClassHandle, InteractionClassHash>& pub){
+    void BaseFederate::PublishInteractions(unordered_set<InteractionClassHandle, InteractionClassHash>& pub){
         for(const auto&x:pub)
         //Send to RTI request to publish parameters (_ParametersMap) of this federate
         //After that federate can provide information about updates of his parameters in RTI using sendInteraction
@@ -407,7 +410,8 @@ namespace HLA{
 
     void BaseFederate::SendParameters() const{}
 
-    void BaseFederate::ThreadModeling(){
+    template<>
+    void BaseFederate::Modeling<ModelMode::THREADING>(){
         while(_f_modeling){
             Logger log(_log_filename);
             {
@@ -425,7 +429,8 @@ namespace HLA{
         }
     }
 
-    void BaseFederate::FollowModeling(){
+    template<>
+    void BaseFederate::Modeling<ModelMode::FOLLOWING>(){
         Logger log(_log_filename);
         auto dur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now()-_last_time);
         auto step = chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(_modeling_step));
@@ -437,6 +442,11 @@ namespace HLA{
         AttributeProcess();
         _state = State::DOING;
         log << L"INFO:" << _federate_name << L"Begin of following modeling step - doing" << Logger::Flush();
+    }
+
+    template<>
+    void BaseFederate::Modeling<ModelMode::MANAGING>(){
+
     }
 
     void BaseFederate::AttributeProcess(){
