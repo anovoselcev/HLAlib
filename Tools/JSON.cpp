@@ -180,7 +180,7 @@ namespace HLA {
 * @param input
 * @return
 */
-    JSON Load(wistream& input) {
+    JSON JSON::Load(wistream& input) {
       return JSON{LoadNode(input)};
     }
 

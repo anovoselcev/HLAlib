@@ -11,7 +11,7 @@ namespace HLA {
     std::vector<typename HLAtype::type> cast_from_rti(const rti1516e::VariableLengthData& v);
 
     template <class T_FOM, class T_MOD, unsigned m_OBV=1>
-    class Vector : public ClassForRTI<std::vector<T_MOD>,m_OBV>
+    class Vector : public BasicTemplate<std::vector<T_MOD>,m_OBV>
     {
       Vector& operator = (const Vector &) {
         return *this;
@@ -21,7 +21,7 @@ namespace HLA {
 
       using type = T_MOD;
 
-      Vector(const Vector &variableArray):ClassForRTI<std::vector<T_MOD>,m_OBV>(variableArray) {}
+      Vector(const Vector &variableArray):BasicTemplate<std::vector<T_MOD>,m_OBV>(variableArray) {}
 
       Vector() {
         ptrData = nullptr;

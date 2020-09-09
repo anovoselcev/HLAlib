@@ -14,7 +14,7 @@ namespace HLA {
 
 
     template <class T, unsigned mem, bool blLE=true>
-      class SimpleData: public ClassForRTI <T,mem>{
+      class SimpleData: public BasicTemplate <T,mem>{
         public:
 
           using type = T;

@@ -129,17 +129,18 @@ namespace HLA {
 
     private:
 /**
+* @brief Load
+* @param input
+* @return
+*/
+      static JSON Load(std::wistream& input);
+/**
 * @brief root
 */
       std::shared_ptr<Node> root;
     };
 
-/**
-* @brief Load
-* @param input
-* @return
-*/
-    JSON Load(std::wistream& input);
+
 }
 
 

@@ -5,8 +5,14 @@
 #include <RTI/RTI1516.h>
 
 namespace HLA {
-//Template for RTI presentation of Type with mem (Octet Boundary Value)
+
     template <class Type, unsigned OBV>
+/**
+* @brief The ClassForRTI class
+* RTI-Representation Template for RTI Data Class Interface.
+* Type : user data type representation
+* OBV  : Octet Boundary Value
+*/
     class ClassForRTI {
     public:
     //Default constructor
