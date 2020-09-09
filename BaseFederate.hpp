@@ -398,9 +398,7 @@ private:
 * Hash for Object Class, it necessary for hash structures
 */
         struct ObjectClassHash{
-            size_t operator()(const rti1516e::ObjectClassHandle& _Object) const noexcept{
-                return _Object.hash();
-            }
+            size_t operator()(const rti1516e::ObjectClassHandle& _Object) const noexcept;
         };
 
 /**
@@ -408,9 +406,7 @@ private:
 * Hash for Interaction Class, it necessary for hash structures
 */
         struct InteractionClassHash{
-            size_t operator()(const rti1516e::InteractionClassHandle& _Interaction) const noexcept{
-                return _Interaction.hash();
-            }
+            size_t operator()(const rti1516e::InteractionClassHandle& _Interaction) const noexcept;
         };
 /**
 * @brief The CallbackInformation struct

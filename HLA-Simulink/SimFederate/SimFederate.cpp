@@ -29,7 +29,6 @@ namespace HLA {
         std::lock_guard<std::mutex> guard(_pmutex);
         while(!_qParameters.empty()){
             auto& message = _qParameters.front();
-            //std::wcout << L"Button " << HLA::Tools::widen(b.name) << " " << b.push << std::endl;
             _qParameters.pop();
         }
     }
@@ -42,7 +41,7 @@ namespace HLA {
 
     void SimFederate::UpdateAttributes() const{
         rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Wstring>(_federate_name);
-        int i = 20l;
+        int i = 20;
         rti1516e::VariableLengthData type = HLA::cast_to_rti<HLA::Integer32BE>(i);
         rti1516e::AttributeHandleValueMap map;
         map[_AttributesMap.at(_MyClass).at(L"Name")] = v;

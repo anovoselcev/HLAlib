@@ -879,4 +879,24 @@ namespace HLA{
             _qParameters.push({info,theParameterValues});   // Add new message {information or tag in byte array, map of interactions}
         }
     }
+
+/**
+* @brief BaseFederate::ObjectClassHash::operator ()
+* @param _Object
+* Hash for Object Class, it necessary for hash structures
+* @return
+*/
+    size_t BaseFederate::ObjectClassHash::operator()(const ObjectClassHandle& _Object) const noexcept{
+        return static_cast<size_t>(_Object.hash());
+    }
+
+/**
+* @brief BaseFederate::InteractionClassHash::operator ()
+* @param _Interaction
+* Hash for Interaction Class, it necessary for hash structures
+* @return
+*/
+    size_t BaseFederate::InteractionClassHash::operator()(const rti1516e::InteractionClassHandle &_Interaction) const noexcept{
+        return static_cast<size_t>(_Interaction.hash());
+    }
 }
