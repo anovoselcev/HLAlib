@@ -21,14 +21,17 @@ namespace HLA {
                       std::wstring&& fname,
                       std::wstring&& ip = L"localhost") noexcept;
 					  
-		SimFederate(const HLA::JSON& file);
+        SimFederate(const HLA::JSON& file) noexcept;
 		
-		SimFederate(HLA::JSON&& file);
+        SimFederate(HLA::JSON&& file) noexcept;
 
-        void SendToRTI(double value);
     private:
 
-        void ParameterProcess();
+        void ParameterProcess() override;
+
+        void AttributeProcess() override;
+
+        void SendParameters() const override;
 		
 		void UpdateAttributes() const override;
 

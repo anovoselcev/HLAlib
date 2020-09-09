@@ -8,7 +8,7 @@ SOURCES += \
         ../BaseFederate.cpp \
         ../HLAdata/BasicException.cpp \
         ../HLAdata/Tools.cpp \
-        ../Logger.cpp \
+        ../Tools/Logger.cpp \
         ../ModelGuard.cpp \
         ../Tools/JSON.cpp \
         main.cpp
@@ -25,7 +25,7 @@ HEADERS += \
     ../HLAdata/HLAtypes.hpp \
     ../HLAdata/HLAvector.hpp \
     ../HLAdata/Tools.hpp \
-    ../Logger.hpp \
+    ../Tools/Logger.hpp \
     ../ModelGuard.hpp \
     ../Tools/JSON.hpp \
     FollowFederate.hpp \

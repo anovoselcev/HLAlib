@@ -12,7 +12,7 @@ namespace HLA{
     typename std::array<typename HLAtype::type, Size> cast_from_rti(const rti1516e::VariableLengthData& v);
 
     template <class T_FOM, class T_MOD, size_t uiDim, unsigned m_OBV>
-    class Array : public ClassForRTI <std::array<T_MOD,uiDim>, m_OBV>{
+    class Array : public BasicTemplate <std::array<T_MOD,uiDim>, m_OBV>{
       Array & operator = (const Array &/*fixedArray*/) {
         return *this;
       }
@@ -20,7 +20,7 @@ namespace HLA{
 
       using type = T_MOD;
 
-      Array(const Array &fixedArray): ClassForRTI<std::array<T_MOD,uiDim>, m_OBV>(fixedArray) {
+      Array(const Array &fixedArray): BasicTemplate<std::array<T_MOD,uiDim>, m_OBV>(fixedArray) {
       }
 
       Array() {

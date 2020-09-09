@@ -4,12 +4,13 @@
 #include "BasicTemplates.hpp"
 
 #include <type_traits>
+
 namespace HLA {
     template <class StringType,
               class symb = typename std::conditional<std::is_same<StringType,std::string>::value,char,wchar_t>::type,
               int OBV = sizeof (symb),
               int unit = 4>
-    class BaseHLAstring : public ClassForRTI<StringType,OBV> {
+    class BaseHLAstring : public BasicTemplate<StringType,OBV> {
     public:
 
         using type = StringType;
@@ -116,8 +117,7 @@ namespace HLA {
 template<>
     rti1516e::VariableLengthData cast_to_rti<Wstring>(const typename std::wstring& t){
         String conv;
-        std::string str;
-        str.assign(t.begin(), t.end());
+        std::string str(Tools::unwiden(t));
         rti1516e::VariableLengthData v;
         conv.get(str);
         conv.setDataToRTI(v);
@@ -126,12 +126,10 @@ template<>
 template<>
     std::wstring cast_from_rti<Wstring>(const rti1516e::VariableLengthData& v){
         String conv;
-        std::wstring t;
         std::string str;
         conv.getDataFromRTI(v);
         conv.set(str);
-        t.assign(std::move(str.begin()), std::move(str.end()));
-        return t;
+        return Tools::widen(std::move(str));
     }
 }
 #endif // RTISTRING_HPP

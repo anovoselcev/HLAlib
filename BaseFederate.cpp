@@ -1,6 +1,13 @@
+//================================================================================================================================================
+/*
+ * Written by Novoseltsev Artemy
+ * This program is free software.
+ * This program is distributed in the hope that it will be useful.
+*/
+//================================================================================================================================================
+
 #include "BaseFederate.hpp"
-#include "Logger.hpp"
-#include <chrono>
+#include "Tools/Logger.hpp"
 
 
 namespace HLA{

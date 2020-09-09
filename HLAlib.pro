@@ -21,19 +21,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     BaseFederate.cpp \
+    HLA-Simulink/SimFederate/SimFederate.cpp \
     HLAdata/BasicException.cpp \
     HLAdata/Tools.cpp \
-    Logger.cpp \
+    Tools/Logger.cpp \
     ModelGuard.cpp\
     Tools/JSON.cpp
 
 HEADERS += \
+    HLA-Simulink/SimFederate/SimFederate.hpp \
     HLAdata/BasicException.hpp \
     HLAdata/BasicTemplates.hpp \
     HLAdata/BasicTypes.hpp \
     HLAdata/HLA*.hpp\
     HLAdata/Tools.hpp \
-    Logger.hpp \
+    Tools/Logger.hpp \
     ModelGuard.hpp \
     *Federate.hpp \
     Tools/JSON.hpp
@@ -57,70 +59,6 @@ DEPENDPATH += $$PWD/../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DISTFILES += \
     HLA-Simulink/HLAblock \
     HLA-Simulink/HLAblock.slx \
-    HLA-Simulink/HLAblock.slx.autosave \
-    HLA-Simulink/HLAblock.slx.original \
-    HLA-Simulink/HLAblock.slxc \
-    HLA-Simulink/HLAblock_grt_rtw/HLAblock.mk \
-    HLA-Simulink/HLAblock_grt_rtw/buildInfo.mat \
-    HLA-Simulink/HLAblock_grt_rtw/build_exception.mat \
-    HLA-Simulink/HLAblock_grt_rtw/codeInfo.mat \
-    HLA-Simulink/HLAblock_grt_rtw/codedescriptor.dmr \
-    HLA-Simulink/HLAblock_grt_rtw/compileInfo.mat \
-    HLA-Simulink/HLAblock_grt_rtw/defines.txt \
-    HLA-Simulink/HLAblock_grt_rtw/html/BaseFederate_cpp.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/BasicException_cpp.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_codegen_rpt.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_contents.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_cpp.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_data_cpp.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_h.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_interface.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_private_h.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_reducedblocks.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_subsystems.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_survey.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/HLAblock_types_h.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/Logger_cpp.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/SimFederate_cpp.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/Tools_cpp.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/TransferBlock_wrapper_cpp.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/css/coder_app.css \
-    HLA-Simulink/HLAblock_grt_rtw/html/define.js \
-    HLA-Simulink/HLAblock_grt_rtw/html/hilite_warning.png \
-    HLA-Simulink/HLAblock_grt_rtw/html/inspect.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/js/coder_app.js \
-    HLA-Simulink/HLAblock_grt_rtw/html/multiword_types_h.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/nav.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/navToolbar.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/rtmodel_h.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/rtwhilite.js \
-    HLA-Simulink/HLAblock_grt_rtw/html/rtwmsg.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/rtwreport.css \
-    HLA-Simulink/HLAblock_grt_rtw/html/rtwreport_utils.js \
-    HLA-Simulink/HLAblock_grt_rtw/html/rtwshrink.js \
-    HLA-Simulink/HLAblock_grt_rtw/html/rtwtypes_h.html \
-    HLA-Simulink/HLAblock_grt_rtw/html/search.js \
-    HLA-Simulink/HLAblock_grt_rtw/html/spinner.gif \
-    HLA-Simulink/HLAblock_grt_rtw/modelsources.txt \
-    HLA-Simulink/HLAblock_grt_rtw/rtw_proj.tmw \
-    HLA-Simulink/HLAblock_grt_rtw/rtwtypeschksum.mat \
-    HLA-Simulink/HLAblock_grt_rtw/tmwinternal/simulink_cache.xml \
-    HLA-Simulink/LogFile \
-    HLA-Simulink/SFB__TransferBlock__SFB.mat \
-    HLA-Simulink/SimFederate/SimFederate.pro.user \
     HLA-Simulink/TransferBlock.mexa64 \
-    HLA-Simulink/TransferBlock.tlc \
-    HLA-Simulink/lrc_20200705_161414.671.log \
-    HLA-Simulink/rtwmakecfg.m \
-    HLA-Simulink/slprj/grt/HLAblock/tmwinternal/CompileInfo.xml \
-    HLA-Simulink/slprj/grt/HLAblock/tmwinternal/binfo.mat \
-    HLA-Simulink/slprj/grt/HLAblock/tmwinternal/minfo.mat \
-    HLA-Simulink/slprj/grt/_sharedutils/shared_file.dmr \
-    HLA-Simulink/slprj/modeladvisor/com_2emathworks_2ecgo_2egroup_/HLAblock/model_diagnose_custom.html \
-    HLA-Simulink/slprj/modeladvisor/com_2emathworks_2ecgo_2egroup_/HLAblock/report.html \
-    HLA-Simulink/slprj/modeladvisor/com_2emathworks_2ecgo_2egroup_/HLAblock/report_1.html \
-    HLA-Simulink/slprj/sl_proj.tmw
+    HLA-Simulink/TransferBlock.mexw64 \
 
-SUBDIRS += \
-    HLA-Simulink/SimFederate/SimFederate.pro \
-    HLA-Simulink/SimFederate/SimFederate.pro
