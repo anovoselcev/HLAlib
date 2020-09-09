@@ -1,10 +1,10 @@
-//=========================================================================================
+//================================================================================================================================================
 /*
  * Written by Novoseltsev Artemy
  * This program is free software.
  * This program is distributed in the hope that it will be useful.
 */
-//=========================================================================================
+//================================================================================================================================================
 
 #ifndef BASEFEDERATE_HPP
 #define BASEFEDERATE_HPP
@@ -42,7 +42,7 @@ namespace HLA{
 * Started      : Federate state after succesfull initializaton
 * Processing   : Federate state during data processing
 * Doing        : Federate state during time control
-* Exit         : Federate state in the end of simulation
+* Exit         : Federate state at the end of simulation
 */
     enum class State{
         PREPARE      = 0,
@@ -60,11 +60,11 @@ namespace HLA{
 */
     class BaseFederate: public rti1516e::NullFederateAmbassador{
 
-//=========================================================================================
+//================================================================================================================================================
 
 //          Public API
 
-//=========================================================================================
+//================================================================================================================================================
 
     public:
 
@@ -268,11 +268,11 @@ namespace HLA{
 */
         BaseFederate& LoadSOMFromJSON(JSON&& file);
 
-//=========================================================================================
+//================================================================================================================================================
 
 //          Private Methods, structures and alias
 
-//=========================================================================================
+//================================================================================================================================================
 
 private:
 
@@ -520,11 +520,11 @@ private:
 */
         void RegisterName();
 
-//=========================================================================================
+//================================================================================================================================================
 
 //          Protected API and fields
 
-//=========================================================================================
+//================================================================================================================================================
 
     protected:
 /**
@@ -587,14 +587,14 @@ private:
 * @brief reflectAttributeValues
 * @param theObject          : Instanse Handle of Federate sender (something like id)
 * @param theAttributeValues : Map of VariableLengthData (byte arrays)
-* @param theUserSuppliedTag : Mark of message
+* @param info : Mark of message
 * Callback function from RTI. Call when subscribed federate update his attributes.
 * Info of reflected attributes in theUserSuppliedTag
 * Data of reflected attributes in theAttributeValues
 */
         virtual void reflectAttributeValues(rti1516e::ObjectInstanceHandle theObject,
                                             const rti1516e::AttributeHandleValueMap &theAttributeValues,
-                                            const rti1516e::VariableLengthData &theUserSuppliedTag,
+                                            const rti1516e::VariableLengthData &info,
                                             rti1516e::OrderType ,
                                             rti1516e::TransportationType,
                                             rti1516e::SupplementalReflectInfo)
@@ -604,14 +604,14 @@ private:
 * @brief receiveInteraction
 * @param theInteraction     : Handle of received interaction
 * @param theParameterValues : Map of VariableLengthData (byte arrays)
-* @param theUserSuppliedTag : Mark of message
+* @param info : Mark of message
 * Callback function from RTI. Call when subscribed interation with his parameters sends.
 * Info of recived interaction in theUserSuppliedTag
-* Data of reflected interaction in theParameterValues
+* Data of recived interaction in theParameterValues
 */
         virtual void receiveInteraction (rti1516e::InteractionClassHandle theInteraction,
                                          rti1516e::ParameterHandleValueMap const & theParameterValues,
-                                         rti1516e::VariableLengthData const & theUserSuppliedTag,
+                                         rti1516e::VariableLengthData const & info,
                                          rti1516e::OrderType sentOrder,
                                          rti1516e::TransportationType theType,
                                          rti1516e::SupplementalReceiveInfo theReceiveInfo)
