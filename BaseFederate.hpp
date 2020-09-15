@@ -770,7 +770,7 @@ private:
 * @brief _last_time
 * Last time mark for ModelGuard in FollowModeling mode
 */
-        std::chrono::time_point<std::chrono::steady_clock> _last_time;
+        std::unique_ptr<std::chrono::time_point<std::chrono::steady_clock>> _last_time = nullptr;
 
 /**
 * @brief _AttributeNames

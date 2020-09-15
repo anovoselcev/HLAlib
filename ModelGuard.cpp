@@ -56,7 +56,7 @@ namespace HLA {
     void ModelGuard::ModelingControl<ModelMode::FOLLOWING>(){
         _federate->_state = State::PROCESSING;                      // Set federate step for proccessing
         _federate->Modeling<ModelMode::FOLLOWING>();                // Run federate follow modeling method
-        _federate->_last_time = std::chrono::steady_clock::now();   // Save last time
+        *_federate->_last_time = std::chrono::steady_clock::now();   // Save last time
     }
 
     template<>

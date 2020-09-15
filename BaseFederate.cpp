@@ -232,7 +232,7 @@ namespace HLA{
             if(_mode == ModelMode::THREADING)
                 _modeling_thread = std::thread(&BaseFederate::Modeling<ModelMode::THREADING>,this); // Run Modeling Thread
             else if(_mode == ModelMode::FOLLOWING)
-                _last_time = chrono::steady_clock::now();                                           // Save last clock time
+                _last_time = make_unique<chrono::time_point<chrono::steady_clock>>(chrono::steady_clock::now());                                           // Save last clock time
             else if(_mode == ModelMode::MANAGING){
                 //pass
             }
@@ -488,7 +488,7 @@ namespace HLA{
 */
     void BaseFederate::Modeling<ModelMode::FOLLOWING>(){
         Logger log(_log_filename);                                                                       // Create log writer
-        auto dur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now()-_last_time);  // Create time interval
+        auto dur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - *_last_time);  // Create time interval
         auto step = chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(_modeling_step));   // Convert modeling step to time interval
         if((step - dur).count()>0)                                                                       // If dur less than modeling step
             this_thread::sleep_for(chrono::milliseconds(step - dur));                                    // Sleep for difference betwen step and dur

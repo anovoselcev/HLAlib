@@ -6,7 +6,7 @@
 namespace HLA {
 
     template <class T_MOD, unsigned OBV = 8>
-    class BaseFixedRecord : public BasicTemplate <T_MOD, OBV> {
+    class BaseFixedRecord : public ClassForRTI <T_MOD, OBV> {
     protected:
       Octet_* ptrData;
     public:
@@ -15,12 +15,12 @@ namespace HLA {
 
       unsigned m_uiSizeData;
 
-      BaseFixedRecord() : BasicTemplate<T_MOD, OBV>() {
+      BaseFixedRecord() : ClassForRTI<T_MOD, OBV>() {
         ptrData=nullptr;
         m_uiSizeData = 0;
       }
 
-      BaseFixedRecord(const BaseFixedRecord &fixedRecord) : BasicTemplate<T_MOD, OBV>(fixedRecord) {
+      BaseFixedRecord(const BaseFixedRecord &fixedRecord) : ClassForRTI<T_MOD, OBV>(fixedRecord) {
       }
 
       virtual ~BaseFixedRecord() {

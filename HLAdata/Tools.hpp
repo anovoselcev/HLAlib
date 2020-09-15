@@ -34,6 +34,7 @@ namespace HLA {
 
     std::string unwiden(std::wstring&& s);
 
+
   }
 }
 #endif // TOOLS_HPP
