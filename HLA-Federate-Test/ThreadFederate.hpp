@@ -2,6 +2,7 @@
 #define THREADFEDERATE_HPP
 #include "../BaseFederate.hpp"
 #include "../HLAdata/HLAdata.hpp"
+#include "RTI/time/HLAfloat64Time.h"
 
 class ThreadFederate final : public HLA::BaseFederate{
 public:

@@ -65,6 +65,16 @@ namespace HLA {
 * ..............................
 */
     void ModelGuard::ModelingControl<ModelMode::MANAGING>(){
+        {
+            std::lock_guard<std::mutex>(_federate->_smutex);
+            _federate->_state = State::READY;
+            _federate->ReadyToGo();
+        }
+
+        _federate->_cond.wait(lock,[this]{              // Wait for GO federate state, federate notify ModelGuard about state change
+            return _federate->_state==State::DOING;
+        });
+        _federate->Modeling<ModelMode::MANAGING>();
 
     }
 }

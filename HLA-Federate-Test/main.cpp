@@ -74,8 +74,8 @@ int main()
 //    this_thread::sleep_for(chrono::milliseconds(5));
 //    std::thread th6(NewThreadFederate,L"Fed6",199);
 //    th6.detach();
-  NewFollowFederate(L"Fed7",100);
-    std::wcout << sizeof (int32_t) << std::endl;
+    //NewFollowFederate(L"Fed7",100);
+    //std::wcout << sizeof (int32_t) << std::endl;
 
     return 0;
 }

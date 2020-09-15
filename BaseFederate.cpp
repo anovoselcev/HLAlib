@@ -8,6 +8,7 @@
 
 #include "BaseFederate.hpp"
 #include "Tools/Logger.hpp"
+#include "HLAdata/HLAenum.hpp"
 
 
 namespace HLA{
@@ -514,7 +515,9 @@ namespace HLA{
 * @brief BaseFederate::Modeling<ModelMode::MANAGING>
 */
     void BaseFederate::Modeling<ModelMode::MANAGING>(){
-
+       Logger log(_log_filename);                // Create log writer
+       lock_guard<mutex> guard(_smutex);         // Lock state mutex
+       _state = State::DOING;
     }
 
 /**
@@ -877,6 +880,23 @@ namespace HLA{
         if(_state >= State::STARTED){                       // If federate start modeling
             lock_guard<mutex> guard(_pmutex);               // Lock queue of recived interactions
             _qParameters.push({info,theParameterValues});   // Add new message {information or tag in byte array, map of interactions}
+        }
+    }
+
+    void BaseFederate::receiveInteraction (InteractionClassHandle theInteraction,
+                                           ParameterHandleValueMap const & theParameterValues,
+                                           VariableLengthData const & stamp,
+                                           OrderType sentOrder,
+                                           TransportationType theType,
+                                           LogicalTime const & theTime,
+                                           OrderType receivedOrder,
+                                           SupplementalReceiveInfo theReceiveInfo)
+    throw (FederateInternalError){
+        TimeStamp ts = cast_from_rti<Enum<TimeStamp>>(stamp);
+        if(ts == TimeStamp::GO){
+            lock_guard<mutex> guard(_smutex);
+            _state = State::DOING;
+            _cond.notify_one();
         }
     }
 

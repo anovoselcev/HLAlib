@@ -42,6 +42,7 @@ namespace HLA{
 * Started      : Federate state after succesfull initializaton
 * Processing   : Federate state during data processing
 * Doing        : Federate state during time control
+* Ready        : Federate state, when it waiting for next time
 * Exit         : Federate state at the end of simulation
 */
     enum class State{
@@ -51,7 +52,16 @@ namespace HLA{
         STARTED      = 3,
         PROCESSING   = 4,
         DOING        = 5,
+        READY        = 6,
         EXIT         = -1
+    };
+
+/**
+* @brief The TimeStamp enum
+*/
+    enum class TimeStamp{
+        READY = 0,
+        GO    = 1
     };
 
 /**
@@ -588,7 +598,7 @@ private:
 * Info of reflected attributes in theUserSuppliedTag
 * Data of reflected attributes in theAttributeValues
 */
-        virtual void reflectAttributeValues(rti1516e::ObjectInstanceHandle theObject,
+        void reflectAttributeValues(rti1516e::ObjectInstanceHandle theObject,
                                             const rti1516e::AttributeHandleValueMap &theAttributeValues,
                                             const rti1516e::VariableLengthData &info,
                                             rti1516e::OrderType ,
@@ -605,7 +615,7 @@ private:
 * Info of recived interaction in theUserSuppliedTag
 * Data of recived interaction in theParameterValues
 */
-        virtual void receiveInteraction (rti1516e::InteractionClassHandle theInteraction,
+        void receiveInteraction (rti1516e::InteractionClassHandle theInteraction,
                                          rti1516e::ParameterHandleValueMap const & theParameterValues,
                                          rti1516e::VariableLengthData const & info,
                                          rti1516e::OrderType sentOrder,
@@ -613,6 +623,15 @@ private:
                                          rti1516e::SupplementalReceiveInfo theReceiveInfo)
         throw (rti1516e::FederateInternalError) override;
 
+       void receiveInteraction (rti1516e::InteractionClassHandle theInteraction,
+                                rti1516e::ParameterHandleValueMap const & theParameterValues,
+                                rti1516e::VariableLengthData const & theUserSuppliedTag,
+                                rti1516e::OrderType sentOrder,
+                                rti1516e::TransportationType theType,
+                                rti1516e::LogicalTime const & theTime,
+                                rti1516e::OrderType receivedOrder,
+                                rti1516e::SupplementalReceiveInfo theReceiveInfo)
+       throw (rti1516e::FederateInternalError) override;
 
 
 /** @brief _federate_name
