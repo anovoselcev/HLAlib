@@ -8,7 +8,8 @@
 
 #include "BaseFederate.hpp"
 #include "Tools/Logger.hpp"
-#include "HLAdata/HLAenum.hpp"
+
+#include "RTI/time/HLAfloat64Time.h"
 
 
 namespace HLA{
@@ -235,7 +236,6 @@ namespace HLA{
             else if(_mode == ModelMode::FOLLOWING)
                 _last_time = make_unique<chrono::time_point<chrono::steady_clock>>(chrono::steady_clock::now());                                           // Save last clock time
             else if(_mode == ModelMode::MANAGING){
-                //pass
             }
             RunFederate();                                                          // Run the Federate main function (can be empty)
         }
@@ -337,8 +337,8 @@ namespace HLA{
     void BaseFederate::InitInteractionsAndParameters(unordered_set<InteractionClassHandle, InteractionClassHash>& sub,
                                                      unordered_set<InteractionClassHandle, InteractionClassHash>& pub){
 
-        sub.reserve(_InteractionsNames.size());
-        pub.reserve(_MyInteractionsNames.size());
+        sub.reserve(_InteractionsNames.size() + 1);
+        pub.reserve(_MyInteractionsNames.size() + 1);
 
         for(const auto&Interaction:_InteractionsNames){
 
@@ -353,6 +353,11 @@ namespace HLA{
 
                 _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
         }
+        try{
+            _InteractionClasses[L"GO"] = _rtiAmbassador->getInteractionClassHandle(L"GO");
+            sub.insert(_InteractionClasses[L"GO"]);
+        }
+        catch(...){}
 
         for(const auto&Interaction:_MyInteractionsNames){
 
@@ -367,6 +372,11 @@ namespace HLA{
 
                 _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
         }
+        try{
+            _InteractionClasses[L"READY"] = _rtiAmbassador->getInteractionClassHandle(L"READY");
+            pub.insert(_InteractionClasses[L"READY"]);
+        }
+        catch(...){}
     }
 
 /**
@@ -428,6 +438,11 @@ namespace HLA{
             dur = chrono::duration_cast<std::chrono::microseconds>(chrono::steady_clock::now()-start).count(); // Update time interval
         }
           _MyInstanceID = _rtiAmbassador->registerObjectInstance(_MyClass, _federate_name);                    // Get specific ID for federate from RTI
+    }
+
+    void BaseFederate::ReadyToGo() const{
+        HLAfloat64Time UselessStamp;
+        _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"READY"), ParameterHandleValueMap(), VariableLengthData(), UselessStamp);
     }
 
 /**
@@ -515,8 +530,12 @@ namespace HLA{
 * @brief BaseFederate::Modeling<ModelMode::MANAGING>
 */
     void BaseFederate::Modeling<ModelMode::MANAGING>(){
-       Logger log(_log_filename);                // Create log writer
-       lock_guard<mutex> guard(_smutex);         // Lock state mutex
+       Logger log(_log_filename);                                     // Create log writer
+       UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
+       thread ParametersThread(&BaseFederate::ParameterProcess,this); // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
+       ParametersThread.detach();
+       AttributeProcess();                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
+       lock_guard<mutex> guard(_smutex);
        _state = State::DOING;
     }
 
@@ -884,18 +903,17 @@ namespace HLA{
     }
 
     void BaseFederate::receiveInteraction (InteractionClassHandle theInteraction,
-                                           ParameterHandleValueMap const & theParameterValues,
-                                           VariableLengthData const & stamp,
-                                           OrderType sentOrder,
-                                           TransportationType theType,
-                                           LogicalTime const & theTime,
-                                           OrderType receivedOrder,
-                                           SupplementalReceiveInfo theReceiveInfo)
+                                           ParameterHandleValueMap const & ,
+                                           VariableLengthData const & ,
+                                           OrderType ,
+                                           TransportationType ,
+                                           LogicalTime const & ,
+                                           OrderType ,
+                                           SupplementalReceiveInfo )
     throw (FederateInternalError){
-        TimeStamp ts = cast_from_rti<Enum<TimeStamp>>(stamp);
-        if(ts == TimeStamp::GO){
+        if(theInteraction == _InteractionClasses[L"GO"] && _state >= State::STARTED){
             lock_guard<mutex> guard(_smutex);
-            _state = State::DOING;
+            _state = State::PROCESSING;
             _cond.notify_one();
         }
     }
