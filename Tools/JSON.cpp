@@ -1,4 +1,5 @@
 #include "JSON.hpp"
+#include <string>
 
 namespace HLA {
 

@@ -114,7 +114,7 @@ namespace HLA {
     using Wstring = BaseHLAstring<std::wstring>;
 
 template<>
-    rti1516e::VariableLengthData cast_to_rti<Wstring>(const typename std::wstring& t){
+inline rti1516e::VariableLengthData cast_to_rti<Wstring>(const typename std::wstring& t){
         String conv;
         std::string str(Tools::unwiden(t));
         rti1516e::VariableLengthData v;
@@ -123,7 +123,7 @@ template<>
         return v;
     }
 template<>
-    std::wstring cast_from_rti<Wstring>(const rti1516e::VariableLengthData& v){
+inline std::wstring cast_from_rti<Wstring>(const rti1516e::VariableLengthData& v){
         String conv;
         std::string str;
         conv.getDataFromRTI(v);

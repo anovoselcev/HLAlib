@@ -71,7 +71,7 @@ namespace HLA {
             _federate->ReadyToGo();
         }
 
-        _federate->_cond.wait(lock,[this]{                  // Wait for GO federate state, federate notify ModelGuard about state change
+        _federate->_cond.wait(lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
             return _federate->_state == State::PROCESSING;
         });
         _federate->Modeling<ModelMode::MANAGING>();
