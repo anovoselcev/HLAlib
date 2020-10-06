@@ -122,6 +122,7 @@ inline rti1516e::VariableLengthData cast_to_rti<Wstring>(const typename std::wst
         conv.setDataToRTI(v);
         return v;
     }
+
 template<>
 inline std::wstring cast_from_rti<Wstring>(const rti1516e::VariableLengthData& v){
         String conv;

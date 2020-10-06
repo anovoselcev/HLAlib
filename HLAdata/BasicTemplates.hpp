@@ -76,7 +76,7 @@ namespace HLA {
 #endif
 
     template<typename HLAtype>
-    rti1516e::VariableLengthData cast_to_rti(const typename HLAtype::type& t){
+    inline rti1516e::VariableLengthData cast_to_rti(const typename HLAtype::type& t){
         HLAtype conv;
         rti1516e::VariableLengthData v;
         conv.get(t);
@@ -85,7 +85,7 @@ namespace HLA {
     }
 
     template<typename HLAtype>
-    typename HLAtype::type cast_from_rti(const rti1516e::VariableLengthData& v){
+    inline typename HLAtype::type cast_from_rti(const rti1516e::VariableLengthData& v){
         HLAtype conv;
         typename HLAtype::type t;
         conv.getDataFromRTI(v);

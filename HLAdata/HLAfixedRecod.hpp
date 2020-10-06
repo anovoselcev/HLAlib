@@ -1,7 +1,9 @@
 #ifndef RTIFIXEDRECOD_HPP
 #define RTIFIXEDRECOD_HPP
-
+#define BOOST_PFR_USE_CPP17 0
 #include "BasicTemplates.hpp"
+#include "boost/pfr.hpp"
+#include <iostream>
 
 namespace HLA {
 
@@ -87,8 +89,13 @@ namespace HLA {
 
       unsigned getsize(){return m_uiSizeData;}
 
-      template <class FieldType, class FieldTypeNext>
-      void F_offset(FieldType& field, FieldTypeNext& fieldNext,  unsigned &offset, void* ptrSource, unsigned uiMaxSize) {
+      template <class FieldType,
+                class FieldTypeNext>
+      void F_offset(FieldType& field,
+                    FieldTypeNext& fieldNext,
+                    unsigned &offset,
+                    void* ptrSource,
+                    unsigned uiMaxSize) {
         unsigned P, uiSize, mmOBV;
         field.getDataMax(reinterpret_cast<char*>(ptrSource)+offset, uiMaxSize-offset);
         uiSize = field.getsize();
@@ -106,7 +113,10 @@ namespace HLA {
       }
 
       template<typename FieldType>
-      void auto_offset(unsigned &offset, void* ptrSource, unsigned long uiMaxSize,FieldType& field){
+      void auto_offset(unsigned &offset,
+                       void* ptrSource,
+                       unsigned long uiMaxSize,
+                       FieldType& field){
           F_offsetLast<FieldType>(field,offset,ptrSource,static_cast<unsigned>(uiMaxSize));
           if (ptrData!=nullptr) delete[] ptrData;
             m_uiSizeData = offset;
@@ -115,7 +125,12 @@ namespace HLA {
       }
 
       template<typename Field1, typename Field2, typename ...Fields>
-      void auto_offset(unsigned &offset, void* ptrSource, unsigned long uiMaxSize,Field1& field1,Field2& field2,Fields&... fields){
+      void auto_offset(unsigned &offset,
+                       void* ptrSource,
+                       unsigned long uiMaxSize,
+                       Field1& field1,
+                       Field2& field2,
+                       Fields&... fields){
         F_offset< Field1, Field2 >(field1,field2,offset,ptrSource,uiMaxSize);
         auto_offset(offset, ptrSource,uiMaxSize,field2,fields...);
       }
@@ -201,7 +216,214 @@ namespace HLA {
           uiSize = field.getsize();
           auto_seter<false>(offset,uiSize,fields...);
       }
-};
+    };
+
+    template< typename Struct,
+              unsigned OBV,
+              typename ...RTI_types>
+    class Struct_wrapper : public BaseFixedRecord<Struct, OBV>{
+
+    public:
+
+        void getDataMax(void *ptrSource, unsigned long uiMaxSize){
+            unsigned offset = 0;
+            ref_offset<RTI_types...>(offset, ptrSource, uiMaxSize);
+        }
+
+        void get(const Struct &obj){
+            unsigned offset = 0, uiSize;
+            this->m_uiSizeData=0;
+            std::tuple<RTI_types...> converters;
+            ref_geter_first<true, 0, RTI_types...>(offset,uiSize,converters,obj);
+
+            ref_geter_second<true, 0, RTI_types...>(offset, uiSize,converters);
+
+        }
+
+        void set(Struct &obj){
+            unsigned offset = 0, uiSize;
+            ref_seter<true, 0, RTI_types...>(offset,uiSize,obj);
+        }
+
+    private:
+
+        template <class FieldType,
+                  class FieldTypeNext>
+        void Fideld_offset(FieldType& field,
+                           FieldTypeNext& fieldNext,
+                           unsigned &offset,
+                           void* ptrSource,
+                           unsigned uiMaxSize) {
+          unsigned P, uiSize, mmOBV;
+          field.getDataMax(reinterpret_cast<char*>(ptrSource)+offset, uiMaxSize-offset);
+          uiSize = field.getsize();
+          mmOBV = fieldNext.getOctetBoundary();
+          P = Tools::getPendingBytes(offset+uiSize,mmOBV);
+          offset += uiSize+P;
+        }
+
+        template <class FieldType>
+        void Field_offsetLast(FieldType& field,
+                              unsigned &offset,
+                              void* ptrSource,
+                              unsigned uiMaxSize) {
+          unsigned uiSize;
+          field.getDataMax(reinterpret_cast<char*>(ptrSource)+offset, uiMaxSize-offset);
+          uiSize = field.getsize();
+          offset += uiSize;
+        }
+
+        template<typename FieldType>
+        void ref_offset(unsigned &offset,
+                        void* ptrSource,
+                        unsigned long uiMaxSize){
+            FieldType field;
+            Field_offsetLast<FieldType>(field,offset,ptrSource,static_cast<unsigned>(uiMaxSize));
+            if (this->ptrData != nullptr)
+                delete[] this->ptrData;
+            this->m_uiSizeData = offset;
+            this->ptrData = new HLA::Octet_[this->m_uiSizeData];
+            memcpy(this->ptrData, ptrSource, this->m_uiSizeData);
+
+        }
+
+        template<typename Field1,
+                 typename Field2,
+                 typename ...Fields>
+        void ref_offset(unsigned &offset,
+                        void* ptrSource,
+                        unsigned long uiMaxSize){
+            Field1 field1;
+            Field2 field2;
+            Fideld_offset< Field1, Field2 >(field1,field2,offset,ptrSource,uiMaxSize);
+            ref_offset<Field2, Fields...>(offset, ptrSource,uiMaxSize);
+        }
+
+        template<bool first,
+                 size_t count,
+                 typename Field>
+        void ref_geter_first(unsigned& offset,
+                             unsigned& uiSize,
+                             std::tuple<RTI_types...>& conv,
+                             const Struct& obj){
+
+            typename Field::type value = boost::pfr::get<count>(obj);
+            std::get<count>(conv).get(value);
+            unsigned P,mmOBV;
+            if(!first){
+              mmOBV = std::get<count>(conv).getOctetBoundary();
+              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+              offset += uiSize+P;
+            }
+            uiSize = std::get<count>(conv).getsize();
+            offset+=uiSize;
+            this->m_uiSizeData = offset;
+            if(this->ptrData != nullptr)
+                delete[] this->ptrData;
+            this->ptrData = new HLA::Octet_[this->m_uiSizeData];
+            offset = 0;
+        }
+
+        template<bool first ,
+                 size_t count,
+                 typename Field1,
+                 typename Field2,
+                 typename ...Fields>
+        void ref_geter_first(unsigned& offset,
+                             unsigned& uiSize,
+                             std::tuple<RTI_types...>& conv,
+                             const Struct& obj){
+            typename Field1::type value = boost::pfr::get<count>(obj);
+            std::get<count>(conv).get(value);
+            unsigned P,mmOBV;
+            if(!first){
+              mmOBV = std::get<count>(conv).getOctetBoundary();
+              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+              offset += uiSize+P;
+            }
+            uiSize = std::get<count>(conv).getsize();
+            ref_geter_first<false, count + 1, Field2, Fields...>(offset,uiSize, conv, obj);
+        }
+
+        template<bool first,
+                 size_t count,
+                 typename Field>
+         void ref_geter_second(unsigned& offset,
+                               unsigned& uiSize,
+                               std::tuple<RTI_types...>& conv){
+            unsigned P, mmOBV;
+            if(!first){
+              mmOBV = std::get<count>(conv).getOctetBoundary();
+              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+              offset += uiSize+P;
+            }
+            uiSize = std::get<count>(conv).getsize();
+            std::get<count>(conv).setData(this->ptrData+offset,uiSize);
+        }
+
+        template<bool first,
+                 size_t count,
+                 typename Field1,
+                 typename Field2,
+                 typename ...Fields>
+        void ref_geter_second(unsigned& offset,
+                              unsigned& uiSize,
+                              std::tuple<RTI_types...>& conv){
+            unsigned P,mmOBV;
+            if(!first){
+              mmOBV = std::get<count>(conv).getOctetBoundary();
+              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+              offset += uiSize+P;
+            }
+            uiSize = std::get<count>(conv).getsize();
+            std::get<count>(conv).setData(this->ptrData+offset,uiSize);
+            ref_geter_second<false, count + 1, Field2, Fields...>(offset, uiSize, conv);
+        }
+
+        template<bool first,
+                 size_t count,
+                 typename Field>
+        void ref_seter(unsigned& offset,
+                       unsigned& uiSize,
+                       Struct& obj){
+            unsigned P, mmOBV;
+            Field field;
+            if(!first){
+              mmOBV = field.getOctetBoundary();
+              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+              offset += uiSize+P;
+          }
+          field.getDataMax(this->ptrData+offset,this->m_uiSizeData-offset);
+          typename Field::type value;
+          field.set(value);
+          boost::pfr::get<count>(obj) = std::move(value);
+          uiSize = field.getsize();
+        }
+
+        template<bool first,
+                 size_t count,
+                 typename Field1,
+                 typename Field2,
+                 typename ...Fields>
+        void ref_seter(unsigned& offset,
+                       unsigned& uiSize,
+                       Struct& obj){
+            unsigned P, mmOBV;
+            Field1 field;
+            if(!first){
+                mmOBV = field.getOctetBoundary();
+                P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+                offset += uiSize+P;
+            }
+            field.getDataMax(this->ptrData+offset,this->m_uiSizeData-offset);
+            typename Field1::type value;
+            field.set(value);
+            boost::pfr::get<count>(obj) = std::move(value);
+            uiSize = field.getsize();
+            ref_seter<false, count + 1, Field2, Fields...>(offset,uiSize,obj);
+        }
+
+    };
 
 
 }

@@ -4,19 +4,9 @@ CONFIG -= app_bundle
 CONFIG -= qt
 QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV
 SOURCES += main.cpp \
-    ../BasicException.cpp \
-    ../Tools.cpp
+
 HEADERS+= \
-    ../BasicException.hpp \
-    ../BasicTemplates.hpp \
-    ../HLAarray.hpp \
-    ../HLAdata.hpp \
-    ../HLAenum.hpp \
-    ../HLAfixedRecod.hpp \
-    ../HLAstring.hpp \
-    ../HLAtypes.hpp \
-    ../HLAvector.hpp \
-    ../Tools.hpp \
+
     TestBaseRTIstring.hpp \
     TestHLAenum.hpp \
     TestRTIarray.hpp \

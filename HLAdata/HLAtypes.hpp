@@ -80,7 +80,7 @@ namespace HLA {
 
           void get(T& obj){
             m_data=obj;
-            if (!blLE) changeENDIAN(m_data);
+            if (!blLE) Tools::changeENDIAN(m_data);
           }
 
           void setDataToRTI(rti1516e::VariableLengthData &obj){

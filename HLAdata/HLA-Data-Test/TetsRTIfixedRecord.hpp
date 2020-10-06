@@ -182,10 +182,28 @@ public:
     }
 };
 
+using HLAPerson_ = HLA::Struct_wrapper<Person, 8,
+                                                HLA::Wstring,
+                                                HLA::Wstring,
+                                                HLA::Integer32BE,
+                                                HLA::Float64BE,
+                                                HLA::Float64BE>;
+
 void TestPerson(){
     Person p1 = {L"Ivan",L"Ivanov",30,80.4,179.3};
     rti1516e::VariableLengthData v = HLA::cast_to_rti<HLAPerson>(p1);
     Person p2 = HLA::cast_from_rti<HLAPerson>(v);
+    ASSERT_EQUAL(p1.first_name,p2.first_name)
+    ASSERT_EQUAL(p1.second_name,p2.second_name)
+    ASSERT_EQUAL(p1.age,p2.age)
+    ASSERT_EQUAL(p1.weight,p2.weight)
+    ASSERT_EQUAL(p1.height,p2.height)
+}
+
+void TestPerson_(){
+    Person p1 = {L"Ivan",L"Ivanov",30,80.4,179.3};
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLAPerson_>(p1);
+    Person p2 = HLA::cast_from_rti<HLAPerson_>(v);
     ASSERT_EQUAL(p1.first_name,p2.first_name)
     ASSERT_EQUAL(p1.second_name,p2.second_name)
     ASSERT_EQUAL(p1.age,p2.age)
@@ -242,12 +260,29 @@ void TestButton(){
     ASSERT_EQUAL(b1.name2,b2.name2)
 }
 
+
+using HLAButton_ = HLA::Struct_wrapper<Button, 8,
+                                       HLA::Integer32BE,
+                                       HLA::String,
+                                       HLA::String>;
+
+void TestButton_(){
+    Button b1 = {120,"Ivan","Ivanov"};
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLAButton_>(b1);
+    Button b2 = HLA::cast_from_rti<HLAButton_>(v);
+    ASSERT_EQUAL(b1.push,b2.push)
+    ASSERT_EQUAL(b1.name1,b2.name1)
+    ASSERT_EQUAL(b1.name2,b2.name2)
+}
+
 void TestfixedRecord(){
     LOG_DURATION("Fixed Record")
     TestPosition();
     TestBook();
     TestJuice();
     TestPerson();
+    TestPerson_();
     TestButton();
+    TestButton_();
 }
 #endif // TETSFIXEDRECORD_HPP

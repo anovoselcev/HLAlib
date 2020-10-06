@@ -43,3 +43,7 @@ unix:!macx: LIBS += -L$$PWD/../../../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lfed
 
 INCLUDEPATH += $$PWD/../../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
+
+INCLUDEPATH += $$PWD/../../../magic_get-develop/include
+DEPENDPATH += $$PWD/../../../magic_get-develop/include
+
