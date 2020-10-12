@@ -218,10 +218,13 @@ namespace HLA {
       }
     };
 
+
+
+
     template< typename Struct,
               unsigned OBV,
               typename ...RTI_types>
-    class Struct_wrapper : public BaseFixedRecord<Struct, OBV>{
+    class Struct_wrapper final : public BaseFixedRecord<Struct, OBV>{
 
     public:
 
@@ -307,7 +310,9 @@ namespace HLA {
                              std::tuple<RTI_types...>& conv,
                              const Struct& obj){
 
-            typename Field::type value = boost::pfr::get<count>(obj);
+            auto value = boost::pfr::get<count>(obj);
+            static_assert (std::is_same<typename Field::type, decltype (value)>::value, "Types don't match" );
+
             std::get<count>(conv).get(value);
             unsigned P,mmOBV;
             if(!first){
@@ -324,6 +329,7 @@ namespace HLA {
             offset = 0;
         }
 
+
         template<bool first ,
                  size_t count,
                  typename Field1,
@@ -333,7 +339,8 @@ namespace HLA {
                              unsigned& uiSize,
                              std::tuple<RTI_types...>& conv,
                              const Struct& obj){
-            typename Field1::type value = boost::pfr::get<count>(obj);
+            auto value = boost::pfr::get<count>(obj);
+            static_assert (std::is_same<typename Field1::type, decltype(value)>::value, "Types don't match" );
             std::get<count>(conv).get(value);
             unsigned P,mmOBV;
             if(!first){
@@ -386,6 +393,9 @@ namespace HLA {
         void ref_seter(unsigned& offset,
                        unsigned& uiSize,
                        Struct& obj){
+
+            std::remove_reference_t<decltype (boost::pfr::get<count>(obj))> value;
+            static_assert (std::is_same<typename Field::type, decltype (value)>::value, "Types don't match" );
             unsigned P, mmOBV;
             Field field;
             if(!first){
@@ -394,7 +404,6 @@ namespace HLA {
               offset += uiSize+P;
           }
           field.getDataMax(this->ptrData+offset,this->m_uiSizeData-offset);
-          typename Field::type value;
           field.set(value);
           boost::pfr::get<count>(obj) = std::move(value);
           uiSize = field.getsize();
@@ -408,6 +417,8 @@ namespace HLA {
         void ref_seter(unsigned& offset,
                        unsigned& uiSize,
                        Struct& obj){
+            std::remove_reference_t<decltype (boost::pfr::get<count>(obj))> value;
+            static_assert (std::is_same<typename Field1::type, decltype (value)>::value, "Types don't match" );
             unsigned P, mmOBV;
             Field1 field;
             if(!first){
@@ -416,7 +427,7 @@ namespace HLA {
                 offset += uiSize+P;
             }
             field.getDataMax(this->ptrData+offset,this->m_uiSizeData-offset);
-            typename Field1::type value;
+
             field.set(value);
             boost::pfr::get<count>(obj) = std::move(value);
             uiSize = field.getsize();

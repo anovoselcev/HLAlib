@@ -6,7 +6,7 @@
 namespace HLA {
 
     template <class Type, class RTItype = Integer32BE, unsigned OBV = 4>
-    class Enum : public ClassForRTI <Type,OBV>
+    class Enum final: public ClassForRTI <Type,OBV>
     {
     public:
 
