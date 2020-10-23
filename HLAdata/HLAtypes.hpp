@@ -2,7 +2,6 @@
 #define RTITYPES_HPP
 
 #include "BasicTemplates.hpp"
-#include <uchar.h>
 
 namespace HLA {
 
@@ -13,7 +12,7 @@ namespace HLA {
     typename HLAtype::type cast_from_rti(const rti1516e::VariableLengthData& v);
 
 
-    template <class T, unsigned mem, bool blLE=true>
+    template <typename T, unsigned mem, bool blLE=true>
       class SimpleData final: public ClassForRTI <T,mem>{
         public:
 
@@ -42,11 +41,11 @@ namespace HLA {
           }
 
           void getDataFromRTI(rti1516e::VariableLengthData const &obj){
-              unsigned size = (unsigned)obj.size();
+              unsigned size = static_cast<unsigned>(obj.size());
               if (sizeof(T)!=size) {
                 std::ostringstream wstrOut;
                 wstrOut
-                    << L"Размер данных не совпал. Должно прийти " << (unsigned)sizeof(T)
+                    << L"Размер данных не совпал. Должно прийти " << static_cast<unsigned>(sizeof(T))
                     << L" пришло " << size << L" байт";
                 ExceptionForRTI ex(wstrOut.str());
                 throw ex;
@@ -58,7 +57,7 @@ namespace HLA {
             if (sizeof(T)!=size) {
               std::ostringstream wstrOut;
               wstrOut
-                  << L"Размер данных не совпал. Должно прийти " << (unsigned)sizeof(T)
+                  << L"Размер данных не совпал. Должно прийти " << static_cast<unsigned>(sizeof(T))
                   << L" пришло " << size << L" байт";
 
               ExceptionForRTI ex(wstrOut.str());
@@ -91,7 +90,7 @@ namespace HLA {
             if (sizeof(T)!=inSize) {
               std::ostringstream wstrOut;
               wstrOut
-                  << L"Размер данных не совпал. Должно прийти " << (unsigned)sizeof(T)
+                  << L"Размер данных не совпал. Должно прийти " << static_cast<unsigned>(sizeof(T))
                   << L" пришло " << inSize << L" байт";
 
               ExceptionForRTI ex(wstrOut.str());
@@ -103,7 +102,7 @@ namespace HLA {
           unsigned setData(void* ptrDest){
             size_t inSize = sizeof(T);
             memcpy(ptrDest, &m_data, inSize);
-            return (unsigned)inSize;
+            return static_cast<unsigned>(inSize);
           }
 
           void set(T& data) {
@@ -155,8 +154,8 @@ namespace HLA {
         using UnsignedShort  = SimpleData<uint16_t, 2, true>;
         using Unsigned32LE   = SimpleData<uint32_t, 4, true> ;
         using Unsigned64LE   = SimpleData<uint64_t, 8, true>;
-        using UcharLE        = SimpleData<u_char, 1, true>;
-        using UcharBE        = SimpleData<u_char, 1, false>;
+        using UcharLE        = SimpleData<unsigned char, 1, true>;
+        using UcharBE        = SimpleData<unsigned char, 1, false>;
         using CharLE         = SimpleData<char, 2, true>;
         using CharBE         = SimpleData<char, 2, false>;
         using WcharLE        = SimpleData<wchar_t, 4, true>;

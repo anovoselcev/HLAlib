@@ -6,8 +6,8 @@
 
 namespace HLA {
 
-    template <class StringType,
-              class symb = typename std::conditional<std::is_same<StringType,std::string>::value,char,wchar_t>::type,
+    template <typename StringType,
+              typename symb = typename std::conditional<std::is_same<StringType,std::string>::value,char,wchar_t>::type,
               int OBV = sizeof (symb),
               int unit = 4>
     class BaseHLAstring final: public ClassForRTI<StringType,OBV> {

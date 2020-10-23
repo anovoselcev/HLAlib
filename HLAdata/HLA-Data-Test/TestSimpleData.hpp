@@ -98,14 +98,14 @@ void TestWchar(){
 }
 
 void TestUchar(){
-    u_char uch1 = 'a';
+    unsigned char uch1 = 'a';
     rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::UcharLE>(uch1);
-    u_char uch2 = HLA::cast_from_rti<HLA::UcharLE>(v1);
+    unsigned char uch2 = HLA::cast_from_rti<HLA::UcharLE>(v1);
     ASSERT_EQUAL(uch1,uch2);
 
-    u_char uch3 = 'p';
+    unsigned char uch3 = 'p';
     rti1516e::VariableLengthData v2 = HLA::cast_to_rti<HLA::UcharBE>(uch3);
-    u_char uch4 = HLA::cast_from_rti<HLA::UcharBE>(v2);
+    unsigned char uch4 = HLA::cast_from_rti<HLA::UcharBE>(v2);
     ASSERT_EQUAL(uch3,uch4);
 }
 

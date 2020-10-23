@@ -17,7 +17,7 @@ namespace HLA {
 
     ExceptionForRTI(const std::wstring& wstrEx);
 
-    virtual const char *what( ) const throw();
+    virtual const char *what( ) const noexcept;
 
     virtual const std::wstring whatWstr( ) const;
 

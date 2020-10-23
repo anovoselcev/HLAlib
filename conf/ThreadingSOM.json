@@ -4,7 +4,7 @@
     "Type" :            
                         "Threading",
     "FOMpath" :
-                        "../conf/SampleFOM.xml",
+                        "/home/k-110-04/QtWork/HLA/HLAlib/conf/SampleFOM.xml",
     "FederationName":
                         "Test",
     "Address":

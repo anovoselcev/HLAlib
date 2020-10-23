@@ -7,7 +7,7 @@
 
 namespace HLA {
 
-    template <class T_MOD, unsigned OBV = 8>
+    template <typename T_MOD, unsigned OBV = 8>
     class BaseFixedRecord : public ClassForRTI <T_MOD, OBV> {
     protected:
       Octet_* ptrData;

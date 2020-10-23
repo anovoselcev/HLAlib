@@ -15,6 +15,7 @@ namespace HLA {
 * @param fed pointer on target federate based on BaseFederate
 */
     ModelGuard::ModelGuard(BaseFederate* fed) : _federate(fed){
+
         if(_federate)                                                   // Check if federate pointer nullptr
             lock = std::unique_lock<std::mutex>(_federate->_smutex);    // Lock federate state mutex and take control under federate state
         else
@@ -43,7 +44,7 @@ namespace HLA {
 */
     void ModelGuard::ModelingControl<ModelMode::THREADING>(){
         _federate->_cond.wait(lock,[this]{              // Wait for DOING federate state, federate notify ModelGuard about state change
-            return _federate->_state==State::DOING;
+            return _federate->_state == State::DOING;
         });
         _federate->_state = State::PROCESSING;          // Set federate step for proccessing
     }
@@ -56,7 +57,7 @@ namespace HLA {
     void ModelGuard::ModelingControl<ModelMode::FOLLOWING>(){
         _federate->_state = State::PROCESSING;                      // Set federate step for proccessing
         _federate->Modeling<ModelMode::FOLLOWING>();                // Run federate follow modeling method
-        *_federate->_last_time = std::chrono::steady_clock::now();   // Save last time
+        _federate->_last_time = std::chrono::steady_clock::now();   // Save last time
     }
 
     template<>

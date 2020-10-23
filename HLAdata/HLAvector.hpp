@@ -10,7 +10,7 @@ namespace HLA {
     template<typename HLAtype, unsigned OBV>
     std::vector<typename HLAtype::type> cast_from_rti(const rti1516e::VariableLengthData& v);
 
-    template <class T_FOM, class T_MOD, unsigned m_OBV=1>
+    template <typename T_FOM, unsigned m_OBV=1, typename T_MOD = typename T_FOM::type>
     class Vector final: public ClassForRTI<std::vector<T_MOD>,m_OBV>
     {
       Vector& operator = (const Vector &) {
@@ -110,7 +110,7 @@ namespace HLA {
         }
       }
 
-      void get (Vector<T_FOM,T_MOD,m_OBV>& obj) {
+      void get (Vector<T_FOM,m_OBV>& obj) {
 
         if (this != &obj) {
           m_DIM = obj.m_DIM;
@@ -228,7 +228,7 @@ namespace HLA {
 
     template<typename HLAtype, unsigned OBV>
     rti1516e::VariableLengthData cast_to_rti(const std::vector<typename HLAtype::type>& t){
-        Vector<HLAtype,typename HLAtype::type,OBV> conv;
+        Vector<HLAtype,OBV> conv;
         rti1516e::VariableLengthData v;
         conv.get(t);
         conv.setDataToRTI(v);
@@ -239,7 +239,7 @@ namespace HLA {
     std::vector<typename HLAtype::type> cast_from_rti(const rti1516e::VariableLengthData& v){
 
         std::vector<typename HLAtype::type> t;
-        Vector<HLAtype, typename HLAtype::type, OBV> conv;
+        Vector<HLAtype, OBV> conv;
         conv.getDataFromRTI(v);
         conv.set(t);
         return t;

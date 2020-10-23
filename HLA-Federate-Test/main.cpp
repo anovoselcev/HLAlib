@@ -10,11 +10,12 @@ constexpr int step = 200;
 using namespace std;
 
 void  NewThreadFederate(wstring&& name, int delay){
-
+    std::wcout <<  L"     start   " << std::endl;
     auto file = HLA::JSON::MakeJSON(L"../conf/ThreadingSOM.json");
     auto fed = std::make_unique<ThreadFederate>(file);
     fed->   LoadSOMFromJSON(file).
             ConnectRTI();
+     std::wcout <<  L"     start   " << std::endl;
     auto begin = chrono::steady_clock::now();
     while(chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - begin).count() < step*100){
         auto start = chrono::steady_clock::now();
@@ -24,7 +25,7 @@ void  NewThreadFederate(wstring&& name, int delay){
             //assert(fed->_other==L"Fed2");
 
             auto time = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - start).count();
-            //std::wcout << fed->_other << L"        " << time << std::endl;
+            std::wcout << fed->_other << L"        " << time << std::endl;
             assert((time < (step*1.05))||(time > (step*0.95)));
         }
         else
@@ -57,8 +58,8 @@ void NewFollowFederate(wstring&& name, int delay){
 
 int main()
 {
-    //std::thread th1(NewThreadFederate,L"Fed1",150);
-    //th1.detach();
+    std::thread th1(NewThreadFederate,L"Fed1",150);
+    th1.join();
     //this_thread::sleep_for(chrono::milliseconds(5));
 //    std::thread th2(NewFollowFederate, L"Fed2",70);
 //    th2.detach();

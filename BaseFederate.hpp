@@ -8,6 +8,7 @@
 
 #ifndef BASEFEDERATE_HPP
 #define BASEFEDERATE_HPP
+
 #include <RTI/RTI1516.h>
 #include <RTI/NullFederateAmbassador.h>
 
@@ -82,7 +83,7 @@ namespace HLA{
 * @brief BaseFederate
 * Default constructor, initialization nothing specific
 */
-        BaseFederate() noexcept;
+        BaseFederate() = delete;
 
 /**
 * @brief BaseFederate
@@ -625,7 +626,7 @@ private:
                                          rti1516e::SupplementalReceiveInfo theReceiveInfo)
         throw (rti1516e::FederateInternalError) override;
 
-       void receiveInteraction (rti1516e::InteractionClassHandle theInteraction,
+        void receiveInteraction (rti1516e::InteractionClassHandle theInteraction,
                                 rti1516e::ParameterHandleValueMap const & theParameterValues,
                                 rti1516e::VariableLengthData const & theUserSuppliedTag,
                                 rti1516e::OrderType sentOrder,
@@ -634,6 +635,10 @@ private:
                                 rti1516e::OrderType receivedOrder,
                                 rti1516e::SupplementalReceiveInfo theReceiveInfo)
        throw (rti1516e::FederateInternalError) override;
+
+
+       void connectionLost (std::wstring const & faultDescription)
+          throw (rti1516e::FederateInternalError) override;
 
 
 /** @brief _federate_name
@@ -692,12 +697,8 @@ private:
 */
         rti1516e::CallbackModel _callback_mode = rti1516e::HLA_IMMEDIATE;
 
-/**
-* @brief _cond
-* Condition variable that check _state and launch main thread if ModelGuard using
-*/
 
-        std::condition_variable _cond;
+
 
 
 /**
@@ -718,6 +719,9 @@ private:
 * Self instance class of federate with registered federate name in RTI (something like ID in RTI)
 */
         rti1516e::ObjectInstanceHandle _MyInstanceID;
+
+
+
 
 /**
 * @brief _ObjectClasses
@@ -744,6 +748,9 @@ private:
 */
         ParameterHandleMap _ParametersMap;
 
+
+
+
 /**
 * @brief _qAttributes
 * Queue of reflected attributes with transport information
@@ -755,6 +762,9 @@ private:
 * Queue of recived parameters with transport information
 */
         std::queue<CallbackParametersInformation> _qParameters;
+
+
+
 
 /**
 * @brief _amutex
@@ -775,6 +785,9 @@ private:
 
         mutable std::mutex _smutex;
 
+
+
+
 /**
 * @brief _modeling_thread
 * Thread of modeling that process all HLA interface
@@ -791,7 +804,17 @@ private:
 * @brief _last_time
 * Last time mark for ModelGuard in FollowModeling mode
 */
-        std::unique_ptr<std::chrono::time_point<std::chrono::steady_clock>> _last_time = nullptr;
+        std::chrono::time_point<std::chrono::steady_clock> _last_time;
+
+/**
+* @brief _cond
+* Condition variable that check _state and launch main thread if ModelGuard using
+*/
+
+        std::condition_variable _cond;
+
+
+
 
 /**
 * @brief _AttributeNames
@@ -817,12 +840,18 @@ private:
 */
         NameMap _InteractionsNames;
 
+
+
+
 /**
 * @brief ModelGuard
 * Class for time control using RAII
 */
         friend class ModelGuard;
     };
+
+
+
 
 
     template<>

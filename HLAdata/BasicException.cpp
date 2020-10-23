@@ -17,7 +17,7 @@ namespace HLA {
   }
 
 
-  const char *ExceptionForRTI::what( ) const throw() {
+  const char *ExceptionForRTI::what( ) const noexcept {
     return _ExceptionMessage.c_str();
   }
 

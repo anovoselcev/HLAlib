@@ -43,11 +43,19 @@ void TestBigWstring(){
     ASSERT_EQUAL(wstr1,wstr2);
 }
 
+void TestEmptyString(){
+    std::string str1;
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::String>(str1);
+    std::string str2 = HLA::cast_from_rti<HLA::String>(v);
+    ASSERT_EQUAL(str1, str2)
+}
+
 void Teststring(){
     LOG_DURATION("Strings")
     TestString();
     TestWstring();
     TestBigString();
     TestBigWstring();
+    TestEmptyString();
 }
 #endif // TESTBASESTRING_HPP

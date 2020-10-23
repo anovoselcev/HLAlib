@@ -21,6 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     BaseFederate.cpp \
+    FederationManager.cpp \
     HLA-Simulink/SimFederate/SimFederate.cpp \
     HLAdata/BasicException.cpp \
     HLAdata/Tools.cpp \
@@ -29,6 +30,7 @@ SOURCES += \
     Tools/JSON.cpp
 
 HEADERS += \
+    FederationManager.hpp \
     HLA-Simulink/SimFederate/SimFederate.hpp \
     HLAdata/BasicException.hpp \
     HLAdata/BasicTemplates.hpp \

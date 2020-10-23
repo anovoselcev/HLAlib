@@ -18,11 +18,11 @@ namespace HLA{
     using namespace rti1516e;
 
 
-/**
- * @brief BaseFederate::BaseFederate
- * Default constructor, initialization nothing specific
- */
-    BaseFederate::BaseFederate() noexcept{}
+///**
+// * @brief BaseFederate::BaseFederate
+// * Default constructor, initialization nothing specific
+// */
+//    BaseFederate::BaseFederate() noexcept{}
 
 /**
 * @brief BaseFederate::BaseFederate
@@ -108,6 +108,7 @@ namespace HLA{
             _modeling_thread.join();        // Wait for end of thread
         lock_guard<mutex> guard(_smutex);   // Lock state mutex
         _state = State::EXIT;               // Set federate state to EXIT
+        _rtiAmbassador->resignFederationExecution(ResignAction::NO_ACTION);
         Logger log(_log_filename);          // Create log writer
         log << L"INFO:"                     // Write INFO message about disconnect
             << _federate_name
@@ -234,7 +235,7 @@ namespace HLA{
             if(_mode == ModelMode::THREADING)
                 _modeling_thread = std::thread(&BaseFederate::Modeling<ModelMode::THREADING>,this); // Run Modeling Thread
             else if(_mode == ModelMode::FOLLOWING)
-                _last_time = make_unique<chrono::time_point<chrono::steady_clock>>(chrono::steady_clock::now());                                           // Save last clock time
+                _last_time = chrono::time_point<chrono::steady_clock>(chrono::steady_clock::now());                                           // Save last clock time
             else if(_mode == ModelMode::MANAGING){
             }
             RunFederate();                                                          // Run the Federate main function (can be empty)
@@ -442,7 +443,7 @@ namespace HLA{
 
     void BaseFederate::ReadyToGo() const{
         HLAfloat64Time UselessStamp;
-        _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"READY"), ParameterHandleValueMap(), VariableLengthData(), UselessStamp);
+        _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"READY"), ParameterHandleValueMap(), _MyInstanceID.encode(), UselessStamp);
     }
 
 /**
@@ -504,7 +505,7 @@ namespace HLA{
 */
     void BaseFederate::Modeling<ModelMode::FOLLOWING>(){
         Logger log(_log_filename);                                                                       // Create log writer
-        auto dur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - *_last_time);  // Create time interval
+        auto dur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - _last_time);  // Create time interval
         auto step = chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(_modeling_step));   // Convert modeling step to time interval
         if((step - dur).count()>0)                                                                       // If dur less than modeling step
             this_thread::sleep_for(chrono::milliseconds(step - dur));                                    // Sleep for difference betwen step and dur
@@ -816,9 +817,18 @@ namespace HLA{
 * Setup Log FileName
 * @return Sample reference of current Federate
 */
-    BaseFederate& BaseFederate::SetLogFileName(std::string&& filename) noexcept{
+    BaseFederate& BaseFederate::SetLogFileName(string&& filename) noexcept{
         _log_filename = move(filename);
         return *this;
+    }
+
+    void BaseFederate::connectionLost(const wstring &faultDescription)
+                                      throw (FederateInternalError){
+        _f_modeling = false;                // Change flag to finish modeling
+        if(_mode == ModelMode::THREADING)
+            _modeling_thread.join();        // Wait for end of thread
+        lock_guard<mutex> guard(_smutex);   // Lock state mutex
+        _state = State::EXIT;               // Set federate state to EXIT
     }
 
 /**
@@ -827,7 +837,7 @@ namespace HLA{
 * Callback function from RTI. Call when name registration in RegisterName is successful
 */
     void BaseFederate::objectInstanceNameReservationSucceeded(wstring const & name)
-    throw (FederateInternalError){
+                                                              throw (FederateInternalError){
         Logger log(_log_filename); // Create log writer
 
         log << L"INFO:"            // Write INFO message about proccessing part of modeling
@@ -836,6 +846,7 @@ namespace HLA{
             << name
             << Logger::Flush();
 
+        lock_guard<mutex> guard(_smutex);
         _state = State::NAMERESERVED; // Change federate state to name reservation successfuly
     }
 
@@ -845,7 +856,7 @@ namespace HLA{
 * Callback function from RTI. Call when name registration in RegisterName is failed
 */
     void BaseFederate::objectInstanceNameReservationFailed(const wstring & name)
-    throw (FederateInternalError){
+                                                           throw (FederateInternalError){
         Logger log(_log_filename); // Create log writer
 
         log << L"ERROR:"          // Write ERROR message about name reservation failed
@@ -854,6 +865,7 @@ namespace HLA{
             << name
             << Logger::Flush();
 
+        lock_guard<mutex> guard(_smutex);
         _state = State::EXIT;   // Change federate state to exit
     }
 

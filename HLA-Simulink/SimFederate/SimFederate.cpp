@@ -4,7 +4,7 @@ namespace HLA {
     using namespace  rti1516e;
 
 
-    SimFederate::SimFederate() noexcept{}
+//    SimFederate::SimFederate() noexcept{}
 
     SimFederate::SimFederate(const std::wstring& name,
                              const std::wstring& type,

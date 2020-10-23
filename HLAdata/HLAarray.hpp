@@ -11,7 +11,7 @@ namespace HLA{
     template<typename HLAtype, unsigned Size, unsigned OBV>
     typename std::array<typename HLAtype::type, Size> cast_from_rti(const rti1516e::VariableLengthData& v);
 
-    template <class T_FOM, class T_MOD, size_t uiDim, unsigned m_OBV>
+    template <class T_FOM, size_t uiDim, unsigned m_OBV, class T_MOD = class T_FOM::type>
     class Array : public ClassForRTI <std::array<T_MOD,uiDim>, m_OBV>{
       Array & operator = (const Array &/*fixedArray*/) {
         return *this;
@@ -90,7 +90,7 @@ namespace HLA{
         uiSizeEl = tmpFOMobj.setData(ptrData+uiSizeData);
       }
 
-      void get (Array<T_FOM,T_MOD,uiDim,m_OBV>& obj) {
+      void get (Array<T_FOM,uiDim,m_OBV>& obj) {
         if (this != &obj) {
           m_uiSizeData = obj.m_uiSizeData;
           if (ptrData!=nullptr) delete[] ptrData;
@@ -191,7 +191,7 @@ namespace HLA{
 
     template<typename HLAtype, unsigned Size, unsigned OBV>
     inline rti1516e::VariableLengthData cast_to_rti(const std::array<typename HLAtype::type,Size>& t){
-        Array<HLAtype,typename HLAtype::type, Size, OBV> conv;
+        Array<HLAtype, Size, OBV> conv;
         rti1516e::VariableLengthData v;
         conv.get(t);
         conv.setDataToRTI(v);
@@ -200,7 +200,7 @@ namespace HLA{
 
     template<typename HLAtype, unsigned Size, unsigned OBV>
     inline typename std::array<typename HLAtype::type, Size> cast_from_rti(const rti1516e::VariableLengthData& v){
-        Array<HLAtype,typename HLAtype::type, Size, OBV> conv;
+        Array<HLAtype, Size, OBV> conv;
         std::array<typename HLAtype::type, Size> t;
         conv.getDataFromRTI(v);
         conv.set(t);

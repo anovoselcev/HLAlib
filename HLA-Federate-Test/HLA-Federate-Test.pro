@@ -44,3 +44,6 @@ unix:!macx: LIBS += -L$$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lfedtim
 
 INCLUDEPATH += $$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
+
+INCLUDEPATH += /home/k-110-04/QtWork/HLA/magic_get-develop/include
+DEPENDPATH += /home/k-110-04/QtWork/HLA/magic_get-develop/include
