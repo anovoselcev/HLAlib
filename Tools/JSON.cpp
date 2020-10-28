@@ -182,7 +182,10 @@ namespace HLA {
 * @return
 */
     JSON JSON::Load(wistream& input) {
-      return JSON{LoadNode(input)};
+        if(input)
+            return JSON{LoadNode(input)};
+        else
+            throw std::runtime_error("JSON-file not found");
     }
 
 /**
