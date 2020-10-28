@@ -305,7 +305,28 @@ namespace HLA {
         template<bool first,
                  size_t count,
                  typename Field>
-        void ref_geter_first(unsigned& offset,
+        std::enable_if_t<first, void> ref_geter_first(unsigned& offset,
+                             unsigned& uiSize,
+                             std::tuple<RTI_types...>& conv,
+                             const Struct& obj){
+
+            auto value = boost::pfr::get<count>(obj);
+            static_assert (std::is_same<typename Field::type, decltype (value)>::value, "Types don't match" );
+
+            std::get<count>(conv).get(value);
+            uiSize = std::get<count>(conv).getsize();
+            offset+=uiSize;
+            this->m_uiSizeData = offset;
+            if(this->ptrData != nullptr)
+                delete[] this->ptrData;
+            this->ptrData = new HLA::Octet_[this->m_uiSizeData];
+            offset = 0;
+        }
+
+        template<bool first,
+                 size_t count,
+                 typename Field>
+        std::enable_if_t<!first, void> ref_geter_first(unsigned& offset,
                              unsigned& uiSize,
                              std::tuple<RTI_types...>& conv,
                              const Struct& obj){
@@ -315,11 +336,9 @@ namespace HLA {
 
             std::get<count>(conv).get(value);
             unsigned P,mmOBV;
-            if(!first){
-              mmOBV = std::get<count>(conv).getOctetBoundary();
-              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
-              offset += uiSize+P;
-            }
+            mmOBV = std::get<count>(conv).getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
             uiSize = std::get<count>(conv).getsize();
             offset+=uiSize;
             this->m_uiSizeData = offset;
@@ -335,7 +354,23 @@ namespace HLA {
                  typename Field1,
                  typename Field2,
                  typename ...Fields>
-        void ref_geter_first(unsigned& offset,
+        std::enable_if_t<first, void> ref_geter_first(unsigned& offset,
+                             unsigned& uiSize,
+                             std::tuple<RTI_types...>& conv,
+                             const Struct& obj){
+            auto value = boost::pfr::get<count>(obj);
+            static_assert (std::is_same<typename Field1::type, decltype(value)>::value, "Types don't match" );
+            std::get<count>(conv).get(value);
+            uiSize = std::get<count>(conv).getsize();
+            ref_geter_first<false, count + 1, Field2, Fields...>(offset,uiSize, conv, obj);
+        }
+
+        template<bool first ,
+                 size_t count,
+                 typename Field1,
+                 typename Field2,
+                 typename ...Fields>
+        std::enable_if_t<!first, void> ref_geter_first(unsigned& offset,
                              unsigned& uiSize,
                              std::tuple<RTI_types...>& conv,
                              const Struct& obj){
@@ -343,11 +378,9 @@ namespace HLA {
             static_assert (std::is_same<typename Field1::type, decltype(value)>::value, "Types don't match" );
             std::get<count>(conv).get(value);
             unsigned P,mmOBV;
-            if(!first){
-              mmOBV = std::get<count>(conv).getOctetBoundary();
-              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
-              offset += uiSize+P;
-            }
+            mmOBV = std::get<count>(conv).getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
             uiSize = std::get<count>(conv).getsize();
             ref_geter_first<false, count + 1, Field2, Fields...>(offset,uiSize, conv, obj);
         }
@@ -355,17 +388,38 @@ namespace HLA {
         template<bool first,
                  size_t count,
                  typename Field>
-         void ref_geter_second(unsigned& offset,
+         std::enable_if_t<first, void> ref_geter_second(unsigned& offset,
                                unsigned& uiSize,
                                std::tuple<RTI_types...>& conv){
-            unsigned P, mmOBV;
-            if(!first){
-              mmOBV = std::get<count>(conv).getOctetBoundary();
-              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
-              offset += uiSize+P;
-            }
             uiSize = std::get<count>(conv).getsize();
             std::get<count>(conv).setData(this->ptrData+offset,uiSize);
+        }
+
+         template<bool first,
+                  size_t count,
+                  typename Field>
+          std::enable_if_t<!first, void> ref_geter_second(unsigned& offset,
+                                unsigned& uiSize,
+                                std::tuple<RTI_types...>& conv){
+             unsigned P, mmOBV;
+             mmOBV = std::get<count>(conv).getOctetBoundary();
+             P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+             offset += uiSize+P;
+             uiSize = std::get<count>(conv).getsize();
+             std::get<count>(conv).setData(this->ptrData+offset,uiSize);
+         }
+
+        template<bool first,
+                 size_t count,
+                 typename Field1,
+                 typename Field2,
+                 typename ...Fields>
+        std::enable_if_t<first, void> ref_geter_second(unsigned& offset,
+                              unsigned& uiSize,
+                              std::tuple<RTI_types...>& conv){
+            uiSize = std::get<count>(conv).getsize();
+            std::get<count>(conv).setData(this->ptrData+offset,uiSize);
+            ref_geter_second<false, count + 1, Field2, Fields...>(offset, uiSize, conv);
         }
 
         template<bool first,
@@ -373,15 +427,13 @@ namespace HLA {
                  typename Field1,
                  typename Field2,
                  typename ...Fields>
-        void ref_geter_second(unsigned& offset,
+        std::enable_if_t<!first, void> ref_geter_second(unsigned& offset,
                               unsigned& uiSize,
                               std::tuple<RTI_types...>& conv){
             unsigned P,mmOBV;
-            if(!first){
-              mmOBV = std::get<count>(conv).getOctetBoundary();
-              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
-              offset += uiSize+P;
-            }
+            mmOBV = std::get<count>(conv).getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
             uiSize = std::get<count>(conv).getsize();
             std::get<count>(conv).setData(this->ptrData+offset,uiSize);
             ref_geter_second<false, count + 1, Field2, Fields...>(offset, uiSize, conv);
@@ -390,7 +442,23 @@ namespace HLA {
         template<bool first,
                  size_t count,
                  typename Field>
-        void ref_seter(unsigned& offset,
+        std::enable_if_t<first, void> ref_seter(unsigned& offset,
+                       unsigned& uiSize,
+                       Struct& obj){
+
+            std::remove_reference_t<decltype (boost::pfr::get<count>(obj))> value;
+            static_assert (std::is_same<typename Field::type, decltype (value)>::value, "Types don't match" );
+            Field field;
+            field.getDataMax(this->ptrData+offset,this->m_uiSizeData-offset);
+            field.set(value);
+            boost::pfr::get<count>(obj) = std::move(value);
+            uiSize = field.getsize();
+        }
+
+        template<bool first,
+                 size_t count,
+                 typename Field>
+        std::enable_if_t<!first, void> ref_seter(unsigned& offset,
                        unsigned& uiSize,
                        Struct& obj){
 
@@ -398,15 +466,13 @@ namespace HLA {
             static_assert (std::is_same<typename Field::type, decltype (value)>::value, "Types don't match" );
             unsigned P, mmOBV;
             Field field;
-            if(!first){
-              mmOBV = field.getOctetBoundary();
-              P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
-              offset += uiSize+P;
-          }
-          field.getDataMax(this->ptrData+offset,this->m_uiSizeData-offset);
-          field.set(value);
-          boost::pfr::get<count>(obj) = std::move(value);
-          uiSize = field.getsize();
+            mmOBV = field.getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
+            field.getDataMax(this->ptrData+offset,this->m_uiSizeData-offset);
+            field.set(value);
+            boost::pfr::get<count>(obj) = std::move(value);
+            uiSize = field.getsize();
         }
 
         template<bool first,
@@ -414,18 +480,35 @@ namespace HLA {
                  typename Field1,
                  typename Field2,
                  typename ...Fields>
-        void ref_seter(unsigned& offset,
+        std::enable_if_t<first, void> ref_seter(unsigned& offset,
+                       unsigned& uiSize,
+                       Struct& obj){
+            std::remove_reference_t<decltype (boost::pfr::get<count>(obj))> value;
+            static_assert (std::is_same<typename Field1::type, decltype (value)>::value, "Types don't match" );
+            Field1 field;
+            field.getDataMax(this->ptrData+offset,this->m_uiSizeData-offset);
+            field.set(value);
+            boost::pfr::get<count>(obj) = std::move(value);
+            uiSize = field.getsize();
+            ref_seter<false, count + 1, Field2, Fields...>(offset,uiSize,obj);
+        }
+
+
+        template<bool first,
+                 size_t count,
+                 typename Field1,
+                 typename Field2,
+                 typename ...Fields>
+        std::enable_if_t<!first, void> ref_seter(unsigned& offset,
                        unsigned& uiSize,
                        Struct& obj){
             std::remove_reference_t<decltype (boost::pfr::get<count>(obj))> value;
             static_assert (std::is_same<typename Field1::type, decltype (value)>::value, "Types don't match" );
             unsigned P, mmOBV;
             Field1 field;
-            if(!first){
-                mmOBV = field.getOctetBoundary();
-                P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
-                offset += uiSize+P;
-            }
+            mmOBV = field.getOctetBoundary();
+            P = HLA::Tools::getPendingBytes(offset+uiSize,mmOBV);
+            offset += uiSize+P;
             field.getDataMax(this->ptrData+offset,this->m_uiSizeData-offset);
 
             field.set(value);
@@ -433,7 +516,6 @@ namespace HLA {
             uiSize = field.getsize();
             ref_seter<false, count + 1, Field2, Fields...>(offset,uiSize,obj);
         }
-
     };
 
 
