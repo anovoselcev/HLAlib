@@ -7,6 +7,27 @@ namespace HLA {
     using namespace std;
     using namespace rti1516e;
 
+    #ifndef WIN32
+        using  Byte = uint8_t;
+    #else
+        using  Byte = unsigned char;
+    #endif
+
+    inline bool operator==(const VariableLengthData& lhs, const VariableLengthData& rhs){
+       if(lhs.size() == rhs.size()){
+           Byte* lhs_ptr = const_cast<Byte*>(static_cast<const Byte*>(lhs.data()));
+           Byte* rhs_ptr = const_cast<Byte*>(static_cast<const Byte*>(rhs.data()));
+           for(size_t i = 0; i < lhs.size(); ++i){
+               if(*(lhs_ptr + i) != *(rhs_ptr + i))
+                   return false;
+           }
+       }
+       else
+           return false;
+
+       return true;
+    }
+
     FederationManager::FederationManager(const JSON& file) noexcept :
                                                            BaseFederate(file){}
 
@@ -23,10 +44,26 @@ namespace HLA {
     void FederationManager::SendGoTimeStamp(){
         lock_guard<mutex> guard(_smutex);
         HLAfloat64Time UselessStamp;
+
+        if(_federates_map.size() != _federates_count)
+            throw std::runtime_error("Number of Federates is invalid");
+
+        _ready_federates = 0;
+
         _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"GO"), ParameterHandleValueMap(), _MyInstanceID.encode(), UselessStamp);
 
         for(auto& federate : _federates_stamps)
             federate.second = TimeStamp::GO;
+    }
+
+    bool FederationManager::CheckReady(){
+
+        for(const auto& fed : _federates_stamps){
+            if(fed.second != TimeStamp::READY)
+                return false;
+        }
+
+        return true;
     }
 
     void FederationManager::RunFederate(){}
@@ -50,6 +87,8 @@ namespace HLA {
         }
     }
 
+    void FederationManager::ParameterProcess(){}
+
 
     void FederationManager::discoverObjectInstance (ObjectInstanceHandle theObject,
                                                     ObjectClassHandle theObjectClass,
@@ -67,9 +106,11 @@ namespace HLA {
                                                   SupplementalRemoveInfo theRemoveInfo)
                                                   throw (FederateInternalError) {
         lock_guard<mutex> guard(_smutex);
+
         auto federate = find_if(_federates_map.begin(), _federates_map.end(),[theObject](const auto& value){
             return value.second == theObject.encode();
         });
+
         const auto& name = federate->first;
         _federates_stamps.erase(name);
         _federates_map.erase(name);
@@ -96,12 +137,10 @@ namespace HLA {
 
             _federates_stamps[federate->first] = TimeStamp::READY;
 
-            bool flag = all_of(_federates_map.begin(), _federates_map.end(), [](const auto& value){
-               value.second == TimeStamp::READY;
-            });
+            _ready_federates++;
 
-            if(flag)
-                SendGoTimeStamp();
+            if(_ready_federates == _federates_count && CheckReady())
+                    SendGoTimeStamp();
         }
     }
 }

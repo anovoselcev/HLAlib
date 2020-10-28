@@ -20,6 +20,8 @@ namespace HLA{
 
         void SendGoTimeStamp();
 
+        bool CheckReady();
+
         void discoverObjectInstance (rti1516e::ObjectInstanceHandle theObject,
                                      rti1516e::ObjectClassHandle theObjectClass,
                                      std::wstring const & theObjectInstanceName)
@@ -39,7 +41,7 @@ namespace HLA{
                                  rti1516e::LogicalTime const & theTime,
                                  rti1516e::OrderType receivedOrder,
                                  rti1516e::SupplementalReceiveInfo theReceiveInfo)
-        throw (rti1516e::FederateInternalError) override;
+                                 throw (rti1516e::FederateInternalError) override;
 
 
 
@@ -62,6 +64,8 @@ namespace HLA{
         std::unordered_map<std::wstring, std::unordered_map<std::wstring, rti1516e::VariableLengthData>> _federates_values;
 
         size_t _federates_count = 0;
+
+        size_t _ready_federates = 0;
     };
 
 }
