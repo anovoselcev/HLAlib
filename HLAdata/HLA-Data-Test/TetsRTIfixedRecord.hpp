@@ -5,6 +5,7 @@
 #include "../HLAfixedRecod.hpp"
 #include "../HLAstring.hpp"
 #include "../HLAtypes.hpp"
+#include "../HLAvector.hpp"
 
 struct Position{
     double x = 0;
@@ -46,9 +47,20 @@ void TestPosition(){
 
 }
 
+using HLAPosition_ = HLA::Struct_wrapper<Position, 8, HLA::Float64BE, HLA::Float64BE>;
+
+void TestPosition_(){
+    Position pos1{4.0,2.2};
+    rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLAPosition_>(pos1);
+    Position pos2 = HLA::cast_from_rti<HLAPosition_>(v1);
+    ASSERT_EQUAL(pos1.x,pos2.x)
+    ASSERT_EQUAL(pos1.y,pos2.y)
+
+}
+
 struct Book{
     int pages = 0;
-    std::string name = "";
+    std::string name;
 };
 
 class HLABook : public HLA::BaseFixedRecord<Book,8>{
@@ -81,6 +93,17 @@ void TestBook(){
     Book book1 = {784,"C++ Templates"};
     rti1516e::VariableLengthData v = HLA::cast_to_rti<HLABook>(book1);
     Book book2 = HLA::cast_from_rti<HLABook>(v);
+    ASSERT_EQUAL(book1.name,book2.name)
+    ASSERT_EQUAL(book1.pages,book2.pages)
+
+}
+
+using HLABook_ = HLA::Struct_wrapper<Book, 4, HLA::Integer32BE, HLA::String>;
+
+void TestBook_(){
+    Book book1 = {784,"C++ Templates"};
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLABook_>(book1);
+    Book book2 = HLA::cast_from_rti<HLABook_>(v);
     ASSERT_EQUAL(book1.name,book2.name)
     ASSERT_EQUAL(book1.pages,book2.pages)
 
@@ -121,10 +144,22 @@ public:
     }
 };
 
+
 void TestJuice(){
     Juice j1 = {2,2.33,"Orange"};
     rti1516e::VariableLengthData v = HLA::cast_to_rti<HLAJuice>(j1);
     Juice j2 = HLA::cast_from_rti<HLAJuice>(v);
+    ASSERT_EQUAL(j1.volume,j2.volume)
+    ASSERT_EQUAL(j1.type,j2.type)
+    ASSERT_EQUAL(j1.price,j2.price)
+}
+
+using HLAJuice_ = HLA::Struct_wrapper<Juice, 8, HLA::Integer32BE, HLA::Float64BE, HLA::String>;
+
+void TestJuice_(){
+    Juice j1 = {2,2.33,"Orange"};
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLAJuice_>(j1);
+    Juice j2 = HLA::cast_from_rti<HLAJuice_>(v);
     ASSERT_EQUAL(j1.volume,j2.volume)
     ASSERT_EQUAL(j1.type,j2.type)
     ASSERT_EQUAL(j1.price,j2.price)
@@ -275,14 +310,36 @@ void TestButton_(){
     ASSERT_EQUAL(b1.name2,b2.name2)
 }
 
+struct Signal{
+    uint64_t size;
+    std::vector<int> signal;
+};
+
+using HLASignal = HLA::Struct_wrapper<Signal, 8,
+                                                HLA::Unsigned64LE,
+                                                HLA::Vector<HLA::Integer32BE, 4>>;
+
+void TestSignal(){
+    Signal sig1{100, std::vector<int>(100, 23)};
+    auto v1 = HLA::cast_to_rti<HLASignal>(sig1);
+    auto sig2 = HLA::cast_from_rti<HLASignal>(v1);
+    ASSERT_EQUAL(sig1.size, sig2.size);
+    ASSERT_EQUAL(sig1.signal, sig2.signal);
+}
+
+
 void TestfixedRecord(){
     LOG_DURATION("Fixed Record")
     TestPosition();
+    TestPosition_();
     TestBook();
+    TestBook_();
     TestJuice();
+    TestJuice_();
     TestPerson();
     TestPerson_();
     TestButton();
     TestButton_();
+    TestSignal();
 }
 #endif // TETSFIXEDRECORD_HPP

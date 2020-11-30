@@ -5,12 +5,19 @@
 
 namespace HLA {
 
+    template<typename HLAtype>
+    rti1516e::VariableLengthData cast_to_rti(const typename HLAtype::type& t);
+
+    template<typename HLAtype>
+    typename HLAtype::type cast_from_rti(const rti1516e::VariableLengthData& v);
+
     template <class Type, class RTItype = Integer32BE, unsigned OBV = 4>
     class Enum final: public ClassForRTI <Type,OBV>
     {
     public:
 
       using type = Type;
+      using assertion_type = type;
 
       Enum() {
         m_data = 0;
@@ -34,11 +41,11 @@ namespace HLA {
 
       void getDataFromRTI(rti1516e::VariableLengthData const &obj){
         unsigned iq = static_cast<unsigned>(obj.size());
-        if (getsize()!=iq) {
+        if (getsize() != iq) {
           std::stringstream wstrOut;
           wstrOut
-              << L"Размер данных не совпал. Должно прийти " << getsize()
-              << L" пришло " << iq << L" байт";
+              << L"The size of the data did not match. Must recive  " << getsize()
+              << L" recived " << iq << L" bytes";
 
           ExceptionForRTI ex(wstrOut.str());
           throw ex;
@@ -47,25 +54,25 @@ namespace HLA {
       }
 
       void getData(void* ptrSource, unsigned long inSize){
-        if (getsize()!=inSize) {
+        if (getsize() != inSize) {
           std::stringstream wstrOut;
           wstrOut
-              << L"Размер данных не совпал. Должно прийти " << getsize()
-              << L" пришло " << inSize << L" байт";
+              << L"The size of the data did not match. Must recive  " << getsize()
+              << L" recived " << inSize << L" bytes";
 
           ExceptionForRTI ex(wstrOut.str());
           throw ex;
         }
-        m_data.getData(ptrSource,inSize);
+        m_data.getData(ptrSource, inSize);
       }
 
       void getDataMax(void* ptrSource, unsigned long inSize){
         unsigned long current_size = getsize();
         if (current_size > inSize) {
-          ExceptionForRTI ex(L"Данные исчерпаны");
+          ExceptionForRTI ex(L"Data exhausted");
           throw ex;
         }
-        m_data.getData(ptrSource,current_size);
+        m_data.getData(ptrSource, current_size);
       }
 
       void get(Type &data) {
@@ -77,19 +84,19 @@ namespace HLA {
       }
 
       void setData(void* ptrDest, unsigned long inSize){
-        if (getsize()!=inSize) {
+        if (getsize() != inSize) {
           std::stringstream wstrOut;
           wstrOut
-              << L"Размер данных не совпал. Должно прийти " << getsize()
-              << L" пришло " << inSize << L" байт";
+              << L"The size of the data did not match. Must recive  " << getsize()
+              << L" recived " << inSize << L" bytes";
 
           ExceptionForRTI ex(wstrOut.str());
           throw ex;
         }
-        m_data.setData(ptrDest,inSize);
+        m_data.setData(ptrDest, inSize);
       }
 
-      unsigned setData(void* ptrDest){
+      unsigned setData(void* ptrDest) const {
         unsigned inSize;
         inSize = m_data.setData(ptrDest);
         return inSize;
@@ -99,7 +106,7 @@ namespace HLA {
         data = static_cast<Type>(m_data.get());
       }
 
-      unsigned getsize() {return m_data.getsize();}
+      unsigned getsize() const {return m_data.getsize();}
 
       unsigned getOctetBoundary(){return m_data.getOctetBoundary();}
 

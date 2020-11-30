@@ -3,6 +3,7 @@
 #include "../HLAvector.hpp"
 #include "../HLAstring.hpp"
 #include "../HLAtypes.hpp"
+#include "TetsRTIfixedRecord.hpp"
 #include "test_runner.hpp"
 #include "profile.hpp"
 
@@ -102,6 +103,21 @@ void TestBigIntVector(){
     rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Integer32BE,4>(v1);
     std::vector<int> v2 = HLA::cast_from_rti<HLA::Integer32BE,4>(v);
     ASSERT_EQUAL(v1,v2)
+}
+
+void TestClass(){
+    Person p1 = {L"Ivan",L"Ivanov",30,80.4,179.3};
+    std::vector<Person> vp1(100, p1);
+    rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLAPerson_, 8>(vp1);
+    std::vector<Person> vp2 = HLA::cast_from_rti<HLAPerson_, 8>(v1);
+    ASSERT_EQUAL(vp1.size(), vp2.size())
+    for(size_t i = 0; i < 100; ++i){
+        ASSERT_EQUAL(vp1[i].first_name, vp2[i].first_name)
+        ASSERT_EQUAL(vp1[i].second_name,vp2[i].second_name)
+        ASSERT_EQUAL(vp1[i].age,vp2[i].age)
+        ASSERT_EQUAL(vp1[i].weight,vp2[i].weight)
+        ASSERT_EQUAL(vp1[i].height,vp2[i].height)
+    }
 }
 
 void Testvector(){

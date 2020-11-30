@@ -1,8 +1,8 @@
 #ifndef BASICEXCEPTION_HPP
 #define BASICEXCEPTION_HPP
 
-#include<exception>
-#include"Tools.hpp"
+#include <exception>
+#include "Tools.hpp"
 #include <memory.h>
 
 namespace HLA {
@@ -47,8 +47,8 @@ namespace HLA {
       A (const std::wstring& wstrEx)               : ExceptionForRTI(wstrEx)  {};  	\
     };
 
-  EXCEPTION_2_ARGS(EndOfFile, "Достигнут конец файла")
-  EXCEPTION_2_ARGS(FileIsNotOpen, "Файл не открыт")
+  EXCEPTION_2_ARGS(EndOfFile, "End of file")
+  EXCEPTION_2_ARGS(FileIsNotOpen, "Can't open file")
   EXCEPTION(ERROR_BAD_ENVIRONMENT_RRTI)
   EXCEPTION(ReadConfigDataTypeMissmatch)
   EXCEPTION(ReadConfigUncknownReason)

@@ -3,8 +3,11 @@
 #include "../HLAtypes.hpp"
 #include "test_runner.hpp"
 #include "profile.hpp"
+#include <cassert>
+#include <cmath>
 
 void TestInteger(){
+    LOG_DURATION("Simple Data -> Integers")
     int16_t i16BE = 5;
     rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::Integer16BE>(i16BE);
 
@@ -38,6 +41,7 @@ void TestInteger(){
 }
 
 void TestBool(){
+    LOG_DURATION("Simple Data -> Bool")
     bool b1 = true;
     rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::Bool>(b1);
     bool b2 = HLA::cast_from_rti<HLA::Bool>(v1);
@@ -50,18 +54,20 @@ void TestBool(){
 }
 
 void TestFloat(){
-    float f1BE = 5.2;
+    LOG_DURATION("Simple Data -> Float")
+    float f1BE = 5.2f;
     rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::Float32BE>(f1BE);
     float f2BE = HLA::cast_from_rti<HLA::Float32BE>(v1);
     ASSERT_EQUAL(f1BE,f2BE)
 
-    float f1LE = 2.1;
+    float f1LE = 2.1f;
     rti1516e::VariableLengthData v2 = HLA::cast_to_rti<HLA::Float32LE>(f1LE);
     float f2LE = HLA::cast_from_rti<HLA::Float32LE>(v2);
     ASSERT_EQUAL(f1LE,f2LE)
 }
 
 void TestDouble(){
+    LOG_DURATION("Simple Data -> Double")
     double f1BE = 123.32;
     rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::Float64BE>(f1BE);
     double f2BE = HLA::cast_from_rti<HLA::Float64BE>(v1);
@@ -74,6 +80,7 @@ void TestDouble(){
 }
 
 void TestChar(){
+    LOG_DURATION("Simple Data -> Char")
     char ch1 = 'a';
     rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::CharLE>(ch1);
     char ch2 = HLA::cast_from_rti<HLA::CharLE>(v1);
@@ -86,6 +93,7 @@ void TestChar(){
 }
 
 void TestWchar(){
+    LOG_DURATION("Simple Data -> Wchar")
     wchar_t wch1 = L'a';
     rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::WcharLE>(wch1);
     wchar_t wch2 = HLA::cast_from_rti<HLA::WcharLE>(v1);
@@ -98,6 +106,7 @@ void TestWchar(){
 }
 
 void TestUchar(){
+    LOG_DURATION("Simple Data -> Uchar")
     unsigned char uch1 = 'a';
     rti1516e::VariableLengthData v1 = HLA::cast_to_rti<HLA::UcharLE>(uch1);
     unsigned char uch2 = HLA::cast_from_rti<HLA::UcharLE>(v1);
@@ -109,14 +118,23 @@ void TestUchar(){
     ASSERT_EQUAL(uch3,uch4);
 }
 
+void TestNan(){
+    LOG_DURATION("Simple Data -> NAN")
+    double nan = 0.0 / 0.0;
+    assert(std::isnan(nan));
+    rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Float64BE>(nan);
+    assert(std::isnan(HLA::cast_from_rti<HLA::Float64BE>(v)));
+}
+
 void TestSimpleData(){
     LOG_DURATION("Simple Data")
-    TestFloat();
-    TestDouble();
-    TestInteger();
     TestBool();
+    TestDouble();
+    TestFloat();
+    TestInteger();
     TestChar();
     TestWchar();
     TestUchar();
+    TestNan();
 }
 #endif // TESTSIMPLEDATA_HPP

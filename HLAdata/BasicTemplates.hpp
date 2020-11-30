@@ -16,15 +16,15 @@ namespace HLA {
     class ClassForRTI {
     public:
     //Default constructor
-      ClassForRTI() noexcept{}
+      ClassForRTI()  = default;
     //Destructor
       virtual ~ClassForRTI() {}
     //Copy constructor
       ClassForRTI(const ClassForRTI<Type,OBV>& obj) {
         rti1516e::VariableLengthData data;
         if (this != &obj) {
-          obj.setDataToRTI(data);
-          getDataFromRTI(data);
+         // obj.setDataToRTI(data);
+        //  getDataFromRTI(data);
         }
       }
     //Copy assigment operator
@@ -52,11 +52,11 @@ namespace HLA {
     //Set data to ptrDest with fixed size
       virtual void setData(void* ptrDest, unsigned long inSize) = 0;
     //Set data to ptrDest
-      virtual unsigned setData(void* ptrDest) = 0;
+      virtual unsigned setData(void* ptrDest) const = 0;
     //Set to object data from RTI
       virtual void set(Type &obj) = 0;
 
-      virtual unsigned getsize() = 0;
+      virtual unsigned getsize() const = 0;
 
       unsigned getOctetBoundary(){return OBV;}
     };
@@ -70,9 +70,9 @@ namespace HLA {
       }
     }
 #ifndef WIN32
-    using  Octet_ = uint8_t;
+    using  byte = uint8_t;
 #else
-    using Octet_ = unsigned char;
+    using byte = unsigned char;
 #endif
 
     template<typename HLAtype>

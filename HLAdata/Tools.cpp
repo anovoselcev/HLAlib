@@ -6,28 +6,24 @@ using namespace std;
 namespace HLA {
   namespace Tools {
 
-  void changeENDIAN(void* value, unsigned size)
-  {
-    for(char *low=(char*)value,*high=low+size-1;low<high;++low,--high)
-    {
-      char c=*low;
-      *low=*high;
-      *high=c;
+  void changeENDIAN(void* value, unsigned size){
+    for(char *low = static_cast<char*>(value), *high = low + size - 1; low < high; ++low, --high){
+      char c = *low;
+      *low = *high;
+      *high = c;
     }
   }
 
-    unsigned getPendingBytes(unsigned uiElementSize, unsigned OctetBoundaryValue)
-    {
+    unsigned getPendingBytes(unsigned uiElementSize, unsigned OctetBoundaryValue){
       unsigned PendingBytes;
-      PendingBytes = uiElementSize%OctetBoundaryValue;
-      if (PendingBytes!=0) {
-        PendingBytes=OctetBoundaryValue-PendingBytes;
+      PendingBytes = uiElementSize % OctetBoundaryValue;
+      if (PendingBytes) {
+        PendingBytes = OctetBoundaryValue - PendingBytes;
       }
       return PendingBytes;
     }
 
-    std::wstring widen( const std::string& in)
-    {
+    std::wstring widen( const std::string& in){
         std::wstring ws;
         ws.assign(in.begin(),in.end());
         return ws;
