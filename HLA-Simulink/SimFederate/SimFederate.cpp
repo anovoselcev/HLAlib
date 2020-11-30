@@ -4,9 +4,6 @@
 namespace HLA {
     using namespace  rti1516e;
 
-
-    SimFederate::SimFederate() noexcept{}
-
     SimFederate::SimFederate(const std::wstring& name,
                              const std::wstring& type,
                              const std::wstring& FOMname,
@@ -59,7 +56,7 @@ namespace HLA {
             auto& message = _qAttributes.front();
             for(const auto& obj : _ObjectClasses){
                 for(const auto& attr_map : _AttributesMap[obj.second]){
-                    auto& data = message.data.find(attr_map.second);
+                    auto data = message.data.find(attr_map.second);
                     if(data != end(message.data))
                         input[attr_map.first] = std::move(data->second);
                 }

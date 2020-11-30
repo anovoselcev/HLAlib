@@ -7,7 +7,8 @@ namespace HLA {
     
     class SimFederate : public BaseFederate{
     public:
-        SimFederate() noexcept;
+
+        SimFederate() = delete;
         
         SimFederate(const std::wstring& name,
                 const std::wstring& type,
@@ -33,6 +34,21 @@ namespace HLA {
         
         
     private:
+
+        struct Strategy{
+            virtual void Action(const rti1516e::ParameterHandleValueMap& data) = 0;
+            virtual ~Strategy() = default;
+        };
+
+        struct PushButton : public Strategy{
+            void Action(const rti1516e::ParameterHandleValueMap &data) override;
+        };
+
+        struct SwitchTumbler : public Strategy{
+            void Action(const rti1516e::ParameterHandleValueMap &data) override;
+        };
+
+        std::unique_ptr<Strategy> MakeStrategy(const rti1516e::InteractionClassHandle& handle);
         
         void ParameterProcess() override;
         
