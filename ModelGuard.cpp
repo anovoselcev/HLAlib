@@ -1,8 +1,6 @@
 //================================================================================================================================================
 /*
  * Written by Novoseltsev Artemy
- * This program is free software.
- * This program is distributed in the hope that it will be useful.
 */
 //================================================================================================================================================
 
@@ -17,16 +15,17 @@ namespace HLA {
     ModelGuard::ModelGuard(BaseFederate* fed) : _federate(fed){
 
         if(_federate)                                                   // Check if federate pointer nullptr
-            lock = std::unique_lock<std::mutex>(_federate->_smutex);    // Lock federate state mutex and take control under federate state
+            _lock = std::unique_lock<std::mutex>(_federate->_smutex);    // Lock federate state mutex and take control under federate state
         else
             throw std::runtime_error("Nullptr federate");               // If federate pointer is nullptr throw run-time error
 
-        if(_federate->_mode == ModelMode::THREADING)                    // If federate model mode is Threading start Threading control
-            ModelingControl<ModelMode::THREADING>();
-        else if(_federate->_mode == ModelMode::FOLLOWING)               // If federate model mode is Following start Following control
-            ModelingControl<ModelMode::FOLLOWING>();
-        else if(_federate->_mode == ModelMode::MANAGING)                // If federate model mode is Managing..........................
-            ModelingControl<ModelMode::MANAGING>();
+        if(_federate->_mode == MODELMODE::FREE_THREADING)                    // If federate model mode is Threading start Threading control
+            ModelingControl<MODELMODE::FREE_THREADING>();
+        else if(_federate->_mode == MODELMODE::FREE_FOLLOWING)               // If federate model mode is Following start Following control
+            ModelingControl<MODELMODE::FREE_FOLLOWING>();
+        else if(_federate->_mode == MODELMODE::MANAGING_FOLLOWING)                // If federate model mode is Managing..........................
+            ModelingControl<MODELMODE::MANAGING_FOLLOWING>();
+        //ModelingControl<_federate>();
     }
 
 /**
@@ -34,7 +33,7 @@ namespace HLA {
 * When ModelGuard is destructed  the scope thread go on
 */
     ModelGuard::~ModelGuard(){
-        lock.unlock();         // Release the federate state mutex
+        _lock.unlock();         // Release the federate state mutex
     }
 
     template<>
@@ -42,11 +41,11 @@ namespace HLA {
 * @brief ModelGuard::ModelingControl<ModelMode::THREADING>
 * Method which control execution of federate with Threading Model Mode
 */
-    void ModelGuard::ModelingControl<ModelMode::THREADING>(){
-        _federate->_cond.wait(lock,[this]{              // Wait for DOING federate state, federate notify ModelGuard about state change
-            return _federate->_state == State::DOING;
+    void ModelGuard::ModelingControl<MODELMODE::FREE_THREADING>(){
+        _federate->_cond.wait(_lock,[this]{              // Wait for DOING federate state, federate notify ModelGuard about state change
+            return _federate->_state == STATE::DOING;
         });
-        _federate->_state = State::PROCESSING;          // Set federate step for proccessing
+        _federate->_state = STATE::PROCESSING;          // Set federate step for proccessing
     }
 
     template<>
@@ -54,9 +53,9 @@ namespace HLA {
 * @brief ModelGuard::ModelingControl<ModelMode::FOLLOWING>
 * Method which control execution of federate with Following Model Mode
 */
-    void ModelGuard::ModelingControl<ModelMode::FOLLOWING>(){
-        _federate->_state = State::PROCESSING;                      // Set federate step for proccessing
-        _federate->Modeling<ModelMode::FOLLOWING>();                // Run federate follow modeling method
+    void ModelGuard::ModelingControl<MODELMODE::FREE_FOLLOWING>(){
+        _federate->_state = STATE::PROCESSING;                      // Set federate step for proccessing
+        _federate->Modeling<MODELMODE::FREE_FOLLOWING>();                // Run federate follow modeling method
         _federate->_last_time = std::chrono::steady_clock::now();   // Save last time
     }
 
@@ -65,17 +64,17 @@ namespace HLA {
 * @brief ModelGuard::ModelingControl<ModelMode::MANAGING>
 * ..............................
 */
-    void ModelGuard::ModelingControl<ModelMode::MANAGING>(){
+    void ModelGuard::ModelingControl<MODELMODE::MANAGING_FOLLOWING>(){
         {
             std::lock_guard<std::mutex>(_federate->_smutex);
-            _federate->_state = State::READY;
+            _federate->_state = STATE::READY;
             _federate->ReadyToGo();
         }
 
-        _federate->_cond.wait(lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
-            return _federate->_state == State::PROCESSING;
+        _federate->_cond.wait(_lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
+            return _federate->_state == STATE::PROCESSING;
         });
-        _federate->Modeling<ModelMode::MANAGING>();
+        _federate->Modeling<MODELMODE::MANAGING_FOLLOWING>();
 
     }
 }

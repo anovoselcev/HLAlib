@@ -1,8 +1,6 @@
 //================================================================================================================================================
 /*
  * Written by Novoseltsev Artemy
- * This program is free software.
- * This program is distributed in the hope that it will be useful.
 */
 //================================================================================================================================================
 
@@ -80,7 +78,7 @@ namespace HLA {
 
     protected:
 
-        template<ModelMode>
+        template<MODELMODE>
         void ModelingControl();
 
 /**
@@ -93,7 +91,7 @@ namespace HLA {
 * @brief lock
 * Locker for federate state mutex. It means that ModelGuard control state of federate.
 */
-        std::unique_lock<std::mutex> lock;
+        std::unique_lock<std::mutex> _lock;
 
     };
 
@@ -103,21 +101,21 @@ namespace HLA {
 * @brief ModelGuard::ModelingControl<ModelMode::THREADING>
 * Method which control execution of federate with Threading Model Mode
 */
-    void ModelGuard::ModelingControl<ModelMode::THREADING>();
+    void ModelGuard::ModelingControl<MODELMODE::FREE_THREADING>();
 
     template<>
 /**
 * @brief ModelGuard::ModelingControl<ModelMode::FOLLOWING>
 * Method which control execution of federate with Following Model Mode
 */
-    void ModelGuard::ModelingControl<ModelMode::FOLLOWING>();
+    void ModelGuard::ModelingControl<MODELMODE::FREE_FOLLOWING>();
 
     template<>
 /**
 * @brief ModelGuard::ModelingControl<ModelMode::MANAGING>
 * ..............................
 */
-    void ModelGuard::ModelingControl<ModelMode::MANAGING>();
+    void ModelGuard::ModelingControl<MODELMODE::MANAGING_FOLLOWING>();
 }
 
 #endif // MODELGUARD_HPP
