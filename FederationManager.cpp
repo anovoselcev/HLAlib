@@ -1,6 +1,7 @@
 #include "FederationManager.hpp"
 #include "RTI/time/HLAfloat64Time.h"
 #include <algorithm>
+#include <boost/functional/hash.hpp>
 
 namespace HLA {
 
@@ -8,15 +9,15 @@ namespace HLA {
     using namespace rti1516e;
 
     #ifndef WIN32
-        using  Byte = uint8_t;
+        using  byte = uint8_t;
     #else
         using  Byte = unsigned char;
     #endif
 
     inline bool operator==(const VariableLengthData& lhs, const VariableLengthData& rhs){
        if(lhs.size() == rhs.size()){
-           Byte* lhs_ptr = const_cast<Byte*>(static_cast<const Byte*>(lhs.data()));
-           Byte* rhs_ptr = const_cast<Byte*>(static_cast<const Byte*>(rhs.data()));
+           byte* lhs_ptr = const_cast<byte*>(static_cast<const byte*>(lhs.data()));
+           byte* rhs_ptr = const_cast<byte*>(static_cast<const byte*>(rhs.data()));
            for(size_t i = 0; i < lhs.size(); ++i){
                if(*(lhs_ptr + i) != *(rhs_ptr + i))
                    return false;
@@ -42,7 +43,7 @@ namespace HLA {
 
 
     void FederationManager::SendGoTimeStamp(){
-        lock_guard<mutex> guard(_smutex);
+
         HLAfloat64Time UselessStamp;
 
         if(_federates_map.size() != _federates_count)
@@ -53,17 +54,13 @@ namespace HLA {
         _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"GO"), ParameterHandleValueMap(), _MyInstanceID.encode(), UselessStamp);
 
         for(auto& federate : _federates_stamps)
-            federate.second = TimeStamp::GO;
+            federate.second = TIMESTAMP::GO;
     }
 
     bool FederationManager::CheckReady(){
-
-        for(const auto& fed : _federates_stamps){
-            if(fed.second != TimeStamp::READY)
-                return false;
-        }
-
-        return true;
+        return std::all_of(_federates_stamps.begin(), _federates_stamps.end(),[](const auto& value){
+            return value.second == TIMESTAMP::READY;
+        });
     }
 
     void FederationManager::RunFederate(){}
@@ -96,7 +93,7 @@ namespace HLA {
                                                     throw (FederateInternalError){
         lock_guard<mutex> guard(_smutex);
         _federates_map[theObjectInstanceName] = theObject.encode();
-        _federates_stamps[theObjectInstanceName] = TimeStamp::GO;
+        _federates_stamps[theObjectInstanceName] = TIMESTAMP::GO;
         _federates_count++;
     }
 
@@ -128,14 +125,14 @@ namespace HLA {
                                                 SupplementalReceiveInfo )
                                                 throw (FederateInternalError){
 
-        if(theInteraction == _InteractionClasses[L"READY"] && _state >= State::STARTED){
+        if(theInteraction == _InteractionClasses[L"READY"] && _state >= STATE::STARTED){
             lock_guard<mutex> guard(_smutex);
 
             auto federate = find_if(_federates_map.begin(), _federates_map.end(),[theUserSuppliedTag](const auto& value){
                 return value.second == theUserSuppliedTag;
             });
 
-            _federates_stamps[federate->first] = TimeStamp::READY;
+            _federates_stamps[federate->first] = TIMESTAMP::READY;
 
             _ready_federates++;
 
@@ -143,4 +140,12 @@ namespace HLA {
                     SendGoTimeStamp();
         }
     }
+
+    struct FederationManager::VariableLengthDataHash{
+        size_t operator()(const rti1516e::VariableLengthData& data) const noexcept{
+            std::vector<HLA::byte> vec(data.size());
+            memcpy(vec.data(), data.data(), data.size());
+            return boost::hash_value(vec);
+        }
+    };
 }

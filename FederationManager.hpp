@@ -18,6 +18,8 @@ namespace HLA{
 
     private:
 
+        struct VariableLengthDataHash;
+
         void SendGoTimeStamp();
 
         bool CheckReady();
@@ -59,7 +61,7 @@ namespace HLA{
 
         std::unordered_map<std::wstring, rti1516e::VariableLengthData> _federates_map;
 
-        std::unordered_map<std::wstring, TimeStamp> _federates_stamps;
+        std::unordered_map<std::wstring, TIMESTAMP> _federates_stamps;
 
         std::unordered_map<std::wstring, std::unordered_map<std::wstring, rti1516e::VariableLengthData>> _federates_values;
 
