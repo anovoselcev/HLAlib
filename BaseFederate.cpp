@@ -1,8 +1,6 @@
 //================================================================================================================================================
 /*
  * Written by Novoseltsev Artemy
- * This program is free software.
- * This program is distributed in the hope that it will be useful.
 */
 //================================================================================================================================================
 
@@ -104,10 +102,10 @@ namespace HLA{
 */
     BaseFederate::~BaseFederate(){
         _f_modeling = false;                // Change flag to finish modeling
-        if(_mode == ModelMode::THREADING)
+        if(_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING)
             _modeling_thread.join();        // Wait for end of thread
         lock_guard<mutex> guard(_smutex);   // Lock state mutex
-        _state = State::EXIT;               // Set federate state to EXIT
+        _state = STATE::EXIT;               // Set federate state to EXIT
         _rtiAmbassador->resignFederationExecution(ResignAction::NO_ACTION);
         Logger log(_log_filename);          // Create log writer
         log << L"INFO:"                     // Write INFO message about disconnect
@@ -195,7 +193,7 @@ namespace HLA{
 
     // This waste 1 seconds, it's the biggest comand in this function (more than 50ths)
         try{
-            _rtiAmbassador->joinFederationExecution(_federate_name,_federation_name); // After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
+            _rtiAmbassador->joinFederationExecution(_federate_name, _federate_type, _federation_name); // After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
             log << L"INFO:"                                                           // Write INFO message about successfully connection
                 << L"Connect of"
                 << _federate_name
@@ -210,7 +208,7 @@ namespace HLA{
             return false;
         }
 
-        _state = State::CONNECTED;          // If all connect steps finished we set connect flag to true value
+        _state = STATE::CONNECTED;          // If all connect steps finished we set connect flag to true value
 
         try{
             Init();                         // Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate
@@ -232,12 +230,15 @@ namespace HLA{
 
         try{
             _f_modeling = true;                                                                     // Run the main loop of federate
-            if(_mode == ModelMode::THREADING)
-                _modeling_thread = std::thread(&BaseFederate::Modeling<ModelMode::THREADING>,this); // Run Modeling Thread
-            else if(_mode == ModelMode::FOLLOWING)
+            if(_mode == MODELMODE::FREE_THREADING)
+                _modeling_thread = std::thread(&BaseFederate::Modeling<MODELMODE::FREE_THREADING>,this); // Run Modeling Thread
+            else if(_mode == MODELMODE::FREE_FOLLOWING)
                 _last_time = chrono::time_point<chrono::steady_clock>(chrono::steady_clock::now());                                           // Save last clock time
-            else if(_mode == ModelMode::MANAGING){
+            else if(_mode == MODELMODE::MANAGING_FOLLOWING){
             }
+            else if(_mode == MODELMODE::MANAGING_THREADING){
+            }
+
             RunFederate();                                                          // Run the Federate main function (can be empty)
         }
         catch(RTIinternalError& e){                                                 // Catch RTI runtime error
@@ -290,7 +291,7 @@ namespace HLA{
 
         RegisterName();                                                                  // Register _federate_name in RTI
 
-        _state = State::STARTED;                                                         // Set state flag to started state (ready to do)
+        _state = STATE::STARTED;                                                         // Set state flag to started state (ready to do)
     }
 
 /**
@@ -435,7 +436,7 @@ namespace HLA{
         _rtiAmbassador->reserveObjectInstanceName(_federate_name);                                             // Reserve _federate_name in RTI like unique ID
         auto start = chrono::steady_clock::now();                                                              // Start wait timer
         auto dur = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now()-start).count();     // Create time interval
-        while(_state!=State::NAMERESERVED || dur<=1000){                                                       // While _federate_name not reserve or time interval less than 1 millsecond
+        while(_state!=STATE::NAMERESERVED || dur<=1000){                                                       // While _federate_name not reserve or time interval less than 1 millsecond
             dur = chrono::duration_cast<std::chrono::microseconds>(chrono::steady_clock::now()-start).count(); // Update time interval
         }
           _MyInstanceID = _rtiAmbassador->registerObjectInstance(_MyClass, _federate_name);                    // Get specific ID for federate from RTI
@@ -445,6 +446,17 @@ namespace HLA{
         HLAfloat64Time UselessStamp;
         _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"READY"), ParameterHandleValueMap(), _MyInstanceID.encode(), UselessStamp);
     }
+
+    void BaseFederate::CacheID(const rti1516e::ObjectInstanceHandle& ID){
+
+        if(_CacheID[ID].isValid())
+            return;
+
+        ObjectClassHandle objch = _rtiAmbassador->getKnownObjectClassHandle(ID);
+        std::wstring name = _rtiAmbassador->getObjectClassName(objch);
+        _CacheID[ID] = _ObjectClasses[name];
+    }
+
 
 /**
 * @brief BaseFederate::RunFederate
@@ -471,12 +483,12 @@ namespace HLA{
 * @brief BaseFederate::Modeling<ModelMode::THREADING>
 * Main function of modeling that sleep in sub-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
 */
-    void BaseFederate::Modeling<ModelMode::THREADING>(){
+    void BaseFederate::Modeling<MODELMODE::FREE_THREADING>(){
         Logger log(_log_filename);                // Create log writer
         while(_f_modeling){                       // while modeling execute
             {
                 lock_guard<mutex> guard(_smutex); // Lock state mutex
-                _state = State::DOING;            // Change federate state to execute(doing) state without HLA
+                _state = STATE::DOING;            // Change federate state to execute(doing) state without HLA
 
                 log << L"INFO:"                   // Write INFO message about doing part of modeling
                     << _federate_name
@@ -503,7 +515,7 @@ namespace HLA{
 * @brief BaseFederate::Modeling<ModelMode::FOLLOWING>
 * Main function of modeling that sleep in call-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
 */
-    void BaseFederate::Modeling<ModelMode::FOLLOWING>(){
+    void BaseFederate::Modeling<MODELMODE::FREE_FOLLOWING>(){
         Logger log(_log_filename);                                                                       // Create log writer
         auto dur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - _last_time);  // Create time interval
         auto step = chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(_modeling_step));   // Convert modeling step to time interval
@@ -518,7 +530,7 @@ namespace HLA{
         UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
         ParameterProcess();                                            // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
         AttributeProcess();                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
-        _state = State::DOING;                                         // Change federate state to execute(doing) state without HLA
+        _state = STATE::DOING;                                         // Change federate state to execute(doing) state without HLA
 
         log << L"INFO:"                                                // Write INFO message about doing part of modeling
             << _federate_name
@@ -530,14 +542,14 @@ namespace HLA{
 /**
 * @brief BaseFederate::Modeling<ModelMode::MANAGING>
 */
-    void BaseFederate::Modeling<ModelMode::MANAGING>(){
+    void BaseFederate::Modeling<MODELMODE::MANAGING_FOLLOWING>(){
        Logger log(_log_filename);                                     // Create log writer
        UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
        thread ParametersThread(&BaseFederate::ParameterProcess,this); // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
        ParametersThread.detach();
        AttributeProcess();                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
        lock_guard<mutex> guard(_smutex);
-       _state = State::DOING;
+       _state = STATE::DOING;
     }
 
 /**
@@ -615,14 +627,14 @@ namespace HLA{
 * Return current Federate Mode
 * @return ModelMode
 */
-    ModelMode BaseFederate::GetModelMode() const noexcept {return _mode;}
+    MODELMODE BaseFederate::GetModelMode() const noexcept {return _mode;}
 
 /**
 * @brief BaseFederate::GetState
 * Return current Federate State
 * @return State
 */
-    State BaseFederate::GetState() const noexcept {return _state;}
+    STATE BaseFederate::GetState() const noexcept {return _state;}
 
 /**
 * @brief BaseFederate::LoadSOMFromJSON
@@ -646,7 +658,7 @@ namespace HLA{
         SetSubscribeMapOfInteractionsAndParameters(JSON::ToMap(node.at(L"SubscribeInteractions")));// Read hash map of subscribe interactions
         SetModelingStep(node.at(L"ModelingStep")->AsInt());                                        // Read modeling step
         SetSyncCallbackMode(node.at(L"CallbackMode")->AsInt());                                    // Read callback mode
-        SetModelMode(ModelMode(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode
+        SetModelMode(MODELMODE(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode
         SetLogFileName(node.at(L"LogFileName")->AsString());                                       // Read filename of log file
         return *this;
     }
@@ -673,7 +685,7 @@ namespace HLA{
         SetSubscribeMapOfInteractionsAndParameters(JSON::ToMap(node.at(L"SubscribeInteractions")));// Read hash map of subscribe interactions
         SetModelingStep(node.at(L"ModelingStep")->AsInt());                                        // Read modeling step
         SetSyncCallbackMode(node.at(L"CallbackMode")->AsInt());                                    // Read callback mode
-        SetModelMode(ModelMode(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode
+        SetModelMode(MODELMODE(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode
         SetLogFileName(node.at(L"LogFileName")->AsString());                                       // Read filename of log file
         return *this;
     }
@@ -773,7 +785,7 @@ namespace HLA{
 * @return Sample reference of current Federate
 */
     BaseFederate& BaseFederate::SetSyncCallbackMode(bool f)  noexcept{
-        if(f && _state < State::STARTED) // If federate not started and setup sync mode
+        if(f && _state < STATE::STARTED) // If federate not started and setup sync mode
             _callback_mode = HLA_EVOKED; // Change callback mode to sync
         return *this;
     }
@@ -795,7 +807,7 @@ namespace HLA{
 * Setup Modeling Mode parameter, look ModelMode enumeration class
 * @return Sample reference of current Federate
 */
-    BaseFederate& BaseFederate::SetModelMode(ModelMode mode)  noexcept{
+    BaseFederate& BaseFederate::SetModelMode(MODELMODE mode)  noexcept{
         _mode = mode;
         return *this;
     }
@@ -825,10 +837,10 @@ namespace HLA{
     void BaseFederate::connectionLost(const wstring &faultDescription)
                                       throw (FederateInternalError){
         _f_modeling = false;                // Change flag to finish modeling
-        if(_mode == ModelMode::THREADING)
+        if(_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING)
             _modeling_thread.join();        // Wait for end of thread
         lock_guard<mutex> guard(_smutex);   // Lock state mutex
-        _state = State::EXIT;               // Set federate state to EXIT
+        _state = STATE::EXIT;               // Set federate state to EXIT
     }
 
 /**
@@ -847,7 +859,7 @@ namespace HLA{
             << Logger::Flush();
 
         lock_guard<mutex> guard(_smutex);
-        _state = State::NAMERESERVED; // Change federate state to name reservation successfuly
+        _state = STATE::NAMERESERVED; // Change federate state to name reservation successfuly
     }
 
 /**
@@ -866,7 +878,7 @@ namespace HLA{
             << Logger::Flush();
 
         lock_guard<mutex> guard(_smutex);
-        _state = State::EXIT;   // Change federate state to exit
+        _state = STATE::EXIT;   // Change federate state to exit
     }
 
 
@@ -879,16 +891,17 @@ namespace HLA{
 * Info of reflected attributes in theUserSuppliedTag
 * Data of reflected attributes in theAttributeValues
 */
-    void BaseFederate::reflectAttributeValues(ObjectInstanceHandle,
+    void BaseFederate::reflectAttributeValues(ObjectInstanceHandle handle,
                                               const AttributeHandleValueMap &theAttributeValues,
                                               const VariableLengthData & info,
                                               OrderType ,
                                               TransportationType ,
                                               SupplementalReflectInfo)
     throw (FederateInternalError){
-        if(_state >= State::STARTED){                       // If federate start modeling
+        if(_state >= STATE::STARTED){                       // If federate start modeling
             lock_guard<mutex> guard(_amutex);               // Lock queue of reflected attributes
-            _qAttributes.push({info,theAttributeValues});   // Add new message {information or tag in byte array, map of attributes}
+            CacheID(handle);
+            _qAttributes.push({info,theAttributeValues, _CacheID[handle]});   // Add new message {information or tag in byte array, map of attributes}
         }
     }
 
@@ -901,16 +914,16 @@ namespace HLA{
 * Info of recived interaction in theUserSuppliedTag
 * Data of recived interaction in theParameterValues
 */
-    void BaseFederate::receiveInteraction (InteractionClassHandle,
+    void BaseFederate::receiveInteraction (InteractionClassHandle handle,
                                      ParameterHandleValueMap const & theParameterValues,
                                      VariableLengthData const & info,
                                      OrderType,
                                      TransportationType,
                                      SupplementalReceiveInfo)
     throw (FederateInternalError){
-        if(_state >= State::STARTED){                       // If federate start modeling
+        if(_state >= STATE::STARTED){                       // If federate start modeling
             lock_guard<mutex> guard(_pmutex);               // Lock queue of recived interactions
-            _qParameters.push({info,theParameterValues});   // Add new message {information or tag in byte array, map of interactions}
+            _qParameters.push({info, theParameterValues, handle});   // Add new message {information or tag in byte array, map of interactions}
         }
     }
 
@@ -923,9 +936,9 @@ namespace HLA{
                                            OrderType ,
                                            SupplementalReceiveInfo )
     throw (FederateInternalError){
-        if(theInteraction == _InteractionClasses[L"GO"] && _state >= State::STARTED){
+        if(theInteraction == _InteractionClasses[L"GO"] && _state >= STATE::STARTED){
             lock_guard<mutex> guard(_smutex);
-            _state = State::PROCESSING;
+            _state = STATE::PROCESSING;
             _cond.notify_one();
         }
     }

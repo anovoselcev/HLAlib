@@ -1,8 +1,6 @@
 //================================================================================================================================================
 /*
  * Written by Novoseltsev Artemy
- * This program is free software.
- * This program is distributed in the hope that it will be useful.
 */
 //================================================================================================================================================
 
@@ -28,10 +26,11 @@ namespace HLA{
 * Threading : Do modeling process and federate time control in the new thread
 * Managing  : Do modeling process ................................................................
 */
-    enum class ModelMode{
-        FOLLOWING = 0,
-        THREADING = 1,
-        MANAGING  = 2
+    enum class MODELMODE{
+        FREE_FOLLOWING      = 0,
+        FREE_THREADING      = 1,
+        MANAGING_FOLLOWING  = 2,
+        MANAGING_THREADING  = 3
     };
 
 /**
@@ -46,7 +45,7 @@ namespace HLA{
 * Ready        : Federate state, when it waiting for next time
 * Exit         : Federate state at the end of simulation
 */
-    enum class State{
+    enum class STATE{
         PREPARE      = 0,
         NAMERESERVED = 1,
         CONNECTED    = 2,
@@ -60,7 +59,7 @@ namespace HLA{
 /**
 * @brief The TimeStamp enum
 */
-    enum class TimeStamp{
+    enum class TIMESTAMP{
         READY = 0,
         GO    = 1
     };
@@ -238,14 +237,14 @@ namespace HLA{
 * Return current Federate Mode
 * @return ModelMode
 */
-        ModelMode GetModelMode() const noexcept;
+        MODELMODE GetModelMode() const noexcept;
 
 /**
 * @brief GetState
 * Return current Federate State
 * @return State
 */
-        State GetState() const noexcept;
+        STATE GetState() const noexcept;
 
 /**
 * @brief LoadSOMFromJSON
@@ -313,7 +312,7 @@ private:
 * Setup Modeling Mode parameter, look ModelMode enumeration class
 * @return Sample reference of current Federate
 */
-        BaseFederate& SetModelMode(ModelMode mode) noexcept;
+        BaseFederate& SetModelMode(MODELMODE mode) noexcept;
 
 /**
 * @brief SetSyncCallbackMode
@@ -419,29 +418,36 @@ private:
         struct InteractionClassHash{
             size_t operator()(const rti1516e::InteractionClassHandle& _Interaction) const noexcept;
         };
+
+        struct ObjectInstanceClassHash{
+            size_t operator()(const rti1516e::ObjectInstanceHandle& _ObjectInstance) const noexcept;
+        };
+
 /**
 * @brief The CallbackInformation struct
 * Data structure for Callback Message {info, data}
 * info : Some mark, using for differ identifiers
 * data : Map of data with VariableLengthData (ByteArray)
 */
-        template<typename T>
+        template<typename T,
+                 typename Handle>
         struct CallbackInformation{
             rti1516e::VariableLengthData info;
             T data;
+            Handle handle;
         };
 
 /**
 * @brief CallbackAttributesInformation
 * CallbackInformation struct with data = AttributeHandleValueMap
 */
-        using CallbackAttributesInformation = CallbackInformation<rti1516e::AttributeHandleValueMap>;
+        using CallbackAttributesInformation = CallbackInformation<rti1516e::AttributeHandleValueMap, rti1516e::ObjectClassHandle>;
 
 /**
 * @brief CallbackParametersInformation
 * CallbackInformation struct with data = ParameterHandleValueMap
 */
-        using CallbackParametersInformation = CallbackInformation<rti1516e::ParameterHandleValueMap>;
+        using CallbackParametersInformation = CallbackInformation<rti1516e::ParameterHandleValueMap, rti1516e::InteractionClassHandle>;
 
 /**
 * @brief ObjectHandleMap
@@ -529,6 +535,8 @@ private:
 
         void ReadyToGo() const;
 
+        void CacheID(const rti1516e::ObjectInstanceHandle&);
+
 //================================================================================================================================================
 
 //          Protected API and fields
@@ -557,7 +565,7 @@ private:
         virtual void SendParameters() const;
 
 
-       template<ModelMode>
+       template<MODELMODE>
 /**
 * @brief Modeling
 * Polymorphic Main function of modeling, look at specializations
@@ -676,13 +684,13 @@ private:
 * @brief _state
 * State of Federate, look at enumeration class State
 */
-        State _state = State::PREPARE;
+        STATE _state = STATE::PREPARE;
 
 /**
 * @brief _mode
 * Model Mode of Federate, look at enumeration class ModelMode
 */
-        ModelMode _mode = ModelMode::THREADING;
+        MODELMODE _mode = MODELMODE::FREE_THREADING;
 /**
 * @brief _f_modeling
 * Flag of modeling execution
@@ -750,6 +758,8 @@ private:
 
 
 
+        std::unordered_map<rti1516e::ObjectInstanceHandle, rti1516e::ObjectClassHandle&, ObjectInstanceClassHash> _CacheID;
+
 
 /**
 * @brief _qAttributes
@@ -815,7 +825,6 @@ private:
 
 
 
-
 /**
 * @brief _AttributeNames
 * List of attributes for publish
@@ -859,7 +868,7 @@ private:
 * @brief BaseFederate::Modeling<ModelMode::THREADING>
 * Main function of modeling that sleep in sub-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
 */
-    void BaseFederate::Modeling<ModelMode::THREADING>();
+    void BaseFederate::Modeling<MODELMODE::FREE_THREADING>();
 
 
     template<>
@@ -867,13 +876,20 @@ private:
 * @brief BaseFederate::Modeling<ModelMode::FOLLOWING>
 * Main function of modeling that sleep in call-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
 */
-    void BaseFederate::Modeling<ModelMode::FOLLOWING>();
+    void BaseFederate::Modeling<MODELMODE::FREE_FOLLOWING>();
 
 
     template<>
 /**
 * @brief BaseFederate::Modeling<ModelMode::MANAGING>
 */
-    void BaseFederate::Modeling<ModelMode::MANAGING>();
+    void BaseFederate::Modeling<MODELMODE::MANAGING_FOLLOWING>();
+
+
+    template<>
+/**
+* @brief BaseFederate::Modeling<ModelMode::MANAGING>
+*/
+    void BaseFederate::Modeling<MODELMODE::MANAGING_THREADING>();
 }
 #endif // BASEFEDERATE_HPP
