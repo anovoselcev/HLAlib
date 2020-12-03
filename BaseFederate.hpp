@@ -178,7 +178,7 @@ namespace HLA{
 * Connect to RTI. In order to connect we need to create federation based on FOM (isn't nessary, if federation already exist) and join there. After that federate initialized in RTI and go to the his main loop. Use only to lvalue class samples
 * @return flag of success execution
 */
-         bool ConnectRTI() &;
+         bool ConnectRTI(const JSON& file) &;
 
 /**
 * @brief operator ()
@@ -186,7 +186,7 @@ namespace HLA{
 * Operator that run federate with modelin_step in milliseconds = step like functional object
 * @return flag of success execution
 */
-        virtual bool operator()(int step=100);
+        virtual bool operator()(const JSON& file);
 
 /**
 * @brief GetName
@@ -339,71 +339,6 @@ private:
         BaseFederate& SetLogFileName(std::string&& log_filenmae) noexcept;
 
 /**
-* @brief SetMapOfObjectsAndAttributes
-* @param objects_attributes_map Hash Map of objects and their attributes (matches with FOM), which federate want to subscribe ({{"Object1", {"Attribute1", "Attribute2",....}}....})
-* Set map of Objects and Attribute, which federate subscribe (lvalue version)
-* @return Sample reference of current Federate
-*/
-        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(const NameMap& objects_attributes_map) noexcept;
-
-/**
-* @brief SetMapOfObjectsAndAttributes
-* @param objects_attributes_map Hash Map of objects and their attributes (matches with FOM), which federate want to subscribe ({{"Object1", {"Attribute1", "Attribute2",....}}....})
-* Set map of Objects and Attribute, which federate subscribe (rvalue version)
-* @return Sample reference of current Federate
-*/
-        BaseFederate& SetSubscribeMapOfObjectsAndAttributes(NameMap&& objects_attributes_map) noexcept;
-
-/**
-* @brief SetPublishListOfAttributes
-* @param attribute_list List of attributes (matches with FOM), which federate want to publish ({"Attribute1", "Attribute2",....})
-* Set list of Attributes, which federate publish (lvalue version)
-* @return Sample reference of current Federate
-*/
-        BaseFederate& SetPublishListOfAttributes(const NameList& attribute_list) noexcept;
-
-/**
-* @brief SetPublishListOfAttributes
-* @param attribute_list List of attributes (matches with FOM), which federate want to publish ({"Attribute1", "Attribute2",....})
-* Set list of Attributes, which federate publish (rvalue version)
-* @return Sample reference of current Federate
-*/
-        BaseFederate& SetPublishListOfAttributes(NameList&& attribute_list) noexcept;
-
-
-/**
-* @brief SetMapOfInteractionsAndParameters
-* @param interations_parameters_map Hash Map of interactions and their parameters (matches with FOM), which federate want to subscribe ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* Set map of Interactions and Parameters, which federate want subscribe (lvalue version)
-* @return Sample reference of current Federate
-*/
-        BaseFederate& SetSubscribeMapOfInteractionsAndParameters(const NameMap& interations_parameters_map) noexcept;
-
-/**
-* @brief SetMapOfInteractionsAndParameters
-* @param interations_parameters_map Hash Map of interactions and their parameters (matches with FOM), which federate want to subscribe ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* Set map of Interactions and Parameters, which federate want subscribe (rvalue version)
-* @return Sample reference of current Federate
-*/
-        BaseFederate& SetSubscribeMapOfInteractionsAndParameters(NameMap&& interations_parameters_map) noexcept;
-
-/**
-* @brief SetMapOfInteractionsAndParameters
-* @param interations_parameters_map Hash Map of interactions and their parameters (matches with FOM), which federate want to publish ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* Set map of Interactions and Parameters, which federate want publish (lvalue version)
-* @return Sample reference of current Federate
-*/
-        BaseFederate& SetPublishMapOfInteractionAndParameters(const NameMap& interations_parameters_map) noexcept;
-
-/**
-* @brief SetMapOfInteractionsAndParameters
-* @param interations_parameters_map Hash Map of interactions and their parameters (matches with FOM), which federate want to publish ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* Set map of Interactions and Parameters, which federate want publish (rvalue version)
-* @return Sample reference of current Federate
-*/
-        BaseFederate& SetPublishMapOfInteractionAndParameters(NameMap&& interations_parameters_map) noexcept;
-
-/**
 * @brief The ObjectClassHash struct
 * Hash for Object Class, it necessary for hash structures
 */
@@ -463,7 +398,7 @@ private:
 
 /**
 * @brief AttributeHandleMap
-* Alias for data structure std::unordered_map<rti1516e::ObjectClassHandle, std::unordered_map<std::wstring, rti1516e::AttributeHandle>, ObjectClassHash>
+* Alias for data structure std::unordered_map<rti1516e::ObjectClassHandle, std::unordered_map<std::wstring, rtigetglobaleHandle>, ObjectClassHash>
 */
         using AttributeHandleMap = std::unordered_map<rti1516e::ObjectClassHandle, std::unordered_map<std::wstring, rti1516e::AttributeHandle>, ObjectClassHash>;
 
@@ -485,22 +420,26 @@ private:
 * @brief Init
 * Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate.
 */
-        void Init();
+        void Init(const JSON& file);
 
 
 /**
 * @brief InitClassesAndAttributes
-* Initializerd federate object and his attributes indicated in _AttributeNames and environmental objects and attributes indicated in _ObjectNames
+* Initializerd federate object and his attributes indicated in _AttributeNagetglobalmental objects and attributes indicated in _ObjectNames
 */
-        void InitClassesAndAttributes(std::unordered_map<rti1516e::ObjectClassHandle,rti1516e::AttributeHandleSet,ObjectClassHash>&,
-                                              rti1516e::AttributeHandleSet&);
+        void InitClassesAndAttributes(const NameList&,
+                                      const NameMap&,
+                                      std::unordered_map<rti1516e::ObjectClassHandle,rti1516e::AttributeHandleSet,ObjectClassHash>&,
+                                      rti1516e::AttributeHandleSet&);
 
 
 /**
 * @brief InitInteractionsAndParameters
 * Initializerd federate interactions and their parameters indicated in _MyInteractionsNames and environmental interactions and paramters indicated in _InteractionsNames
 */
-        void InitInteractionsAndParameters(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&,
+        void InitInteractionsAndParameters(const NameMap&,
+                                           const NameMap&,
+                                           std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&,
                                            std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
 
 /**
@@ -758,7 +697,7 @@ private:
 
 
 
-        std::unordered_map<rti1516e::ObjectInstanceHandle, rti1516e::ObjectClassHandle&, ObjectInstanceClassHash> _CacheID;
+        std::unordered_map<rti1516e::ObjectInstanceHandle, rti1516e::ObjectClassHandle*, ObjectInstanceClassHash> _CacheID;
 
 
 /**
@@ -822,34 +761,6 @@ private:
 */
 
         std::condition_variable _cond;
-
-
-
-/**
-* @brief _AttributeNames
-* List of attributes for publish
-*/
-        NameList _AttributeNames;
-
-/**
-* @brief _ObjectsNames
-* Hash map of objects and attributes for subscribe
-*/
-        NameMap _ObjectsNames;
-
-/**
-* @brief _MyInteractions
-* Hash map of interactions and parameters for publish
-*/
-        NameMap _MyInteractionsNames;
-
-/**
-* @brief _InteractionsNames
-* Hash map of onteractions and parameters for subscribe
-*/
-        NameMap _InteractionsNames;
-
-
 
 
 /**

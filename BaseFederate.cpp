@@ -131,7 +131,9 @@ namespace HLA{
 * Connect to RTI. In order to connect we need to create federation based on FOM (isn't nessary, if federation already exist) and join there. After that federate initialized in RTI and go to the his main loop. Use only to lvalue class samples
 * @return flag of success execution
 */
-    bool BaseFederate::ConnectRTI() & {
+    bool BaseFederate::ConnectRTI(const JSON& file) & {
+
+        LoadSOMFromJSON(file);
 
         Logger log(_log_filename);                // Create log writer
         try{
@@ -191,7 +193,7 @@ namespace HLA{
             return false;
         }
 
-    // This waste 1 seconds, it's the biggest comand in this function (more than 50ths)
+        // This waste 1 seconds, it's the biggest comand in this function (more than 50ths)
         try{
             _rtiAmbassador->joinFederationExecution(_federate_name, _federate_type, _federation_name); // After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
             log << L"INFO:"                                                           // Write INFO message about successfully connection
@@ -211,7 +213,7 @@ namespace HLA{
         _state = STATE::CONNECTED;          // If all connect steps finished we set connect flag to true value
 
         try{
-            Init();                         // Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate
+            Init(file);                         // Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate
 
             log << L"INFO:"                 // Write INFO message about successfull join
                 << L"Init of"
@@ -258,16 +260,15 @@ namespace HLA{
 * Operator that run federate with modeling_step in milliseconds = step like functional object
 * @return flag of success execution
 */
-    bool BaseFederate::operator()(int step) {
-        _modeling_step = step; // Set modeling step
-        return ConnectRTI();   // Call ConnecrRTI, look at ConnectRTI()
+    bool BaseFederate::operator()(const JSON& file) {
+        return ConnectRTI(file);   // Call ConnecrRTI, look at ConnectRTI()
     }
 
 /**
 * @brief BaseFederate::Init
 * Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate.
 */
-    void BaseFederate::Init(){
+    void BaseFederate::Init(const JSON& file){
 
         unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash> subscribeAttributesSet; // Hash table for subscribe objects and their attributes
 
@@ -277,13 +278,23 @@ namespace HLA{
 
         unordered_set<InteractionClassHandle, InteractionClassHash>         PublishInteractionSet;  // Set for publish interactions
 
-        InitClassesAndAttributes(subscribeAttributesSet, PublishSet);                  // Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
+        const auto& node = file.GetRoot()->AsMap();
+
+        NameMap ObjectsNames        = JSON::ToMap(node.at(L"SubscribeAttributes"));
+
+        NameList AttributeNames     = JSON::ToVector(node.at(L"PublishAttributes"));
+
+        NameMap MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
+
+        NameMap InteractionsNames   = JSON::ToMap(node.at(L"SubscribeInteractions"));
+
+        InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);                  // Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
 
         SubscribeAttributes(subscribeAttributesSet);                                    // Send to RTI set of attributes which federate want to recive
 
         PublishAttributes(PublishSet);                                                  // Send to RTI set of attributes which federate publish
 
-        InitInteractionsAndParameters(SubscribeInteractionSet, PublishInteractionSet); // Initializerd Interactions and there parameters indicated in FOM
+        InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames,SubscribeInteractionSet, PublishInteractionSet); // Initializerd Interactions and there parameters indicated in FOM
 
         SubscribeInteractions(SubscribeInteractionSet);                                 // Send to RTI set of interactions which federate want to recive
 
@@ -294,25 +305,28 @@ namespace HLA{
         _state = STATE::STARTED;                                                         // Set state flag to started state (ready to do)
     }
 
+
 /**
 * @brief BaseFederate::InitClassesAndAttributes
 * @param _subscribeAttributesSet Hash table for subscribe objects and their attributes
 * @param _PublishSet Set for publish attributes
 * Initializerd federate object and his attributes and environmental objects and attributes indicated in _ObjectNames
 */
-    void BaseFederate::InitClassesAndAttributes(unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash>& subscribeAttributesSet,
+    void BaseFederate::InitClassesAndAttributes(const NameList& AttributeNames,
+                                                const NameMap& ObjectsNames,
+                                                unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash>& subscribeAttributesSet,
                                                 AttributeHandleSet& PublishSet){
 
         _MyClass = _rtiAmbassador->getObjectClassHandle(_federate_type);                                   //Initializerd our federate object(_MyClass) from FOM refer to _federate_type
 
-        for(const auto& Attribute:_AttributeNames){
+        for(const auto& Attribute:AttributeNames){
 
             _AttributesMap[_MyClass][Attribute] = _rtiAmbassador->getAttributeHandle(_MyClass,Attribute); // Set table(_AttributesMap) of this object attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
 
             PublishSet.insert(_AttributesMap[_MyClass][Attribute]);                                       // Insert federate attributes to Publish Set(_aPublishSetId)
         }
 
-        for(const auto&Object:_ObjectsNames){                                                            // Initializerd environmental objects and attributes indicated in _ObjectNames and attributes of it federate
+        for(const auto&Object:ObjectsNames){                                                            // Initializerd environmental objects and attributes indicated in _ObjectNames and attributes of it federate
 
             const auto& objectName = Object.first;                                                       // Cache of Object Name
 
@@ -336,13 +350,15 @@ namespace HLA{
 * @param pub
 * Initializerd federate interactions and his parameters and environmental interactions and parameters indicated in _InteractionNames
 */
-    void BaseFederate::InitInteractionsAndParameters(unordered_set<InteractionClassHandle, InteractionClassHash>& sub,
+    void BaseFederate::InitInteractionsAndParameters(const NameMap& InteractionsNames,
+                                                     const NameMap& MyInteractionsNames,
+                                                     unordered_set<InteractionClassHandle, InteractionClassHash>& sub,
                                                      unordered_set<InteractionClassHandle, InteractionClassHash>& pub){
 
-        sub.reserve(_InteractionsNames.size() + 1);
-        pub.reserve(_MyInteractionsNames.size() + 1);
+        sub.reserve(InteractionsNames.size() + 1);
+        pub.reserve(MyInteractionsNames.size() + 1);
 
-        for(const auto&Interaction:_InteractionsNames){
+        for(const auto&Interaction:InteractionsNames){
 
             auto& interactionName = Interaction.first;                             // Cache of Interaction Name
 
@@ -361,7 +377,7 @@ namespace HLA{
         }
         catch(...){}
 
-        for(const auto&Interaction:_MyInteractionsNames){
+        for(const auto&Interaction:MyInteractionsNames){
 
             auto& interactionName = Interaction.first;                             // Cache of Interaction Name
 
@@ -449,12 +465,12 @@ namespace HLA{
 
     void BaseFederate::CacheID(const rti1516e::ObjectInstanceHandle& ID){
 
-        if(_CacheID[ID].isValid())
+        if(_CacheID[ID]->isValid())
             return;
 
         ObjectClassHandle objch = _rtiAmbassador->getKnownObjectClassHandle(ID);
         std::wstring name = _rtiAmbassador->getObjectClassName(objch);
-        _CacheID[ID] = _ObjectClasses[name];
+        _CacheID[ID] = &_ObjectClasses[name];
     }
 
 
@@ -507,6 +523,22 @@ namespace HLA{
             thread ParametersThread(&BaseFederate::ParameterProcess,this); // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
             ParametersThread.detach();
             AttributeProcess();                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
+        }
+    }
+
+    template<>
+    void BaseFederate::Modeling<MODELMODE::MANAGING_THREADING>(){
+        std::unique_lock<std::mutex> _lock;
+        while(_f_modeling){
+            {
+                std::lock_guard<std::mutex> guard(_smutex);
+                _state = STATE::READY;
+                ReadyToGo();
+            }
+
+            _cond.wait(_lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
+                return _state == STATE::PROCESSING;
+            });
         }
     }
 
@@ -652,10 +684,6 @@ namespace HLA{
 */
     BaseFederate& BaseFederate::LoadSOMFromJSON(const JSON& file){
         const auto node         = file.GetRoot()->AsMap();                                         // Open the main node of file like hash map
-        SetPublishListOfAttributes                (JSON::ToVector(node.at(L"PublishAttributes"))); // Read list of publish attributes
-        SetSubscribeMapOfObjectsAndAttributes     (JSON::ToMap(node.at(L"SubscribeAttributes")));  // Read hash map of subscribe attributes
-        SetPublishMapOfInteractionAndParameters   (JSON::ToMap(node.at(L"PublishInteractions")));  // Read hash map of publish interactions
-        SetSubscribeMapOfInteractionsAndParameters(JSON::ToMap(node.at(L"SubscribeInteractions")));// Read hash map of subscribe interactions
         SetModelingStep(node.at(L"ModelingStep")->AsInt());                                        // Read modeling step
         SetSyncCallbackMode(node.at(L"CallbackMode")->AsInt());                                    // Read callback mode
         SetModelMode(MODELMODE(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode
@@ -679,102 +707,10 @@ namespace HLA{
 */
     BaseFederate& BaseFederate::LoadSOMFromJSON(JSON&& file){
         const auto node         = file.GetRoot()->AsMap();                                         // Open the main node of file like hash map
-        SetPublishListOfAttributes                (JSON::ToVector(node.at(L"PublishAttributes"))); // Read list of publish attributes
-        SetSubscribeMapOfObjectsAndAttributes     (JSON::ToMap(node.at(L"SubscribeAttributes")));  // Read hash map of subscribe attributes
-        SetPublishMapOfInteractionAndParameters   (JSON::ToMap(node.at(L"PublishInteractions")));  // Read hash map of publish interactions
-        SetSubscribeMapOfInteractionsAndParameters(JSON::ToMap(node.at(L"SubscribeInteractions")));// Read hash map of subscribe interactions
         SetModelingStep(node.at(L"ModelingStep")->AsInt());                                        // Read modeling step
         SetSyncCallbackMode(node.at(L"CallbackMode")->AsInt());                                    // Read callback mode
         SetModelMode(MODELMODE(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode
         SetLogFileName(node.at(L"LogFileName")->AsString());                                       // Read filename of log file
-        return *this;
-    }
-
-/**
-* @brief BaseFederate::SetSubscribeMapOfObjectsAndAttributes
-* @param _map Hash Map of objects and their attributes (matches with FOM), which federate want to subscribe ({{"Object1", {"Attribute1", "Attribute2",....}}....})
-* Set map of Objects and Attribute, which federate subscribe (lvalue version)
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetSubscribeMapOfObjectsAndAttributes(const NameMap& _map) noexcept{
-        _ObjectsNames = _map;
-        return *this;
-    }
-
-/**
-* @brief BaseFederate::SetSubscribeMapOfObjectsAndAttributes
-* @param _map Hash Map of objects and their attributes (matches with FOM), which federate want to subscribe ({{"Object1", {"Attribute1", "Attribute2",....}}....})
-* Set map of Objects and Attribute, which federate subscribe (rvalue version)
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetSubscribeMapOfObjectsAndAttributes(NameMap&& _map) noexcept{
-        _ObjectsNames = move(_map);
-        return *this;
-    }
-
-/**
-* @brief BaseFederate::SetPublishListOfAttributes
-* @param attribute_list List of attributes (matches with FOM), which federate want to publish ({"Attribute1", "Attribute2",....})
-* Set list of Attributes, which federate publish (lvalue version)
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetPublishListOfAttributes(const NameList& attr)  noexcept{
-        _AttributeNames = attr;
-        return *this;
-    }
-
-/**
-* @brief BaseFederate::SetPublishListOfAttributes
-* @param attribute_list List of attributes (matches with FOM), which federate want to publish ({"Attribute1", "Attribute2",....})
-* Set list of Attributes, which federate publish (rvalue version)
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetPublishListOfAttributes(NameList &&attr)  noexcept{
-        _AttributeNames = move(attr);
-        return *this;
-    }
-
-/**
-* @brief BaseFederate::SetSubscribeMapOfInteractionsAndParameters
-* @param _map Hash Map of interactions and their parameters (matches with FOM), which federate want to subscribe ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* Set map of Interactions and Parameters, which federate want subscribe (lvalue version)
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetSubscribeMapOfInteractionsAndParameters(const NameMap& _map)  noexcept{
-        _InteractionsNames = _map;
-        return *this;
-    }
-
-/**
-* @brief BaseFederate::SetSubscribeMapOfInteractionsAndParameters
-* @param interations_parameters_map Hash Map of interactions and their parameters (matches with FOM), which federate want to subscribe ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* Set map of Interactions and Parameters, which federate want subscribe (rvalue version)
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetSubscribeMapOfInteractionsAndParameters(NameMap&& _map)  noexcept{
-        _InteractionsNames = move(_map);
-        return *this;
-    }
-
-/**
-* @brief BaseFederate::SetPublishMapOfInteractionAndParameters
-* @param interations_parameters_map Hash Map of interactions and their parameters (matches with FOM), which federate want to publish ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* Set map of Interactions and Parameters, which federate want publish (lvalue version)
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetPublishMapOfInteractionAndParameters(const NameMap& map) noexcept{
-        _MyInteractionsNames = map;
-        return *this;
-    }
-
-/**
-* @brief BaseFederate::SetPublishMapOfInteractionAndParameters
-* @param interations_parameters_map Hash Map of interactions and their parameters (matches with FOM), which federate want to publish ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* Set map of Interactions and Parameters, which federate want publish (rvalue version)
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetPublishMapOfInteractionAndParameters(NameMap&& map) noexcept{
-        _MyInteractionsNames = move(map);
         return *this;
     }
 
@@ -901,7 +837,7 @@ namespace HLA{
         if(_state >= STATE::STARTED){                       // If federate start modeling
             lock_guard<mutex> guard(_amutex);               // Lock queue of reflected attributes
             CacheID(handle);
-            _qAttributes.push({info,theAttributeValues, _CacheID[handle]});   // Add new message {information or tag in byte array, map of attributes}
+            _qAttributes.push({info,theAttributeValues, *_CacheID[handle]});   // Add new message {information or tag in byte array, map of attributes}
         }
     }
 
@@ -961,5 +897,9 @@ namespace HLA{
 */
     size_t BaseFederate::InteractionClassHash::operator()(const rti1516e::InteractionClassHandle &_Interaction) const noexcept{
         return static_cast<size_t>(_Interaction.hash());
+    }
+
+    size_t BaseFederate::ObjectInstanceClassHash::operator()(const rti1516e::ObjectInstanceHandle &_ObjectInstance) const noexcept{
+        return static_cast<size_t>(_ObjectInstance.hash());
     }
 }
