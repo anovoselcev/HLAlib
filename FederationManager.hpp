@@ -18,7 +18,9 @@ namespace HLA{
 
     private:
 
-        struct VariableLengthDataHash;
+        struct ObjectInstanceClassHash{
+            size_t operator()(const rti1516e::ObjectInstanceHandle& obj) const noexcept;
+        };
 
         void SendGoTimeStamp();
 
@@ -59,7 +61,7 @@ namespace HLA{
 
         void ParameterProcess() override;
 
-        std::unordered_map<std::wstring, rti1516e::VariableLengthData> _federates_map;
+        std::unordered_map<rti1516e::ObjectInstanceHandle, std::wstring, ObjectInstanceClassHash> _federates_map;
 
         std::unordered_map<std::wstring, TIMESTAMP> _federates_stamps;
 

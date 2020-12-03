@@ -8,26 +8,6 @@ namespace HLA {
     using namespace std;
     using namespace rti1516e;
 
-    #ifndef WIN32
-        using  byte = uint8_t;
-    #else
-        using  Byte = unsigned char;
-    #endif
-
-    inline bool operator==(const VariableLengthData& lhs, const VariableLengthData& rhs){
-       if(lhs.size() == rhs.size()){
-           byte* lhs_ptr = const_cast<byte*>(static_cast<const byte*>(lhs.data()));
-           byte* rhs_ptr = const_cast<byte*>(static_cast<const byte*>(rhs.data()));
-           for(size_t i = 0; i < lhs.size(); ++i){
-               if(*(lhs_ptr + i) != *(rhs_ptr + i))
-                   return false;
-           }
-       }
-       else
-           return false;
-
-       return true;
-    }
 
     FederationManager::FederationManager(const JSON& file) noexcept :
                                                            BaseFederate(file){}
@@ -92,7 +72,7 @@ namespace HLA {
                                                     wstring const & theObjectInstanceName)
                                                     throw (FederateInternalError){
         lock_guard<mutex> guard(_smutex);
-        _federates_map[theObjectInstanceName] = theObject.encode();
+        _federates_map[theObject] = theObjectInstanceName;
         _federates_stamps[theObjectInstanceName] = TIMESTAMP::GO;
         _federates_count++;
     }
@@ -104,13 +84,11 @@ namespace HLA {
                                                   throw (FederateInternalError) {
         lock_guard<mutex> guard(_smutex);
 
-        auto federate = find_if(_federates_map.begin(), _federates_map.end(),[theObject](const auto& value){
-            return value.second == theObject.encode();
-        });
-
-        const auto& name = federate->first;
+        const auto& name = _federates_map[theObject];
+        if(_federates_stamps[name] == TIMESTAMP::READY)
+            _ready_federates--;
         _federates_stamps.erase(name);
-        _federates_map.erase(name);
+        _federates_map.erase(theObject);
         _federates_count--;
     }
 
@@ -128,11 +106,10 @@ namespace HLA {
         if(theInteraction == _InteractionClasses[L"READY"] && _state >= STATE::STARTED){
             lock_guard<mutex> guard(_smutex);
 
-            auto federate = find_if(_federates_map.begin(), _federates_map.end(),[theUserSuppliedTag](const auto& value){
-                return value.second == theUserSuppliedTag;
-            });
-
-            _federates_stamps[federate->first] = TIMESTAMP::READY;
+            rti1516e::VariableLengthData v = theUserSuppliedTag;
+            rti1516e::ObjectInstanceHandle obj;
+            obj.encode(v);
+            _federates_stamps[_federates_map[obj]] = TIMESTAMP::READY;
 
             _ready_federates++;
 
@@ -141,11 +118,7 @@ namespace HLA {
         }
     }
 
-    struct FederationManager::VariableLengthDataHash{
-        size_t operator()(const rti1516e::VariableLengthData& data) const noexcept{
-            std::vector<HLA::byte> vec(data.size());
-            memcpy(vec.data(), data.data(), data.size());
-            return boost::hash_value(vec);
-        }
-    };
+    size_t FederationManager::ObjectInstanceClassHash::operator()(const rti1516e::ObjectInstanceHandle &obj) const noexcept{
+        return static_cast<size_t>(obj.hash());
+    }
 }
