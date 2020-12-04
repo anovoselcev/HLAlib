@@ -26,7 +26,7 @@ namespace HLA{
 * Threading : Do modeling process and federate time control in the new thread
 * Managing  : Do modeling process ................................................................
 */
-    enum class MODELMODE{
+    enum class MODELMODE : short{
         FREE_FOLLOWING      = 0,
         FREE_THREADING      = 1,
         MANAGING_FOLLOWING  = 2,
@@ -45,7 +45,7 @@ namespace HLA{
 * Ready        : Federate state, when it waiting for next time
 * Exit         : Federate state at the end of simulation
 */
-    enum class STATE{
+    enum class STATE : short{
         PREPARE      = 0,
         NAMERESERVED = 1,
         CONNECTED    = 2,
@@ -59,7 +59,7 @@ namespace HLA{
 /**
 * @brief The TimeStamp enum
 */
-    enum class TIMESTAMP{
+    enum class TIMESTAMP : short{
         READY = 0,
         GO    = 1
     };
