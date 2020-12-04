@@ -1,14 +1,27 @@
 #include "FederationManager.hpp"
 #include "RTI/time/HLAfloat64Time.h"
 #include <algorithm>
-#include <boost/functional/hash.hpp>
+
+#include <iostream>
 
 namespace HLA {
 
     using namespace std;
     using namespace rti1516e;
-
-
+using byte = uint8_t;
+inline bool operator==(const rti1516e::VariableLengthData& lhs, const rti1516e::VariableLengthData& rhs){
+   if(lhs.size() == rhs.size()){
+       HLA::byte* lhs_ptr = const_cast<HLA::byte*>(static_cast<const HLA::byte*>(lhs.data()));
+       HLA::byte* rhs_ptr = const_cast<HLA::byte*>(static_cast<const HLA::byte*>(rhs.data()));
+       for(size_t i = 0; i < lhs.size(); ++i){
+           if(*(lhs_ptr + i) != *(rhs_ptr + i))
+               return false;
+       }
+   }
+   else
+       return false;
+   return true;
+}
     FederationManager::FederationManager(const JSON& file) noexcept :
                                                            BaseFederate(file){}
 
@@ -17,12 +30,21 @@ namespace HLA {
 
     FederationManager::~FederationManager(){
         lock_guard<mutex> guard(_smutex);
-        _rtiAmbassador->resignFederationExecution(ResignAction::NO_ACTION);
+        _rtiAmbassador->resignFederationExecution(ResignAction::CANCEL_THEN_DELETE_THEN_DIVEST);
         _rtiAmbassador->destroyFederationExecution(_federation_name);
     }
 
 
+    size_t FederationManager::GetFederatesCount() const noexcept{
+        return _federates_count;
+    }
+
+    void FederationManager::RunFederate(){
+    }
+
     void FederationManager::SendGoTimeStamp(){
+
+        std::wcout << L"I prepare to send GO" << std::endl;
 
         HLAfloat64Time UselessStamp;
 
@@ -43,7 +65,6 @@ namespace HLA {
         });
     }
 
-    void FederationManager::RunFederate(){}
 
     void FederationManager::UpdateAttributes() const{}
 
@@ -71,7 +92,23 @@ namespace HLA {
                                                     ObjectClassHandle theObjectClass,
                                                     wstring const & theObjectInstanceName)
                                                     throw (FederateInternalError){
+        std::wcout << L"I see new" << std::endl;
         lock_guard<mutex> guard(_smutex);
+        std::wcout << theObject.toString() << std::endl;
+        _federates_map[theObject] = theObjectInstanceName;
+        _federates_stamps[theObjectInstanceName] = TIMESTAMP::GO;
+        _federates_count++;
+
+    }
+
+    void FederationManager::discoverObjectInstance (ObjectInstanceHandle theObject,
+                                                    ObjectClassHandle theObjectClass,
+                                                    std::wstring const & theObjectInstanceName,
+                                                    FederateHandle producingFederate)
+                                                    throw (FederateInternalError){
+        std::wcout << L"I see new" << std::endl;
+        lock_guard<mutex> guard(_smutex);
+        std::wcout << theObject.toString() << std::endl;
         _federates_map[theObject] = theObjectInstanceName;
         _federates_stamps[theObjectInstanceName] = TIMESTAMP::GO;
         _federates_count++;
@@ -82,6 +119,8 @@ namespace HLA {
                                                   OrderType sentOrder,
                                                   SupplementalRemoveInfo theRemoveInfo)
                                                   throw (FederateInternalError) {
+
+        std::wcout << L"One less" << std::endl;
         lock_guard<mutex> guard(_smutex);
 
         const auto& name = _federates_map[theObject];
@@ -104,16 +143,23 @@ namespace HLA {
                                                 throw (FederateInternalError){
 
         if(theInteraction == _InteractionClasses[L"READY"] && _state >= STATE::STARTED){
+           // std::wcout << L"I recive ready" << std::endl;
             lock_guard<mutex> guard(_smutex);
+            long hash;
+            memcpy(&hash, theUserSuppliedTag.data(), sizeof (long));
+            auto fed = std::find_if(_federates_map.begin(), _federates_map.end(), [&hash](const auto& value){
+                return value.first.hash() == hash;
+            });
+            std::wcout << fed->second << std::endl;
 
-            rti1516e::VariableLengthData v = theUserSuppliedTag;
-            rti1516e::ObjectInstanceHandle obj;
-            obj.encode(v);
-            _federates_stamps[_federates_map[obj]] = TIMESTAMP::READY;
+            _federates_stamps[fed->second] = TIMESTAMP::READY;
 
             _ready_federates++;
 
-            if(_ready_federates == _federates_count && CheckReady())
+            std::wcout << L"Num of Federates = " << _federates_count << std::endl;
+            std::wcout << L"Num of Ready Federates = " << _ready_federates << std::endl;
+
+            if(CheckReady())
                     SendGoTimeStamp();
         }
     }

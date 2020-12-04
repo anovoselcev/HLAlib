@@ -16,6 +16,8 @@ namespace HLA{
 
         ~FederationManager() override;
 
+        size_t GetFederatesCount() const noexcept;
+
     private:
 
         struct ObjectInstanceClassHash{
@@ -26,9 +28,16 @@ namespace HLA{
 
         bool CheckReady();
 
+
         void discoverObjectInstance (rti1516e::ObjectInstanceHandle theObject,
                                      rti1516e::ObjectClassHandle theObjectClass,
                                      std::wstring const & theObjectInstanceName)
+                                     throw (rti1516e::FederateInternalError) override;
+
+        void discoverObjectInstance (rti1516e::ObjectInstanceHandle theObject,
+                                     rti1516e::ObjectClassHandle theObjectClass,
+                                     std::wstring const & theObjectInstanceName,
+                                     rti1516e::FederateHandle producingFederate)
                                      throw (rti1516e::FederateInternalError) override;
 
         void removeObjectInstance (rti1516e::ObjectInstanceHandle theObject,
