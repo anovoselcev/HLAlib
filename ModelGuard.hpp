@@ -116,6 +116,9 @@ namespace HLA {
 * ..............................
 */
     void ModelGuard::ModelingControl<MODELMODE::MANAGING_FOLLOWING>();
+
+    template<>
+    void ModelGuard::ModelingControl<MODELMODE::MANAGING_THREADING>();
 }
 
 #endif // MODELGUARD_HPP

@@ -25,7 +25,8 @@ namespace HLA {
             ModelingControl<MODELMODE::FREE_FOLLOWING>();
         else if(_federate->_mode == MODELMODE::MANAGING_FOLLOWING)                // If federate model mode is Managing..........................
             ModelingControl<MODELMODE::MANAGING_FOLLOWING>();
-        //ModelingControl<_federate>();
+        else if(_federate->_mode == MODELMODE::MANAGING_THREADING)
+            ModelingControl<MODELMODE::MANAGING_THREADING>();
     }
 
 /**
@@ -65,16 +66,18 @@ namespace HLA {
 * ..............................
 */
     void ModelGuard::ModelingControl<MODELMODE::MANAGING_FOLLOWING>(){
-        {
-            std::lock_guard<std::mutex>(_federate->_smutex);
-            _federate->_state = STATE::READY;
-            _federate->ReadyToGo();
-        }
+        _federate->_state = STATE::READY;
+        _federate->ReadyToGo();
 
         _federate->_cond.wait(_lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
             return _federate->_state == STATE::PROCESSING;
         });
         _federate->Modeling<MODELMODE::MANAGING_FOLLOWING>();
 
+    }
+
+    template<>
+    void ModelGuard::ModelingControl<MODELMODE::MANAGING_THREADING>(){
+        this->~ModelGuard();
     }
 }
