@@ -2,6 +2,7 @@
 #define LOGGER_HPP
 #include <fstream>
 #include <sstream>
+#include <mutex>
 
 namespace HLA {
 
@@ -11,22 +12,29 @@ namespace HLA {
     class Logger{
     public:
 
-/**
-* @brief Logger
-* @param log_filename
-*/
-        Logger(const std::string& log_filename);
+        enum class MSG{
+            ERROR = 0,
+            INFO = 1
+        };
 
 /**
 * @brief Logger
 * @param log_filename
 */
-        Logger(std::string&& log_filename);
+        Logger(const std::wstring& log_filename, const std::wstring& fedname);
+
+/**
+* @brief Logger
+* @param log_filename
+*/
+        Logger(std::wstring&& log_filename, const std::wstring& fedname);
 /**
 * @brief ~Logger()
 * Destructor of basic federate
 */
         ~Logger();
+
+        Logger& operator<<(MSG);
 
 /**
 * @brief operator <<
@@ -74,11 +82,13 @@ namespace HLA {
 /**
 * @brief _file
 */
-        std::wofstream _file;
+        std::wfstream _file;
 /**
 * @brief _stream
 */
-        std::wostringstream _stream;
+        std::wstringstream _stream;
+
+        mutable std::mutex _mut;
 
     };
 

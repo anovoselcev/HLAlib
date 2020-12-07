@@ -7,16 +7,37 @@ namespace HLA {
 * @brief Logger::Logger
 * @param str
 */
-    Logger::Logger(const std::string& str){
-        _file.open(str, std::ios_base::app);
+    Logger::Logger(const std::wstring& str, const std::wstring& fedname){
+        std::string _fedname, pref;
+        _fedname.assign(fedname.begin(), fedname.end());
+        pref.assign(str.begin(), str.end());
+        time_t seconds = time(nullptr);
+        std::string time = asctime(localtime(&seconds));
+        std::hash<std::string> hash;
+        _file.open(pref + "_" + _fedname + "_" + std::to_string(hash(time)), std::ios_base::out);
     }
 
 /**
 * @brief Logger::Logger
 * @param str
 */
-    Logger::Logger(std::string&& str){
-        _file.open(std::move(str));
+    Logger::Logger(std::wstring&& str, const std::wstring& fedname){
+        std::string _fedname, pref;
+        _fedname.assign(fedname.begin(), fedname.end());
+        pref.assign(str.begin(), str.end());
+        time_t seconds = time(nullptr);
+        std::string time = asctime(localtime(&seconds));
+        std::hash<std::string> hash;
+        _file.open(pref + "_" + _fedname + "_" + std::to_string(hash(time)), std::ios_base::out);
+    }
+
+    Logger& Logger::operator<<(MSG m){
+        _mut.lock();
+        if(m == MSG::INFO)
+            _stream << L"INFO: ";
+        else if(m == MSG::ERROR)
+            _stream << L"ERROR: ";
+        return *this;
     }
 
 /**
@@ -75,6 +96,8 @@ namespace HLA {
         os << L">>" << asctime(timeinfo) << L": " << _stream.str() << L'\n';
         _stream.str(L"");
         _file << os.str();
+        _file.flush();
+        _mut.unlock();
         return *this;
     }
 
