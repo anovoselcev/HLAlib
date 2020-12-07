@@ -8,11 +8,15 @@
 #include "Tools/Logger.hpp"
 
 #include "RTI/time/HLAfloat64Time.h"
+
 #include <iostream>
+
 namespace HLA{
 
     using namespace std;
     using namespace rti1516e;
+
+    static unique_ptr<Logger> log;
 
 /**
 * @brief BaseFederate::BaseFederate
@@ -94,12 +98,13 @@ namespace HLA{
 */
     BaseFederate::~BaseFederate(){
         _f_modeling = false;                // Change flag to finish modeling
+        if(_mode == MODELMODE::MANAGING_THREADING)
+            _cond.notify_one();
         if(_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING)
             _modeling_thread.join();        // Wait for end of thread
         lock_guard<mutex> guard(_smutex);   // Lock state mutex
         _state = STATE::EXIT;               // Set federate state to EXIT
-        Logger log(_log_filename);          // Create log writer
-        log << L"INFO:"                     // Write INFO message about disconnect
+        *log << L"INFO:"                     // Write INFO message about disconnect
             << _federate_name
             << L"disconnect from"
             << _host_IP_address
@@ -124,13 +129,13 @@ namespace HLA{
 */
     bool BaseFederate::ConnectRTI(const JSON& file) & {
         LoadSOMFromJSON(file);
-
-        Logger log(_log_filename);                // Create log writer
+        std::wstring logfilename = file.GetRoot()->AsMap().at(L"LogFileName")->AsWstring();
+        log = make_unique<Logger>(logfilename, _federate_name);
         try{
             _rtiAmbassador = MakeRTIambassador(); // Initialized rtiAmbassador to call RTI servecies (look HLA::MakeRTIambassador)
         }
         catch(RTIinternalError& e){               // Catch RTI runtime error
-            log << L"ERROR:"                      // Write ERROR message about runtime error
+            *log << Logger::MSG::ERROR                      // Write ERROR message about runtime error
                 << _federate_name
                 << L"Can't create RTIambassador"
                 << e.what()
@@ -145,7 +150,7 @@ namespace HLA{
                 _rtiAmbassador->connect(*this,_callback_mode,L"crcAddress="+_host_IP_address); // Using rtiAmbassador connect this federate to RTI from _host_IP_address
         }
         catch(...){                                                                            // Catch some error
-            log << L"ERROR:"                                                                   // Write ERROR message about error
+            *log << Logger::MSG::ERROR                                                                  // Write ERROR message about error
                 << _federate_name
                 << L"Cant connect"
                 << Logger::Flush();
@@ -158,7 +163,7 @@ namespace HLA{
         catch(FederationExecutionAlreadyExists&){}                                 // If federation already exist we catch exception(FederationExecutionAlreadyExists) and do nothing
 
         catch(ErrorReadingFDD& e){                                                 // Catch FOM reading runtime error
-            log << L"ERROR:"                                                       // Write ERROR message about FOM reading
+            *log << Logger::MSG::ERROR                                                       // Write ERROR message about FOM reading
                 << _federate_name
                 << L"Cant read FOM"
                 << e.what()
@@ -166,7 +171,7 @@ namespace HLA{
             return false;
         }
         catch(CouldNotOpenFDD& e ){                                                // Catch FOM opening runtime error
-            log << L"ERROR:"                                                       // Write ERROR message about FOM opening
+            *log << Logger::MSG::ERROR                                                       // Write ERROR message about FOM opening
                 << _federate_name
                 << L"Cant open FOM"
                 << e.what()
@@ -174,7 +179,7 @@ namespace HLA{
             return false;
         }
         catch(...){                                                                // Catch some error
-            log << L"ERROR:"                                                       // Write ERROR message about error
+            *log << Logger::MSG::ERROR                                                       // Write ERROR message about error
                 << _federate_name
                 << L"Cant create federation"
                 << Logger::Flush();
@@ -183,14 +188,14 @@ namespace HLA{
         // This waste 1 seconds, it's the biggest comand in this function (more than 50ths)
         try{
             _rtiAmbassador->joinFederationExecution(_federate_name, _federate_type, _federation_name); // After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
-            log << L"INFO:"                                                           // Write INFO message about successfully connection
+            *log << Logger::MSG::INFO                                                         // Write INFO message about successfully connection
                 << L"Connect of"
                 << _federate_name
                 <<  L"done"
                  << Logger::Flush();
         }
         catch(...){                                                                  // Catch some error
-            log << L"ERROR:"                                                         // Write ERROR message about error
+            *log << Logger::MSG::ERROR                                                         // Write ERROR message about error
                 << _federate_name
                 << L"Can't join"
                 << Logger::Flush();
@@ -202,14 +207,14 @@ namespace HLA{
         try{
             Init(file);                         // Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate
 
-            log << L"INFO:"                 // Write INFO message about successfull join
+            *log << Logger::MSG::INFO                 // Write INFO message about successfull join
                 << L"Init of"
                 << _federate_name
                 << L"done"
                 << Logger::Flush();
         }
         catch(RTIinternalError& e){         // Catch RTI runtime error
-            log << L"ERROR:"                // Write ERROR message about runtime error
+            *log << Logger::MSG::ERROR               // Write ERROR message about runtime error
                 << _federate_name
                 << L"Error in Init() with"
                 << e.what()
@@ -230,14 +235,13 @@ namespace HLA{
             RunFederate();                                                          // Run the Federate main function (can be empty)
         }
         catch(RTIinternalError& e){                                                 // Catch RTI runtime error
-            log << L"ERROR:"                                                        // Write ERROR message about runtime error
+            *log << Logger::MSG::ERROR                                                        // Write ERROR message about runtime error
                 << _federate_name
                 << L"Error in Run() with"
                 << e.what()
                 << Logger::Flush();
             return false;
         }
-        std::wcout << L"All done" << std::endl;
         return true;
     }
 
@@ -361,15 +365,6 @@ namespace HLA{
                 _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
         }
 
-        if(_mode >= MODELMODE::MANAGING_FOLLOWING){
-            _InteractionClasses[L"GO"] = _rtiAmbassador->getInteractionClassHandle(L"GO");
-            sub.insert(_InteractionClasses[L"GO"]);
-        }
-        else{
-            _InteractionClasses[L"READY"] = _rtiAmbassador->getInteractionClassHandle(L"READY");
-            sub.insert(_InteractionClasses[L"READY"]);
-        }
-
         for(const auto&Interaction:MyInteractionsNames){
 
             auto& interactionName = Interaction.first;                             // Cache of Interaction Name
@@ -384,14 +379,21 @@ namespace HLA{
                 _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
         }
 
-        if(_mode >= MODELMODE::MANAGING_FOLLOWING){
-            _InteractionClasses[L"READY"] = _rtiAmbassador->getInteractionClassHandle(L"READY");
-            pub.insert(_InteractionClasses[L"READY"]);
+        try{
+            if(_mode >= MODELMODE::MANAGING_FOLLOWING){
+                _InteractionClasses[L"GO"] = _rtiAmbassador->getInteractionClassHandle(L"GO");
+                sub.insert(_InteractionClasses[L"GO"]);
+                _InteractionClasses[L"READY"] = _rtiAmbassador->getInteractionClassHandle(L"READY");
+                pub.insert(_InteractionClasses[L"READY"]);
+            }
+            else{
+                _InteractionClasses[L"READY"] = _rtiAmbassador->getInteractionClassHandle(L"READY");
+                sub.insert(_InteractionClasses[L"READY"]);
+                _InteractionClasses[L"GO"] = _rtiAmbassador->getInteractionClassHandle(L"GO");
+                pub.insert(_InteractionClasses[L"GO"]);
+            }
         }
-        else{
-            _InteractionClasses[L"GO"] = _rtiAmbassador->getInteractionClassHandle(L"GO");
-            pub.insert(_InteractionClasses[L"GO"]);
-        }
+        catch(...){}
     }
 
 /**
@@ -457,10 +459,10 @@ namespace HLA{
 
     void BaseFederate::ReadyToGo() const{
         HLAfloat64Time UselessStamp;
-        std::wcout << _federate_name << L" send READY" << std::endl;
         long hash = _MyInstanceID.hash();
         rti1516e::VariableLengthData v;
         v.setData(&hash, sizeof (hash));
+        wcout << _federate_name << L" send READY" << endl;
         _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"READY"), ParameterHandleValueMap(), v, UselessStamp);
     }
 
@@ -502,13 +504,12 @@ namespace HLA{
 */
 
     void BaseFederate::Modeling<MODELMODE::FREE_THREADING>(){
-        Logger log(_log_filename);                // Create log writer
         while(_f_modeling){                       // while modeling execute
             {
                 lock_guard<mutex> guard(_smutex); // Lock state mutex
                 _state = STATE::DOING;            // Change federate state to execute(doing) state without HLA
 
-                log << L"INFO:"                   // Write INFO message about doing part of modeling
+                *log << Logger::MSG::INFO                  // Write INFO message about doing part of modeling
                     << _federate_name
                     << L"Begin of threading modeling step - doing"
                     << Logger::Flush();
@@ -516,7 +517,7 @@ namespace HLA{
             _cond.notify_one();                                           // Notify conditional variable in ModelGuard
             this_thread::sleep_for(chrono::milliseconds(_modeling_step)); // Sleep for modeling step
 
-            log << L"INFO:"                                               // Write INFO message about proccessing part of modeling
+            *log << Logger::MSG::INFO                                               // Write INFO message about proccessing part of modeling
                 << _federate_name
                 << L"End of threading modeling step - proccessing"
                 << Logger::Flush();
@@ -537,7 +538,7 @@ namespace HLA{
            ReadyToGo();
 
             _cond.wait(lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
-                return _state == STATE::PROCESSING;
+                return _state == STATE::PROCESSING || !_f_modeling;
             });
 
             UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
@@ -552,14 +553,13 @@ namespace HLA{
 * @brief BaseFederate::Modeling<ModelMode::FOLLOWING>
 * Main function of modeling that sleep in call-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
 */
-    void BaseFederate::Modeling<MODELMODE::FREE_FOLLOWING>(){
-        Logger log(_log_filename);                                                                       // Create log writer
+    void BaseFederate::Modeling<MODELMODE::FREE_FOLLOWING>(){                                                                      // Create log writer
         auto dur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - _last_time);  // Create time interval
         auto step = chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(_modeling_step));   // Convert modeling step to time interval
         if((step - dur).count()>0)                                                                       // If dur less than modeling step
             this_thread::sleep_for(chrono::milliseconds(step - dur));                                    // Sleep for difference betwen step and dur
 
-        log << L"INFO:"                                                 // Write INFO message about proccessing part of modeling
+        *log << Logger::MSG::INFO                                                 // Write INFO message about proccessing part of modeling
             << _federate_name
             << L"End of following modeling step - proccessing"
             << Logger::Flush();
@@ -569,7 +569,7 @@ namespace HLA{
         AttributeProcess();                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
         _state = STATE::DOING;                                         // Change federate state to execute(doing) state without HLA
 
-        log << L"INFO:"                                                // Write INFO message about doing part of modeling
+        *log << Logger::MSG::INFO                                                // Write INFO message about doing part of modeling
             << _federate_name
             << L"Begin of following modeling step - doing"
             << Logger::Flush();
@@ -580,7 +580,6 @@ namespace HLA{
 * @brief BaseFederate::Modeling<ModelMode::MANAGING>
 */
     void BaseFederate::Modeling<MODELMODE::MANAGING_FOLLOWING>(){
-       Logger log(_log_filename);                                     // Create log writer
        UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
        thread ParametersThread(&BaseFederate::ParameterProcess,this); // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
        ParametersThread.detach();
@@ -690,8 +689,7 @@ namespace HLA{
         const auto node         = file.GetRoot()->AsMap();                                         // Open the main node of file like hash map
         SetModelingStep(node.at(L"ModelingStep")->AsInt());                                        // Read modeling step
         SetSyncCallbackMode(node.at(L"CallbackMode")->AsInt());                                    // Read callback mode
-        SetModelMode(MODELMODE(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode
-        SetLogFileName(node.at(L"LogFileName")->AsString());                                       // Read filename of log file
+        SetModelMode(MODELMODE(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode                                      // Read filename of log file
         return *this;
     }
 
@@ -713,8 +711,7 @@ namespace HLA{
         const auto node         = file.GetRoot()->AsMap();                                         // Open the main node of file like hash map
         SetModelingStep(node.at(L"ModelingStep")->AsInt());                                        // Read modeling step
         SetSyncCallbackMode(node.at(L"CallbackMode")->AsInt());                                    // Read callback mode
-        SetModelMode(MODELMODE(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode
-        SetLogFileName(node.at(L"LogFileName")->AsString());                                       // Read filename of log file
+        SetModelMode(MODELMODE(node.at(L"ModelingMode")->AsInt()));                                // Read modeling mode                                       // Read filename of log file
         return *this;
     }
 
@@ -752,28 +749,6 @@ namespace HLA{
         return *this;
     }
 
-/**
-* @brief BaseFederate::SetLogFileName
-* @param log_filename FileName of log-file
-* Setup Log FileName
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetLogFileName(const std::string& filename) noexcept{
-        _log_filename = filename;
-        return *this;
-    }
-
-/**
-* @brief BaseFederate::SetLogFileName
-* @param log_filename FileName of log-file
-* Setup Log FileName
-* @return Sample reference of current Federate
-*/
-    BaseFederate& BaseFederate::SetLogFileName(string&& filename) noexcept{
-        _log_filename = move(filename);
-        return *this;
-    }
-
     void BaseFederate::connectionLost(const wstring &faultDescription)
                                       throw (FederateInternalError){
         _f_modeling = false;                // Change flag to finish modeling
@@ -790,9 +765,8 @@ namespace HLA{
 */
     void BaseFederate::objectInstanceNameReservationSucceeded(wstring const & name)
                                                               throw (FederateInternalError){
-        Logger log(_log_filename); // Create log writer
 
-        log << L"INFO:"            // Write INFO message about proccessing part of modeling
+        *log << Logger::MSG::INFO            // Write INFO message about proccessing part of modeling
             << _federate_name
             << L"Reserved"
             << name
@@ -809,9 +783,8 @@ namespace HLA{
 */
     void BaseFederate::objectInstanceNameReservationFailed(const wstring & name)
                                                            throw (FederateInternalError){
-        Logger log(_log_filename); // Create log writer
 
-        log << L"ERROR:"          // Write ERROR message about name reservation failed
+        *log << Logger::MSG::ERROR          // Write ERROR message about name reservation failed
             << _federate_name
             << L"Can't Reserved"
             << name
@@ -877,10 +850,10 @@ namespace HLA{
                                            SupplementalReceiveInfo )
     throw (FederateInternalError){
         if(theInteraction == _InteractionClasses[L"GO"] && _state >= STATE::STARTED){
-            std::wcout << _federate_name << L" recive GO" << std::endl;
             lock_guard<mutex> guard(_smutex);
             _state = STATE::PROCESSING;
             _cond.notify_one();
+            wcout << _federate_name << L" recive GO" << endl;
         }
     }
 

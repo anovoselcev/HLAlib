@@ -323,22 +323,6 @@ private:
        BaseFederate& SetSyncCallbackMode(bool is_sync) noexcept;
 
 /**
-* @brief SetLogFileName
-* @param log_filename FileName of log-file
-* Setup Log FileName
-* @return Sample reference of current Federate
-*/
-       BaseFederate& SetLogFileName(const std::string& log_filename) noexcept;
-
-/**
-* @brief SetLogFileName
-* @param log_filename FileName of log-file
-* Setup Log FileName
-* @return Sample reference of current Federate
-*/
-        BaseFederate& SetLogFileName(std::string&& log_filenmae) noexcept;
-
-/**
 * @brief The ObjectClassHash struct
 * Hash for Object Class, it necessary for hash structures
 */
@@ -528,7 +512,7 @@ private:
 * @param theObjectInstanceName
 * Callback function from RTI. Call when name registration in RegisterName is successful
 */
-        virtual void objectInstanceNameReservationSucceeded (std::wstring const & theObjectInstanceName)
+        void objectInstanceNameReservationSucceeded (std::wstring const & theObjectInstanceName)
         throw (rti1516e::FederateInternalError) override;
 
 /**
@@ -536,7 +520,7 @@ private:
 * @param theObjectInstanceName
 * Callback function from RTI. Call when name registration in RegisterName is failed
 */
-        virtual void objectInstanceNameReservationFailed(const std::wstring &theObjectInstanceName)
+        void objectInstanceNameReservationFailed(const std::wstring &theObjectInstanceName)
         throw (rti1516e::FederateInternalError) override;
 
 /**
@@ -612,12 +596,6 @@ private:
 * IP address of CRC
 */
         const std::wstring _host_IP_address;
-
-/**
-* @brief _log_filename
-* Name of Log file
-*/
-        std::string _log_filename = "LogFile";
 
 /**
 * @brief _state
