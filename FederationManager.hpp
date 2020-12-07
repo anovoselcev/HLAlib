@@ -2,7 +2,6 @@
 #define FEDERATIONMANAGER_HPP
 
 #include "BaseFederate.hpp"
-#include <boost/variant.hpp>
 
 namespace HLA{
 
@@ -15,8 +14,6 @@ namespace HLA{
         FederationManager(JSON&& file) noexcept;
 
         ~FederationManager() override;
-
-        size_t GetFederatesCount() const noexcept;
 
     private:
 

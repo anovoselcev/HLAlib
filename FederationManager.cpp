@@ -8,20 +8,7 @@ namespace HLA {
 
     using namespace std;
     using namespace rti1516e;
-using byte = uint8_t;
-inline bool operator==(const rti1516e::VariableLengthData& lhs, const rti1516e::VariableLengthData& rhs){
-   if(lhs.size() == rhs.size()){
-       HLA::byte* lhs_ptr = const_cast<HLA::byte*>(static_cast<const HLA::byte*>(lhs.data()));
-       HLA::byte* rhs_ptr = const_cast<HLA::byte*>(static_cast<const HLA::byte*>(rhs.data()));
-       for(size_t i = 0; i < lhs.size(); ++i){
-           if(*(lhs_ptr + i) != *(rhs_ptr + i))
-               return false;
-       }
-   }
-   else
-       return false;
-   return true;
-}
+
     FederationManager::FederationManager(const JSON& file) noexcept :
                                                            BaseFederate(file){}
 
@@ -43,8 +30,6 @@ inline bool operator==(const rti1516e::VariableLengthData& lhs, const rti1516e::
     }
 
     void FederationManager::SendGoTimeStamp(){
-
-        std::wcout << L"I prepare to send GO" << std::endl;
 
         HLAfloat64Time UselessStamp;
 
@@ -143,14 +128,12 @@ inline bool operator==(const rti1516e::VariableLengthData& lhs, const rti1516e::
                                                 throw (FederateInternalError){
 
         if(theInteraction == _InteractionClasses[L"READY"] && _state >= STATE::STARTED){
-           // std::wcout << L"I recive ready" << std::endl;
             lock_guard<mutex> guard(_smutex);
             long hash;
             memcpy(&hash, theUserSuppliedTag.data(), sizeof (long));
             auto fed = std::find_if(_federates_map.begin(), _federates_map.end(), [&hash](const auto& value){
                 return value.first.hash() == hash;
             });
-            std::wcout << fed->second << std::endl;
 
             _federates_stamps[fed->second] = TIMESTAMP::READY;
 
@@ -159,7 +142,7 @@ inline bool operator==(const rti1516e::VariableLengthData& lhs, const rti1516e::
             std::wcout << L"Num of Federates = " << _federates_count << std::endl;
             std::wcout << L"Num of Ready Federates = " << _ready_federates << std::endl;
 
-            if(CheckReady())
+            if(_ready_federates == _federates_count)
                     SendGoTimeStamp();
         }
     }
