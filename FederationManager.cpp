@@ -1,5 +1,6 @@
 #include "FederationManager.hpp"
 #include "RTI/time/HLAfloat64Time.h"
+#include <cstring>
 #include <algorithm>
 
 #include <iostream>
@@ -22,10 +23,6 @@ namespace HLA {
     }
 
 
-    size_t FederationManager::GetFederatesCount() const noexcept{
-        return _federates_count;
-    }
-
     void FederationManager::RunFederate(){
     }
 
@@ -43,13 +40,6 @@ namespace HLA {
         for(auto& federate : _federates_stamps)
             federate.second = TIMESTAMP::GO;
     }
-
-    bool FederationManager::CheckReady(){
-        return std::all_of(_federates_stamps.begin(), _federates_stamps.end(),[](const auto& value){
-            return value.second == TIMESTAMP::READY;
-        });
-    }
-
 
     void FederationManager::UpdateAttributes() const{}
 

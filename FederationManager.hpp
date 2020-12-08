@@ -23,8 +23,6 @@ namespace HLA{
 
         void SendGoTimeStamp();
 
-        bool CheckReady();
-
 
         void discoverObjectInstance (rti1516e::ObjectInstanceHandle theObject,
                                      rti1516e::ObjectClassHandle theObjectClass,
