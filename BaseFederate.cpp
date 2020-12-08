@@ -468,12 +468,13 @@ namespace HLA{
 
     void BaseFederate::CacheID(const rti1516e::ObjectInstanceHandle& ID){
 
-        if(_CacheID[ID]->isValid())
+        if(_CacheID[ID])
             return;
 
+        std::wcout << L"New Cache" << std::endl;
         ObjectClassHandle objch = _rtiAmbassador->getKnownObjectClassHandle(ID);
-        std::wstring name = _rtiAmbassador->getObjectClassName(objch);
-        _CacheID[ID] = &_ObjectClasses[name];
+
+        _CacheID[ID] = &_ObjectClasses[_rtiAmbassador->getObjectClassName(objch)];
     }
 
 
