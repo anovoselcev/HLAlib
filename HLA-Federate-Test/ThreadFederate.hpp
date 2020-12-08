@@ -3,19 +3,20 @@
 #include "../BaseFederate.hpp"
 #include "../HLAdata/HLAdata.hpp"
 #include "RTI/time/HLAfloat64Time.h"
+#include <iostream>
 
 class ThreadFederate final : public HLA::BaseFederate{
 public:
     ThreadFederate(std::wstring&& name,
                    std::wstring&& FOM) :
         HLA::BaseFederate(name,L"Threading",FOM,L"Test"){
-        _mode = HLA::ModelMode::THREADING;
+        _mode = HLA::MODELMODE::FREE_THREADING;
     }
 
     ThreadFederate(const std::wstring& name,
                    const std::wstring& FOM) :
         HLA::BaseFederate(name,L"Threading",FOM,L"Test"){
-        _mode = HLA::ModelMode::THREADING;
+        _mode = HLA::MODELMODE::FREE_THREADING;
     }
 
     ThreadFederate(HLA::JSON& file) :
@@ -38,7 +39,8 @@ protected:
         std::lock_guard<std::mutex> guard(_amutex);
         while(!_qAttributes.empty()){
             auto& message = _qAttributes.front();
-            _other = HLA::cast_from_rti<HLA::Wstring>(message.data.find(_AttributesMap[_ObjectClasses[L"Following"]][L"Name"])->second);
+            std::wcout << HLA::cast_from_rti<HLA::Wstring>(message.data.find(_AttributesMap[_ObjectClasses[L"Following"]][L"Name"])->second) << std::endl;
+            std::wcout << HLA::cast_from_rti<HLA::Float64BE>(message.info) << std::endl;
             _qAttributes.pop();
         }
     }

@@ -9,13 +9,13 @@ public:
     FollowFederate(std::wstring&& name,
                    std::wstring&& FOM) :
         HLA::BaseFederate(name,L"Following",FOM,L"Test"){
-        _mode = HLA::ModelMode::FOLLOWING;
+        _mode = HLA::MODELMODE::FREE_FOLLOWING;
     }
 
     FollowFederate(const std::wstring& name,
                    const std::wstring& FOM) :
         HLA::BaseFederate(name,L"Following",FOM,L"Test"){
-        _mode = HLA::ModelMode::FOLLOWING;
+        _mode = HLA::MODELMODE::FREE_FOLLOWING;
     }
     FollowFederate(HLA::JSON& file) :
                    HLA::BaseFederate(file){}
@@ -35,13 +35,9 @@ protected:
     void AttributeProcess() override{
         std::lock_guard<std::mutex> guard(_amutex);
         while(!_qAttributes.empty()){
-            //std::wcout << L"I recive" << std::endl;
             auto& message = _qAttributes.front();
-            //std::wcout << HLA::cast_from_rti<HLA::Wstring>(message.data.find(_AttributesMap[_ObjectClasses[L"Threading"]][L"Name"])->second).size() << std::endl;
-            auto str = HLA::cast_from_rti<HLA::Wstring>(message.info);
-            std::wstring wstr;
-            wstr.assign(str.begin(), str.end());
-            std::wcout << str << std::endl;
+            std::wcout << HLA::cast_from_rti<HLA::Wstring>(message.data.find(_AttributesMap[_ObjectClasses[L"Threading"]][L"Name"])->second) << std::endl;
+            std::wcout << HLA::cast_from_rti<HLA::Wstring>(message.info) << std::endl;
             _qAttributes.pop();
         }
     }

@@ -6,8 +6,10 @@ QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV -pthread
 LIBS += -pthread
 SOURCES += \
         ../BaseFederate.cpp \
+        ../FederationManager.cpp \
         ../HLAdata/BasicException.cpp \
         ../HLAdata/Tools.cpp \
+        ../ProxyFederate.cpp \
         ../Tools/Logger.cpp \
         ../ModelGuard.cpp \
         ../Tools/JSON.cpp \
@@ -15,6 +17,7 @@ SOURCES += \
 
 HEADERS += \
     ../BaseFederate.hpp \
+    ../FederationManager.hpp \
     ../HLAdata/BasicException.hpp \
     ../HLAdata/BasicTemplates.hpp \
     ../HLAdata/HLAarray.hpp \
@@ -25,6 +28,7 @@ HEADERS += \
     ../HLAdata/HLAtypes.hpp \
     ../HLAdata/HLAvector.hpp \
     ../HLAdata/Tools.hpp \
+    ../ProxyFederate.hpp \
     ../Tools/Logger.hpp \
     ../ModelGuard.hpp \
     ../Tools/JSON.hpp \
@@ -45,5 +49,5 @@ unix:!macx: LIBS += -L$$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lfedtim
 INCLUDEPATH += $$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 
-INCLUDEPATH += /home/k-110-04/QtWork/HLA/magic_get-develop/include
-DEPENDPATH += /home/k-110-04/QtWork/HLA/magic_get-develop/include
+INCLUDEPATH += $$PWD/../3dparty/magic_get-develop/include
+DEPENDPATH += $$PWD/../3dparty/magic_get-develop/include
