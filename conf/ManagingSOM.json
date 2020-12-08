@@ -1,8 +1,8 @@
 {
     "Name" :
-                        "First",
+                        "Manager",
     "Type" :            
-                        "Following",
+                        "Threading",
     "FOMpath" :
                         "/home/k-110-04/QtWork/HLA/HLAlib/conf/SampleFOM.xml",
     "FederationName":
@@ -15,14 +15,16 @@
                         0,
                         
     "ModelingMode" :
-                        2,
+                        0,
     "LogFileName" :
                         "LogFile",
     
     "PublishAttributes": 
                         ["Name"],
     "SubscribeAttributes" :
-                        {"Threading" :
+                        {"Following":
+                                        ["Name"],
+                         "Threading":
                                         ["Name"]},
     "PublishInteractions" : 
                             {},

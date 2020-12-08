@@ -38,48 +38,12 @@
                         <transportation>HLAreliable</transportation>
                         <order>Receive</order>
                     </attribute>
-                    <attribute>
-                        <name>Attr1</name>
-                        <dataType>HLAunicodeString</dataType>
-                        <updateType>Conditional</updateType>
-                        <ownership>DivestAcquire</ownership>
-                        <sharing>Neither</sharing>
-                        <transportation>HLAreliable</transportation>
-                        <order>Receive</order>
-                    </attribute>
-                    <attribute>
-                        <name>Attr2</name>
-                        <dataType>HLAunicodeString</dataType>
-                        <updateType>Conditional</updateType>
-                        <ownership>DivestAcquire</ownership>
-                        <sharing>Neither</sharing>
-                        <transportation>HLAreliable</transportation>
-                        <order>Receive</order>
-                    </attribute>
             </objectClass>
             <objectClass>
                 <name>Following</name>
                 <sharing>Neither</sharing>
                     <attribute>
                         <name>Name</name>
-                        <dataType>HLAunicodeString</dataType>
-                        <updateType>Conditional</updateType>
-                        <ownership>DivestAcquire</ownership>
-                        <sharing>Neither</sharing>
-                        <transportation>HLAreliable</transportation>
-                        <order>Receive</order>
-                    </attribute>
-                    <attribute>
-                        <name>Attr1</name>
-                        <dataType>HLAunicodeString</dataType>
-                        <updateType>Conditional</updateType>
-                        <ownership>DivestAcquire</ownership>
-                        <sharing>Neither</sharing>
-                        <transportation>HLAreliable</transportation>
-                        <order>Receive</order>
-                    </attribute>
-                    <attribute>
-                        <name>Attr2</name>
                         <dataType>HLAunicodeString</dataType>
                         <updateType>Conditional</updateType>
                         <ownership>DivestAcquire</ownership>
@@ -94,16 +58,18 @@
         <interactionClass>
             <name>HLAinteractionRoot</name>
 			<interactionClass>
-				<name>Action</name>
+				<name>GO</name>
 				<sharing>PublishSubscribe</sharing>
 				<transportation>HLAreliable</transportation>
 				<order>Receive</order>
 				<semantics>Communication</semantics>
-				<parameter>
-					<name>Sender</name>
-					<dataType>Int</dataType>
-					<semantics>Contents of message</semantics>
-                </parameter>
+			</interactionClass>
+			<interactionClass>
+				<name>READY</name>
+				<sharing>PublishSubscribe</sharing>
+				<transportation>HLAreliable</transportation>
+				<order>Receive</order>
+				<semantics>Communication</semantics>
 			</interactionClass>
         </interactionClass>
     </interactions>

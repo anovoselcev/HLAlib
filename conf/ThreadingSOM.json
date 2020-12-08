@@ -15,13 +15,12 @@
                         0,
                         
     "ModelingMode" :
-                        1,
+                        3,
     "LogFileName" :
                         "LogFile",
     
     "PublishAttributes": 
-                        ["Name",
-                         "Attr1"],
+                        ["Name"],
     "SubscribeAttributes" :
                         {"Following" :
                                         ["Name"]},
