@@ -25,6 +25,7 @@ SOURCES += \
     HLA-Simulink/SimFederate/SimFederate.cpp \
     HLAdata/BasicException.cpp \
     HLAdata/Tools.cpp \
+    ProxyFederate.cpp \
     Tools/Logger.cpp \
     ModelGuard.cpp\
     Tools/JSON.cpp
@@ -32,11 +33,15 @@ SOURCES += \
 HEADERS += \
     FederationManager.hpp \
     HLA-Simulink/SimFederate/SimFederate.hpp \
+    HLA-Simulink/SimFederate/Strategy.hpp \
     HLAdata/BasicException.hpp \
     HLAdata/BasicTemplates.hpp \
     HLAdata/BasicTypes.hpp \
     HLAdata/HLA*.hpp\
+    HLAdata/HLAvariant.hpp \
+    HLAdata/NewDataTypes.hpp \
     HLAdata/Tools.hpp \
+    ProxyFederate.hpp \
     Tools/Logger.hpp \
     ModelGuard.hpp \
     *Federate.hpp \
@@ -58,8 +63,14 @@ unix:!macx: LIBS += -L$$PWD/../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lfedtime15
 INCLUDEPATH += $$PWD/../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 
-INCLUDEPATH += $$PWD/../magic_get-develop/include
-DEPENDPATH += $$PWD/../magic_get-develop/include
+
+unix:!macx: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/gcc4.8/ -ltbb
+
+INCLUDEPATH += $$PWD/3dparty/tbb/include/
+DEPENDPATH += $$PWD/3dparty/tbb/include/
+
+INCLUDEPATH += $$PWD/3dparty/magic_get-develop/include/
+DEPENDPATH += $$PWD/3dparty/magic_get-develop/include/
 
 DISTFILES += \
     HLA-Simulink/HLAblock \

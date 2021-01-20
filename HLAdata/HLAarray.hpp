@@ -28,7 +28,7 @@ namespace HLA{
             }
         }
 
-        void getDataFromRTI(rti1516e::VariableLengthData const &obj){
+        void getDataFromRTI(const rti1516e::VariableLengthData &obj){
             getData(const_cast<void*>(obj.data()), static_cast<unsigned long>(obj.size()));
         }
 
@@ -49,7 +49,7 @@ namespace HLA{
             memcpy(reinterpret_cast<void*>(ptrData), input_data,m_uiSizeData);
         }
 
-        void get(std::array<T_MOD,uiDim> const & inData) {
+        void get(const std::array<T_MOD,uiDim> & inData) {
             unsigned uiSizeEl, uiSizeData, P;
             T_FOM tmpFOMobj;
             m_uiSizeData = 0;

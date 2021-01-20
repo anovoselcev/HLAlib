@@ -6,7 +6,6 @@
 #include "HLAarray.hpp"
 #include "HLAtypes.hpp"
 #include "HLAenum.hpp"
-#include "HLAvariant.hpp"
 
 namespace HLA {
 

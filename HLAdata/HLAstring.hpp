@@ -28,18 +28,18 @@ namespace HLA {
         m_str = StringType(reinterpret_cast<symb*>(&lenth),unit);
       }
 
-      void get(BaseHLAstring const &str) {
+      void get(const BaseHLAstring &str) {
         m_str = str;
       }
 
-      virtual void get(StringType const &str){
+      virtual void get(const StringType &str){
         unsigned lenth = static_cast<unsigned>(str.length());
         Tools::changeENDIAN(lenth);
         m_str = StringType(reinterpret_cast<symb*>(&lenth),unit);
         m_str += str;
       }
 
-      void getDataFromRTI(rti1516e::VariableLengthData const &obj){
+      void getDataFromRTI(const rti1516e::VariableLengthData &obj){
         unsigned iq = static_cast<unsigned>(obj.size());
         m_str = StringType(reinterpret_cast<const symb*>(obj.data()),iq/OBV);
       }

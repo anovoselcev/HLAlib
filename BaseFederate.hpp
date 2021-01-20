@@ -338,10 +338,6 @@ private:
             size_t operator()(const rti1516e::InteractionClassHandle& _Interaction) const noexcept;
         };
 
-        struct ObjectInstanceClassHash{
-            size_t operator()(const rti1516e::ObjectInstanceHandle& _ObjectInstance) const noexcept;
-        };
-
 /**
 * @brief The CallbackInformation struct
 * Data structure for Callback Message {info, data}
@@ -675,7 +671,7 @@ private:
 
 
 
-        std::unordered_map<rti1516e::ObjectInstanceHandle, rti1516e::ObjectClassHandle*, ObjectInstanceClassHash> _CacheID;
+        std::unordered_map<size_t, rti1516e::ObjectClassHandle*> _CacheID;
 
 
 /**

@@ -78,7 +78,7 @@ namespace HLA {
         return m_uiSizeData;
       }
 
-      void getDataFromRTI(rti1516e::VariableLengthData const &obj){
+      void getDataFromRTI(const rti1516e::VariableLengthData &obj){
         getDataMax(const_cast<void*>(obj.data()),static_cast<unsigned long>(obj.size()));
       }
 

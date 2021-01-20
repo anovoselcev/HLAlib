@@ -2,6 +2,9 @@
 #include "Tools/Logger.hpp"
 
 namespace HLA {
+
+    extern std::unique_ptr<Logger> log;
+
     using namespace  rti1516e;
 
     SimFederate::SimFederate(const std::wstring& name,
@@ -33,8 +36,7 @@ namespace HLA {
             _rtiAmbassador->updateAttributeValues(_MyInstanceID,map, rti1516e::VariableLengthData());
         }
         catch(...){
-            HLA::Logger log(this->_log_filename);
-            log << L"ERROR"
+            *log << Logger::MSG::ERROR
                 << _federate_name
                 << L"Can't update attributes"
                 << HLA::Logger::Flush();

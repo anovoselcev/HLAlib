@@ -12,7 +12,7 @@ namespace HLA {
     template<typename HLAtype, unsigned OBV>
     std::vector<typename HLAtype::type> cast_from_rti(const rti1516e::VariableLengthData& v);
 
-    template <typename T_FOM, unsigned m_OBV = 1, typename T_MOD = typename T_FOM::type>
+    template <typename T_FOM, unsigned m_OBV = 1, typename T_MOD = typename T_FOM::type, bool Easy = std::is_integral<T_MOD>::value || std::is_floating_point<T_MOD>::value>
     class Vector final: public ClassForRTI<std::vector<T_MOD>,m_OBV>
     {
         Vector& operator = (const Vector &) {
@@ -31,7 +31,7 @@ namespace HLA {
             }
         }
 
-        void getDataFromRTI(rti1516e::VariableLengthData const &obj){
+        void getDataFromRTI(const rti1516e::VariableLengthData &obj){
             getData(const_cast<void*>(obj.data()), static_cast<unsigned long>(obj.size()));
         }
 
@@ -53,11 +53,11 @@ namespace HLA {
             memcpy(ptrData, input_data, m_uiSizeData);
         }
 
-        void get(std::vector<T_MOD> const & inData) {
+        void get(const std::vector<T_MOD> & inData) {
             unsigned uiSizeEl = 0,
-                     uiSizeData = 4,
-                     P = 0,
-                     uiHeader;
+                    uiSizeData = 4,
+                    P = 0,
+                    uiHeader;
 
             T_FOM tmpFOBobj;
 
@@ -65,41 +65,53 @@ namespace HLA {
 
             m_DIM = static_cast<size_t>(inData.size());
 
-            if (m_DIM) {
-                for (size_t i = 0; i < m_DIM - 1; i++) {
-                    tmpFOBobj.get(inData[i]);
+            if(Easy){
+                if (ptrData)
+                    delete[] ptrData;
+                m_uiSizeData = 4 + sizeof (T_MOD) * m_DIM;
+                ptrData = new byte[m_uiSizeData];
+                uiHeader = m_DIM;
+                memcpy(ptrData, &uiHeader, 4);
+               // memcpy(ptrData + 4, inData.data(), m_uiSizeData - 4);
+            }
+            else{
+
+                if (m_DIM) {
+                    for (size_t i = 0; i < m_DIM - 1; i++) {
+                        tmpFOBobj.get(inData[i]);
+                        uiSizeEl = tmpFOBobj.getsize();
+                        P = Tools::getPendingBytes(uiSizeEl, m_OBV);
+                        uiSizeData += uiSizeEl + P;
+                    }
+                    tmpFOBobj.get(inData[m_DIM - 1]);
                     uiSizeEl = tmpFOBobj.getsize();
-                    P = Tools::getPendingBytes(uiSizeEl, m_OBV);
-                    uiSizeData += uiSizeEl + P;
                 }
-                tmpFOBobj.get(inData[m_DIM - 1]);
-                uiSizeEl = tmpFOBobj.getsize();
-            }
-            else {
-                uiSizeEl = 0;
-                P = 0;
-            }
+                else {
+                    uiSizeEl = 0;
+                    P = 0;
+                }
 
-            m_uiSizeData = uiSizeData + uiSizeEl;
+                m_uiSizeData = uiSizeData + uiSizeEl;
 
-            if (ptrData)
-                delete[] ptrData;
-            ptrData = new byte[m_uiSizeData];
+                if (ptrData)
+                    delete[] ptrData;
+                ptrData = new byte[m_uiSizeData];
 
-            uiHeader = m_DIM;
+                uiHeader = m_DIM;
 
-            uiSizeData = 4;
-            memcpy(ptrData, &uiHeader, 4);
+                uiSizeData = 4;
+                memcpy(ptrData, &uiHeader, 4);
 
-            if (m_DIM) {
-                for (size_t i = 0; i < m_DIM - 1; i++) {
-                    tmpFOBobj.get(inData[i]);
+                if (m_DIM) {
+                    for (size_t i = 0; i < m_DIM - 1; i++) {
+                        tmpFOBobj.get(inData[i]);
+                        uiSizeEl = tmpFOBobj.setData(ptrData + uiSizeData);
+                        P = Tools::getPendingBytes(uiSizeEl,m_OBV);
+                        uiSizeData += uiSizeEl + P;
+                    }
+                    tmpFOBobj.get(inData[m_DIM - 1]);
                     uiSizeEl = tmpFOBobj.setData(ptrData + uiSizeData);
-                    P = Tools::getPendingBytes(uiSizeEl,m_OBV);
-                    uiSizeData += uiSizeEl + P;
                 }
-                tmpFOBobj.get(inData[m_DIM - 1]);
-                uiSizeEl = tmpFOBobj.setData(ptrData + uiSizeData);
             }
         }
 
@@ -156,21 +168,29 @@ namespace HLA {
         }
 
         void set(std::vector<T_MOD>& outData) {
-            unsigned uiSizeEl, P;
-            T_MOD obj;
-            T_FOM objFOM;
+
             unsigned uiSizeOfVector;
-            unsigned uiSizeData = 4;
             memcpy(&uiSizeOfVector, ptrData, 4);
             Tools::changeENDIAN(uiSizeOfVector);
             outData.resize(m_DIM);
-            for (size_t i = 0; i < m_DIM; i++) {
-                objFOM.getDataMax(ptrData + uiSizeData, m_uiSizeData - uiSizeData);
-                objFOM.set(obj);
-                outData[i] = std::move(obj);
-                uiSizeEl = objFOM.getsize();
-                P = Tools::getPendingBytes(uiSizeEl,m_OBV);
-                uiSizeData += uiSizeEl + P;
+            if(Easy){
+               // T_MOD* pointer = reinterpret_cast<T_MOD*>(outData.data());
+               // memcpy(pointer, ptrData + 4, sizeof (T_MOD) * m_DIM);
+                //std::copy(ptrData + 4, ptrData + m_uiSizeData - sizeof (T_MOD), outData);
+            }
+            else{
+                T_MOD obj;
+                T_FOM objFOM;
+                unsigned uiSizeEl, P;
+                unsigned uiSizeData = 4;
+                for (size_t i = 0; i < m_DIM; i++) {
+                    objFOM.getDataMax(ptrData + uiSizeData, m_uiSizeData - uiSizeData);
+                    objFOM.set(obj);
+                    outData[i] = std::move(obj);
+                    uiSizeEl = objFOM.getsize();
+                    P = Tools::getPendingBytes(uiSizeEl,m_OBV);
+                    uiSizeData += uiSizeEl + P;
+                }
             }
         }
 

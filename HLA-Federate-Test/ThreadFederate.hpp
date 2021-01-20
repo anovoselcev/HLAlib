@@ -1,9 +1,11 @@
 #ifndef THREADFEDERATE_HPP
 #define THREADFEDERATE_HPP
 #include "../BaseFederate.hpp"
+#include "../Tools/Logger.hpp"
 #include "../HLAdata/HLAdata.hpp"
-#include "RTI/time/HLAfloat64Time.h"
 #include <iostream>
+
+extern std::unique_ptr<HLA::Logger> logger;
 
 class ThreadFederate final : public HLA::BaseFederate{
 public:

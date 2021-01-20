@@ -97,7 +97,7 @@ void TestVectorWstring(){
 
 void TestBigIntVector(){
     LOG_DURATION("Big_vector")
-    std::vector<int> v1(1'000'000);
+    std::vector<int> v1(5'000'000'00);
     for(int i = 0; i< v1.size();i++)
         v1[i] = i;
     rti1516e::VariableLengthData v = HLA::cast_to_rti<HLA::Integer32BE,4>(v1);

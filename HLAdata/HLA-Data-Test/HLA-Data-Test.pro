@@ -16,9 +16,14 @@ HEADERS+= \
     ../HLAstring.hpp \
     ../HLAtypes.hpp \
     ../HLAvector.hpp \
+    ../NewDataTypes.hpp \
     ../Tools.hpp \
+    NewTest.hpp \
     TestBaseRTIstring.hpp \
+    TestForManual.hpp \
     TestHLAenum.hpp \
+    TestHLAvariant.hpp \
+    TestOperator.hpp \
     TestRTIarray.hpp \
     TestRTIvector.hpp \
     TestSimpleData.hpp \
@@ -44,6 +49,6 @@ unix:!macx: LIBS += -L$$PWD/../../../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lfed
 INCLUDEPATH += $$PWD/../../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 
-INCLUDEPATH += $$PWD/../../../magic_get-develop/include
-DEPENDPATH += $$PWD/../../../magic_get-develop/include
+INCLUDEPATH += $$PWD/../../3dparty/magic_get-develop/include
+DEPENDPATH += $$PWD/../../3dparty/magic_get-develop/include
 

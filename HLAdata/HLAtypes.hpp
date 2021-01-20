@@ -23,13 +23,13 @@ namespace HLA {
             m_data = 0;
         }
 
-        virtual void get(T const &obj) {
+        virtual void get(const T &obj) {
             m_data = obj;
             if (!blLE)
                 Tools::changeENDIAN(m_data);
         }
 
-        void getDataFromRTI(rti1516e::VariableLengthData const &obj){
+        void getDataFromRTI(const rti1516e::VariableLengthData &obj){
             unsigned size = static_cast<unsigned>(obj.size());
             if (sizeof(T) != size) {
                 std::ostringstream wstrOut;

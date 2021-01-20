@@ -37,13 +37,13 @@ namespace HLA {
         return *this;
       }
     //Get data from RTI
-      virtual void getDataFromRTI(rti1516e::VariableLengthData const &obj) = 0;
+      virtual void getDataFromRTI(const rti1516e::VariableLengthData &obj) = 0;
     //Get data from ptrSource with fixed size from RTI
       virtual void getData(void* ptrSource, unsigned long inSize) = 0;
     //Get data from ptrSource with max size form RTI
       virtual void getDataMax(void* ptrSource, unsigned long uiMaxSize) = 0;
     //Get object of Type to transform in Variable Data
-      virtual void get(Type const &obj) = 0;
+      virtual void get(const Type &obj) = 0;
     //Copy
       virtual void copy(ClassForRTI<Type,OBV>& obj);
     //Set Data to object, it prepare Variable Length Data to RTI

@@ -51,3 +51,11 @@ DEPENDPATH += $$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 
 INCLUDEPATH += $$PWD/../3dparty/magic_get-develop/include
 DEPENDPATH += $$PWD/../3dparty/magic_get-develop/include
+
+unix:!macx: LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/gcc4.8/ -ltbb
+
+INCLUDEPATH += $$PWD/../3dparty/tbb/include/
+DEPENDPATH += $$PWD/../3dparty/tbb/include/
+
+INCLUDEPATH += $$PWD/../3dparty/boost_1_74_0/
+DEPENDPATH += $$PWD/../3dparty/boost_1_74_0/

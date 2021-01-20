@@ -55,17 +55,17 @@ void NewFollowFederate(wstring&& name, int delay){
 
 int main()
 {
-    //auto file = HLA::JSON::MakeJSON(L"../conf/ManagingSOM.json");
-    //HLA::FederationManager man(file);
-    //man.ConnectRTI(file);
+    auto file = HLA::JSON::MakeJSON(L"../conf/ManagingSOM.json");
+    HLA::FederationManager man(file);
+    man.ConnectRTI(file);
 
     //HLA::ProxyFederate prx(file);
     //prx("10.55.82.125:8080", file);
-    //std::this_thread::sleep_for(std::chrono::seconds(500000));
+    std::this_thread::sleep_for(std::chrono::seconds(500000));
     //std::thread th1(NewThreadFederate,L"Fed1",1000);
     //th1.join();
     //std::this_thread::sleep_for(std::chrono::seconds(5));
-    NewFollowFederate( L"Fed2",10000);
+    //NewFollowFederate( L"Fed2",10000);
     //th1.detach();
    // std::this_thread::sleep_for(std::chrono::milliseconds(10000));
    // auto file = HLA::JSON::MakeJSON(L"../conf/ThreadingSOM.json");

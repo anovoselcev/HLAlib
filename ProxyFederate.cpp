@@ -17,10 +17,7 @@ namespace HLA {
         _socket.bind(udp_endpoint_t(boost::asio::ip::address::from_string(address), port));
 
         Listen();
-
-        _context.run();
-        //ConnectRTI(file)
-        return true;
+        return ConnectRTI(file);
     }
 
     void ProxyFederate::RunFederate(){

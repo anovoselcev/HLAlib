@@ -31,15 +31,15 @@ namespace HLA {
         m_data = std::move(source);
       }
 
-      void get(RTItype const &obj) {
+      void get(const RTItype &obj) {
         m_data = obj.m_data;
       }
 
-      virtual void get(Type const &source){
+      virtual void get(const Type &source){
         m_data = int(source);
       }
 
-      void getDataFromRTI(rti1516e::VariableLengthData const &obj){
+      void getDataFromRTI(const rti1516e::VariableLengthData &obj){
         unsigned iq = static_cast<unsigned>(obj.size());
         if (getsize() != iq) {
           std::stringstream wstrOut;
