@@ -1,9 +1,3 @@
-//================================================================================================================================================
-/*
- * Written by Novoseltsev Artemy
-*/
-//================================================================================================================================================
-
 #ifndef BASEFEDERATE_HPP
 #define BASEFEDERATE_HPP
 
@@ -426,25 +420,25 @@ private:
 * @brief SubscribeAttributes
 * Call RTI to subscribe on Objects and Attributes from _ObjectNames
 */
-        void SubscribeAttributes(std::unordered_map<rti1516e::ObjectClassHandle,rti1516e::AttributeHandleSet,ObjectClassHash>&);
+        void SubscribeAttributes(const std::unordered_map<rti1516e::ObjectClassHandle,rti1516e::AttributeHandleSet,ObjectClassHash>&) const;
 
 /**
 * @brief PublishAttributes
 * Call RTI to publish the _MyClass with attributes from _AttributeNames
 */
-        void PublishAttributes(rti1516e::AttributeHandleSet&);
+        void PublishAttributes(const rti1516e::AttributeHandleSet&) const;
 
 /**
 * @brief SubscribeParameters
 * Call RTI to subscribe on Interactions and Parameters from _MyInteractionsNames
 */
-        void SubscribeInteractions(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
+        void SubscribeInteractions(const std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&) const;
 
 /**
 * @brief PublishParameters
 * Call RTI to publish the Interactions and Parameters from _InteractionsNames
 */
-        void PublishInteractions(std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&);
+        void PublishInteractions(const std::unordered_set<rti1516e::InteractionClassHandle, InteractionClassHash>&) const;
 
 /**
 * @brief RegisterName

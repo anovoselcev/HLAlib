@@ -5,7 +5,7 @@
 #include "../FederationManager.hpp"
 #include "../ProxyFederate.hpp"
 #include <assert.h>
-
+#include <tbb/tbb.h>
 
 constexpr int step = 2;
 
@@ -53,15 +53,29 @@ void NewFollowFederate(wstring&& name, int delay){
     }
 }
 
+void f1(){
+    std::wcout << L"First" << std::endl;
+    std::this_thread::sleep_for(std::chrono::minutes(4));
+}
+
+void f2(){
+    std::wcout << L"Second" << std::endl;
+}
+
 int main()
 {
-    auto file = HLA::JSON::MakeJSON(L"../conf/ManagingSOM.json");
+//    tbb::task_group tg;
+//    tg.run([](){f1();});
+//    tg.run([](){f2();});
+    auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/build-AutoCoderForTest-Desktop_Qt_5_12_5_GCC_64bit-Release/Test.JSON");
     HLA::FederationManager man(file);
+    auto start = std::chrono::steady_clock::now();
     man.ConnectRTI(file);
-
+    auto end = std::chrono::steady_clock::now();
+    std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << L"us" << std::endl;
     //HLA::ProxyFederate prx(file);
     //prx("10.55.82.125:8080", file);
-    std::this_thread::sleep_for(std::chrono::seconds(500000));
+    std::this_thread::sleep_for(std::chrono::seconds(5));
     //std::thread th1(NewThreadFederate,L"Fed1",1000);
     //th1.join();
     //std::this_thread::sleep_for(std::chrono::seconds(5));

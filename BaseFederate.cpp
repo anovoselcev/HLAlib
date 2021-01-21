@@ -1,9 +1,3 @@
-//================================================================================================================================================
-/*
- * Written by Novoseltsev Artemy
-*/
-//================================================================================================================================================
-
 #include "BaseFederate.hpp"
 #include "Tools/Logger.hpp"
 
@@ -76,7 +70,10 @@ namespace HLA{
                                           _federate_type(file.GetRoot()->AsMap().at(L"Type")->AsWstring()),
                                           _FOMname(file.GetRoot()->AsMap().at(L"FOMpath")->AsWstring()),
                                           _federation_name(file.GetRoot()->AsMap().at(L"FederationName")->AsWstring()),
-                                          _host_IP_address(file.GetRoot()->AsMap().at(L"Address")->AsWstring()){}
+                                          _host_IP_address(file.GetRoot()->AsMap().at(L"Address")->AsWstring()){
+        std::wstring logfilename = file.GetRoot()->AsMap().at(L"LogFileName")->AsWstring();
+        logger = make_unique<Logger>(logfilename, _federate_name);
+    }
 
 /**
 * @brief BaseFederate::BaseFederate
@@ -93,16 +90,19 @@ namespace HLA{
                                           _federate_type(move(file.GetRoot()->AsMap().at(L"Type")->AsWstring())),
                                           _FOMname(move(file.GetRoot()->AsMap().at(L"FOMpath")->AsWstring())),
                                           _federation_name(move(file.GetRoot()->AsMap().at(L"FederationName")->AsWstring())),
-                                          _host_IP_address(move(file.GetRoot()->AsMap().at(L"Address")->AsWstring())){}
+                                          _host_IP_address(move(file.GetRoot()->AsMap().at(L"Address")->AsWstring())){
+        std::wstring logfilename = file.GetRoot()->AsMap().at(L"LogFileName")->AsWstring();
+        logger = make_unique<Logger>(logfilename, _federate_name);
+    }
 /**
 * @brief BaseFederate::~BaseFederate
 * Destructor of basic federate, which set Federate State to EXIT
 */
     BaseFederate::~BaseFederate(){
         _f_modeling = false;                // Change flag to finish modeling
-        if(_mode == MODELMODE::MANAGING_THREADING)
+        if(_mode == MODELMODE::MANAGING_THREADING && _state >= STATE::CONNECTED)
             _cond.notify_one();
-        if(_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING)
+        if((_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING) && _state >= STATE::CONNECTED)
             _modeling_thread.join();        // Wait for end of thread
         lock_guard<mutex> guard(_smutex);   // Lock state mutex
         _state = STATE::EXIT;               // Set federate state to EXIT
@@ -131,12 +131,11 @@ namespace HLA{
 */
     bool BaseFederate::ConnectRTI(const JSON& file) & {
         LoadSOMFromJSON(file);
-        std::wstring logfilename = file.GetRoot()->AsMap().at(L"LogFileName")->AsWstring();
-        logger = make_unique<Logger>(logfilename, _federate_name);
         try{
             _rtiAmbassador = MakeRTIambassador(); // Initialized rtiAmbassador to call RTI servecies (look HLA::MakeRTIambassador)
         }
         catch(RTIinternalError& e){               // Catch RTI runtime error
+
             *logger << Logger::MSG::ERROR                      // Write ERROR message about runtime error
                 << _federate_name
                 << L"Can't create RTIambassador"
@@ -152,6 +151,7 @@ namespace HLA{
                 _rtiAmbassador->connect(*this,_callback_mode,L"crcAddress="+_host_IP_address); // Using rtiAmbassador connect this federate to RTI from _host_IP_address
         }
         catch(...){                                                                            // Catch some error
+
             *logger << Logger::MSG::ERROR                                                                  // Write ERROR message about error
                 << _federate_name
                 << L"Cant connect"
@@ -165,6 +165,7 @@ namespace HLA{
         catch(FederationExecutionAlreadyExists&){}                                 // If federation already exist we catch exception(FederationExecutionAlreadyExists) and do nothing
 
         catch(ErrorReadingFDD& e){                                                 // Catch FOM reading runtime error
+
             *logger << Logger::MSG::ERROR                                                       // Write ERROR message about FOM reading
                 << _federate_name
                 << L"Cant read FOM"
@@ -172,7 +173,8 @@ namespace HLA{
                 << Logger::Flush();
             return false;
         }
-        catch(CouldNotOpenFDD& e ){                                                // Catch FOM opening runtime error
+        catch(CouldNotOpenFDD& e){                                                // Catch FOM opening runtime error
+
             *logger << Logger::MSG::ERROR                                                       // Write ERROR message about FOM opening
                 << _federate_name
                 << L"Cant open FOM"
@@ -181,6 +183,7 @@ namespace HLA{
             return false;
         }
         catch(...){                                                                // Catch some error
+
             *logger << Logger::MSG::ERROR                                                       // Write ERROR message about error
                 << _federate_name
                 << L"Cant create federation"
@@ -190,6 +193,7 @@ namespace HLA{
         // This waste 1 seconds, it's the biggest comand in this function (more than 50ths)
         try{
             _rtiAmbassador->joinFederationExecution(_federate_name, _federate_type, _federation_name); // After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
+
             *logger << Logger::MSG::INFO                                                         // Write INFO message about successfully connection
                 << L"Connect of"
                 << _federate_name
@@ -197,6 +201,7 @@ namespace HLA{
                  << Logger::Flush();
         }
         catch(...){                                                                  // Catch some error
+
             *logger << Logger::MSG::ERROR                                                         // Write ERROR message about error
                 << _federate_name
                 << L"Can't join"
@@ -216,6 +221,7 @@ namespace HLA{
                 << Logger::Flush();
         }
         catch(RTIinternalError& e){         // Catch RTI runtime error
+
             *logger << Logger::MSG::ERROR               // Write ERROR message about runtime error
                 << _federate_name
                 << L"Error in Init() with"
@@ -273,16 +279,52 @@ namespace HLA{
 
         const auto& node = file.GetRoot()->AsMap();
 
-
-        NameMap ObjectsNames        = JSON::ToMap(node.at(L"SubscribeAttributes"));
-
-        NameList AttributeNames     = JSON::ToVector(node.at(L"PublishAttributes"));
-
-        NameMap MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
-
-        NameMap InteractionsNames   = JSON::ToMap(node.at(L"SubscribeInteractions"));
+        tbb::task_scheduler_init init(tbb::task_scheduler_init::automatic);
 
         tbb::task_group g;
+
+        NameList AttributeNames;
+        NameMap ObjectsNames, MyInteractionsNames, InteractionsNames;
+        auto start_json = std::chrono::steady_clock::now();
+
+        g.run([&node, &AttributeNames, &ObjectsNames](){
+            AttributeNames = JSON::ToVector(node.at(L"PublishAttributes"));
+            ObjectsNames = JSON::ToMap(node.at(L"SubscribeAttributes"));
+        });
+//        g.run([&node, &AttributeNames](){
+//            AttributeNames = JSON::ToVector(node.at(L"PublishAttributes"));
+//        });
+
+//        g.run([&node, &ObjectsNames](){
+//            ObjectsNames = JSON::ToMap(node.at(L"SubscribeAttributes"));
+//        });
+
+        g.run([&node, &MyInteractionsNames, &InteractionsNames](){
+            MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
+            InteractionsNames = JSON::ToMap(node.at(L"SubscribeInteractions"));
+        });
+
+//        g.run([&node, &MyInteractionsNames](){
+//            MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
+//        });
+
+//        g.run([&node, &InteractionsNames](){
+//            InteractionsNames = JSON::ToMap(node.at(L"SubscribeInteractions"));
+//        });
+
+        g.wait();
+//        NameMap ObjectsNames        = JSON::ToMap(node.at(L"SubscribeAttributes"));
+
+//        NameList AttributeNames     = JSON::ToVector(node.at(L"PublishAttributes"));
+
+//        NameMap MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
+
+//        NameMap InteractionsNames   = JSON::ToMap(node.at(L"SubscribeInteractions"));
+        auto end_json = std::chrono::steady_clock::now();
+        std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_json - start_json).count() << L" JSON Init" << std::endl;
+
+
+        auto start_init = std::chrono::steady_clock::now();
 
         g.run([this, &AttributeNames, &ObjectsNames, &subscribeAttributesSet, &PublishSet](){
             this->InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
@@ -294,29 +336,55 @@ namespace HLA{
 
         g.wait();
 
-        g.run([this, &subscribeAttributesSet](){
-            this->SubscribeAttributes(subscribeAttributesSet);
-        });
+//        InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
+//        InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames,SubscribeInteractionSet, PublishInteractionSet);
 
-        g.run([this, &PublishSet](){
+        auto end_init = std::chrono::steady_clock::now();
+        std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_init - start_init).count() << L" Init" << std::endl;
+
+        auto start_ps = std::chrono::steady_clock::now();
+
+        g.run([this, &subscribeAttributesSet, &PublishSet](){
+            this->SubscribeAttributes(subscribeAttributesSet);
             this->PublishAttributes(PublishSet);
         });
 
-        g.run([this, &SubscribeInteractionSet](){
-            this->SubscribeInteractions(SubscribeInteractionSet);
-        });
+//        g.run([this, &subscribeAttributesSet](){
+//            this->SubscribeAttributes(subscribeAttributesSet);
+//        });
 
-        g.run([this, &PublishInteractionSet](){
+//        g.run([this, &PublishSet](){
+//            this->PublishAttributes(PublishSet);
+//        });
+
+        g.run([this, &SubscribeInteractionSet,&PublishInteractionSet](){
+            this->SubscribeInteractions(SubscribeInteractionSet);
             this->PublishInteractions(PublishInteractionSet);
         });
 
-        g.run([this](){
-            this->RegisterName();
-        });
+//        g.run([this, &SubscribeInteractionSet](){
+//            this->SubscribeInteractions(SubscribeInteractionSet);
+//        });
+
+//        g.run([this, &PublishInteractionSet](){
+//            this->PublishInteractions(PublishInteractionSet);
+//        });
 
         g.wait();
 
-/*        InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);                  // Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
+
+//        SubscribeAttributes(subscribeAttributesSet);
+//        PublishAttributes(PublishSet);
+//        SubscribeInteractions(SubscribeInteractionSet);
+//        PublishInteractions(PublishInteractionSet);
+
+        auto end_ps = std::chrono::steady_clock::now();
+
+        std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_ps - start_ps).count() << L" PS" << std::endl;
+
+        RegisterName();
+
+       /* InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);                  // Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
 
         SubscribeAttributes(subscribeAttributesSet);                                    // Send to RTI set of attributes which federate want to recive
 
@@ -328,7 +396,7 @@ namespace HLA{
 
         PublishInteractions(PublishInteractionSet);                                     // Send to RTI set of interactions which federate publish
 
-        RegisterName();  */                                                                // Register _federate_name in RTI
+        RegisterName();  */                                                               // Register _federate_name in RTI
 
         _state = STATE::STARTED;                                                         // Set state flag to started state (ready to do)
     }
@@ -478,7 +546,7 @@ namespace HLA{
 * @param _externAttributesSet
 * Call RTI to subscribe on Objects and Attributes from _ObjectNames
 */
-    void BaseFederate::SubscribeAttributes(unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash>& _externAttributesSet){
+    void BaseFederate::SubscribeAttributes(const unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash>& _externAttributesSet) const{
         for(const auto& x:_externAttributesSet)
 
             _rtiAmbassador->subscribeObjectClassAttributes(x.first,x.second);// Send to RTI request to subscribe on Object(x.first) and his Attribute Set (x.second)
@@ -493,7 +561,7 @@ namespace HLA{
 * @param _aPublishSet
 * Call RTI to publish the _MyClass with attributes from _AttributeNames
 */
-    void BaseFederate::PublishAttributes(AttributeHandleSet& _aPublishSet){
+    void BaseFederate::PublishAttributes(const AttributeHandleSet& _aPublishSet) const{
 
         _rtiAmbassador->publishObjectClassAttributes(_MyClass,_aPublishSet);// Send to RTI request to publish attributes (_aPublishSetId) of this federate with object _MyClass
                                                                             // After that federate can provide information about updates of his attributes in RTI using UpdateAttributes
@@ -504,7 +572,7 @@ namespace HLA{
 * @param sub
 * Call RTI to subscribe on Interactions and Parameters from _MyInteractionsNames
 */
-    void BaseFederate::SubscribeInteractions(unordered_set<InteractionClassHandle, InteractionClassHash>& sub){
+    void BaseFederate::SubscribeInteractions(const unordered_set<InteractionClassHandle, InteractionClassHash>& sub) const{
         for(const auto&x:sub)
 
             _rtiAmbassador->subscribeInteractionClass(x);// Send to RTI request to subscribe on Interaction x
@@ -520,7 +588,7 @@ namespace HLA{
 * @param pub
 * Call RTI to publish the Interactions and Parameters from _InteractionsNames
 */
-    void BaseFederate::PublishInteractions(unordered_set<InteractionClassHandle, InteractionClassHash>& pub){
+    void BaseFederate::PublishInteractions(const unordered_set<InteractionClassHandle, InteractionClassHash>& pub) const{
         for(const auto&x:pub)
 
             _rtiAmbassador->publishInteractionClass(x);// Send to RTI request to publish parameters (_ParametersMap) of this federate

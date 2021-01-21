@@ -2,7 +2,7 @@ TEMPLATE = app
 CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
-QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV -pthread
+QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV -pthread -Ofast
 LIBS += -pthread
 SOURCES += \
         ../BaseFederate.cpp \
@@ -59,3 +59,8 @@ DEPENDPATH += $$PWD/../3dparty/tbb/include/
 
 INCLUDEPATH += $$PWD/../3dparty/boost_1_74_0/
 DEPENDPATH += $$PWD/../3dparty/boost_1_74_0/
+
+#unix:!macx: LIBS += -L$$PWD/../../../../../../usr/lib/x86_64-linux-gnu/ -ltbb
+
+#INCLUDEPATH += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu
+#DEPENDPATH += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu
