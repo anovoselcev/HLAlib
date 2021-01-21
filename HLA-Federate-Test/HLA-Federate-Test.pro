@@ -52,13 +52,14 @@ DEPENDPATH += $$PWD/../3dparty/magic_get-develop/include
 
 unix:!macx: LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/gcc4.8/ -ltbb
 
-INCLUDEPATH += $$PWD/../3dparty/tbb/include/
-DEPENDPATH += $$PWD/../3dparty/tbb/include/
+INCLUDEPATH += $$PWD/../3dparty/tbb/include/linux/
+DEPENDPATH += $$PWD/../3dparty/tbb/include/linux/
 
 INCLUDEPATH += $$PWD/../3dparty/boost_1_74_0/
 DEPENDPATH += $$PWD/../3dparty/boost_1_74_0/
 
-#unix:!macx: LIBS += -L$$PWD/../../../../../../usr/lib/x86_64-linux-gnu/ -ltbb
+win32: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb
 
-#INCLUDEPATH += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu
-#DEPENDPATH += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu
+INCLUDEPATH += $$PWD/3dparty/tbb/include/windows/
+DEPENDPATH += $$PWD/3dparty/tbb/include/windows/
+

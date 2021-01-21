@@ -3,7 +3,11 @@
 
 #include "RTI/time/HLAfloat64Time.h"
 
-#include "3dparty/tbb/include/tbb/tbb.h"
+#ifndef WIN32
+    #include "tbb/tbb.h"
+#else
+    #include "oneapi/tbb.h"
+#endif
 
 #include <iostream>
 
