@@ -12,7 +12,7 @@ namespace HLA{
     using namespace std;
     using namespace rti1516e;
 
-    static unique_ptr<Logger> logger;
+    unique_ptr<Logger> logger;
 
 /**
 * @brief BaseFederate::BaseFederate
@@ -106,7 +106,7 @@ namespace HLA{
             _modeling_thread.join();        // Wait for end of thread
         lock_guard<mutex> guard(_smutex);   // Lock state mutex
         _state = STATE::EXIT;               // Set federate state to EXIT
-        *logger << L"INFO:"                     // Write INFO message about disconnect
+        *logger << Logger::MSG::INFO                    // Write INFO message about disconnect
             << _federate_name
             << L"disconnect from"
             << _host_IP_address
@@ -229,6 +229,13 @@ namespace HLA{
                 << Logger::Flush();
             return false;
         }
+        catch(...){
+            *logger << Logger::MSG::ERROR                                                         // Write ERROR message about error
+                << _federate_name
+                << L"Can't Init"
+                << Logger::Flush();
+            return false;
+        }
 
         try{
             _f_modeling = true;                                                                     // Run the main loop of federate
@@ -279,40 +286,59 @@ namespace HLA{
 
         const auto& node = file.GetRoot()->AsMap();
 
-        tbb::task_scheduler_init init(tbb::task_scheduler_init::automatic);
+        tbb::task_scheduler_init sinit;
+        std::wcout << L"Is scheduler active? = " << sinit.is_active() << std::endl;
 
-        tbb::task_group g;
+        std::wcout << L"Default num threads = " << sinit.default_num_threads() << std::endl;
+        tbb::task_group read, init, ps;
+
 
         NameList AttributeNames;
         NameMap ObjectsNames, MyInteractionsNames, InteractionsNames;
-        auto start_json = std::chrono::steady_clock::now();
 
-        g.run([&node, &AttributeNames, &ObjectsNames](){
-            AttributeNames = JSON::ToVector(node.at(L"PublishAttributes"));
-            ObjectsNames = JSON::ToMap(node.at(L"SubscribeAttributes"));
-        });
-//        g.run([&node, &AttributeNames](){
+       auto start_json = std::chrono::steady_clock::now();
+
+        tbb::parallel_invoke(
+                    [&node, &AttributeNames](){
+                       AttributeNames = JSON::ToVector(node.at(L"PublishAttributes"));
+                    },
+                    [&node, &ObjectsNames](){
+                       ObjectsNames = JSON::ToMap(node.at(L"SubscribeAttributes"));
+                    },
+                    [&node, &MyInteractionsNames](){
+                        MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
+                    },
+                    [&node, &InteractionsNames](){
+                        InteractionsNames = JSON::ToMap(node.at(L"SubscribeInteractions"));
+                }
+        );
+
+
+//        g.run([&node, &AttributeNames, &ObjectsNames](){
+//            AttributeNames = JSON::ToVector(node.at(L"PublishAttributes"));
+//            ObjectsNames = JSON::ToMap(node.at(L"SubscribeAttributes"));
+//        });
+//        read.run([&node, &AttributeNames](){
 //            AttributeNames = JSON::ToVector(node.at(L"PublishAttributes"));
 //        });
 
-//        g.run([&node, &ObjectsNames](){
+//        read.run([&node, &ObjectsNames](){
 //            ObjectsNames = JSON::ToMap(node.at(L"SubscribeAttributes"));
 //        });
 
-        g.run([&node, &MyInteractionsNames, &InteractionsNames](){
-            MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
-            InteractionsNames = JSON::ToMap(node.at(L"SubscribeInteractions"));
-        });
-
-//        g.run([&node, &MyInteractionsNames](){
+//        g.run([&node, &MyInteractionsNames, &InteractionsNames](){
 //            MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
-//        });
-
-//        g.run([&node, &InteractionsNames](){
 //            InteractionsNames = JSON::ToMap(node.at(L"SubscribeInteractions"));
 //        });
 
-        g.wait();
+//        read.run([&node, &MyInteractionsNames](){
+//            MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
+//        });
+
+//        read.run_and_wait([&node, &InteractionsNames](){
+//            InteractionsNames = JSON::ToMap(node.at(L"SubscribeInteractions"));
+//        });
+
 //        NameMap ObjectsNames        = JSON::ToMap(node.at(L"SubscribeAttributes"));
 
 //        NameList AttributeNames     = JSON::ToVector(node.at(L"PublishAttributes"));
@@ -326,51 +352,72 @@ namespace HLA{
 
         auto start_init = std::chrono::steady_clock::now();
 
-        g.run([this, &AttributeNames, &ObjectsNames, &subscribeAttributesSet, &PublishSet](){
-            this->InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
-        });
+        tbb::parallel_invoke(
+                    [this, &AttributeNames, &ObjectsNames, &subscribeAttributesSet, &PublishSet](){
+                        this->InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
+                    },
+                    [this, &InteractionsNames, &MyInteractionsNames, &SubscribeInteractionSet, &PublishInteractionSet](){
+                        this->InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames, SubscribeInteractionSet, PublishInteractionSet);
+                    }
+        );
 
-        g.run([this, &InteractionsNames, &MyInteractionsNames, &SubscribeInteractionSet, &PublishInteractionSet](){
-            this->InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames, SubscribeInteractionSet, PublishInteractionSet);
-        });
+//        init.run([this, &AttributeNames, &ObjectsNames, &subscribeAttributesSet, &PublishSet](){
+//            this->InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
+//        });
 
-        g.wait();
+//        init.run_and_wait([this, &InteractionsNames, &MyInteractionsNames, &SubscribeInteractionSet, &PublishInteractionSet](){
+//            this->InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames, SubscribeInteractionSet, PublishInteractionSet);
+//        });
+
 
 //        InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
 //        InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames,SubscribeInteractionSet, PublishInteractionSet);
 
         auto end_init = std::chrono::steady_clock::now();
-        std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_init - start_init).count() << L" Init" << std::endl;
+       std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_init - start_init).count() << L" Init" << std::endl;
 
         auto start_ps = std::chrono::steady_clock::now();
 
-        g.run([this, &subscribeAttributesSet, &PublishSet](){
-            this->SubscribeAttributes(subscribeAttributesSet);
-            this->PublishAttributes(PublishSet);
-        });
-
-//        g.run([this, &subscribeAttributesSet](){
+//        g.run([this, &subscribeAttributesSet, &PublishSet](){
 //            this->SubscribeAttributes(subscribeAttributesSet);
-//        });
-
-//        g.run([this, &PublishSet](){
 //            this->PublishAttributes(PublishSet);
 //        });
 
-        g.run([this, &SubscribeInteractionSet,&PublishInteractionSet](){
-            this->SubscribeInteractions(SubscribeInteractionSet);
-            this->PublishInteractions(PublishInteractionSet);
-        });
+        tbb::parallel_invoke(
+                    [this, &subscribeAttributesSet](){
+                        this->SubscribeAttributes(subscribeAttributesSet);
+                    },
+                    [this, &PublishSet](){
+                        this->PublishAttributes(PublishSet);
+                    },
+                    [this, &SubscribeInteractionSet](){
+                        this->SubscribeInteractions(SubscribeInteractionSet);
+                    },
+                    [this, &PublishInteractionSet](){
+                        this->PublishInteractions(PublishInteractionSet);
+                     }
+        );
 
-//        g.run([this, &SubscribeInteractionSet](){
+//        ps.run([this, &subscribeAttributesSet](){
+//            this->SubscribeAttributes(subscribeAttributesSet);
+//        });
+
+//        ps.run([this, &PublishSet](){
+//            this->PublishAttributes(PublishSet);
+//        });
+
+////        g.run([this, &SubscribeInteractionSet,&PublishInteractionSet](){
+////            this->SubscribeInteractions(SubscribeInteractionSet);
+////            this->PublishInteractions(PublishInteractionSet);
+////        });
+
+//        ps.run([this, &SubscribeInteractionSet](){
 //            this->SubscribeInteractions(SubscribeInteractionSet);
 //        });
 
-//        g.run([this, &PublishInteractionSet](){
+//        ps.run_and_wait([this, &PublishInteractionSet](){
 //            this->PublishInteractions(PublishInteractionSet);
 //        });
-
-        g.wait();
 
 
 //        SubscribeAttributes(subscribeAttributesSet);
@@ -380,7 +427,7 @@ namespace HLA{
 
         auto end_ps = std::chrono::steady_clock::now();
 
-        std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_ps - start_ps).count() << L" PS" << std::endl;
+       std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_ps - start_ps).count() << L" PS" << std::endl;
 
         RegisterName();
 
@@ -424,6 +471,10 @@ namespace HLA{
 
             PublishSet.insert(_AttributesMap[_MyClass][Attribute]);                                       // Insert federate attributes to Publish Set(_aPublishSetId)
         }
+
+        *logger << Logger::MSG::INFO
+            << L"Init of Classes and Attributes"
+            << Logger::Flush();
 
 //        tbb::parallel_for_each(ObjectsNames,[this, &subscribeAttributesSet](const auto& value){
 //            const auto& objectName = value.first;
@@ -496,6 +547,9 @@ namespace HLA{
                 _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
         }
 
+        *logger << Logger::MSG::INFO
+            << L"Init of Interactions and Parameters"
+            << Logger::Flush();
 
 //        tbb::parallel_for_each(MyInteractionsNames, [this, &pub](const auto& value){
 //            auto& interactionName = value.first;
@@ -923,7 +977,7 @@ namespace HLA{
     void BaseFederate::connectionLost(const wstring &faultDescription)
                                       throw (FederateInternalError){
         _f_modeling = false;                // Change flag to finish modeling
-        if(_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING)
+        if((_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING) && _state >= STATE::CONNECTED)
             _modeling_thread.join();        // Wait for end of thread
         lock_guard<mutex> guard(_smutex);   // Lock state mutex
         _state = STATE::EXIT;               // Set federate state to EXIT
@@ -939,8 +993,7 @@ namespace HLA{
 
         *logger << Logger::MSG::INFO            // Write INFO message about proccessing part of modeling
             << _federate_name
-            << L"Reserved"
-            << name
+            << L"Reserved name"
             << Logger::Flush();
 
         lock_guard<mutex> guard(_smutex);
@@ -957,8 +1010,7 @@ namespace HLA{
 
         *logger << Logger::MSG::ERROR          // Write ERROR message about name reservation failed
             << _federate_name
-            << L"Can't Reserved"
-            << name
+            << L"Can't Reserved name"
             << Logger::Flush();
 
         lock_guard<mutex> guard(_smutex);

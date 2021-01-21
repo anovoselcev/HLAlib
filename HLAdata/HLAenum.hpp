@@ -44,11 +44,10 @@ namespace HLA {
         if (getsize() != iq) {
           std::stringstream wstrOut;
           wstrOut
-              << L"The size of the data did not match. Must recive  " << getsize()
-              << L" recived " << iq << L" bytes";
+              << "The size of the data did not match. Must recive  " << getsize()
+              << " recived " << iq << " bytes";
 
-          ExceptionForRTI ex(wstrOut.str());
-          throw ex;
+          throw std::runtime_error(wstrOut.str());
         }
         m_data.getDataFromRTI(obj);
       }
@@ -60,8 +59,7 @@ namespace HLA {
               << L"The size of the data did not match. Must recive  " << getsize()
               << L" recived " << inSize << L" bytes";
 
-          ExceptionForRTI ex(wstrOut.str());
-          throw ex;
+          throw std::runtime_error(wstrOut.str());
         }
         m_data.getData(ptrSource, inSize);
       }
@@ -69,8 +67,7 @@ namespace HLA {
       void getDataMax(void* ptrSource, unsigned long inSize){
         unsigned long current_size = getsize();
         if (current_size > inSize) {
-          ExceptionForRTI ex(L"Data exhausted");
-          throw ex;
+          throw std::runtime_error("Data exhausted");
         }
         m_data.getData(ptrSource, current_size);
       }
@@ -90,8 +87,7 @@ namespace HLA {
               << L"The size of the data did not match. Must recive  " << getsize()
               << L" recived " << inSize << L" bytes";
 
-          ExceptionForRTI ex(wstrOut.str());
-          throw ex;
+          throw std::runtime_error(wstrOut.str());
         }
         m_data.setData(ptrDest, inSize);
       }

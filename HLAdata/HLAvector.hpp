@@ -130,40 +130,32 @@ namespace HLA {
         void setDataToRTI(rti1516e::VariableLengthData &obj){
             if (ptrData)  {
                 obj.setData(ptrData,m_uiSizeData);
-            } else {
-                ExceptionForRTI ex(L"HLAvector.setDataToRTI. ) NULL pointer.");
-                throw ex;
-            }
+            } else
+                throw std::runtime_error("HLAvector.setDataToRTI. ) NULL pointer.");
         }
 
         void setData(void* ptrDest, unsigned long inSize){
             if (m_uiSizeData != inSize) {
                 std::stringstream wstrOut;
                 wstrOut
-                        << L"HLAvector\n" << L"The size of the data did not match. Must recive " << m_uiSizeData
-                        << L" recived "<< inSize << L" bytes";
-
-                ExceptionForRTI ex(wstrOut.str());
-                throw ex;
+                        << "HLAvector\n" << "The size of the data did not match. Must recive " << m_uiSizeData
+                        << " recived "<< inSize << " bytes";
+                throw std::runtime_error(wstrOut.str());
             }
 
             if (ptrData)  {
                 memcpy(ptrDest, ptrData, m_uiSizeData);
             }
-            else {
-                ExceptionForRTI ex(L"HLAvector.setData. NULL pointer.");
-                throw ex;
-            }
+            else
+                throw std::runtime_error("HLAvector.setData. NULL pointer.");
         }
 
         unsigned setData(void* ptrDest) const {
 
             if (ptrData)  {
                 memcpy(ptrDest, ptrData, m_uiSizeData);
-            } else {
-                ExceptionForRTI ex(L"HLAvector.setData. NULL pointer.");
-                throw ex;
-            }
+            } else
+                throw std::runtime_error("HLAvector.setData. NULL pointer.");
             return m_uiSizeData;
         }
 
@@ -212,20 +204,20 @@ namespace HLA {
         void chekSize(void* input_data, unsigned long inSize) /*noexcept(false)*/ {
             m_uiSizeData = 4;
             if (inSize < m_uiSizeData) {
-                throw ExceptionForRTI(L"HLAvector Data is exhausted before reading is complete!.");
+                throw std::runtime_error("HLAvector Data is exhausted before reading is complete!.");
             }
             memcpy(&m_DIM, input_data,m_uiSizeData);
             unsigned uiSizeEl,P;
             T_FOM tmpT;
             for (size_t i = 0; i < m_DIM; i++) {
                 if (inSize <= m_uiSizeData) {
-                    throw ExceptionForRTI(L"HLAvector Data is exhausted before reading is complete!.");
+                    throw std::runtime_error("HLAvector Data is exhausted before reading is complete!.");
                 }
                 try {
                     tmpT.getDataMax(static_cast<char*>(input_data)+m_uiSizeData, inSize-m_uiSizeData);
                 }
-                catch (ExceptionForRTI & ex) {
-                    throw ExceptionForRTI(L"HLAvector" + Tools::widen(ex.what()));
+                catch (std::runtime_error & ex) {
+                    throw std::runtime_error(std::string("HLAvector") +ex.what());
                 }
                 uiSizeEl = tmpT.getsize();
                 if (i != m_DIM - 1) {

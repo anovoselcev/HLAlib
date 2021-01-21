@@ -7,7 +7,6 @@ LIBS += -pthread
 SOURCES += \
         ../BaseFederate.cpp \
         ../FederationManager.cpp \
-        ../HLAdata/BasicException.cpp \
         ../HLAdata/Tools.cpp \
         ../ProxyFederate.cpp \
         ../Tools/Logger.cpp \
@@ -18,7 +17,6 @@ SOURCES += \
 HEADERS += \
     ../BaseFederate.hpp \
     ../FederationManager.hpp \
-    ../HLAdata/BasicException.hpp \
     ../HLAdata/BasicTemplates.hpp \
     ../HLAdata/HLAarray.hpp \
     ../HLAdata/HLAdata.hpp \

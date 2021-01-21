@@ -1,8 +1,8 @@
 #ifndef BASICTEMPLATES_HPP
 #define BASICTEMPLATES_HPP
 
-#include "BasicException.hpp"
 #include <RTI/RTI1516.h>
+#include "Tools.hpp"
 
 namespace HLA {
 

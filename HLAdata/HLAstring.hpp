@@ -2,6 +2,7 @@
 #define RTISTRING_HPP
 
 #include "BasicTemplates.hpp"
+#include <cstring>
 #include <type_traits>
 
 namespace HLA {
@@ -47,12 +48,9 @@ namespace HLA {
         unsigned _size;
         memcpy(&_size, ptrSource, unit);
         Tools::changeENDIAN(_size);
-        if (_size != inSize - unit) {
-
-          ExceptionForRTI ex(L"The size of the data did not match. Must recive " + std::to_wstring(getsize()) +
-                             L" recived " + std::to_wstring(inSize) + L" bytes. In String getData");
-          throw ex;
-        }
+        if (_size != inSize - unit)
+          throw std::runtime_error("The size of the data did not match. Must recive " + std::to_string(getsize()) +
+                                   " recived " + std::to_string(inSize) + " bytes. In String getData");;
         m_str = StringType(reinterpret_cast<symb*>(ptrSource),_size+unit);
 
       }
@@ -63,11 +61,10 @@ namespace HLA {
         Tools::changeENDIAN(_size);
 
 
-        if (_size > inSize - unit) {
-          ExceptionForRTI ex(L"The size of the data did not match. Must recive  " + std::to_wstring(getsize()) +
-                             L" recived " + std::to_wstring(inSize) + L" bytes. In String getDataMax");
-          throw ex;
-        }
+        if (_size > inSize - unit)
+          throw std::runtime_error("The size of the data did not match. Must recive  " + std::to_string(getsize()) +
+                             " recived " + std::to_string(inSize) + " bytes. In String getDataMax");
+
         m_str = StringType(reinterpret_cast<symb*>(ptrSource),_size + unit);
       }
 
@@ -83,12 +80,10 @@ namespace HLA {
       }
 
       void setData(void* ptrDest, unsigned long inSize) {
-        if (getsize() != inSize) {
+        if (getsize() != inSize)
+          throw std::runtime_error("The size of the data did not match. Must recive  " + std::to_string(getsize()) +
+                                   " recived " + std::to_string(inSize) + " bytes. In String SetData");
 
-          ExceptionForRTI ex(L"The size of the data did not match. Must recive  " + std::to_wstring(getsize()) +
-                             L" recived " + std::to_wstring(inSize) + L" bytes. In String SetData");
-          throw ex;
-        }
         memcpy(ptrDest, reinterpret_cast<symb*>(&m_str[0]), inSize);
       }
 

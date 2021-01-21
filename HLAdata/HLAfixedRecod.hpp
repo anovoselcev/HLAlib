@@ -42,39 +42,32 @@ namespace HLA {
         if (ptrData)  {
           obj.setData(ptrData, m_uiSizeData);
         }
-        else {
-          ExceptionForRTI ex(L"HLAfixedRecord.setDataToRTI. NULL pointer.");
-          throw ex;
-        }
+        else
+          throw std::runtime_error("HLAfixedRecord.setDataToRTI. NULL pointer.");
       }
 
       void setData(void* ptrDest, unsigned long inSize){
         if (m_uiSizeData != inSize) {
           std::stringstream wstrOut;
           wstrOut
-              << L"HLAfixedRecord\n" << L"The size of the data did not match. Must recive " << m_uiSizeData
-              << L" recived " << inSize << L" bytes";
+              << "HLAfixedRecord\n" << "The size of the data did not match. Must recive " << m_uiSizeData
+              << " recived " << inSize << " bytes";
 
-          ExceptionForRTI ex(wstrOut.str());
-          throw ex;
+          throw std::runtime_error(wstrOut.str());
         }
         if (ptrData)  {
           memcpy(ptrDest, ptrData, m_uiSizeData);
         }
-        else {
-            ExceptionForRTI ex(L"HLAfixedRecord.setData. ) + NULL pointer.");
-            throw ex;
-        }
+        else
+            throw std::runtime_error("HLAfixedRecord.setData. ) + NULL pointer.");
       }
 
       unsigned setData(void* ptrDest) const{
         if (ptrData)  {
           memcpy(ptrDest, ptrData, m_uiSizeData);
         }
-        else {
-          ExceptionForRTI ex(L"HLAfixedRecord.setData. NULL pointer.");
-          throw ex;
-        }
+        else
+          throw std::runtime_error("HLAfixedRecord.setData. NULL pointer.");
         return m_uiSizeData;
       }
 

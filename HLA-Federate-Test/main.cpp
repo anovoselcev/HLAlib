@@ -55,11 +55,14 @@ void NewFollowFederate(wstring&& name, int delay){
 
 void f1(){
     std::wcout << L"First" << std::endl;
-    std::this_thread::sleep_for(std::chrono::minutes(4));
+    for(;;);
+    std::this_thread::sleep_for(std::chrono::minutes(5));
 }
 
 void f2(){
     std::wcout << L"Second" << std::endl;
+    for(;;)
+    std::this_thread::sleep_for(std::chrono::minutes(5));
 }
 
 int main()
@@ -75,7 +78,7 @@ int main()
     std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << L"us" << std::endl;
     //HLA::ProxyFederate prx(file);
     //prx("10.55.82.125:8080", file);
-    std::this_thread::sleep_for(std::chrono::seconds(5));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     //std::thread th1(NewThreadFederate,L"Fed1",1000);
     //th1.join();
     //std::this_thread::sleep_for(std::chrono::seconds(5));

@@ -2,6 +2,7 @@
 #include "RTI/time/HLAfloat64Time.h"
 #include <cstring>
 #include <algorithm>
+#include "Tools/Logger.hpp"
 
 #include <iostream>
 
@@ -9,6 +10,8 @@ namespace HLA {
 
     using namespace std;
     using namespace rti1516e;
+
+    extern std::unique_ptr<HLA::Logger> logger;
 
     FederationManager::FederationManager(const JSON& file) noexcept :
                                                            BaseFederate(file){}
@@ -18,8 +21,16 @@ namespace HLA {
 
     FederationManager::~FederationManager(){
         lock_guard<mutex> guard(_smutex);
-        _rtiAmbassador->resignFederationExecution(ResignAction::CANCEL_THEN_DELETE_THEN_DIVEST);
-        _rtiAmbassador->destroyFederationExecution(_federation_name);
+        try{
+            _rtiAmbassador->resignFederationExecution(ResignAction::CANCEL_THEN_DELETE_THEN_DIVEST);
+            _rtiAmbassador->destroyFederationExecution(_federation_name);
+        }
+        catch(...){
+            *logger << Logger::MSG::ERROR                      // Write ERROR message about runtime error
+                << _federate_name
+                << L"Can't destroy federation"
+                << Logger::Flush();
+        }
     }
 
 

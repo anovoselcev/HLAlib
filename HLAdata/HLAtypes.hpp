@@ -34,10 +34,9 @@ namespace HLA {
             if (sizeof(T) != size) {
                 std::ostringstream wstrOut;
                 wstrOut
-                        << L"The size of the data did not match. Must recive " << static_cast<unsigned>(sizeof(T))
-                        << L" recived " << size << L" bytes";
-                ExceptionForRTI ex(wstrOut.str());
-                throw ex;
+                        << "The size of the data did not match. Must recive " << static_cast<unsigned>(sizeof(T))
+                        << " recived " << size << " bytes";
+                throw std::runtime_error(wstrOut.str());
             }
             memcpy(&m_data, obj.data(), size);
         }
@@ -46,11 +45,10 @@ namespace HLA {
             if (sizeof(T) != size) {
                 std::ostringstream wstrOut;
                 wstrOut
-                        << L"The size of the data did not match. Must recive " << static_cast<unsigned>(sizeof(T))
-                        << L" recived " << size << L" bytes";
+                        << "The size of the data did not match. Must recive " << static_cast<unsigned>(sizeof(T))
+                        << " recived " << size << " bytes";
 
-                ExceptionForRTI ex(wstrOut.str());
-                throw ex;
+                throw std::runtime_error(wstrOut.str());
             }
             memcpy(&m_data, input_data, size);
         }
@@ -58,10 +56,9 @@ namespace HLA {
 
         void getDataMax(void* ptrSource, unsigned long inSize){
             size_t current_size = getsize();
-            if (current_size > inSize) {
-                ExceptionForRTI ex(L"Data exhausted");
-                throw ex;
-            }
+            if (current_size > inSize)
+                throw std::runtime_error("Data exhausted");
+
             memcpy(&m_data, ptrSource, current_size);
         }
 
@@ -79,11 +76,10 @@ namespace HLA {
             if (sizeof(T) != inSize) {
                 std::ostringstream wstrOut;
                 wstrOut
-                        << L"The size of the data did not match. Must recive " << static_cast<unsigned>(sizeof(T))
-                        << L" recived " << inSize << L" bytes";
+                        << "The size of the data did not match. Must recive " << static_cast<unsigned>(sizeof(T))
+                        << " recived " << inSize << " bytes";
 
-                ExceptionForRTI ex(wstrOut.str());
-                throw ex;
+                throw std::runtime_error(wstrOut.str());
             }
             memcpy(ptrDest, &m_data, inSize);
         }

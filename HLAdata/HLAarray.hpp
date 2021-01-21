@@ -92,37 +92,29 @@ namespace HLA{
             if (ptrData)  {
                 obj.setData(ptrData, m_uiSizeData);
             }
-            else {
-                ExceptionForRTI ex(L"HLAarray.setDataToRTI. NULL pointer.");
-                throw ex;
-            }
+            else
+                throw std::runtime_error("HLAarray.setDataToRTI. NULL pointer.");
         }
 
         void setData(void* ptrDest, unsigned long inSize){
             if (m_uiSizeData != inSize) {
                 std::stringstream wstrOut;
                 wstrOut
-                        << L"HLAarray\n" << L"The size of the data did not match. Must recive " << m_uiSizeData
-                        << L" recived " << inSize << L" bytes";
-
-                ExceptionForRTI ex(wstrOut.str());
-                throw ex;
+                        << "HLAarray\n" << "The size of the data did not match. Must recive " << m_uiSizeData
+                        << " recived " << inSize << " bytes";
+                throw std::runtime_error(wstrOut.str());
             }
             if (ptrData)
                 memcpy(ptrDest, ptrData, m_uiSizeData);
-            else {
-                ExceptionForRTI ex(L"HLAarray.setData. NULL pointer.");
-                throw ex;
-            }
+            else
+                throw std::runtime_error("HLAarray.setData. NULL pointer.");
         }
 
         unsigned setData(void* ptrDest) const {
             if (ptrData)
                 memcpy(ptrDest, ptrData, m_uiSizeData);
-            else {
-                ExceptionForRTI ex(L"HLAarray.setData. NULL pointer.");
-                throw ex;
-            }
+            else
+                throw std::runtime_error("HLAarray.setData. NULL pointer.");
             return m_uiSizeData;
         }
 
@@ -152,18 +144,18 @@ namespace HLA{
         void chekSize(void* input_data, unsigned long inSize){
             m_uiSizeData = 0;
             if (inSize < m_uiSizeData) {
-                throw ExceptionForRTI(L"HLAarray Data is exhausted before reading is complete!.");
+                throw std::runtime_error("HLAarray Data is exhausted before reading is complete!.");
             }
             unsigned uiSizeEl,P;
             T_FOM tmpT;
             for (size_t i = 0; i < uiDim; i++) {
                 if (inSize < m_uiSizeData)
-                    throw ExceptionForRTI(L"HLAarray Data is exhausted before reading is complete!.");
+                    throw std::runtime_error("HLAarray Data is exhausted before reading is complete!.");
                 try {
                     tmpT.getDataMax((reinterpret_cast<char*>(input_data)+m_uiSizeData), inSize-m_uiSizeData);
                 }
-                catch (ExceptionForRTI & ex) {
-                    throw ExceptionForRTI(L"HLAarray" + Tools::widen(ex.what()));
+                catch (std::runtime_error & ex) {
+                    throw std::runtime_error(std::string("HLAarray") + ex.what());
                 }
                 uiSizeEl = tmpT.getsize();
                 if (i != uiDim - 1) {
