@@ -13,7 +13,7 @@ namespace HLA {
     public:
 
         enum class MSG{
-            ERROR = 0,
+            ERRORR = 0,
             INFO = 1
         };
 

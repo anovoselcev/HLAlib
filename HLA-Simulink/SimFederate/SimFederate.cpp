@@ -36,7 +36,7 @@ namespace HLA {
             _rtiAmbassador->updateAttributeValues(_MyInstanceID,map, rti1516e::VariableLengthData());
         }
         catch(...){
-            *log << Logger::MSG::ERROR
+            *log << Logger::MSG::ERRORR
                 << _federate_name
                 << L"Can't update attributes"
                 << HLA::Logger::Flush();

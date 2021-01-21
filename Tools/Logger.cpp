@@ -35,7 +35,7 @@ namespace HLA {
         _mut.lock();
         if(m == MSG::INFO)
             _stream << L"INFO: ";
-        else if(m == MSG::ERROR)
+        else if(m == MSG::ERRORR)
             _stream << L"ERROR: ";
         return *this;
     }

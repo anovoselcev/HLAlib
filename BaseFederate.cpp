@@ -136,7 +136,7 @@ namespace HLA{
         }
         catch(RTIinternalError& e){               // Catch RTI runtime error
 
-            *logger << Logger::MSG::ERROR                      // Write ERROR message about runtime error
+            *logger << Logger::MSG::ERRORR                      // Write ERROR message about runtime error
                 << _federate_name
                 << L"Can't create RTIambassador"
                 << e.what()
@@ -152,7 +152,7 @@ namespace HLA{
         }
         catch(...){                                                                            // Catch some error
 
-            *logger << Logger::MSG::ERROR                                                                  // Write ERROR message about error
+            *logger << Logger::MSG::ERRORR                                                                  // Write ERROR message about error
                 << _federate_name
                 << L"Cant connect"
                 << Logger::Flush();
@@ -166,7 +166,7 @@ namespace HLA{
 
         catch(ErrorReadingFDD& e){                                                 // Catch FOM reading runtime error
 
-            *logger << Logger::MSG::ERROR                                                       // Write ERROR message about FOM reading
+            *logger << Logger::MSG::ERRORR                                                       // Write ERROR message about FOM reading
                 << _federate_name
                 << L"Cant read FOM"
                 << e.what()
@@ -175,7 +175,7 @@ namespace HLA{
         }
         catch(CouldNotOpenFDD& e){                                                // Catch FOM opening runtime error
 
-            *logger << Logger::MSG::ERROR                                                       // Write ERROR message about FOM opening
+            *logger << Logger::MSG::ERRORR                                                       // Write ERROR message about FOM opening
                 << _federate_name
                 << L"Cant open FOM"
                 << e.what()
@@ -184,7 +184,7 @@ namespace HLA{
         }
         catch(...){                                                                // Catch some error
 
-            *logger << Logger::MSG::ERROR                                                       // Write ERROR message about error
+            *logger << Logger::MSG::ERRORR                                                       // Write ERROR message about error
                 << _federate_name
                 << L"Cant create federation"
                 << Logger::Flush();
@@ -202,7 +202,7 @@ namespace HLA{
         }
         catch(...){                                                                  // Catch some error
 
-            *logger << Logger::MSG::ERROR                                                         // Write ERROR message about error
+            *logger << Logger::MSG::ERRORR                                                         // Write ERROR message about error
                 << _federate_name
                 << L"Can't join"
                 << Logger::Flush();
@@ -222,7 +222,7 @@ namespace HLA{
         }
         catch(RTIinternalError& e){         // Catch RTI runtime error
 
-            *logger << Logger::MSG::ERROR               // Write ERROR message about runtime error
+            *logger << Logger::MSG::ERRORR               // Write ERROR message about runtime error
                 << _federate_name
                 << L"Error in Init() with"
                 << e.what()
@@ -230,7 +230,7 @@ namespace HLA{
             return false;
         }
         catch(...){
-            *logger << Logger::MSG::ERROR                                                         // Write ERROR message about error
+            *logger << Logger::MSG::ERRORR                                                         // Write ERROR message about error
                 << _federate_name
                 << L"Can't Init"
                 << Logger::Flush();
@@ -250,7 +250,7 @@ namespace HLA{
             RunFederate();                                                          // Run the Federate main function (can be empty)
         }
         catch(RTIinternalError& e){                                                 // Catch RTI runtime error
-            *logger << Logger::MSG::ERROR                                                        // Write ERROR message about runtime error
+            *logger << Logger::MSG::ERRORR                                                        // Write ERROR message about runtime error
                 << _federate_name
                 << L"Error in Run() with"
                 << e.what()
@@ -286,10 +286,10 @@ namespace HLA{
 
         const auto& node = file.GetRoot()->AsMap();
 
-        tbb::task_scheduler_init sinit;
-        std::wcout << L"Is scheduler active? = " << sinit.is_active() << std::endl;
+        //tbb::task_scheduler_init sinit;
+        //std::wcout << L"Is scheduler active? = " << sinit.is_active() << std::endl;
 
-        std::wcout << L"Default num threads = " << sinit.default_num_threads() << std::endl;
+        //std::wcout << L"Default num threads = " << sinit.default_num_threads() << std::endl;
         tbb::task_group read, init, ps;
 
 
@@ -472,9 +472,7 @@ namespace HLA{
             PublishSet.insert(_AttributesMap[_MyClass][Attribute]);                                       // Insert federate attributes to Publish Set(_aPublishSetId)
         }
 
-        *logger << Logger::MSG::INFO
-            << L"Init of Classes and Attributes"
-            << Logger::Flush();
+        std::wcout << L"Id of Classes and Attributes " << std::this_thread::get_id() << std::endl;
 
 //        tbb::parallel_for_each(ObjectsNames,[this, &subscribeAttributesSet](const auto& value){
 //            const auto& objectName = value.first;
@@ -547,9 +545,7 @@ namespace HLA{
                 _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
         }
 
-        *logger << Logger::MSG::INFO
-            << L"Init of Interactions and Parameters"
-            << Logger::Flush();
+        std::wcout << L"Id Interactions and Parameters " << std::this_thread::get_id() << std::endl;
 
 //        tbb::parallel_for_each(MyInteractionsNames, [this, &pub](const auto& value){
 //            auto& interactionName = value.first;
@@ -1008,7 +1004,7 @@ namespace HLA{
     void BaseFederate::objectInstanceNameReservationFailed(const wstring & name)
                                                            throw (FederateInternalError){
 
-        *logger << Logger::MSG::ERROR          // Write ERROR message about name reservation failed
+        *logger << Logger::MSG::ERRORR          // Write ERROR message about name reservation failed
             << _federate_name
             << L"Can't Reserved name"
             << Logger::Flush();

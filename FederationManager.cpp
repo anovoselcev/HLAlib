@@ -26,7 +26,7 @@ namespace HLA {
             _rtiAmbassador->destroyFederationExecution(_federation_name);
         }
         catch(...){
-            *logger << Logger::MSG::ERROR                      // Write ERROR message about runtime error
+            *logger << Logger::MSG::ERRORR                      // Write ERROR message about runtime error
                 << _federate_name
                 << L"Can't destroy federation"
                 << Logger::Flush();
