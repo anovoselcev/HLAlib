@@ -265,7 +265,7 @@ namespace HLA{
 
     bool BaseFederate::isActive() const & noexcept{
         std::lock_guard<std::mutex> guard(_smutex);
-        return _state >= STATE::CONNECTED;
+        return _state >= STATE::CONNECTED && _f_modeling;
     }
 
 /**
