@@ -10,6 +10,7 @@
 #include <unordered_set>
 
 #include "Tools/JSON.hpp"
+#include "Tools/Logger.hpp"
 
 namespace HLA{
 
@@ -173,6 +174,8 @@ namespace HLA{
 * @return flag of success execution
 */
          bool ConnectRTI(const JSON& file) &;
+
+         bool isActive() const & noexcept;
 
 /**
 * @brief operator ()

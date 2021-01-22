@@ -1,5 +1,4 @@
 #include "BaseFederate.hpp"
-#include "Tools/Logger.hpp"
 
 #include "RTI/time/HLAfloat64Time.h"
 
@@ -9,14 +8,13 @@
     #include "oneapi/tbb.h"
 #endif
 
-#include <iostream>
-
 namespace HLA{
+
+    std::unique_ptr<Logger> logger;
 
     using namespace std;
     using namespace rti1516e;
 
-    unique_ptr<Logger> logger;
 
 /**
 * @brief BaseFederate::BaseFederate
@@ -264,6 +262,12 @@ namespace HLA{
         return true;
     }
 
+
+    bool BaseFederate::isActive() const & noexcept{
+        std::lock_guard<std::mutex> guard(_smutex);
+        return _state >= STATE::CONNECTED;
+    }
+
 /**
 * @brief BaseFederate::operator ()
 * @param step Modeling Step in milliseconds
@@ -294,13 +298,11 @@ namespace HLA{
         //std::wcout << L"Is scheduler active? = " << sinit.is_active() << std::endl;
 
         //std::wcout << L"Default num threads = " << sinit.default_num_threads() << std::endl;
-        tbb::task_group read, init, ps;
+        //tbb::task_group read, init, ps;
 
 
         NameList AttributeNames;
         NameMap ObjectsNames, MyInteractionsNames, InteractionsNames;
-
-       auto start_json = std::chrono::steady_clock::now();
 
         tbb::parallel_invoke(
                     [&node, &AttributeNames](){
@@ -350,11 +352,7 @@ namespace HLA{
 //        NameMap MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
 
 //        NameMap InteractionsNames   = JSON::ToMap(node.at(L"SubscribeInteractions"));
-        auto end_json = std::chrono::steady_clock::now();
-        std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_json - start_json).count() << L" JSON Init" << std::endl;
 
-
-        auto start_init = std::chrono::steady_clock::now();
 
         tbb::parallel_invoke(
                     [this, &AttributeNames, &ObjectsNames, &subscribeAttributesSet, &PublishSet](){
@@ -376,11 +374,6 @@ namespace HLA{
 
 //        InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
 //        InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames,SubscribeInteractionSet, PublishInteractionSet);
-
-        auto end_init = std::chrono::steady_clock::now();
-       std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_init - start_init).count() << L" Init" << std::endl;
-
-        auto start_ps = std::chrono::steady_clock::now();
 
 //        g.run([this, &subscribeAttributesSet, &PublishSet](){
 //            this->SubscribeAttributes(subscribeAttributesSet);
@@ -429,10 +422,6 @@ namespace HLA{
 //        SubscribeInteractions(SubscribeInteractionSet);
 //        PublishInteractions(PublishInteractionSet);
 
-        auto end_ps = std::chrono::steady_clock::now();
-
-       std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end_ps - start_ps).count() << L" PS" << std::endl;
-
         RegisterName();
 
        /* InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);                  // Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
@@ -475,8 +464,6 @@ namespace HLA{
 
             PublishSet.insert(_AttributesMap[_MyClass][Attribute]);                                       // Insert federate attributes to Publish Set(_aPublishSetId)
         }
-
-        std::wcout << L"Id of Classes and Attributes " << std::this_thread::get_id() << std::endl;
 
 //        tbb::parallel_for_each(ObjectsNames,[this, &subscribeAttributesSet](const auto& value){
 //            const auto& objectName = value.first;
@@ -548,8 +535,6 @@ namespace HLA{
 
                 _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
         }
-
-        std::wcout << L"Id Interactions and Parameters " << std::this_thread::get_id() << std::endl;
 
 //        tbb::parallel_for_each(MyInteractionsNames, [this, &pub](const auto& value){
 //            auto& interactionName = value.first;
@@ -671,7 +656,6 @@ namespace HLA{
         long hash = _MyInstanceID.hash();
         rti1516e::VariableLengthData v;
         v.setData(&hash, sizeof (hash));
-        wcout << _federate_name << L" send READY" << endl;
         _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"READY"), ParameterHandleValueMap(), v, UselessStamp);
     }
 
@@ -680,7 +664,6 @@ namespace HLA{
         if(_CacheID[static_cast<size_t>(ID.hash())])
             return;
 
-        std::wcout << L"New Cache" << std::endl;
         ObjectClassHandle objch = _rtiAmbassador->getKnownObjectClassHandle(ID);
 
         _CacheID[static_cast<size_t>(ID.hash())] = &_ObjectClasses[_rtiAmbassador->getObjectClassName(objch)];
@@ -1076,7 +1059,6 @@ namespace HLA{
             lock_guard<mutex> guard(_smutex);
             _state = STATE::PROCESSING;
             _cond.notify_one();
-            wcout << _federate_name << L" recive GO" << endl;
         }
     }
 

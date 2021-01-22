@@ -2,16 +2,14 @@
 #include "RTI/time/HLAfloat64Time.h"
 #include <cstring>
 #include <algorithm>
-#include "Tools/Logger.hpp"
 
-#include <iostream>
 
 namespace HLA {
 
+    extern std::unique_ptr<HLA::Logger> logger;
+
     using namespace std;
     using namespace rti1516e;
-
-    extern std::unique_ptr<HLA::Logger> logger;
 
     FederationManager::FederationManager(const JSON& file) noexcept :
                                                            BaseFederate(file){}
@@ -78,9 +76,7 @@ namespace HLA {
                                                     ObjectClassHandle theObjectClass,
                                                     wstring const & theObjectInstanceName)
                                                     throw (FederateInternalError){
-        std::wcout << L"I see new" << std::endl;
         lock_guard<mutex> guard(_smutex);
-        std::wcout << theObject.toString() << std::endl;
         _federates_map[theObject] = theObjectInstanceName;
         _federates_stamps[theObjectInstanceName] = TIMESTAMP::GO;
         _federates_count++;
@@ -92,9 +88,7 @@ namespace HLA {
                                                     std::wstring const & theObjectInstanceName,
                                                     FederateHandle producingFederate)
                                                     throw (FederateInternalError){
-        std::wcout << L"I see new" << std::endl;
         lock_guard<mutex> guard(_smutex);
-        std::wcout << theObject.toString() << std::endl;
         _federates_map[theObject] = theObjectInstanceName;
         _federates_stamps[theObjectInstanceName] = TIMESTAMP::GO;
         _federates_count++;
@@ -106,7 +100,6 @@ namespace HLA {
                                                   SupplementalRemoveInfo theRemoveInfo)
                                                   throw (FederateInternalError) {
 
-        std::wcout << L"One less" << std::endl;
         lock_guard<mutex> guard(_smutex);
 
         const auto& name = _federates_map[theObject];
@@ -139,9 +132,6 @@ namespace HLA {
             _federates_stamps[fed->second] = TIMESTAMP::READY;
 
             _ready_federates++;
-
-            std::wcout << L"Num of Federates = " << _federates_count << std::endl;
-            std::wcout << L"Num of Ready Federates = " << _ready_federates << std::endl;
 
             if(_ready_federates == _federates_count)
                     SendGoTimeStamp();

@@ -2,7 +2,6 @@
 #define RTIVECTOR_HPP
 
 #include "BasicTemplates.hpp"
-#include <iostream>
 
 namespace HLA {
 

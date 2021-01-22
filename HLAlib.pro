@@ -1,7 +1,7 @@
 CONFIG -= qt
 
 TEMPLATE = lib
-#CONFIG += staticlib
+CONFIG += staticlib
 
 CONFIG += c++14
 
@@ -23,7 +23,6 @@ SOURCES += \
     BaseFederate.cpp \
     FederationManager.cpp \
     HLA-Simulink/SimFederate/SimFederate.cpp \
-    HLAdata/BasicException.cpp \
     HLAdata/Tools.cpp \
     ProxyFederate.cpp \
     Tools/Logger.cpp \
@@ -34,7 +33,6 @@ HEADERS += \
     FederationManager.hpp \
     HLA-Simulink/SimFederate/SimFederate.hpp \
     HLA-Simulink/SimFederate/Strategy.hpp \
-    HLAdata/BasicException.hpp \
     HLAdata/BasicTemplates.hpp \
     HLAdata/BasicTypes.hpp \
     HLAdata/HLA*.hpp\
