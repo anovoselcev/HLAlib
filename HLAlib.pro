@@ -51,6 +51,8 @@ unix {
 }
 !isEmpty(target.path): INSTALLS += target
 
+
+
 unix:!macx: LIBS += -L$$PWD/../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lrti1516e
 
 INCLUDEPATH += $$PWD/../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
@@ -60,6 +62,28 @@ unix:!macx: LIBS += -L$$PWD/../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lfedtime15
 
 INCLUDEPATH += $$PWD/../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
+
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516e
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516ed
+
+INCLUDEPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+DEPENDPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+
+
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516e
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516ed
+
+INCLUDEPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+DEPENDPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexec
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexecd
+
+INCLUDEPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+DEPENDPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 
 
 unix:!macx: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/gcc4.8/ -ltbb
@@ -84,4 +108,8 @@ DISTFILES += \
     HLA-Simulink/HLAblock.slx \
     HLA-Simulink/TransferBlock.mexa64 \
     HLA-Simulink/TransferBlock.mexw64 \
+
+
+
+
 
