@@ -231,7 +231,7 @@ namespace HLA {
 
 
     template<typename HLAtype, unsigned OBV>
-    rti1516e::VariableLengthData cast_to_rti(const std::vector<typename HLAtype::type>& t){
+    inline rti1516e::VariableLengthData cast_to_rti(const std::vector<typename HLAtype::type>& t){
         Vector<HLAtype,OBV> conv;
         rti1516e::VariableLengthData v;
         conv.get(t);
@@ -240,7 +240,7 @@ namespace HLA {
     }
 
     template<typename HLAtype, unsigned OBV>
-    std::vector<typename HLAtype::type> cast_from_rti(const rti1516e::VariableLengthData& v){
+    inline std::vector<typename HLAtype::type> cast_from_rti(const rti1516e::VariableLengthData& v){
 
         std::vector<typename HLAtype::type> t;
         Vector<HLAtype, OBV> conv;

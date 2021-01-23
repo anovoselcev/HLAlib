@@ -6,7 +6,7 @@
 
 namespace HLA {
 
-    extern std::unique_ptr<HLA::Logger> logger;
+   // extern std::unique_ptr<HLA::Logger> logger;
 
     using namespace std;
     using namespace rti1516e;

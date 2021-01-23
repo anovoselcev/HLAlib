@@ -14,6 +14,8 @@
 
 namespace HLA{
 
+    extern std::unique_ptr<Logger> logger;
+
 /**
 * @brief The ModelMode enum
 * Set of Model Modes:

@@ -85,6 +85,8 @@ namespace HLA {
 */
     Logger::Flush::Flush(){}
 
+    Logger::Endl::Endl(){}
+
 /**
 * @brief Logger::operator <<
 * @return
@@ -101,6 +103,17 @@ namespace HLA {
         return *this;
     }
 
+    Logger& Logger::operator<<(Endl){
+        time_t seconds = time(nullptr);
+        tm* timeinfo = localtime(&seconds);
+        std::wostringstream os;
+        os << L">>" << asctime(timeinfo) << L": " << _stream.str() << L'\n';
+        _stream.str(L"");
+        _file << os.str();
+        _mut.unlock();
+        return *this;
+    }
+
 /**
 * @brief Logger::~Logger
 */
@@ -112,8 +125,9 @@ namespace HLA {
             std::wostringstream os;
             os << L">>" << asctime(timeinfo) << ": " << _stream.str() << L'\n';
             _stream.clear();
-            _file << os.str();
+            _file << os.str(); 
         }
+        _file.flush();
         _file.close();
     }
 

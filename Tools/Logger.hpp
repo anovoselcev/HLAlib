@@ -71,11 +71,17 @@ namespace HLA {
             Flush();
         };
 
+        struct Endl{
+            Endl();
+        };
+
 /**
 * @brief operator <<
 * @return
 */
         Logger& operator<<(Flush);
+
+        Logger& operator<<(Endl);
 
     private:
 
