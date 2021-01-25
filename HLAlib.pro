@@ -91,7 +91,7 @@ unix:!macx: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/gcc4.8/ -ltbb
 INCLUDEPATH += $$PWD/3dparty/tbb/include/linux/
 DEPENDPATH += $$PWD/3dparty/tbb/include/linux/
 
-win32: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb
+win32: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb12
 
 INCLUDEPATH += $$PWD/3dparty/tbb/include/windows/
 DEPENDPATH += $$PWD/3dparty/tbb/include/windows/
