@@ -3,7 +3,7 @@
 #include "RTI/time/HLAfloat64Time.h"
 
 #ifndef WIN32
-    #include "tbb/tbb.h"
+    #include "tbb/parallel_invoke.h"
 #else
     #include "oneapi/tbb.h"
 #endif
@@ -231,6 +231,25 @@ namespace HLA{
                 << Logger::Flush();
             return false;
         }
+        catch(NameNotFound& e){
+            *logger << Logger::MSG::ERRORR               // Write ERROR message about runtime error
+                << _federate_name
+                << L"In Init() Name Not Found with "
+                << e.what()
+                << Logger::Flush();
+            return false;
+        }
+        catch(std::exception& e){
+            std::string str = e.what();
+            std::wstring wstr;
+            wstr.assign(move(str.begin()), move(str.end()));
+            *logger << Logger::MSG::ERRORR               // Write ERROR message about runtime error
+                << _federate_name
+                << L"Error in Init() with "
+                << wstr
+                << Logger::Flush();
+            return false;
+        }
         catch(...){
             *logger << Logger::MSG::ERRORR                                                         // Write ERROR message about error
                 << _federate_name
@@ -294,13 +313,6 @@ namespace HLA{
 
         const auto& node = file.GetRoot()->AsMap();
 
-        //tbb::task_scheduler_init sinit;
-        //std::wcout << L"Is scheduler active? = " << sinit.is_active() << std::endl;
-
-        //std::wcout << L"Default num threads = " << sinit.default_num_threads() << std::endl;
-        //tbb::task_group read, init, ps;
-
-
         NameList AttributeNames;
         NameMap ObjectsNames, MyInteractionsNames, InteractionsNames;
 
@@ -320,40 +332,6 @@ namespace HLA{
         );
 
 
-//        g.run([&node, &AttributeNames, &ObjectsNames](){
-//            AttributeNames = JSON::ToVector(node.at(L"PublishAttributes"));
-//            ObjectsNames = JSON::ToMap(node.at(L"SubscribeAttributes"));
-//        });
-//        read.run([&node, &AttributeNames](){
-//            AttributeNames = JSON::ToVector(node.at(L"PublishAttributes"));
-//        });
-
-//        read.run([&node, &ObjectsNames](){
-//            ObjectsNames = JSON::ToMap(node.at(L"SubscribeAttributes"));
-//        });
-
-//        g.run([&node, &MyInteractionsNames, &InteractionsNames](){
-//            MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
-//            InteractionsNames = JSON::ToMap(node.at(L"SubscribeInteractions"));
-//        });
-
-//        read.run([&node, &MyInteractionsNames](){
-//            MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
-//        });
-
-//        read.run_and_wait([&node, &InteractionsNames](){
-//            InteractionsNames = JSON::ToMap(node.at(L"SubscribeInteractions"));
-//        });
-
-//        NameMap ObjectsNames        = JSON::ToMap(node.at(L"SubscribeAttributes"));
-
-//        NameList AttributeNames     = JSON::ToVector(node.at(L"PublishAttributes"));
-
-//        NameMap MyInteractionsNames = JSON::ToMap(node.at(L"PublishInteractions"));
-
-//        NameMap InteractionsNames   = JSON::ToMap(node.at(L"SubscribeInteractions"));
-
-
         tbb::parallel_invoke(
                     [this, &AttributeNames, &ObjectsNames, &subscribeAttributesSet, &PublishSet](){
                         this->InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
@@ -363,22 +341,6 @@ namespace HLA{
                     }
         );
 
-//        init.run([this, &AttributeNames, &ObjectsNames, &subscribeAttributesSet, &PublishSet](){
-//            this->InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
-//        });
-
-//        init.run_and_wait([this, &InteractionsNames, &MyInteractionsNames, &SubscribeInteractionSet, &PublishInteractionSet](){
-//            this->InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames, SubscribeInteractionSet, PublishInteractionSet);
-//        });
-
-
-//        InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
-//        InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames,SubscribeInteractionSet, PublishInteractionSet);
-
-//        g.run([this, &subscribeAttributesSet, &PublishSet](){
-//            this->SubscribeAttributes(subscribeAttributesSet);
-//            this->PublishAttributes(PublishSet);
-//        });
 
         tbb::parallel_invoke(
                     [this, &subscribeAttributesSet](){
@@ -395,32 +357,7 @@ namespace HLA{
                      }
         );
 
-//        ps.run([this, &subscribeAttributesSet](){
-//            this->SubscribeAttributes(subscribeAttributesSet);
-//        });
 
-//        ps.run([this, &PublishSet](){
-//            this->PublishAttributes(PublishSet);
-//        });
-
-////        g.run([this, &SubscribeInteractionSet,&PublishInteractionSet](){
-////            this->SubscribeInteractions(SubscribeInteractionSet);
-////            this->PublishInteractions(PublishInteractionSet);
-////        });
-
-//        ps.run([this, &SubscribeInteractionSet](){
-//            this->SubscribeInteractions(SubscribeInteractionSet);
-//        });
-
-//        ps.run_and_wait([this, &PublishInteractionSet](){
-//            this->PublishInteractions(PublishInteractionSet);
-//        });
-
-
-//        SubscribeAttributes(subscribeAttributesSet);
-//        PublishAttributes(PublishSet);
-//        SubscribeInteractions(SubscribeInteractionSet);
-//        PublishInteractions(PublishInteractionSet);
 
         RegisterName();
 
@@ -701,19 +638,9 @@ namespace HLA{
             {
                 lock_guard<mutex> guard(_smutex); // Lock state mutex
                 _state = STATE::DOING;            // Change federate state to execute(doing) state without HLA
-
-                *logger << Logger::MSG::INFO                  // Write INFO message about doing part of modeling
-                    << _federate_name
-                    << L"Begin of threading modeling step - doing"
-                    << Logger::Flush();
             }
             _cond.notify_one();                                           // Notify conditional variable in ModelGuard
             this_thread::sleep_for(chrono::milliseconds(_modeling_step)); // Sleep for modeling step
-
-            *logger << Logger::MSG::INFO                                               // Write INFO message about proccessing part of modeling
-                << _federate_name
-                << L"End of threading modeling step - proccessing"
-                << Logger::Flush();
 
             UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
             SendParameters();
@@ -731,20 +658,9 @@ namespace HLA{
            _state = STATE::READY;
            ReadyToGo();
 
-           *logger << Logger::MSG::INFO
-                << _federate_name
-                << L"Ready"
-                << Logger::Flush();
-
-            _cond.wait(lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
+           _cond.wait(lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
                 return _state == STATE::PROCESSING || !_f_modeling;
             });
-
-            *logger << Logger::MSG::INFO
-                 << _federate_name
-                 << L"At Proccessing"
-                 << Logger::Flush();
-
 
             UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
             SendParameters();
@@ -765,21 +681,11 @@ namespace HLA{
         if((step - dur).count()>0)                                                                       // If dur less than modeling step
             this_thread::sleep_for(chrono::milliseconds(step - dur));                                    // Sleep for difference betwen step and dur
 
-        *logger << Logger::MSG::INFO                                                 // Write INFO message about proccessing part of modeling
-            << _federate_name
-            << L"End of following modeling step - proccessing"
-            << Logger::Flush();
-
         UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
         SendParameters();
         ParameterProcess();                                            // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
         AttributeProcess();                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
         _state = STATE::DOING;                                         // Change federate state to execute(doing) state without HLA
-
-        *logger << Logger::MSG::INFO                                                // Write INFO message about doing part of modeling
-            << _federate_name
-            << L"Begin of following modeling step - doing"
-            << Logger::Flush();
     }
 
     template<>

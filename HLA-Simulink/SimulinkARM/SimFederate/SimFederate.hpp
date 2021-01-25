@@ -20,7 +20,6 @@ namespace HLA {
 
     class SimFederate : public BaseFederate{
     public:
-        SimFederate() noexcept;
 
         SimFederate(const std::wstring& name,
                       const std::wstring& type,

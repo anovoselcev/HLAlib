@@ -26,7 +26,7 @@
     <objects>
     	<objectClass>
             <name>HLAobjectRoot</name>
-            <objectClass>
+			<objectClass>
                 <name>Threading</name>
                 <sharing>Neither</sharing>
                     <attribute>
@@ -40,7 +40,20 @@
                     </attribute>
             </objectClass>
             <objectClass>
-                <name>Following</name>
+                <name>ARM</name>
+                <sharing>Neither</sharing>
+                    <attribute>
+                        <name>Name</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
+                    </attribute>
+            </objectClass>
+            <objectClass>
+                <name>Matlab</name>
                 <sharing>Neither</sharing>
                     <attribute>
                         <name>Name</name>
@@ -57,6 +70,40 @@
     <interactions>
         <interactionClass>
             <name>HLAinteractionRoot</name>
+			<interactionClass>
+				<name>ARMaction</name>
+				<sharing>PublishSubscribe</sharing>
+				<transportation>HLAreliable</transportation>
+				<order>Receive</order>
+				<semantics>Communication</semantics>
+				<parameter>
+					<name>Sender</name>
+					<dataType>Int</dataType>
+					<semantics>Contents of message</semantics>
+                </parameter>
+				<parameter>
+					<name>PushButton</name>
+					<dataType>Int</dataType>
+					<semantics>Contents of message</semantics>
+                </parameter>
+				<parameter>
+					<name>Tumbler</name>
+					<dataType>Int</dataType>
+					<semantics>Contents of message</semantics>
+                </parameter>
+			</interactionClass>
+			<interactionClass>
+				<name>MatlabCallback</name>
+				<sharing>PublishSubscribe</sharing>
+				<transportation>HLAreliable</transportation>
+				<order>Receive</order>
+				<semantics>Communication</semantics>
+				<parameter>
+					<name>Stamp</name>
+					<dataType>Int</dataType>
+					<semantics>Contents of message</semantics>
+                </parameter>
+			</interactionClass>
 			<interactionClass>
 				<name>GO</name>
 				<sharing>PublishSubscribe</sharing>

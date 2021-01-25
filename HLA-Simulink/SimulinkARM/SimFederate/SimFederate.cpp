@@ -4,6 +4,8 @@
 
 namespace HLA {
     using namespace  rti1516e;
+    
+    extern std::unique_ptr<Logger> logger;
 
 	class HLAButton final : public HLA::BaseFixedRecord<Button,8>{
 	public:
@@ -55,8 +57,6 @@ namespace HLA {
 
 
 
-    SimFederate::SimFederate() noexcept{}
-
     SimFederate::SimFederate(const std::wstring& name,
                              const std::wstring& type,
                              const std::wstring& FOMname,
@@ -80,13 +80,12 @@ namespace HLA {
 		rti1516e::ParameterHandleValueMap map;
 		rti1516e::InteractionClassHandle name(_InteractionClasses[L"MatlabCallback"]);
 		map[_ParametersMap[name][L"Stamp"]] = HLA::cast_to_rti<HLA::Integer32LE>(id);
+        *logger << L"INFO:" << _federate_name << L" Send " << id << Logger::Flush();
 		try{
 			_rtiAmbassador->sendInteraction(name,map,HLA::cast_to_rti<HLA::String>("Matlab"));
 		}
-		catch(...){
-			HLA::Logger log(this->_log_filename);
-			log << L"ERROR:" << _federate_name << L"Can't send Interaction MatlabCallback" << Logger::Flush();
-		}
+		catch(...){}
+			//*logger << L"ERROR:" << _federate_name << L"Can't send Interaction MatlabCallback" << Logger::Flush();
 		
 	}
 	
@@ -96,7 +95,8 @@ namespace HLA {
 		while(!_qParameters.empty()){
 			auto& message = _qParameters.front();
 			Button button = HLA::cast_from_rti<HLAButton>(message.data.find(_ParametersMap.at(name).at(L"PushButton"))->second);
-			if(button.model_name == _federate_name)
+            *logger << L"INFO:" << _federate_name << L" Recive button with name " << button.model_name << Logger::Flush();
+			//if(button.model_name == _federate_name)
 				SendBulbFlashSignal(button.bulb_id);
 			_qParameters.pop();
 		}
