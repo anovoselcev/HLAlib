@@ -5,7 +5,7 @@
 #ifndef WIN32
     #include "tbb/parallel_invoke.h"
 #else
-    #include "oneapi/tbb.h"
+    #include "oneapi/tbb/parallel_invoke.h"
 #endif
 
 namespace HLA{
