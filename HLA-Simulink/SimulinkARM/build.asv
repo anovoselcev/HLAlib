@@ -5,8 +5,7 @@ specs.HeaderFiles = {'Wrapper.hpp', 'SimFederate.hpp'};
 os = 'windows'
 if (computer == 'GLNXA64')
     os = 'linux'
-    setenv('RRTI_HOME', '/home/k-110-04/Desktop/RRTI/rrti-2.0.0164/')
-    setenv('LD_LIBRARY_PATH', '/home/k-110-04/Desktop/RRTI/rrti-2.0.0164/bin:/home/k-110-04/QtWork/HLA/HLAlib/3dparty/tbb/lib/intel64/gcc4.8/')
+    
 end
 HLAlibPath = 'C:\QtWork\laboratory\'
 RRTIpath = 'C:\rrti-2.0\RRTI-2.0.0164\'
