@@ -2,8 +2,7 @@ TEMPLATE = app
 CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
-QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV -pthread -Ofast
-LIBS += -pthread
+QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV -Ofast
 SOURCES += \
         ../BaseFederate.cpp \
         ../FederationManager.cpp \
@@ -47,6 +46,24 @@ unix:!macx: LIBS += -L$$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lfedtim
 INCLUDEPATH += $$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516e
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516ed
+
+INCLUDEPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+DEPENDPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516e
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516ed
+
+INCLUDEPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+DEPENDPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexec
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexecd
+
+INCLUDEPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+DEPENDPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
+
 INCLUDEPATH += $$PWD/../3dparty/magic_get-develop/include
 DEPENDPATH += $$PWD/../3dparty/magic_get-develop/include
 
@@ -55,11 +72,21 @@ unix:!macx: LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/gcc4.8/ -ltbb
 INCLUDEPATH += $$PWD/../3dparty/tbb/include/linux/
 DEPENDPATH += $$PWD/../3dparty/tbb/include/linux/
 
-INCLUDEPATH += $$PWD/../3dparty/boost_1_74_0/
-DEPENDPATH += $$PWD/../3dparty/boost_1_74_0/
+INCLUDEPATH += $$PWD/../3dparty/tbb/include/windows/
+DEPENDPATH += $$PWD/../3dparty/tbb/include/windows/
 
 win32: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb
 
 INCLUDEPATH += $$PWD/3dparty/tbb/include/windows/
 DEPENDPATH += $$PWD/3dparty/tbb/include/windows/
 
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb12
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb12d
+
+
+INCLUDEPATH += $$PWD/../3dparty/boost_1_74_0/
+DEPENDPATH += $$PWD/../3dparty/boost_1_74_0/
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_74_0/stage/lib/ -llibboost_date_time-vc142-mt-gd-x64-1_74
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_74_0/stage/lib/ -llibboost_date_time-vc142-mt-gd-x64-1_74d
