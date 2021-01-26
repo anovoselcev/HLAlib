@@ -37,7 +37,7 @@ namespace HLA {
 * Method which control execution of federate with Threading Model Mode
 */
     void ModelGuard::ModelingControl<MODELMODE::FREE_THREADING>(){
-        _federate->_cond.wait(_lock,[this]{              // Wait for DOING federate state, federate notify ModelGuard about state change
+        _federate->_condition.wait(_lock,[this]{              // Wait for DOING federate state, federate notify ModelGuard about state change
             return _federate->_state == STATE::DOING;
         });
         _federate->_state = STATE::PROCESSING;          // Set federate step for proccessing
@@ -63,7 +63,7 @@ namespace HLA {
         _federate->_state = STATE::READY;
         _federate->ReadyToGo();
 
-        _federate->_cond.wait(_lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
+        _federate->_condition.wait(_lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
             return _federate->_state == STATE::PROCESSING;
         });
         _federate->Modeling<MODELMODE::MANAGING_FOLLOWING>();
