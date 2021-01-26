@@ -82,7 +82,10 @@ DEPENDPATH += $$PWD/3dparty/tbb/include/windows/
 
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb12
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb12d
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb12_debug
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb_debug
 
 
 INCLUDEPATH += $$PWD/../3dparty/boost_1_74_0/

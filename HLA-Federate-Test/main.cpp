@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include "ThreadFederate.hpp"
 #include "FollowFederate.hpp"
@@ -8,6 +9,7 @@
 #include <tbb/tbb.h>
 
 constexpr int step = 2;
+
 
 using namespace std;
 
@@ -70,7 +72,7 @@ int main()
 //    tbb::task_group tg;
 //    tg.run([](){f1();});
 //    tg.run([](){f2();});
-    auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/build-AutoCoderForTest-Desktop_Qt_5_12_5_GCC_64bit-Release/Test.JSON");
+    auto file = HLA::JSON::MakeJSON(L"C:\\config\\ARM.json");
     HLA::FederationManager man(file);
     auto start = std::chrono::steady_clock::now();
     man.ConnectRTI(file);

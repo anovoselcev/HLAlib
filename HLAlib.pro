@@ -91,7 +91,11 @@ unix:!macx: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/gcc4.8/ -ltbb
 INCLUDEPATH += $$PWD/3dparty/tbb/include/linux/
 DEPENDPATH += $$PWD/3dparty/tbb/include/linux/
 
-win32: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb12
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb12
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb12_debug
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb_debug
 
 INCLUDEPATH += $$PWD/3dparty/tbb/include/windows/
 DEPENDPATH += $$PWD/3dparty/tbb/include/windows/
@@ -103,11 +107,6 @@ DEPENDPATH += $$PWD/3dparty/magic_get-develop/include/
 INCLUDEPATH += $$PWD/3dparty/boost_1_74_0/
 DEPENDPATH += $$PWD/3dparty/boost_1_74_0/
 
-DISTFILES += \
-    HLA-Simulink/HLAblock \
-    HLA-Simulink/HLAblock.slx \
-    HLA-Simulink/TransferBlock.mexa64 \
-    HLA-Simulink/TransferBlock.mexw64 \
 
 
 
