@@ -14,14 +14,19 @@
 
 namespace HLA{
 
+/**
+* @brief logger
+* Logger - Singlton for log inforamtion about connection, initialization and execution
+*/
     extern std::unique_ptr<Logger> logger;
 
 /**
 * @brief The ModelMode enum
 * Set of Model Modes:
-* Following : Do modeling process and federate time control in the thread, which connect federate to RTI
-* Threading : Do modeling process and federate time control in the new thread
-* Managing  : Do modeling process ................................................................
+* Free_Following      : Do modeling process and federate time control in the thread, which connect federate to RTI with independent modeling step (master)
+* Free_Threading      : Do modeling process and federate time control in the new thread with independent modeling step (master)
+* Managing_Following  : Do modeling process in the thread, which connect federate to RTI with depends on FederationManager (slave)
+* Managing_Threading  :  Do modeling process and federate time control in the new thread with depends on FederationManager (slave)
 */
     enum class MODELMODE : short{
         FREE_FOLLOWING      = 0,
@@ -55,6 +60,8 @@ namespace HLA{
 
 /**
 * @brief The TimeStamp enum
+* READY : Stapm that notify FederationManager about ready of Federate
+* GO    : Stamp that notify Federate that FederationManager allow next modeling step
 */
     enum class TIMESTAMP : short{
         READY = 0,
@@ -120,6 +127,7 @@ namespace HLA{
 * FOMpath        : Path to FOM file
 * FederationName : Name of Federation
 * Address        : IP - address of CRC
+* LogFileName    : Prefix for log - file
 * Constructor for JSON file with lvalue reference
 */
         BaseFederate(const JSON& file) noexcept;
@@ -132,6 +140,7 @@ namespace HLA{
 * FOMpath        : Path to FOM file
 * FederationName : Name of Federation
 * Address        : IP - address of CRC
+* LogFileName    : Prefix for log - file
 * Constructor for JSON file with rvalue reference
 */
         BaseFederate(JSON&& file) noexcept;
@@ -177,6 +186,11 @@ namespace HLA{
 */
          bool ConnectRTI(const JSON& file) &;
 
+/**
+* @brief isActive
+* Method notifying about the status of the federate
+* @return flag of active execution
+*/
          bool isActive() const & noexcept;
 
 /**
@@ -245,13 +259,21 @@ namespace HLA{
 */
         STATE GetState() const noexcept;
 
+
+//================================================================================================================================================
+
+//          Private Methods, structures and alias
+
+//================================================================================================================================================
+
+private:
+
 /**
 * @brief LoadSOMFromJSON
 * @param file file JSON file with necessary parameters:
 * ModelingStep          : Step of Modeling in milliseconds
 * CallbackMode          : Asynchronous/Synchronous mode match 0/1
 * ModelingMode          : Modeling Mode parameter, look ModelMode enumeration class
-* LogFileName           : Name of file for log info
 * PublishAttributes     : List of attributes (matches with FOM), which federate want to publish ({"Attribute1", "Attribute2",....})
 * SubscribeAttributes   : Hash Map of objects and their attributes (matches with FOM), which federate want to subscribe ({{"Object1", {"Attribute1", "Attribute2",....}}....})
 * PublishInteractions   : Hash Map of interactions and their parameters (matches with FOM), which federate want to publish ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
@@ -267,7 +289,6 @@ namespace HLA{
 * ModelingStep          : Step of Modeling in milliseconds
 * CallbackMode          : Asynchronous/Synchronous mode match 0/1
 * ModelingMode          : Modeling Mode parameter, look ModelMode enumeration class
-* LogFileName           : Name of file for log info
 * PublishAttributes     : List of attributes (matches with FOM), which federate want to publish ({"Attribute1", "Attribute2",....})
 * SubscribeAttributes   : Hash Map of objects and their attributes (matches with FOM), which federate want to subscribe ({{"Object1", {"Attribute1", "Attribute2",....}}....})
 * PublishInteractions   : Hash Map of interactions and their parameters (matches with FOM), which federate want to publish ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
@@ -276,14 +297,6 @@ namespace HLA{
 * @return Sample reference of current Federate
 */
         BaseFederate& LoadSOMFromJSON(JSON&& file);
-
-//================================================================================================================================================
-
-//          Private Methods, structures and alias
-
-//================================================================================================================================================
-
-private:
 
 /**
 * @brief NameMap
@@ -340,8 +353,9 @@ private:
 /**
 * @brief The CallbackInformation struct
 * Data structure for Callback Message {info, data}
-* info : Some mark, using for differ identifiers
-* data : Map of data with VariableLengthData (ByteArray)
+* info   : Some mark, using for differ identifiers
+* data   : Map of data with VariableLengthData (ByteArray)
+* handle : Handle of recived type
 */
         template<typename T,
                  typename Handle>
@@ -451,9 +465,17 @@ private:
 */
         void RegisterName();
 
+/**
+* @brief ReadyToGo
+* Method that sends the FederationManager a stamp that the federate is ready for the next modeling step
+*/
         void ReadyToGo() const;
 
-        void CacheID(const rti1516e::ObjectInstanceHandle&);
+/**
+* @brief CacheID
+* Method caching the handle of the resulting object class by the hash of the class id
+*/
+        void CacheID(const rti1516e::ObjectInstanceHandle&) const;
 
 //================================================================================================================================================
 
@@ -617,10 +639,6 @@ private:
 */
         rti1516e::CallbackModel _callback_mode = rti1516e::HLA_IMMEDIATE;
 
-
-
-
-
 /**
 * @brief _rtiAmbassador
 * Pointer for RTI-ambassador object
@@ -639,8 +657,6 @@ private:
 * Self instance class of federate with registered federate name in RTI (something like ID in RTI)
 */
         rti1516e::ObjectInstanceHandle _MyInstanceID;
-
-
 
 
 /**
@@ -668,9 +684,12 @@ private:
 */
         ParameterHandleMap _ParametersMap;
 
-
-
-        std::unordered_map<size_t, rti1516e::ObjectClassHandle*> _CacheID;
+/**
+* @brief _CacheID
+* Hash map for caching [ObjectID; ObjectClassID] in format [HashOF(ObjectID); PointerOF(ObjectClassID)] for better memory using
+* it valueable for switching and parsing queue of attributes
+*/
+        mutable std::unordered_map<size_t, const rti1516e::ObjectClassHandle*> _CacheID;
 
 
 /**
@@ -684,9 +703,6 @@ private:
 * Queue of recived parameters with transport information
 */
         std::queue<CallbackParametersInformation> _qParameters;
-
-
-
 
 /**
 * @brief _amutex
@@ -706,9 +722,6 @@ private:
 */
 
         mutable std::mutex _smutex;
-
-
-
 
 /**
 * @brief _modeling_thread
@@ -733,7 +746,7 @@ private:
 * Condition variable that check _state and launch main thread if ModelGuard using
 */
 
-        std::condition_variable _cond;
+        std::condition_variable _condition;
 
 
 /**
