@@ -4,12 +4,18 @@
 
 #ifndef WIN32
     #include "tbb/parallel_invoke.h"
+    #include "tbb/parallel_for_each.h"
 #else
     #include "oneapi/tbb/parallel_invoke.h"
+    #include "oneapi/tbb/parallel_for_each.h"
 #endif
 
 namespace HLA{
 
+/**
+* @brief logger
+* Logger - Singlton for log inforamtion about connection, initialization and execution
+*/
     std::unique_ptr<Logger> logger;
 
     using namespace std;
@@ -65,6 +71,7 @@ namespace HLA{
 * FOMpath        : Path to FOM file
 * FederationName : Name of Federation
 * Address        : IP - address of CRC
+* LogFileName    : Prefix for log - file
 * Constructor for JSON file with lvalue reference
 */
     BaseFederate::BaseFederate(const JSON& file) noexcept :
@@ -73,8 +80,9 @@ namespace HLA{
                                           _FOMname(file.GetRoot()->AsMap().at(L"FOMpath")->AsWstring()),
                                           _federation_name(file.GetRoot()->AsMap().at(L"FederationName")->AsWstring()),
                                           _host_IP_address(file.GetRoot()->AsMap().at(L"Address")->AsWstring()){
-        std::wstring logfilename = file.GetRoot()->AsMap().at(L"LogFileName")->AsWstring();
-        logger = make_unique<Logger>(logfilename, _federate_name);
+
+        const std::wstring logfilename = file.GetRoot()->AsMap().at(L"LogFileName")->AsWstring(); // Read prefix for log from JSON
+        logger = make_unique<Logger>(logfilename, _federate_name);                                // Create Logger
     }
 
 /**
@@ -85,6 +93,7 @@ namespace HLA{
 * FOMpath        : Path to FOM file
 * FederationName : Name of Federation
 * Address        : IP - address of CRC
+* LogFileName    : Prefix for log - file
 * Constructor for JSON file with rvalue reference
 */
     BaseFederate::BaseFederate(JSON&& file) noexcept:
@@ -93,8 +102,9 @@ namespace HLA{
                                           _FOMname(move(file.GetRoot()->AsMap().at(L"FOMpath")->AsWstring())),
                                           _federation_name(move(file.GetRoot()->AsMap().at(L"FederationName")->AsWstring())),
                                           _host_IP_address(move(file.GetRoot()->AsMap().at(L"Address")->AsWstring())){
-        std::wstring logfilename = file.GetRoot()->AsMap().at(L"LogFileName")->AsWstring();
-        logger = make_unique<Logger>(logfilename, _federate_name);
+
+        const std::wstring logfilename = file.GetRoot()->AsMap().at(L"LogFileName")->AsWstring(); // Read prefix for log from JSON
+        logger = make_unique<Logger>(logfilename, _federate_name);                                // Create Logger
     }
 /**
 * @brief BaseFederate::~BaseFederate
@@ -103,12 +113,12 @@ namespace HLA{
     BaseFederate::~BaseFederate(){
         _f_modeling = false;                // Change flag to finish modeling
         if(_mode == MODELMODE::MANAGING_THREADING && _state >= STATE::CONNECTED)
-            _cond.notify_one();
+            _condition.notify_one();
         if((_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING) && _state >= STATE::CONNECTED)
             _modeling_thread.join();        // Wait for end of thread
         lock_guard<mutex> guard(_smutex);   // Lock state mutex
         _state = STATE::EXIT;               // Set federate state to EXIT
-        *logger << Logger::MSG::INFO                    // Write INFO message about disconnect
+        *logger << Logger::MSG::INFO        // Write INFO message about disconnect
             << _federate_name
             << L"disconnect from"
             << _host_IP_address
@@ -132,13 +142,13 @@ namespace HLA{
 * @return flag of success execution
 */
     bool BaseFederate::ConnectRTI(const JSON& file) & {
-        LoadSOMFromJSON(file);
+        LoadSOMFromJSON(file);                     // Read additional information from JSON
         try{
             _rtiAmbassador = MakeRTIambassador(); // Initialized rtiAmbassador to call RTI servecies (look HLA::MakeRTIambassador)
         }
         catch(RTIinternalError& e){               // Catch RTI runtime error
 
-            *logger << Logger::MSG::ERRORR                      // Write ERROR message about runtime error
+            *logger << Logger::MSG::ERRORR        // Write ERROR message about runtime error
                 << _federate_name
                 << L"Can't create RTIambassador"
                 << e.what()
@@ -154,7 +164,7 @@ namespace HLA{
         }
         catch(...){                                                                            // Catch some error
 
-            *logger << Logger::MSG::ERRORR                                                                  // Write ERROR message about error
+            *logger << Logger::MSG::ERRORR                                                     // Write ERROR message about error
                 << _federate_name
                 << L"Cant connect"
                 << Logger::Flush();
@@ -166,27 +176,27 @@ namespace HLA{
         }
         catch(FederationExecutionAlreadyExists&){}                                 // If federation already exist we catch exception(FederationExecutionAlreadyExists) and do nothing
 
-        catch(ErrorReadingFDD& e){                                                 // Catch FOM reading runtime error
+        catch(ErrorReadingFDD& e){          // Catch FOM reading runtime error
 
-            *logger << Logger::MSG::ERRORR                                                       // Write ERROR message about FOM reading
+            *logger << Logger::MSG::ERRORR  // Write ERROR message about FOM reading
                 << _federate_name
                 << L"Cant read FOM"
                 << e.what()
                 << Logger::Flush();
             return false;
         }
-        catch(CouldNotOpenFDD& e){                                                // Catch FOM opening runtime error
+        catch(CouldNotOpenFDD& e){          // Catch FOM opening runtime error
 
-            *logger << Logger::MSG::ERRORR                                                       // Write ERROR message about FOM opening
+            *logger << Logger::MSG::ERRORR  // Write ERROR message about FOM opening
                 << _federate_name
                 << L"Cant open FOM"
                 << e.what()
                 << Logger::Flush();
             return false;
         }
-        catch(...){                                                                // Catch some error
+        catch(...){                          // Catch some error
 
-            *logger << Logger::MSG::ERRORR                                                       // Write ERROR message about error
+            *logger << Logger::MSG::ERRORR   // Write ERROR message about error
                 << _federate_name
                 << L"Cant create federation"
                 << Logger::Flush();
@@ -196,15 +206,15 @@ namespace HLA{
         try{
             _rtiAmbassador->joinFederationExecution(_federate_name, _federate_type, _federation_name); // After connect and create/find federation with name (_federation_name) we join to it with name (_federate_name)
 
-            *logger << Logger::MSG::INFO                                                         // Write INFO message about successfully connection
+            *logger << Logger::MSG::INFO                                                               // Write INFO message about successfully connection
                 << L"Connect of"
                 << _federate_name
                 <<  L"done"
                  << Logger::Flush();
         }
-        catch(...){                                                                  // Catch some error
+        catch(...){                           // Catch some error
 
-            *logger << Logger::MSG::ERRORR                                                         // Write ERROR message about error
+            *logger << Logger::MSG::ERRORR    // Write ERROR message about error
                 << _federate_name
                 << L"Can't join"
                 << Logger::Flush();
@@ -214,9 +224,9 @@ namespace HLA{
         _state = STATE::CONNECTED;          // If all connect steps finished we set connect flag to true value
 
         try{
-            Init(file);                         // Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate
+            Init(file);                     // Initialized federate (it's object type in FOM and attributes), environment in federation (other types and attributes indicated in _ObjectsNames) and their connections for this federate
 
-            *logger << Logger::MSG::INFO                 // Write INFO message about successfull join
+            *logger << Logger::MSG::INFO    // Write INFO message about successfull join
                 << L"Init of"
                 << _federate_name
                 << L"done"
@@ -224,26 +234,26 @@ namespace HLA{
         }
         catch(RTIinternalError& e){         // Catch RTI runtime error
 
-            *logger << Logger::MSG::ERRORR               // Write ERROR message about runtime error
+            *logger << Logger::MSG::ERRORR  // Write ERROR message about runtime error
                 << _federate_name
                 << L"Error in Init() with"
                 << e.what()
                 << Logger::Flush();
             return false;
         }
-        catch(NameNotFound& e){
-            *logger << Logger::MSG::ERRORR               // Write ERROR message about runtime error
+        catch(NameNotFound& e){                          // Catch RTI NamedNotFound error
+            *logger << Logger::MSG::ERRORR               // Write ERROR message about NamedNotFound error
                 << _federate_name
                 << L"In Init() Name Not Found with "
                 << e.what()
                 << Logger::Flush();
             return false;
         }
-        catch(std::exception& e){
+        catch(std::exception& e){                        // Catch RTI runtime error
             std::string str = e.what();
             std::wstring wstr;
-            wstr.assign(move(str.begin()), move(str.end()));
-            *logger << Logger::MSG::ERRORR               // Write ERROR message about runtime error
+            wstr.assign(str.begin(), str.end());
+            *logger << Logger::MSG::ERRORR               // Write ERROR message about error
                 << _federate_name
                 << L"Error in Init() with "
                 << wstr
@@ -251,7 +261,7 @@ namespace HLA{
             return false;
         }
         catch(...){
-            *logger << Logger::MSG::ERRORR                                                         // Write ERROR message about error
+            *logger << Logger::MSG::ERRORR              // Write ERROR message about error
                 << _federate_name
                 << L"Can't Init"
                 << Logger::Flush();
@@ -259,19 +269,19 @@ namespace HLA{
         }
 
         try{
-            _f_modeling = true;                                                                     // Run the main loop of federate
+            _f_modeling = true;                        // Run the main loop of federate
             if(_mode == MODELMODE::FREE_THREADING)
                 _modeling_thread = std::thread(&BaseFederate::Modeling<MODELMODE::FREE_THREADING>,this); // Run Modeling Thread
             else if(_mode == MODELMODE::FREE_FOLLOWING)
-                _last_time = chrono::time_point<chrono::steady_clock>(chrono::steady_clock::now());                                           // Save last clock time
+                _last_time = chrono::time_point<chrono::steady_clock>(chrono::steady_clock::now());      // Save last clock time
             else if(_mode == MODELMODE::MANAGING_THREADING){
                 _modeling_thread = std::thread(&BaseFederate::Modeling<MODELMODE::MANAGING_THREADING>, this);
             }
 
-            RunFederate();                                                          // Run the Federate main function (can be empty)
+            RunFederate();                 // Run the Federate main function (can be empty)
         }
-        catch(RTIinternalError& e){                                                 // Catch RTI runtime error
-            *logger << Logger::MSG::ERRORR                                                        // Write ERROR message about runtime error
+        catch(RTIinternalError& e){        // Catch RTI runtime error
+            *logger << Logger::MSG::ERRORR // Write ERROR message about runtime error
                 << _federate_name
                 << L"Error in Run() with"
                 << e.what()
@@ -281,9 +291,13 @@ namespace HLA{
         return true;
     }
 
-
+/**
+* @brief BaseFederate::isActive
+* Method notifying about the status of the federate
+* @return flag of active execution
+*/
     bool BaseFederate::isActive() const & noexcept{
-        std::lock_guard<std::mutex> guard(_smutex);
+        std::lock_guard<std::mutex> guard(_smutex);       // Lock federate state
         return _state >= STATE::CONNECTED && _f_modeling;
     }
 
@@ -333,9 +347,11 @@ namespace HLA{
 
 
         tbb::parallel_invoke(
+                    // Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
                     [this, &AttributeNames, &ObjectsNames, &subscribeAttributesSet, &PublishSet](){
                         this->InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);
                     },
+                    // Initializerd Interactions and there parameters indicated in FOM
                     [this, &InteractionsNames, &MyInteractionsNames, &SubscribeInteractionSet, &PublishInteractionSet](){
                         this->InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames, SubscribeInteractionSet, PublishInteractionSet);
                     }
@@ -343,39 +359,28 @@ namespace HLA{
 
 
         tbb::parallel_invoke(
+                    // Send to RTI set of attributes which federate want to recive
                     [this, &subscribeAttributesSet](){
                         this->SubscribeAttributes(subscribeAttributesSet);
                     },
+                    // Send to RTI set of attributes which federate publish
                     [this, &PublishSet](){
                         this->PublishAttributes(PublishSet);
                     },
+                    // Send to RTI set of interactions which federate want to recive
                     [this, &SubscribeInteractionSet](){
                         this->SubscribeInteractions(SubscribeInteractionSet);
                     },
+                    // Send to RTI set of interactions which federate publish
                     [this, &PublishInteractionSet](){
                         this->PublishInteractions(PublishInteractionSet);
                      }
         );
 
 
+        RegisterName(); // Register _federate_name in RTI
 
-        RegisterName();
-
-       /* InitClassesAndAttributes(AttributeNames, ObjectsNames, subscribeAttributesSet, PublishSet);                  // Initializerd federate object and his attributes and environmental objects and attributes indicated in FOM
-
-        SubscribeAttributes(subscribeAttributesSet);                                    // Send to RTI set of attributes which federate want to recive
-
-        PublishAttributes(PublishSet);                                                  // Send to RTI set of attributes which federate publish
-
-        InitInteractionsAndParameters(InteractionsNames, MyInteractionsNames,SubscribeInteractionSet, PublishInteractionSet); // Initializerd Interactions and there parameters indicated in FOM
-
-        SubscribeInteractions(SubscribeInteractionSet);                                 // Send to RTI set of interactions which federate want to recive
-
-        PublishInteractions(PublishInteractionSet);                                     // Send to RTI set of interactions which federate publish
-
-        RegisterName();  */                                                               // Register _federate_name in RTI
-
-        _state = STATE::STARTED;                                                         // Set state flag to started state (ready to do)
+        _state = STATE::STARTED; // Set state flag to started state (ready to do)
     }
 
 
@@ -391,44 +396,44 @@ namespace HLA{
                                                 AttributeHandleSet& PublishSet){
 
         _MyClass = _rtiAmbassador->getObjectClassHandle(_federate_type);                                   //Initializerd our federate object(_MyClass) from FOM refer to _federate_type
-//        tbb::parallel_for_each(AttributeNames,[this, &PublishSet](const auto& value){
-//            _AttributesMap[_MyClass][value] = _rtiAmbassador->getAttributeHandle(_MyClass,value);
-//            PublishSet.insert(_AttributesMap[_MyClass][value]);
-//        });
-        for(const auto& Attribute:AttributeNames){
+        tbb::parallel_for_each(AttributeNames,[this, &PublishSet](const auto& value){
+            _AttributesMap[_MyClass][value] = _rtiAmbassador->getAttributeHandle(_MyClass,value);
+            PublishSet.insert(_AttributesMap[_MyClass][value]);
+        });
+//        for(const auto& Attribute:AttributeNames){
 
-            _AttributesMap[_MyClass][Attribute] = _rtiAmbassador->getAttributeHandle(_MyClass,Attribute); // Set table(_AttributesMap) of this object attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
+//            _AttributesMap[_MyClass][Attribute] = _rtiAmbassador->getAttributeHandle(_MyClass,Attribute); // Set table(_AttributesMap) of this object attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
 
-            PublishSet.insert(_AttributesMap[_MyClass][Attribute]);                                       // Insert federate attributes to Publish Set(_aPublishSetId)
-        }
+//            PublishSet.insert(_AttributesMap[_MyClass][Attribute]);                                       // Insert federate attributes to Publish Set(_aPublishSetId)
+//        }
 
-//        tbb::parallel_for_each(ObjectsNames,[this, &subscribeAttributesSet](const auto& value){
-//            const auto& objectName = value.first;
-
-//            const auto& objectId =
-//                    _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);
-
-//            tbb::parallel_for_each(value.second,[this, &subscribeAttributesSet, &objectId](const auto& name){
-//                _AttributesMap[objectId][name] =_rtiAmbassador->getAttributeHandle(objectId,name);
-//                subscribeAttributesSet[objectId].insert(_AttributesMap[objectId][name]);
-//            });
-//        });
-
-        for(const auto&Object:ObjectsNames){                                                            // Initializerd environmental objects and attributes indicated in _ObjectNames and attributes of it federate
-
-            const auto& objectName = Object.first;                                                       // Cache of Object Name
+        tbb::parallel_for_each(ObjectsNames,[this, &subscribeAttributesSet](const auto& value){
+            const auto& objectName = value.first;
 
             const auto& objectId =
-                    _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);       // Set table(_ObjectClasses) of objects like [TypeName, HLAobjectClass(something like link to FOM)] and Cache Object ID
+                    _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);
 
-            for(const auto&Attribute:Object.second){
+            tbb::parallel_for_each(value.second,[this, &subscribeAttributesSet, &objectId](const auto& name){
+                _AttributesMap[objectId][name] =_rtiAmbassador->getAttributeHandle(objectId,name);
+                subscribeAttributesSet[objectId].insert(_AttributesMap[objectId][name]);
+            });
+        });
 
-                _AttributesMap[objectId][Attribute] =_rtiAmbassador->getAttributeHandle(objectId,Attribute); // Set table(_AttributesMap) of object's attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
+//        for(const auto&Object:ObjectsNames){                                                            // Initializerd environmental objects and attributes indicated in _ObjectNames and attributes of it federate
 
-                subscribeAttributesSet[objectId].insert(_AttributesMap[objectId][Attribute]);                // Insert extern attributes to Subscribe Set(_externAttributeSet)
+//            const auto& objectName = Object.first;                                                       // Cache of Object Name
 
-            }
-        }
+//            const auto& objectId =
+//                    _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);       // Set table(_ObjectClasses) of objects like [TypeName, HLAobjectClass(something like link to FOM)] and Cache Object ID
+
+//            for(const auto&Attribute:Object.second){
+
+//                _AttributesMap[objectId][Attribute] =_rtiAmbassador->getAttributeHandle(objectId,Attribute); // Set table(_AttributesMap) of object's attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
+
+//                subscribeAttributesSet[objectId].insert(_AttributesMap[objectId][Attribute]);                // Insert extern attributes to Subscribe Set(_externAttributeSet)
+
+//            }
+//        }
     }
 
 
@@ -446,59 +451,59 @@ namespace HLA{
         sub.reserve(InteractionsNames.size() + 1);
         pub.reserve(MyInteractionsNames.size() + 1);
 
-//        tbb::parallel_for_each(InteractionsNames, [this, &sub](const auto& value){
-//            auto& interactionName = value.first;
-
-//            auto& interactionId = _InteractionClasses[interactionName]
-//                    = _rtiAmbassador->getInteractionClassHandle(interactionName);
-
-//            sub.insert(interactionId);
-
-//            tbb::parallel_for_each(value.second, [this, &interactionId](const auto& name){
-//                _ParametersMap[interactionId][name] =_rtiAmbassador->getParameterHandle(interactionId,name);
-//            });
-//        });
-
-        for(const auto&Interaction:InteractionsNames){
-
-            auto& interactionName = Interaction.first;                             // Cache of Interaction Name
+        tbb::parallel_for_each(InteractionsNames, [this, &sub](const auto& value){
+            auto& interactionName = value.first;
 
             auto& interactionId = _InteractionClasses[interactionName]
-                    = _rtiAmbassador->getInteractionClassHandle(interactionName);  // Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)] and Cache Interaction ID
+                    = _rtiAmbassador->getInteractionClassHandle(interactionName);
 
-            sub.insert(interactionId);                                             // Insert InteractionHandle to subscribe set
+            sub.insert(interactionId);
 
-            for(const auto&Parameter:Interaction.second)
+            tbb::parallel_for_each(value.second, [this, &interactionId](const auto& name){
+                _ParametersMap[interactionId][name] =_rtiAmbassador->getParameterHandle(interactionId,name);
+            });
+        });
 
-                _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
-        }
+//        for(const auto&Interaction:InteractionsNames){
 
-//        tbb::parallel_for_each(MyInteractionsNames, [this, &pub](const auto& value){
-//            auto& interactionName = value.first;
+//            auto& interactionName = Interaction.first;                             // Cache of Interaction Name
 
 //            auto& interactionId = _InteractionClasses[interactionName]
-//                    = _rtiAmbassador->getInteractionClassHandle(interactionName);
+//                    = _rtiAmbassador->getInteractionClassHandle(interactionName);  // Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)] and Cache Interaction ID
 
-//            pub.insert(interactionId);
+//            sub.insert(interactionId);                                             // Insert InteractionHandle to subscribe set
 
-//            tbb::parallel_for_each(value.second, [this, &interactionId](const auto& name){
-//                _ParametersMap[interactionId][name] =_rtiAmbassador->getParameterHandle(interactionId,name);
-//            });
-//        });
+//            for(const auto&Parameter:Interaction.second)
 
-        for(const auto&Interaction:MyInteractionsNames){
+//                _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
+//        }
 
-            auto& interactionName = Interaction.first;                             // Cache of Interaction Name
+        tbb::parallel_for_each(MyInteractionsNames, [this, &pub](const auto& value){
+            auto& interactionName = value.first;
 
             auto& interactionId = _InteractionClasses[interactionName]
-                    = _rtiAmbassador->getInteractionClassHandle(interactionName); // Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)] and Cahce InteractionID
+                    = _rtiAmbassador->getInteractionClassHandle(interactionName);
 
-            pub.insert(interactionId);                                            // Insert InteractionHandle to publish set
+            pub.insert(interactionId);
 
-            for(const auto&Parameter:Interaction.second)
+            tbb::parallel_for_each(value.second, [this, &interactionId](const auto& name){
+                _ParametersMap[interactionId][name] =_rtiAmbassador->getParameterHandle(interactionId,name);
+            });
+        });
 
-                _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
-        }
+//        for(const auto&Interaction:MyInteractionsNames){
+
+//            auto& interactionName = Interaction.first;                             // Cache of Interaction Name
+
+//            auto& interactionId = _InteractionClasses[interactionName]
+//                    = _rtiAmbassador->getInteractionClassHandle(interactionName); // Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)] and Cahce InteractionID
+
+//            pub.insert(interactionId);                                            // Insert InteractionHandle to publish set
+
+//            for(const auto&Parameter:Interaction.second)
+
+//                _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
+//        }
 
         try{
             if(_mode >= MODELMODE::MANAGING_FOLLOWING){
@@ -523,13 +528,13 @@ namespace HLA{
 * Call RTI to subscribe on Objects and Attributes from _ObjectNames
 */
     void BaseFederate::SubscribeAttributes(const unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash>& _externAttributesSet) const{
-        for(const auto& x:_externAttributesSet)
+//        for(const auto& x:_externAttributesSet)
 
-            _rtiAmbassador->subscribeObjectClassAttributes(x.first,x.second);// Send to RTI request to subscribe on Object(x.first) and his Attribute Set (x.second)
-                                                                         // It get opportunity to recive information about updates of object's attribute set in reflectAttributeValues
-//        tbb::parallel_for_each(_externAttributesSet,[this](const auto& value){
-//            _rtiAmbassador->subscribeObjectClassAttributes(value.first,value.second);
-//        });
+//            _rtiAmbassador->subscribeObjectClassAttributes(x.first,x.second);// Send to RTI request to subscribe on Object(x.first) and his Attribute Set (x.second)
+//                                                                         // It get opportunity to recive information about updates of object's attribute set in reflectAttributeValues
+        tbb::parallel_for_each(_externAttributesSet,[this](const auto& value){
+            _rtiAmbassador->subscribeObjectClassAttributes(value.first,value.second);
+        });
     }
 
 /**
@@ -549,14 +554,14 @@ namespace HLA{
 * Call RTI to subscribe on Interactions and Parameters from _MyInteractionsNames
 */
     void BaseFederate::SubscribeInteractions(const unordered_set<InteractionClassHandle, InteractionClassHash>& sub) const{
-        for(const auto&x:sub)
+//        for(const auto&x:sub)
 
-            _rtiAmbassador->subscribeInteractionClass(x);// Send to RTI request to subscribe on Interaction x
-                                                         // It get opportunity to recive information about updates of interaction's parameter set in reflectParameterValues
+//            _rtiAmbassador->subscribeInteractionClass(x);// Send to RTI request to subscribe on Interaction x
+//                                                         // It get opportunity to recive information about updates of interaction's parameter set in reflectParameterValues
 
-//        tbb::parallel_for_each(sub, [this](const auto& value){
-//            _rtiAmbassador->subscribeInteractionClass(value);
-//        });
+        tbb::parallel_for_each(sub, [this](const auto& value){
+            _rtiAmbassador->subscribeInteractionClass(value);
+        });
     }
 
 /**
@@ -565,13 +570,13 @@ namespace HLA{
 * Call RTI to publish the Interactions and Parameters from _InteractionsNames
 */
     void BaseFederate::PublishInteractions(const unordered_set<InteractionClassHandle, InteractionClassHash>& pub) const{
-        for(const auto&x:pub)
+//        for(const auto&x:pub)
 
-            _rtiAmbassador->publishInteractionClass(x);// Send to RTI request to publish parameters (_ParametersMap) of this federate
+//            _rtiAmbassador->publishInteractionClass(x);// Send to RTI request to publish parameters (_ParametersMap) of this federate
                                                        // After that federate can provide information about updates of his parameters in RTI using sendInteraction
-//        tbb::parallel_for_each(pub, [this](const auto& value){
-//             _rtiAmbassador->publishInteractionClass(value);
-//        });
+        tbb::parallel_for_each(pub, [this](const auto& value){
+             _rtiAmbassador->publishInteractionClass(value);
+        });
     }
 
 /**
@@ -596,14 +601,13 @@ namespace HLA{
         _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"READY"), ParameterHandleValueMap(), v, UselessStamp);
     }
 
-    void BaseFederate::CacheID(const rti1516e::ObjectInstanceHandle& ID){
+    void BaseFederate::CacheID(const rti1516e::ObjectInstanceHandle& ID) const{
 
         if(_CacheID[static_cast<size_t>(ID.hash())])
             return;
 
         ObjectClassHandle objch = _rtiAmbassador->getKnownObjectClassHandle(ID);
-
-        _CacheID[static_cast<size_t>(ID.hash())] = &_ObjectClasses[_rtiAmbassador->getObjectClassName(objch)];
+        _CacheID[static_cast<size_t>(ID.hash())] = &_ObjectClasses.at(_rtiAmbassador->getObjectClassName(objch));
     }
 
 
@@ -639,14 +643,26 @@ namespace HLA{
                 lock_guard<mutex> guard(_smutex); // Lock state mutex
                 _state = STATE::DOING;            // Change federate state to execute(doing) state without HLA
             }
-            _cond.notify_one();                                           // Notify conditional variable in ModelGuard
+            _condition.notify_one();                                           // Notify conditional variable in ModelGuard
             this_thread::sleep_for(chrono::milliseconds(_modeling_step)); // Sleep for modeling step
 
-            UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
-            SendParameters();
-            thread ParametersThread(&BaseFederate::ParameterProcess,this); // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
+            tbb::parallel_invoke([this](){
+                this->UpdateAttributes();
+            },
+                                 [this](){
+                this->SendParameters();
+            });
+//            UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
+//            SendParameters();
+            tbb::parallel_invoke([this](){
+                this->ParameterProcess();
+            },
+                                 [this](){
+                this->AttributeProcess();
+            });
+/*            thread ParametersThread(&BaseFederate::ParameterProcess,this); // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
             ParametersThread.detach();
-            AttributeProcess();                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
+            AttributeProcess(); */                                           // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
         }
     }
 
@@ -658,15 +674,23 @@ namespace HLA{
            _state = STATE::READY;
            ReadyToGo();
 
-           _cond.wait(lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
+           _condition.wait(lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
                 return _state == STATE::PROCESSING || !_f_modeling;
             });
 
-            UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
-            SendParameters();
-            thread ParametersThread(&BaseFederate::ParameterProcess,this); // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
-            ParametersThread.detach();
-            AttributeProcess();
+           tbb::parallel_invoke([this](){
+               this->UpdateAttributes();
+           },
+                                [this](){
+               this->SendParameters();
+           });
+
+           tbb::parallel_invoke([this](){
+               this->ParameterProcess();
+           },
+                                [this](){
+               this->AttributeProcess();
+           });
         }
     }
 
@@ -681,10 +705,19 @@ namespace HLA{
         if((step - dur).count()>0)                                                                       // If dur less than modeling step
             this_thread::sleep_for(chrono::milliseconds(step - dur));                                    // Sleep for difference betwen step and dur
 
-        UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
-        SendParameters();
-        ParameterProcess();                                            // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
-        AttributeProcess();                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
+        tbb::parallel_invoke([this](){
+            this->UpdateAttributes();
+        },
+                             [this](){
+            this->SendParameters();
+        });
+
+        tbb::parallel_invoke([this](){
+            this->ParameterProcess();
+        },
+                             [this](){
+            this->AttributeProcess();
+        });                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
         _state = STATE::DOING;                                         // Change federate state to execute(doing) state without HLA
     }
 
@@ -693,11 +726,19 @@ namespace HLA{
 * @brief BaseFederate::Modeling<ModelMode::MANAGING>
 */
     void BaseFederate::Modeling<MODELMODE::MANAGING_FOLLOWING>(){
-       UpdateAttributes();                                            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
-       SendParameters();
-       thread ParametersThread(&BaseFederate::ParameterProcess,this); // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
-       ParametersThread.detach();
-       AttributeProcess();                                            // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
+        tbb::parallel_invoke([this](){
+            this->UpdateAttributes();
+        },
+                             [this](){
+            this->SendParameters();
+        });
+
+        tbb::parallel_invoke([this](){
+            this->ParameterProcess();
+        },
+                             [this](){
+            this->AttributeProcess();
+        });                                          // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
        _state = STATE::DOING;
     }
 
@@ -894,7 +935,7 @@ namespace HLA{
 * @param theObjectInstanceName
 * Callback function from RTI. Call when name registration in RegisterName is failed
 */
-    void BaseFederate::objectInstanceNameReservationFailed(const wstring & name)
+    void BaseFederate::objectInstanceNameReservationFailed(const wstring &)
                                                            throw (FederateInternalError){
 
         *logger << Logger::MSG::ERRORR          // Write ERROR message about name reservation failed
@@ -964,7 +1005,7 @@ namespace HLA{
         if(theInteraction == _InteractionClasses[L"GO"] && _state >= STATE::STARTED){
             lock_guard<mutex> guard(_smutex);
             _state = STATE::PROCESSING;
-            _cond.notify_one();
+            _condition.notify_one();
         }
     }
 
