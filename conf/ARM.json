@@ -1,0 +1,33 @@
+{
+    "Name" :
+                        "ARMlead",
+    "Type" :            
+                        "ARM",
+    "FOMpath" :
+                        "/home/k-110-04/QtWork/HLA/HLAlib/conf/SampleFOM.xml",
+    "FederationName":
+                        "Test",
+    "Address":
+                        "10.55.82.125",
+    "ModelingStep" : 
+                        100,
+    "CallbackMode" : 
+                        0,
+                        
+    "ModelingMode" :
+                        1,
+    "LogFileName" :
+                        "LogFile",
+    
+    "PublishAttributes": 
+                        ["Name"],
+    "SubscribeAttributes" :
+                        {"Matlab" :
+                                        ["Name"]},
+    "PublishInteractions" : 
+                            {"ARMaction":
+										["Sender", "PushButton","Tumbler"]},
+    "SubscribeInteractions" :
+                            {"MatlabCallback":
+										["Stamp"]}
+}

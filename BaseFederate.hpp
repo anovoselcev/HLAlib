@@ -350,6 +350,10 @@ private:
             size_t operator()(const rti1516e::InteractionClassHandle& _Interaction) const noexcept;
         };
 
+        struct AttributeHash{
+            size_t operator()(const rti1516e::AttributeHandle& attr) const noexcept;
+        };
+
 /**
 * @brief The CallbackInformation struct
 * Data structure for Callback Message {info, data}

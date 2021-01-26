@@ -55,24 +55,10 @@ void NewFollowFederate(wstring&& name, int delay){
     }
 }
 
-void f1(){
-    std::wcout << L"First" << std::endl;
-    for(;;);
-    std::this_thread::sleep_for(std::chrono::minutes(5));
-}
-
-void f2(){
-    std::wcout << L"Second" << std::endl;
-    for(;;)
-    std::this_thread::sleep_for(std::chrono::minutes(5));
-}
 
 int main()
 {
-//    tbb::task_group tg;
-//    tg.run([](){f1();});
-//    tg.run([](){f2();});
-    auto file = HLA::JSON::MakeJSON(L"C:\\config\\ARM.json");
+    auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/build-AutoCoderForTest-Desktop_Qt_5_12_5_GCC_64bit-Release/Test.JSON");
     HLA::FederationManager man(file);
     auto start = std::chrono::steady_clock::now();
     man.ConnectRTI(file);
@@ -80,7 +66,8 @@ int main()
     std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << L"us" << std::endl;
     //HLA::ProxyFederate prx(file);
     //prx("10.55.82.125:8080", file);
-    std::this_thread::sleep_for(std::chrono::seconds(100));
+    std::this_thread::sleep_for(std::chrono::seconds(10));
+    std::wcout << L"After wait" << std::endl;
     //std::thread th1(NewThreadFederate,L"Fed1",1000);
     //th1.join();
     //std::this_thread::sleep_for(std::chrono::seconds(5));

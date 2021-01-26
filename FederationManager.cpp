@@ -16,9 +16,11 @@ namespace HLA {
                                                       BaseFederate(std::move(file)){}
 
     FederationManager::~FederationManager(){
+
         lock_guard<mutex> guard(_smutex);
+
         try{
-            _rtiAmbassador->resignFederationExecution(ResignAction::CANCEL_THEN_DELETE_THEN_DIVEST);
+            _rtiAmbassador->resignFederationExecution(ResignAction::NO_ACTION);
             _rtiAmbassador->destroyFederationExecution(_federation_name);
         }
         catch(...){

@@ -1,10 +1,10 @@
 #include "BaseFederate.hpp"
 
 #include "RTI/time/HLAfloat64Time.h"
-
 #ifndef WIN32
     #include "tbb/parallel_invoke.h"
     #include "tbb/parallel_for_each.h"
+
 #else
     #include "oneapi/tbb/parallel_invoke.h"
     #include "oneapi/tbb/parallel_for_each.h"
@@ -392,48 +392,34 @@ namespace HLA{
 */
     void BaseFederate::InitClassesAndAttributes(const NameList& AttributeNames,
                                                 const NameMap& ObjectsNames,
-                                                unordered_map<ObjectClassHandle,AttributeHandleSet,ObjectClassHash>& subscribeAttributesSet,
+                                                unordered_map<ObjectClassHandle, AttributeHandleSet, ObjectClassHash>& subscribeAttributesSet,
                                                 AttributeHandleSet& PublishSet){
 
-        _MyClass = _rtiAmbassador->getObjectClassHandle(_federate_type);                                   //Initializerd our federate object(_MyClass) from FOM refer to _federate_type
-        tbb::parallel_for_each(AttributeNames,[this, &PublishSet](const auto& value){
-            _AttributesMap[_MyClass][value] = _rtiAmbassador->getAttributeHandle(_MyClass,value);
-            PublishSet.insert(_AttributesMap[_MyClass][value]);
-        });
-//        for(const auto& Attribute:AttributeNames){
+       _MyClass = _rtiAmbassador->getObjectClassHandle(_federate_type);                                   //Initializerd our federate object(_MyClass) from FOM refer to _federate_type
 
-//            _AttributesMap[_MyClass][Attribute] = _rtiAmbassador->getAttributeHandle(_MyClass,Attribute); // Set table(_AttributesMap) of this object attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
+        for(const auto& Attribute:AttributeNames){
 
-//            PublishSet.insert(_AttributesMap[_MyClass][Attribute]);                                       // Insert federate attributes to Publish Set(_aPublishSetId)
-//        }
+            _AttributesMap[_MyClass][Attribute] = _rtiAmbassador->getAttributeHandle(_MyClass,Attribute); // Set table(_AttributesMap) of this object attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
 
-        tbb::parallel_for_each(ObjectsNames,[this, &subscribeAttributesSet](const auto& value){
-            const auto& objectName = value.first;
+            PublishSet.insert(_AttributesMap[_MyClass][Attribute]);                                       // Insert federate attributes to Publish Set(_aPublishSetId)
+        }
+
+
+        for(const auto&Object:ObjectsNames){                                                            // Initializerd environmental objects and attributes indicated in _ObjectNames and attributes of it federate
+
+            const auto& objectName = Object.first;                                                       // Cache of Object Name
 
             const auto& objectId =
-                    _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);
+                    _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);       // Set table(_ObjectClasses) of objects like [TypeName, HLAobjectClass(something like link to FOM)] and Cache Object ID
 
-            tbb::parallel_for_each(value.second,[this, &subscribeAttributesSet, &objectId](const auto& name){
-                _AttributesMap[objectId][name] =_rtiAmbassador->getAttributeHandle(objectId,name);
-                subscribeAttributesSet[objectId].insert(_AttributesMap[objectId][name]);
-            });
-        });
+            for(const auto&Attribute:Object.second){
 
-//        for(const auto&Object:ObjectsNames){                                                            // Initializerd environmental objects and attributes indicated in _ObjectNames and attributes of it federate
+                _AttributesMap[objectId][Attribute] =_rtiAmbassador->getAttributeHandle(objectId,Attribute); // Set table(_AttributesMap) of object's attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
 
-//            const auto& objectName = Object.first;                                                       // Cache of Object Name
+                subscribeAttributesSet[objectId].insert(_AttributesMap[objectId][Attribute]);                // Insert extern attributes to Subscribe Set(_externAttributeSet)
 
-//            const auto& objectId =
-//                    _ObjectClasses[objectName] = _rtiAmbassador->getObjectClassHandle(objectName);       // Set table(_ObjectClasses) of objects like [TypeName, HLAobjectClass(something like link to FOM)] and Cache Object ID
-
-//            for(const auto&Attribute:Object.second){
-
-//                _AttributesMap[objectId][Attribute] =_rtiAmbassador->getAttributeHandle(objectId,Attribute); // Set table(_AttributesMap) of object's attributes like [HLAobjectClass(something like link to FOM), [AttributeName, HLAattribute(something like a link to FOM]]
-
-//                subscribeAttributesSet[objectId].insert(_AttributesMap[objectId][Attribute]);                // Insert extern attributes to Subscribe Set(_externAttributeSet)
-
-//            }
-//        }
+            }
+        }
     }
 
 
@@ -451,59 +437,35 @@ namespace HLA{
         sub.reserve(InteractionsNames.size() + 1);
         pub.reserve(MyInteractionsNames.size() + 1);
 
-        tbb::parallel_for_each(InteractionsNames, [this, &sub](const auto& value){
-            auto& interactionName = value.first;
+        for(const auto&Interaction:InteractionsNames){
+
+            auto& interactionName = Interaction.first;                             // Cache of Interaction Name
 
             auto& interactionId = _InteractionClasses[interactionName]
-                    = _rtiAmbassador->getInteractionClassHandle(interactionName);
+                    = _rtiAmbassador->getInteractionClassHandle(interactionName);  // Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)] and Cache Interaction ID
 
-            sub.insert(interactionId);
+            sub.insert(interactionId);                                             // Insert InteractionHandle to subscribe set
 
-            tbb::parallel_for_each(value.second, [this, &interactionId](const auto& name){
-                _ParametersMap[interactionId][name] =_rtiAmbassador->getParameterHandle(interactionId,name);
-            });
-        });
+            for(const auto&Parameter:Interaction.second)
 
-//        for(const auto&Interaction:InteractionsNames){
+                _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
+        }
 
-//            auto& interactionName = Interaction.first;                             // Cache of Interaction Name
 
-//            auto& interactionId = _InteractionClasses[interactionName]
-//                    = _rtiAmbassador->getInteractionClassHandle(interactionName);  // Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)] and Cache Interaction ID
 
-//            sub.insert(interactionId);                                             // Insert InteractionHandle to subscribe set
+        for(const auto&Interaction:MyInteractionsNames){
 
-//            for(const auto&Parameter:Interaction.second)
-
-//                _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
-//        }
-
-        tbb::parallel_for_each(MyInteractionsNames, [this, &pub](const auto& value){
-            auto& interactionName = value.first;
+            auto& interactionName = Interaction.first;                             // Cache of Interaction Name
 
             auto& interactionId = _InteractionClasses[interactionName]
-                    = _rtiAmbassador->getInteractionClassHandle(interactionName);
+                    = _rtiAmbassador->getInteractionClassHandle(interactionName); // Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)] and Cahce InteractionID
 
-            pub.insert(interactionId);
+            pub.insert(interactionId);                                            // Insert InteractionHandle to publish set
 
-            tbb::parallel_for_each(value.second, [this, &interactionId](const auto& name){
-                _ParametersMap[interactionId][name] =_rtiAmbassador->getParameterHandle(interactionId,name);
-            });
-        });
+            for(const auto&Parameter:Interaction.second)
 
-//        for(const auto&Interaction:MyInteractionsNames){
-
-//            auto& interactionName = Interaction.first;                             // Cache of Interaction Name
-
-//            auto& interactionId = _InteractionClasses[interactionName]
-//                    = _rtiAmbassador->getInteractionClassHandle(interactionName); // Set table(_InteractionClasses) of interactions like [InteractionTypeName, HLAInteractionClass(something like link to FOM)] and Cahce InteractionID
-
-//            pub.insert(interactionId);                                            // Insert InteractionHandle to publish set
-
-//            for(const auto&Parameter:Interaction.second)
-
-//                _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
-//        }
+                _ParametersMap[interactionId][Parameter] =_rtiAmbassador->getParameterHandle(interactionId,Parameter); // Set table(_ParametersMap) of interaction's parameters like [HLAInteractionClass(something like link to FOM), [ParametersName, HLAparameter(something like a link to FOM]]
+        }
 
         try{
             if(_mode >= MODELMODE::MANAGING_FOLLOWING){
@@ -520,6 +482,13 @@ namespace HLA{
             }
         }
         catch(...){}
+
+//        tbb::concurrent_unordered_map <int, int> tbbf;
+
+
+
+//        unordered_map<int, int> d = {tbbf.begin(), tbbf.end()};
+
     }
 
 /**
@@ -557,7 +526,7 @@ namespace HLA{
 //        for(const auto&x:sub)
 
 //            _rtiAmbassador->subscribeInteractionClass(x);// Send to RTI request to subscribe on Interaction x
-//                                                         // It get opportunity to recive information about updates of interaction's parameter set in reflectParameterValues
+////                                                         // It get opportunity to recive information about updates of interaction's parameter set in reflectParameterValues
 
         tbb::parallel_for_each(sub, [this](const auto& value){
             _rtiAmbassador->subscribeInteractionClass(value);
@@ -1027,6 +996,10 @@ namespace HLA{
 */
     size_t BaseFederate::InteractionClassHash::operator()(const rti1516e::InteractionClassHandle &_Interaction) const noexcept{
         return static_cast<size_t>(_Interaction.hash());
+    }
+
+    size_t BaseFederate::AttributeHash::operator()(const rti1516e::AttributeHandle &attr) const noexcept{
+        return static_cast<size_t>(attr.hash());
     }
 
 }

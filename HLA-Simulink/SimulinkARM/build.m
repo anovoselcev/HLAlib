@@ -22,6 +22,8 @@ if(computer =='GLNXA64')
     Libs = ["libHLAlib.a", "libfedtime1516e.so", "librti1516e.so", "libtbb.so"];
     flags = "CXXFLAGS=$CXXFLAGS --std=c++14 -DRRTI -DFED_AMBASSADOR -DRRTI_EV -pthread -lpthread";
     setup = ''
+    setenv('RRTI_HOME', '/home/k-110-04/Desktop/RRTI/rrti-2.0.0164/')
+    setenv('LD_LIBRARY_PATH', '/home/k-110-04/Desktop/RRTI/rrti-2.0.0164/bin:/home/k-110-04/QtWork/HLA/HLAlib/3dparty/tbb/lib/intel64/gcc4.8/')
 end
 specs.IncPaths = {HLAlibPath, join([HLAlibPath, 'HLAdata/']),join([HLAlibPath, 'HLA-Simulink/SimulinkARM/SimFederate/']),join([RRTIpath, 'include/HLA2010']),join([HLAlibPath, '3dparty/magic_get-develop/include'])};
 specs.SrcPaths = {HLAlibPath,join([HLAlibPath, '/HLA-Simulink/SimulinkARM/SimFederate/'])};

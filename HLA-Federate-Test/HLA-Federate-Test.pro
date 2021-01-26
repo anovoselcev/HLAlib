@@ -2,7 +2,8 @@ TEMPLATE = app
 CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
-QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV -Ofast
+QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV  -pthread
+LIBS += -pthread
 SOURCES += \
         ../BaseFederate.cpp \
         ../FederationManager.cpp \
