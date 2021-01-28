@@ -4,6 +4,9 @@ TEMPLATE = lib
 CONFIG += staticlib
 
 CONFIG += c++14
+QMAKE_CFLAGS_RELEASE = -O2 -MT
+QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO += -O2 -MT -Zi
+QMAKE_CFLAGS_DEBUG = -Zi -MTd
 
 QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV -pthread
 LIBS += -pthread
@@ -65,22 +68,19 @@ DEPENDPATH += $$PWD/../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516e
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516ed
+win32: LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516e
 
 INCLUDEPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 
 
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516e
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516ed
+win32: LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516e
 
 INCLUDEPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexec
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexecd
+win32:LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexec
 
 INCLUDEPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010

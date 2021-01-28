@@ -47,20 +47,17 @@ unix:!macx: LIBS += -L$$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/bin/ -lfedtim
 INCLUDEPATH += $$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../../Desktop/RRTI/rrti-2.0.0164/include/HLA2010
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516e
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516ed
+win32:LIBS += -L$$PWD/../../rrti-2.0/RRTI-2.0.0164/lib/ -llibfedtime1516e
 
 INCLUDEPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516e
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516ed
+win32: LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -llibrti1516e
 
 INCLUDEPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexec
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexecd
+win32: LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexec
 
 INCLUDEPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
@@ -76,21 +73,14 @@ DEPENDPATH += $$PWD/../3dparty/tbb/include/linux/
 INCLUDEPATH += $$PWD/../3dparty/tbb/include/windows/
 DEPENDPATH += $$PWD/../3dparty/tbb/include/windows/
 
-win32: LIBS += -L$$PWD/3dparty/tbb/lib/intel64/vc14/ -ltbb
-
-INCLUDEPATH += $$PWD/3dparty/tbb/include/windows/
-DEPENDPATH += $$PWD/3dparty/tbb/include/windows/
-
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb12
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb12_debug
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/vc14/ -ltbb_debug
 
 
 INCLUDEPATH += $$PWD/../3dparty/boost_1_74_0/
 DEPENDPATH += $$PWD/../3dparty/boost_1_74_0/
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_74_0/stage/lib/ -llibboost_date_time-vc142-mt-gd-x64-1_74
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_74_0/stage/lib/ -llibboost_date_time-vc142-mt-gd-x64-1_74d
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_74_0/stage/lib/ -llibboost_date_time-vc142-mt-x64-1_74
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_74_0/stage/lib/ -llibboost_date_time-vc142-mt-gd-x64-1_74
