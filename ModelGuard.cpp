@@ -13,13 +13,13 @@ namespace HLA {
         else
             throw std::runtime_error("Nullptr federate");               // If federate pointer is nullptr throw run-time error
 
-        if(_federate->_mode == MODELMODE::FREE_THREADING)                    // If federate model mode is Threading start Threading control
+        if(_federate->_mode == MODELMODE::FREE_THREADING)                    // If federate model mode is master Threading start Free Threading control
             ModelingControl<MODELMODE::FREE_THREADING>();
-        else if(_federate->_mode == MODELMODE::FREE_FOLLOWING)               // If federate model mode is Following start Following control
+        else if(_federate->_mode == MODELMODE::FREE_FOLLOWING)               // If federate model mode is master Following start Free Following control
             ModelingControl<MODELMODE::FREE_FOLLOWING>();
-        else if(_federate->_mode == MODELMODE::MANAGING_FOLLOWING)                // If federate model mode is Managing..........................
+        else if(_federate->_mode == MODELMODE::MANAGING_FOLLOWING)           // If federate model mode is slave Following start Managing Following control
             ModelingControl<MODELMODE::MANAGING_FOLLOWING>();
-        else if(_federate->_mode == MODELMODE::MANAGING_THREADING)
+        else if(_federate->_mode == MODELMODE::MANAGING_THREADING)           // If federate model mode is slave Threading start Managing Threading control
             ModelingControl<MODELMODE::MANAGING_THREADING>();
     }
 
@@ -33,7 +33,7 @@ namespace HLA {
 
     template<>
 /**
-* @brief ModelGuard::ModelingControl<ModelMode::THREADING>
+* @brief ModelGuard::ModelingControl<ModelMode::FREE_THREADING>
 * Method which control execution of federate with Threading Model Mode
 */
     void ModelGuard::ModelingControl<MODELMODE::FREE_THREADING>(){
@@ -45,7 +45,7 @@ namespace HLA {
 
     template<>
 /**
-* @brief ModelGuard::ModelingControl<ModelMode::FOLLOWING>
+* @brief ModelGuard::ModelingControl<ModelMode::FREE_FOLLOWING>
 * Method which control execution of federate with Following Model Mode
 */
     void ModelGuard::ModelingControl<MODELMODE::FREE_FOLLOWING>(){
@@ -56,22 +56,26 @@ namespace HLA {
 
     template<>
 /**
-* @brief ModelGuard::ModelingControl<ModelMode::MANAGING>
-* ..............................
+* @brief ModelGuard::ModelingControl<MODELMODE::MANAGING_FOLLOWING>
+* Method which control execution of slave federate with Following Model Mode
 */
     void ModelGuard::ModelingControl<MODELMODE::MANAGING_FOLLOWING>(){
-        _federate->_state = STATE::READY;
-        _federate->ReadyToGo();
+        _federate->_state = STATE::READY;                             // Set federate state to READY
+        _federate->ReadyToGo();                                       // Send READY time stamp
 
         _federate->_condition.wait(_lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
             return _federate->_state == STATE::PROCESSING;
         });
-        _federate->Modeling<MODELMODE::MANAGING_FOLLOWING>();
+        _federate->Modeling<MODELMODE::MANAGING_FOLLOWING>();         // Start processing
 
     }
 
     template<>
+/**
+* @brief ModelGuard::ModelingControl<MODELMODE::MANAGING_THREADING>
+* Method which control execution of slave federate with Threading Model Mode
+*/
     void ModelGuard::ModelingControl<MODELMODE::MANAGING_THREADING>(){
-        this->~ModelGuard();
+        this->~ModelGuard();    // It isn't nessesary to control this type here
     }
 }
