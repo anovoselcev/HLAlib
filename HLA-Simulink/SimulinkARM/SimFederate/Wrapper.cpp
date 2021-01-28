@@ -5,7 +5,7 @@ static HLA::SimFederate* fed;
 
 
 void Start_Point_ModelARM(){
-   auto file =  HLA::JSON::MakeJSON( L"/home/k-110-04/QtWork/HLA/HLAlib/conf/matlab.json");
+   auto file =  HLA::JSON::MakeJSON( L"C:\\config\\matlab.json");
     fed = new HLA::SimFederate(file);
     try{
         fed->ConnectRTI(file);
