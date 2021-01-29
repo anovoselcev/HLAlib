@@ -4,7 +4,6 @@
 #include <RTI/RTI1516.h>
 #include <memory.h>
 #include <type_traits>
-#include <iostream>
 
 template <typename T>
 struct DataElement{

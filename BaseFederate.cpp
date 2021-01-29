@@ -2,12 +2,12 @@
 
 #include "RTI/time/HLAfloat64Time.h"
 #ifndef WIN32
-    #include "tbb/parallel_invoke.h"
-    #include "tbb/parallel_for_each.h"
+    #include "3dparty/tbb/include/linux/tbb/parallel_invoke.h"
+    #include "3dparty/tbb/include/linux/tbb/parallel_for_each.h"
 
 #else
-    #include "oneapi/tbb/parallel_invoke.h"
-    #include "oneapi/tbb/parallel_for_each.h"
+    #include "3dparty/tbb/include/windows/oneapi/tbb/parallel_invoke.h"
+    #include "3dparty/tbb/include/windows/oneapi/tbb/parallel_for_each.h"
 #endif
 
 namespace HLA{

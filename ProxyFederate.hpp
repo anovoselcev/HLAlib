@@ -2,7 +2,7 @@
 #define PROXYFEDERATE_HPP
 
 #include "BaseFederate.hpp"
-#include "boost/asio.hpp"
+#include "3dparty/boost_1_74_0/boost/asio.hpp"
 #include <array>
 
 namespace HLA {
