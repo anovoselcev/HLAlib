@@ -33,11 +33,6 @@ namespace HLA {
 * @param value
  */
       explicit Node(std::wstring value);
-/**
-* @brief Node
-* @param value
-*/
-      explicit Node(std::string value);
 
 /**
 * @brief AsVector
@@ -63,11 +58,6 @@ namespace HLA {
 */
       const std::wstring& AsWstring() const;
 
-/**
-* @brief AsString
-* @return
-*/
-      const std::string& AsString() const;
 
     private:
 /**
@@ -86,10 +76,6 @@ namespace HLA {
 * @brief as_wstring
 */
       std::wstring as_wstring;
-/**
-* @brief as_string
-*/
-      std::string as_string;
     };
 
 /**
@@ -120,6 +106,8 @@ namespace HLA {
 * @return
 */
       static std::unordered_map<std::wstring, std::vector<std::wstring>> ToMap(std::shared_ptr<Node>);
+
+      static std::unordered_map<unsigned short, std::wstring> ToMapUshortWstring(std::shared_ptr<Node>);
 
 /**
 * @brief ToVector

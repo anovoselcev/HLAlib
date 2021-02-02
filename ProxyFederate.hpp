@@ -19,6 +19,9 @@ namespace HLA {
                         const std::vector<unsigned short>& ports,
                         const JSON& file);
 
+        bool operator()(const JSON& proxy_file,
+                        const JSON& hla_file);
+
 
     private:
 
@@ -28,15 +31,16 @@ namespace HLA {
 
     protected:
 
-        void Listen(size_t idx);
+        void Listen(unsigned short port);
 
         void RunFederate() override;
 
         boost::asio::io_context _context;
         udp_endpoint_t _endp;
-        std::vector<std::unique_ptr<udp_socket_t>> _sockets;
+        std::unordered_map<unsigned short, std::unique_ptr<udp_socket_t>> _sockets;
+        std::unordered_map<unsigned short, std::wstring> _ports;
        // udp_socket_t _socket{_context};
-        std::vector<std::array<char, 64>> _buffers;
+        std::unordered_map<unsigned short, std::array<char, 64>> _buffers;
     };
 }
 
