@@ -1,0 +1,17 @@
+{
+    "IP_local" :					"10.10.10.4",
+	"IP_remote" : 					"10.10.10.3",
+    "Ports_Subscribe_Attributes" :
+                            {"20001" : "Name"},
+						
+	"Ports_Publish_Attributes" : 
+							{"20009" : "Value",
+							 "20007" : "Name"},
+							 
+	"Ports_Subscribe_Interactions" :
+                            {},
+						
+	"Ports_Publish_Interactions" : 
+							{}
+
+}

@@ -10,6 +10,7 @@
     #include "3dparty/tbb/include/windows/oneapi/tbb/parallel_for_each.h"
 #endif
 
+
 namespace HLA{
 
 /**
@@ -389,7 +390,6 @@ namespace HLA{
                     }
         );
 
-
         tbb::parallel_invoke(
                     // Send to RTI set of attributes which federate want to recive
                     [this, &subscribeAttributesSet](){
@@ -603,11 +603,11 @@ namespace HLA{
 */
     void BaseFederate::CacheID(const rti1516e::ObjectInstanceHandle& ID) const{
 
-        if(_CacheID[static_cast<size_t>(ID.hash())]) // Check is id in cache
+        if(_CacheID[static_cast<size_t>(ID.hash())].isValid()) // Check is id in cache
             return;
 
         ObjectClassHandle objch = _rtiAmbassador->getKnownObjectClassHandle(ID); // Get ObjectClassHandle of extern federate
-        _CacheID[static_cast<size_t>(ID.hash())] = &_ObjectClasses.at(_rtiAmbassador->getObjectClassName(objch)); // Cache object class of extern federate
+        _CacheID[static_cast<size_t>(ID.hash())] = objch; // Cache object class of extern federate
     }
 
 
@@ -987,11 +987,11 @@ namespace HLA{
                                               OrderType ,
                                               TransportationType ,
                                               SupplementalReflectInfo)
-    throw (FederateInternalError){
+    throw (FederateInternalError){;
         if(_state >= STATE::STARTED){                       // If federate start modeling
             lock_guard<mutex> guard(_amutex);               // Lock queue of reflected attributes
             CacheID(handle);
-            _qAttributes.push({info,theAttributeValues, *_CacheID[static_cast<size_t>(handle.hash())]});   // Add new message {information or tag in byte array, map of attributes}
+            _qAttributes.push({info,theAttributeValues, _CacheID[static_cast<size_t>(handle.hash())]});   // Add new message {information or tag in byte array, map of attributes}
         }
     }
 

@@ -1,6 +1,6 @@
 {
     "Name" :
-                        "Manager",
+                        "ManagerAstra",
     "Type" :            
                         "Threading",
     "FOMpath" :
@@ -8,14 +8,14 @@
     "FederationName":
                         "Test",
     "Address":
-                        "localhost",
+                        "10.55.82.125",
     "ModelingStep" : 
                         100,
     "CallbackMode" : 
                         0,
                         
     "ModelingMode" :
-                        0,
+                        1,
     "LogFileName" :
                         "LogFile",
     
@@ -25,7 +25,8 @@
                         {"Following":
                                         ["Name"],
                          "Threading":
-                                        ["Name"]},
+                                        ["Name"],
+                        "Matlab" : ["Value"]},
     "PublishInteractions" : 
                             {},
     "SubscribeInteractions" :

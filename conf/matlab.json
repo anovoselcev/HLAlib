@@ -1,10 +1,10 @@
 {
     "Name" :
-                        "Model0",
+                        "ProxyForRITM",
     "Type" :            
                         "Matlab",
     "FOMpath" :
-                        "/home/k-110-04/QtWork/HLA/HLAlib/conf/SampleFOM.xml",
+                        "C:\\config\\SampleFOM.xml",
     "FederationName":
                         "Test",
     "Address":
@@ -15,12 +15,12 @@
                         0,
                         
     "ModelingMode" :
-                        1,
+                        3,
     "LogFileName" :
                         "LogFile",
     
     "PublishAttributes": 
-                        ["Name"],
+                        ["Name", "Value"],
     "SubscribeAttributes" :
                         {"ARM" :
 										["Name"]},

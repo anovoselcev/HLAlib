@@ -693,7 +693,7 @@ private:
 * Hash map for caching [ObjectID; ObjectClassID] in format [HashOF(ObjectID); PointerOF(ObjectClassID)] for better memory using
 * it valueable for switching and parsing queue of attributes
 */
-        mutable std::unordered_map<size_t, const rti1516e::ObjectClassHandle*> _CacheID;
+        mutable std::unordered_map<size_t, rti1516e::ObjectClassHandle> _CacheID;
 
 /**
 * @brief _qAttributes
