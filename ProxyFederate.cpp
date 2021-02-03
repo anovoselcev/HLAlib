@@ -8,7 +8,7 @@ namespace HLA {
     ProxyFederate::ProxyFederate(const JSON& file) noexcept : BaseFederate(file){}
 
 
-    bool ProxyFederate::operator()(const JSON &proxy_file,
+    bool ProxyFederate::StartProxy(const JSON &proxy_file,
                                    const JSON &hla_file){
 
         auto root = proxy_file.GetRoot()->AsMap();
@@ -122,3 +122,4 @@ namespace HLA {
         }
     }
 }
+

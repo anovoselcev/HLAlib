@@ -1,0 +1,21 @@
+%implements s1_b0_9t2qb_Enable "C"
+
+%function Enable(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+/* Enable for Atomic SubSystem: '<Root>/Ethernet' */
+/* Enable for Sin: '<S1>/Sine Wave' */
+Ethernet_DW.systemEnable = 1;
+/* End of Enable for SubSystem: '<Root>/Ethernet' */
+%closefile cfgTxt
+%<cfgTxt>
+%endfunction
+%function EnableFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Enable(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 2, fcnProtoType)>
+%endfunction

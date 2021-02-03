@@ -1,0 +1,2411 @@
+<?xml version="1.0" encoding="UTF-8"?><Root>
+      		<SubSystem>
+		<Name>BA-IS-GPIO</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-GPIO</xPCName>
+				<SubSystem>
+		<Name>Scope </Name>
+		<xPCName>RITM_test_RT1007/BA-IS-GPIO/Scope </xPCName>
+		
+		
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>Twice a second</blkName>
+            <xpcblkName>BA-IS-GPIO/Twice a second</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-GPIO/Twice a second</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Amplitude</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Period</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>PulseWidth</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>PhaseDelay</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA_IS_gpio_di</blkName>
+            <xpcblkName>BA-IS-GPIO/BA_IS_gpio_di</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-GPIO/BA_IS_gpio_di</SLblockPath>
+            <isSrc>[1 0 13]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 13]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA_IS_gpio_do</blkName>
+            <xpcblkName>BA-IS-GPIO/BA_IS_gpio_do</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-GPIO/BA_IS_gpio_do</SLblockPath>
+            <isSrc>[0 13 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 13]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>Twice a second</sigName>
+              <xpcsigName>BA-IS-GPIO/Twice a second</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p1</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p2</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p3</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p3</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p4</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p4</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p5</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p5</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p6</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p6</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p7</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p7</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p8</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p8</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p9</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p9</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p10</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p10</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p11</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p11</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p12</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p12</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA_IS_gpio_di/p13</sigName>
+              <xpcsigName>BA-IS-GPIO/BA_IS_gpio_di/p13</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-GPIO</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>BA-IS-I2C</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-I2C</xPCName>
+				<SubSystem>
+		<Name>Scope 3</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-I2C/Scope 3</xPCName>
+		
+		
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>BA-IS-I2C_read</blkName>
+            <xpcblkName>BA-IS-I2C/BA-IS-I2C_read</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-I2C/BA-IS-I2C_read</SLblockPath>
+            <isSrc>[1 0 2]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-I2C</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-I2C</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-I2C</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-I2C</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-I2C</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P6</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-I2C</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-I2C_read/p1</sigName>
+              <xpcsigName>BA-IS-I2C/BA-IS-I2C_read/p1</xpcsigName>
+              <sigWidth>4</sigWidth>
+              <sigDim>[4, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-I2C</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-I2C_read/p2</sigName>
+              <xpcsigName>BA-IS-I2C/BA-IS-I2C_read/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-I2C</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>BA-IS-PWM-CAP</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-PWM-CAP</xPCName>
+				<SubSystem>
+		<Name>Scope </Name>
+		<xPCName>RITM_test_RT1007/BA-IS-PWM-CAP/Scope </xPCName>
+		
+		
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>Constant1</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/Constant1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/Constant1</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Constant2</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/Constant2</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/Constant2</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Constant3</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/Constant3</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/Constant3</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Constant8</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/Constant8</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/Constant8</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-CAP</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/BA-IS-CAP</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/BA-IS-CAP</SLblockPath>
+            <isSrc>[1 0 2]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-CAP1</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/BA-IS-CAP1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/BA-IS-CAP1</SLblockPath>
+            <isSrc>[1 0 2]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-CAP2</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/BA-IS-CAP2</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/BA-IS-CAP2</SLblockPath>
+            <isSrc>[1 0 2]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-CAP3</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/BA-IS-CAP3</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/BA-IS-CAP3</SLblockPath>
+            <isSrc>[1 0 2]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-PWM</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/BA-IS-PWM</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/BA-IS-PWM</SLblockPath>
+            <isSrc>[0 2 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-PWM1</blkName>
+            <xpcblkName>BA-IS-PWM-CAP/BA-IS-PWM1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-PWM-CAP/BA-IS-PWM1</SLblockPath>
+            <isSrc>[0 2 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>Constant1</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/Constant1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Constant2</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/Constant2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Constant3</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/Constant3</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Constant8</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/Constant8</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-CAP/p1</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/BA-IS-CAP/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-CAP/p2</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/BA-IS-CAP/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-CAP1/p1</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/BA-IS-CAP1/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-CAP1/p2</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/BA-IS-CAP1/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-CAP2/p1</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/BA-IS-CAP2/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-CAP2/p2</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/BA-IS-CAP2/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-CAP3/p1</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/BA-IS-CAP3/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-CAP3/p2</sigName>
+              <xpcsigName>BA-IS-PWM-CAP/BA-IS-CAP3/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-PWM-CAP</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>BA-IS-SPI</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-SPI</xPCName>
+				<SubSystem>
+		<Name>Counter
+Limited1</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1</xPCName>
+				<SubSystem>
+		<Name>Increment
+Real World</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Increment Real World</xPCName>
+		
+		
+            <block>
+            <blkName>FixPt
+Constant</blkName>
+            <xpcblkName>BA-IS-SPI/Counter Limited1/Increment Real World/FixPt Constant</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Increment Real World/FixPt Constant</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Increment Real World</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FixPt
+Sum1</sigName>
+              <xpcsigName>BA-IS-SPI/Counter Limited1/Increment Real World/FixPt Sum1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Increment Real World</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Wrap To Zero</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Wrap To Zero</xPCName>
+		
+		
+            <block>
+            <blkName>Constant</blkName>
+            <xpcblkName>BA-IS-SPI/Counter Limited1/Wrap To Zero/Constant</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Wrap To Zero/Constant</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Wrap To Zero</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>FixPt
+Switch</blkName>
+            <xpcblkName>BA-IS-SPI/Counter Limited1/Wrap To Zero/FixPt Switch</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Wrap To Zero/FixPt Switch</SLblockPath>
+            <isSrc>[0 3 1]</isSrc>
+          <parameter>
+          <paramName>uplimit</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Wrap To Zero</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FixPt
+Switch</sigName>
+              <xpcsigName>BA-IS-SPI/Counter Limited1/Wrap To Zero/FixPt Switch</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Wrap To Zero</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>Wrap To Zero</blkName>
+            <xpcblkName>BA-IS-SPI/Counter Limited1/Wrap To Zero</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Wrap To Zero</SLblockPath>
+            <isSrc>[0 1 1]</isSrc>
+          <parameter>
+          <paramName>uplimit</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Output</blkName>
+            <xpcblkName>BA-IS-SPI/Counter Limited1/Output</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/Counter Limited1/Output</SLblockPath>
+            <isSrc>[0 1 1]</isSrc>
+          <parameter>
+          <paramName>InitialCondition</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>Output</sigName>
+              <xpcsigName>BA-IS-SPI/Counter Limited1/Output</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-SPI/Counter Limited1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Scope 1</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-SPI/Scope 1</xPCName>
+		
+		
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>Counter
+Limited1</blkName>
+            <xpcblkName>BA-IS-SPI/Counter Limited1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/Counter Limited1</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>uplimit</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Bias1</blkName>
+            <xpcblkName>BA-IS-SPI/Bias1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/Bias1</SLblockPath>
+            <isSrc>[0 1 1]</isSrc>
+          <parameter>
+          <paramName>Bias</paramName>
+          <dim>[1, 4]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Generate some data</blkName>
+            <xpcblkName>BA-IS-SPI/Generate some data</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/Generate some data</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 4]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-SPI1</blkName>
+            <xpcblkName>BA-IS-SPI/BA-IS-SPI1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/BA-IS-SPI1</SLblockPath>
+            <isSrc>[0 1 1]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P6</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P7</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P8</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Manual Switch</blkName>
+            <xpcblkName>BA-IS-SPI/Manual Switch</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-SPI/Manual Switch</SLblockPath>
+            <isSrc>[0 2 1]</isSrc>
+          <parameter>
+          <paramName>CurrentSetting</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>Bias1</sigName>
+              <xpcsigName>BA-IS-SPI/Bias1</xpcsigName>
+              <sigWidth>4</sigWidth>
+              <sigDim>[4, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-SPI1</sigName>
+              <xpcsigName>BA-IS-SPI/BA-IS-SPI1</xpcsigName>
+              <sigWidth>4</sigWidth>
+              <sigDim>[4, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Manual Switch</sigName>
+              <xpcsigName>BA-IS-SPI/Manual Switch</xpcsigName>
+              <sigWidth>4</sigWidth>
+              <sigDim>[4, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-SPI</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>BA-IS-UART</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-UART</xPCName>
+				<SubSystem>
+		<Name>Counter
+Limited</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-UART/Counter Limited</xPCName>
+				<SubSystem>
+		<Name>Increment
+Real World</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-UART/Counter Limited/Increment Real World</xPCName>
+		
+		
+            <block>
+            <blkName>FixPt
+Constant</blkName>
+            <xpcblkName>BA-IS-UART/Counter Limited/Increment Real World/FixPt Constant</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/Counter Limited/Increment Real World/FixPt Constant</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART/Counter Limited/Increment Real World</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FixPt
+Sum1</sigName>
+              <xpcsigName>BA-IS-UART/Counter Limited/Increment Real World/FixPt Sum1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-UART/Counter Limited/Increment Real World</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Wrap To Zero</Name>
+		<xPCName>RITM_test_RT1007/BA-IS-UART/Counter Limited/Wrap To Zero</xPCName>
+		
+		
+            <block>
+            <blkName>Constant</blkName>
+            <xpcblkName>BA-IS-UART/Counter Limited/Wrap To Zero/Constant</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/Counter Limited/Wrap To Zero/Constant</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART/Counter Limited/Wrap To Zero</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>FixPt
+Switch</blkName>
+            <xpcblkName>BA-IS-UART/Counter Limited/Wrap To Zero/FixPt Switch</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/Counter Limited/Wrap To Zero/FixPt Switch</SLblockPath>
+            <isSrc>[0 3 1]</isSrc>
+          <parameter>
+          <paramName>uplimit</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART/Counter Limited/Wrap To Zero</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FixPt
+Switch</sigName>
+              <xpcsigName>BA-IS-UART/Counter Limited/Wrap To Zero/FixPt Switch</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-UART/Counter Limited/Wrap To Zero</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>Wrap To Zero</blkName>
+            <xpcblkName>BA-IS-UART/Counter Limited/Wrap To Zero</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/Counter Limited/Wrap To Zero</SLblockPath>
+            <isSrc>[0 1 1]</isSrc>
+          <parameter>
+          <paramName>uplimit</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART/Counter Limited</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Output</blkName>
+            <xpcblkName>BA-IS-UART/Counter Limited/Output</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/Counter Limited/Output</SLblockPath>
+            <isSrc>[0 1 1]</isSrc>
+          <parameter>
+          <paramName>InitialCondition</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART/Counter Limited</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>Output</sigName>
+              <xpcsigName>BA-IS-UART/Counter Limited/Output</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-UART/Counter Limited</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Scope </Name>
+		<xPCName>RITM_test_RT1007/BA-IS-UART/Scope </xPCName>
+		
+		
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>Counter
+Limited</blkName>
+            <xpcblkName>BA-IS-UART/Counter Limited</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/Counter Limited</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>uplimit</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Generate some data</blkName>
+            <xpcblkName>BA-IS-UART/Generate some data</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/Generate some data</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 4]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-UART_rx</blkName>
+            <xpcblkName>BA-IS-UART/BA-IS-UART_rx</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/BA-IS-UART_rx</SLblockPath>
+            <isSrc>[1 0 3]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-UART_setup</blkName>
+            <xpcblkName>BA-IS-UART/BA-IS-UART_setup</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/BA-IS-UART_setup</SLblockPath>
+            <isSrc>[0 0 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P6</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>BA-IS-UART_tx</blkName>
+            <xpcblkName>BA-IS-UART/BA-IS-UART_tx</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/BA-IS-UART_tx</SLblockPath>
+            <isSrc>[0 2 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Manual Switch</blkName>
+            <xpcblkName>BA-IS-UART/Manual Switch</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/BA-IS-UART/Manual Switch</SLblockPath>
+            <isSrc>[0 2 1]</isSrc>
+          <parameter>
+          <paramName>CurrentSetting</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-UART_rx/p1</sigName>
+              <xpcsigName>BA-IS-UART/BA-IS-UART_rx/p1</xpcsigName>
+              <sigWidth>16</sigWidth>
+              <sigDim>[16, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-UART_rx/p2</sigName>
+              <xpcsigName>BA-IS-UART/BA-IS-UART_rx/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>BA-IS-UART_rx/p3</sigName>
+              <xpcsigName>BA-IS-UART/BA-IS-UART_rx/p3</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Manual Switch</sigName>
+              <xpcsigName>BA-IS-UART/Manual Switch</xpcsigName>
+              <sigWidth>4</sigWidth>
+              <sigDim>[4, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Width</sigName>
+              <xpcsigName>BA-IS-UART/Width</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/BA-IS-UART</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>CA-MA-45</Name>
+		<xPCName>RITM_test_RT1007/CA-MA-45</xPCName>
+				<SubSystem>
+		<Name>CA_MA_status</Name>
+		<xPCName>RITM_test_RT1007/CA-MA-45/CA_MA_status</xPCName>
+				<SubSystem>
+		<Name>Extract Bits</Name>
+		<xPCName>RITM_test_RT1007/CA-MA-45/CA_MA_status/Extract Bits</xPCName>
+		
+		
+			  
+			  
+              <signal>
+              <sigName>Extract Desired Bits</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_status/Extract Bits/Extract Desired Bits</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status/Extract Bits</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Modify Scaling Only</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_status/Extract Bits/Modify Scaling Only</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status/Extract Bits</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Extract Bits1</Name>
+		<xPCName>RITM_test_RT1007/CA-MA-45/CA_MA_status/Extract Bits1</xPCName>
+		
+		
+			  
+			  
+              <signal>
+              <sigName>Extract Desired Bits</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_status/Extract Bits1/Extract Desired Bits</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status/Extract Bits1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Modify Scaling Only</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_status/Extract Bits1/Modify Scaling Only</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status/Extract Bits1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>CA_MA_status</blkName>
+            <xpcblkName>CA-MA-45/CA_MA_status/CA_MA_status</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/CA-MA-45/CA_MA_status/CA_MA_status</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>Signal
+Conversion</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_status/Signal Conversion</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status</SubSystemName>
+                <sigLabel>RxErrorCounter</sigLabel>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Signal
+Conversion1</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_status/Signal Conversion1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status</SubSystemName>
+                <sigLabel>TxErrorCounter</sigLabel>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CA_MA_status</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_status/CA_MA_status</xpcsigName>
+              <sigWidth>5</sigWidth>
+              <sigDim>[5, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45/CA_MA_status</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Scope </Name>
+		<xPCName>RITM_test_RT1007/CA-MA-45/Scope </xPCName>
+		
+		
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>CA_MA_rx</blkName>
+            <xpcblkName>CA-MA-45/CA_MA_rx</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/CA-MA-45/CA_MA_rx</SLblockPath>
+            <isSrc>[1 0 2]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>CA_MA_rx1</blkName>
+            <xpcblkName>CA-MA-45/CA_MA_rx1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/CA-MA-45/CA_MA_rx1</SLblockPath>
+            <isSrc>[1 0 2]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>CA_MA_setup</blkName>
+            <xpcblkName>CA-MA-45/CA_MA_setup</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/CA-MA-45/CA_MA_setup</SLblockPath>
+            <isSrc>[0 0 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 3]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 3]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P6</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P7</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>CA_MA_tx</blkName>
+            <xpcblkName>CA-MA-45/CA_MA_tx</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/CA-MA-45/CA_MA_tx</SLblockPath>
+            <isSrc>[0 1 1]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Sine Wave</blkName>
+            <xpcblkName>CA-MA-45/Sine Wave</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/CA-MA-45/Sine Wave</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Amplitude</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Bias</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Frequency</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>CAN Pack</sigName>
+              <xpcsigName>CA-MA-45/CAN Pack</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CAN Unpack/p1</sigName>
+              <xpcsigName>CA-MA-45/CAN Unpack/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CAN Unpack/p2</sigName>
+              <xpcsigName>CA-MA-45/CAN Unpack/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CAN Unpack/p3</sigName>
+              <xpcsigName>CA-MA-45/CAN Unpack/p3</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CAN Unpack/p4</sigName>
+              <xpcsigName>CA-MA-45/CAN Unpack/p4</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CAN Unpack/p5</sigName>
+              <xpcsigName>CA-MA-45/CAN Unpack/p5</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CAN Unpack/p6</sigName>
+              <xpcsigName>CA-MA-45/CAN Unpack/p6</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CAN Unpack/p7</sigName>
+              <xpcsigName>CA-MA-45/CAN Unpack/p7</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CA_MA_rx/p1</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_rx/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CA_MA_rx/p2</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_rx/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CA_MA_rx1/p1</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_rx1/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CA_MA_rx1/p2</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_rx1/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>CA_MA_tx</sigName>
+              <xpcsigName>CA-MA-45/CA_MA_tx</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Sine Wave</sigName>
+              <xpcsigName>CA-MA-45/Sine Wave</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/CA-MA-45</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>RS-232</Name>
+		<xPCName>RITM_test_RT1007/RS-232</xPCName>
+				<SubSystem>
+		<Name>Baseboard
+Serial F</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F</xPCName>
+				<SubSystem>
+		<Name>RS232 ISR</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR</xPCName>
+				<SubSystem>
+		<Name>Receive 1</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 1</xPCName>
+		
+		
+            <block>
+            <blkName>Constant</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F/RS232 ISR/Receive 1/Constant</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 1/Constant</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 1</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/RS232 ISR/Receive 1/FIFO write 1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Read HW FIFO1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/RS232 ISR/Receive 1/Read HW FIFO1</xpcsigName>
+              <sigWidth>65</sigWidth>
+              <sigDim>[65, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Receive 2</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 2</xPCName>
+		
+		
+            <block>
+            <blkName>Constant</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F/RS232 ISR/Receive 2/Constant</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 2/Constant</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 2</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/RS232 ISR/Receive 2/FIFO write 2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 2</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Read HW FIFO2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/RS232 ISR/Receive 2/Read HW FIFO2</xpcsigName>
+              <sigWidth>65</sigWidth>
+              <sigDim>[65, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Receive 2</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Transmit 1</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 1</xPCName>
+		
+		
+            <block>
+            <blkName>Constant1</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F/RS232 ISR/Transmit 1/Constant1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 1/Constant1</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 1</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FIFO read 1/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/RS232 ISR/Transmit 1/FIFO read 1/p1</xpcsigName>
+              <sigWidth>61</sigWidth>
+              <sigDim>[61, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO read 1/p2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/RS232 ISR/Transmit 1/FIFO read 1/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Transmit 2</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 2</xPCName>
+		
+		
+            <block>
+            <blkName>Constant2</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F/RS232 ISR/Transmit 2/Constant2</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 2/Constant2</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 2</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FIFO read 2/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/RS232 ISR/Transmit 2/FIFO read 2/p1</xpcsigName>
+              <sigWidth>61</sigWidth>
+              <sigDim>[61, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 2</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO read 2/p2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/RS232 ISR/Transmit 2/FIFO read 2/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR/Transmit 2</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+
+		
+			  
+			  
+              <signal>
+              <sigName>Read Int Status FC1/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/RS232 ISR/Read Int Status FC1/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F/RS232 ISR</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>Setup1</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F/Setup1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F/Setup1</SLblockPath>
+            <isSrc>[0 0 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P6</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P7</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P8</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Setup2</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F/Setup2</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F/Setup2</SLblockPath>
+            <isSrc>[0 0 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P6</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P7</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P8</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>Rate Transition</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/Rate Transition</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Rate Transition1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/Rate Transition1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Rate Transition2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/Rate Transition2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Rate Transition3</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/Rate Transition3</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 1/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/FIFO write 1/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 1/p2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/FIFO write 1/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 2/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/FIFO write 2/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 2/p2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F/FIFO write 2/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Baseboard
+Serial F1</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F1</xPCName>
+				<SubSystem>
+		<Name>RS232 ISR</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR</xPCName>
+				<SubSystem>
+		<Name>Receive 1</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 1</xPCName>
+		
+		
+            <block>
+            <blkName>Constant</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F1/RS232 ISR/Receive 1/Constant</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 1/Constant</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 1</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/RS232 ISR/Receive 1/FIFO write 1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Read HW FIFO1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/RS232 ISR/Receive 1/Read HW FIFO1</xpcsigName>
+              <sigWidth>65</sigWidth>
+              <sigDim>[65, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Receive 2</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 2</xPCName>
+		
+		
+            <block>
+            <blkName>Constant</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F1/RS232 ISR/Receive 2/Constant</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 2/Constant</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 2</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/RS232 ISR/Receive 2/FIFO write 2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 2</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Read HW FIFO2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/RS232 ISR/Receive 2/Read HW FIFO2</xpcsigName>
+              <sigWidth>65</sigWidth>
+              <sigDim>[65, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Receive 2</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Transmit 1</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 1</xPCName>
+		
+		
+            <block>
+            <blkName>Constant1</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F1/RS232 ISR/Transmit 1/Constant1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 1/Constant1</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 1</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FIFO read 1/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/RS232 ISR/Transmit 1/FIFO read 1/p1</xpcsigName>
+              <sigWidth>61</sigWidth>
+              <sigDim>[61, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO read 1/p2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/RS232 ISR/Transmit 1/FIFO read 1/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Transmit 2</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 2</xPCName>
+		
+		
+            <block>
+            <blkName>Constant2</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F1/RS232 ISR/Transmit 2/Constant2</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 2/Constant2</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Value</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 2</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>FIFO read 2/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/RS232 ISR/Transmit 2/FIFO read 2/p1</xpcsigName>
+              <sigWidth>61</sigWidth>
+              <sigDim>[61, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 2</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO read 2/p2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/RS232 ISR/Transmit 2/FIFO read 2/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR/Transmit 2</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+
+		
+			  
+			  
+              <signal>
+              <sigName>Read Int Status FC1/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/RS232 ISR/Read Int Status FC1/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1/RS232 ISR</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>Setup1</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F1/Setup1</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F1/Setup1</SLblockPath>
+            <isSrc>[0 0 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P6</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P7</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P8</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Setup2</blkName>
+            <xpcblkName>RS-232/Baseboard Serial F1/Setup2</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Baseboard Serial F1/Setup2</SLblockPath>
+            <isSrc>[0 0 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P6</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P7</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P8</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>Rate Transition</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/Rate Transition</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Rate Transition1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/Rate Transition1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Rate Transition2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/Rate Transition2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Rate Transition3</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/Rate Transition3</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 1/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/FIFO write 1/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 1/p2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/FIFO write 1/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 2/p1</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/FIFO write 2/p1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO write 2/p2</sigName>
+              <xpcsigName>RS-232/Baseboard Serial F1/FIFO write 2/p2</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232/Baseboard Serial F1</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+		<SubSystem>
+		<Name>Target Scope</Name>
+		<xPCName>RITM_test_RT1007/RS-232/Target Scope</xPCName>
+		
+		
+
+		</SubSystem>
+
+		
+            <block>
+            <blkName>ASCII Decode </blkName>
+            <xpcblkName>RS-232/ASCII Decode </xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/ASCII Decode </SLblockPath>
+            <isSrc>[0 1 1]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 3]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>ASCII Encode </blkName>
+            <xpcblkName>RS-232/ASCII Encode </xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/ASCII Encode </SLblockPath>
+            <isSrc>[0 1 1]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 3]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Sine Wave</blkName>
+            <xpcblkName>RS-232/Sine Wave</xpcblkName>
+            <SLblockPath>RITM_test_RT1007/RS-232/Sine Wave</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Amplitude</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Bias</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Frequency</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>ASCII Decode </sigName>
+              <xpcsigName>RS-232/ASCII Decode </xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>ASCII Encode </sigName>
+              <xpcsigName>RS-232/ASCII Encode </xpcsigName>
+              <sigWidth>128</sigWidth>
+              <sigDim>[128, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>FIFO read </sigName>
+              <xpcsigName>RS-232/FIFO read </xpcsigName>
+              <sigWidth>1025</sigWidth>
+              <sigDim>[1025, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Sine Wave</sigName>
+              <xpcsigName>RS-232/Sine Wave</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>RITM_test_RT1007/RS-232</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+
+      
+
+</Root>

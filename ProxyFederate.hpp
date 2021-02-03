@@ -15,11 +15,7 @@ namespace HLA {
 
         ProxyFederate(JSON&& file) noexcept;
 
-        bool operator()(const std::string& ip,
-                        const std::vector<unsigned short>& ports,
-                        const JSON& file);
-
-        bool operator()(const JSON& proxy_file,
+        bool StartProxy(const JSON& proxy_file,
                         const JSON& hla_file);
 
 

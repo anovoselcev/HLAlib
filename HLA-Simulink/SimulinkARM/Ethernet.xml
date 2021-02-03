@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?><Root>
+      		<SubSystem>
+		<Name>Ethernet</Name>
+		<xPCName>Ethernet/Ethernet</xPCName>
+		
+		
+            <block>
+            <blkName>UDP Configure</blkName>
+            <xpcblkName>Ethernet/UDP Configure</xpcblkName>
+            <SLblockPath>Ethernet/Ethernet/UDP Configure</SLblockPath>
+            <isSrc>[0 0 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 4]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 4]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 4]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P8</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P9</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P10</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P11</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P12</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>UDP Send1</blkName>
+            <xpcblkName>Ethernet/UDP Send1</xpcblkName>
+            <SLblockPath>Ethernet/Ethernet/UDP Send1</SLblockPath>
+            <isSrc>[0 2 0]</isSrc>
+          <parameter>
+          <paramName>P1</paramName>
+          <dim>[1, 10]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P2</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P3</paramName>
+          <dim>[1, 10]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P4</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P5</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>P6</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Sine Wave1</blkName>
+            <xpcblkName>Ethernet/Sine Wave1</xpcblkName>
+            <SLblockPath>Ethernet/Ethernet/Sine Wave1</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Amplitude</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Bias</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Frequency</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Sine Wave5</blkName>
+            <xpcblkName>Ethernet/Sine Wave5</xpcblkName>
+            <SLblockPath>Ethernet/Ethernet/Sine Wave5</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Amplitude</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Bias</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Frequency</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          </block>
+            <block>
+            <blkName>Sine Wave6</blkName>
+            <xpcblkName>Ethernet/Sine Wave6</xpcblkName>
+            <SLblockPath>Ethernet/Ethernet/Sine Wave6</SLblockPath>
+            <isSrc>[1 0 1]</isSrc>
+          <parameter>
+          <paramName>Amplitude</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Bias</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>Frequency</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosH</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>SinPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          <parameter>
+          <paramName>CosPhi</paramName>
+          <dim>[1, 1]</dim>  
+		  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+          </parameter>
+          </block>
+			  
+			  
+              <signal>
+              <sigName>Data Type Conversion</sigName>
+              <xpcsigName>Ethernet/Data Type Conversion</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Data Type Conversion1</sigName>
+              <xpcsigName>Ethernet/Data Type Conversion1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Byte Packing 2</sigName>
+              <xpcsigName>Ethernet/Byte Packing 2</xpcsigName>
+              <sigWidth>8</sigWidth>
+              <sigDim>[8, 1]</sigDim>
+			  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Byte Packing 6</sigName>
+              <xpcsigName>Ethernet/Byte Packing 6</xpcsigName>
+              <sigWidth>4</sigWidth>
+              <sigDim>[4, 1]</sigDim>
+			  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Byte Packing 7</sigName>
+              <xpcsigName>Ethernet/Byte Packing 7</xpcsigName>
+              <sigWidth>2</sigWidth>
+              <sigDim>[2, 1]</sigDim>
+			  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Sine Wave1</sigName>
+              <xpcsigName>Ethernet/Sine Wave1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Sine Wave5</sigName>
+              <xpcsigName>Ethernet/Sine Wave5</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Sine Wave6</sigName>
+              <xpcsigName>Ethernet/Sine Wave6</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+			  
+			  
+              <signal>
+              <sigName>Width1</sigName>
+              <xpcsigName>Ethernet/Width1</xpcsigName>
+              <sigWidth>1</sigWidth>
+              <sigDim>[1, 1]</sigDim>
+			  <SubSystemName>Ethernet/Ethernet</SubSystemName>
+			  <sigTestPoint>false</sigTestPoint>
+            </signal>
+
+		</SubSystem>
+
+      
+
+</Root>

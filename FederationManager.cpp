@@ -72,6 +72,7 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
             auto& message = _qAttributes.front();
             Some value = HLA::cast_from_rti<HLAsome>(message.data.begin()->second);                         // To delete
             std::wcout << value.value1 << L"    " << value.value2 << L"   " << value.value3 << std::endl;   // To delete
+
 //            for(const auto& object : _ObjectClasses){
 //                for(const auto& attributte : _AttributesMap[object.second]){
 //                    auto value = move(message.data.find(attributte.second)->second);
