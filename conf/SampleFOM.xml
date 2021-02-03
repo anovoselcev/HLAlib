@@ -40,6 +40,19 @@
                     </attribute>
             </objectClass>
             <objectClass>
+                <name>Following</name>
+                <sharing>Neither</sharing>
+                    <attribute>
+                        <name>Name</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
+                    </attribute>
+            </objectClass>
+            <objectClass>
                 <name>ARM</name>
                 <sharing>Neither</sharing>
                     <attribute>
@@ -57,6 +70,15 @@
                 <sharing>Neither</sharing>
                     <attribute>
                         <name>Name</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
+                    </attribute>
+                    <attribute>
+                        <name>Value</name>
                         <dataType>HLAunicodeString</dataType>
                         <updateType>Conditional</updateType>
                         <ownership>DivestAcquire</ownership>

@@ -1,0 +1,4 @@
+function ri = Ethernetri
+
+ri = [];
+

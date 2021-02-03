@@ -5,15 +5,47 @@
 
 namespace HLA{
 
+/**
+* @brief The FederationManager class
+* Federate for managing in HLAlib, which provide easy API for control federation execution and sync step of federation
+*/
     class FederationManager final: public BaseFederate{
+
+//================================================================================================================================================
+
+//          Public API
+
+//================================================================================================================================================
 
     public:
 
+
+/**
+* @brief FederationManager
+* @param file : file JSON file with necessary parameters
+* Constructor of FederationManager do the same things as BaseFederate
+*/
         FederationManager(const JSON& file) noexcept;
 
+
+/**
+* @brief FederationManager
+* @param file : file JSON file with necessary parameters
+* Constructor of FederationManager do the same things as BaseFederate
+*/
         FederationManager(JSON&& file) noexcept;
 
+/**
+* @brief ~FederationManager
+* Destructor of FederationManager, which resign federation and destroy it
+*/
         ~FederationManager() override;
+
+//================================================================================================================================================
+
+//          Private Methods and structures
+
+//================================================================================================================================================
 
     private:
 

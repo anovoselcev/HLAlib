@@ -61,13 +61,6 @@ namespace HLA {
       return as_wstring;
     }
 
-/**
-* @brief Node::AsString
-* @return
-*/
-    const std::string& Node::AsString() const{
-        return as_string;
-    }
 
 /**
 * @brief JSON::JSON
@@ -214,6 +207,16 @@ namespace HLA {
 
         for(auto& p:map)
             result[p.first] = ToVector(p.second);
+
+        return result;
+    }
+
+    unordered_map<unsigned short, wstring> JSON::ToMapUshortWstring(shared_ptr<Node> node){
+        unordered_map<unsigned short, wstring> result;
+        auto map = node->AsMap();
+
+        for(const auto& x : map)
+            result[static_cast<unsigned short>(std::stoi(x.first))] = x.second->AsWstring();
 
         return result;
     }

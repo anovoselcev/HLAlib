@@ -1,0 +1,45 @@
+%implements s1_b0_9t2qb_SystemInitialize "C"
+
+%function SystemInitialize(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%assign tlcSetupRuntimeResourcesFcnOfS0B0 = OpaqueTLCBlockFcn("SetupRuntimeResources", 0, 0, 0, 0, 0)
+%assign tlcSetupRuntimeResourcesFcnOfS0B2 = OpaqueTLCBlockFcn("SetupRuntimeResources", 0, 2, 0, 0, 1)
+%assign tlcStartFcnOfS0B0 = OpaqueTLCBlockFcn("Start", 0, 0, 0, 0, 2)
+%assign tlcStartFcnOfS0B2 = OpaqueTLCBlockFcn("Start", 0, 2, 0, 0, 3)
+%<SLibInsertAsyncTaskInitializeCode(system)>
+%<SLibWriteMachineInitialize()>
+%if !WHITE_SPACE(tlcSetupRuntimeResourcesFcnOfS0B0)
+/* SystemInitialize for Atomic SubSystem: '<Root>/Ethernet' */
+/* SetupRuntimeResources for S-Function (slrtIPConfig): '<S1>/UDP Configure' */
+%<tlcSetupRuntimeResourcesFcnOfS0B0>\
+%endif
+%if !WHITE_SPACE(tlcSetupRuntimeResourcesFcnOfS0B2)
+/* SetupRuntimeResources for S-Function (slrtUDPSend): '<S1>/UDP Send' */
+%<tlcSetupRuntimeResourcesFcnOfS0B2>\
+%endif
+%if !WHITE_SPACE(tlcStartFcnOfS0B0)
+/* Start for S-Function (slrtIPConfig): '<S1>/UDP Configure' */
+%<tlcStartFcnOfS0B0>\
+%endif
+/* Start for Width: '<S1>/Width' */
+Ethernet_B.Width = 8.0;
+%if !WHITE_SPACE(tlcStartFcnOfS0B2)
+/* Start for S-Function (slrtUDPSend): '<S1>/UDP Send' */
+%<tlcStartFcnOfS0B2>\
+/* End of SystemInitialize for SubSystem: '<Root>/Ethernet' */
+%endif
+%<SLibInsertInitPeriodicCStatesFcn(system)>
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedSystemInitializeLocalVars", localVarDecl)>
+%endfunction
+%function SystemInitializeFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void SystemInitialize(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 0, fcnProtoType)>
+%endfunction

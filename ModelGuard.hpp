@@ -93,25 +93,29 @@ namespace HLA {
     template<>
 /**
 * @brief ModelGuard::ModelingControl<ModelMode::THREADING>
-* Method which control execution of federate with Threading Model Mode
+* Method which control execution of master federate with Threading Model Mode
 */
     void ModelGuard::ModelingControl<MODELMODE::FREE_THREADING>();
 
     template<>
 /**
 * @brief ModelGuard::ModelingControl<ModelMode::FOLLOWING>
-* Method which control execution of federate with Following Model Mode
+* Method which control execution of master federate with Following Model Mode
 */
     void ModelGuard::ModelingControl<MODELMODE::FREE_FOLLOWING>();
 
     template<>
 /**
 * @brief ModelGuard::ModelingControl<ModelMode::MANAGING>
-* ..............................
+* Method which control execution of slave federate with Following Model Mode
 */
     void ModelGuard::ModelingControl<MODELMODE::MANAGING_FOLLOWING>();
 
     template<>
+/**
+* @brief ModelGuard::ModelingControl<MODELMODE::MANAGING_THREADING>
+* Method which control execution of slave federate with Threading Model Mode
+*/
     void ModelGuard::ModelingControl<MODELMODE::MANAGING_THREADING>();
 }
 

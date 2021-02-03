@@ -15,7 +15,8 @@ namespace HLA {
 
         ProxyFederate(JSON&& file) noexcept;
 
-        bool operator()(const std::string& ip, const JSON& file);
+        bool StartProxy(const JSON& proxy_file,
+                        const JSON& hla_file);
 
 
     private:
@@ -26,14 +27,31 @@ namespace HLA {
 
     protected:
 
-        void Listen();
+        void Listen_attributes(unsigned short port);
+
+        void Listen_interactions(unsigned short port);
+
+        void WriteAttributes(unsigned short port, const rti1516e::VariableLengthData&);
+
+        void WriteInteractions(unsigned short port, const rti1516e::VariableLengthData&);
 
         void RunFederate() override;
 
+        void AttributeProcess() override;
+
+        void ParameterProcess() override;
+
         boost::asio::io_context _context;
         udp_endpoint_t _endp;
-        udp_socket_t _socket{_context};
-        std::array<char, 256> _buffer;
+
+        std::unordered_map<unsigned short, std::unique_ptr<udp_socket_t>> _sockets;
+
+        std::unordered_map<unsigned short, std::wstring> _ports_pub_attributes;
+        std::unordered_map<unsigned short, std::wstring> _ports_sub_attributes;
+        std::unordered_map<unsigned short, std::wstring> _ports_pub_interactions;
+        std::unordered_map<unsigned short, std::wstring> _ports_sub_interactions;
+        std::wstring ip_remote;
+        std::unordered_map<unsigned short, std::array<char, 64>> _buffers;
     };
 }
 

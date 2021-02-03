@@ -1,0 +1,55 @@
+%implements s1_b0_9t2qb_Outputs "C"
+
+%function Outputs(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+
+real_T HoldSine;
+real_T HoldCosine;
+%closefile localVarDecl
+%assign tlcOutputsFcnOfS0B0 = OpaqueTLCBlockFcn("Outputs", 0, 0, 0, 1, 0)
+%assign tlcOutputsFcnOfS0B1 = OpaqueTLCBlockFcn("Outputs", 0, 1, 0, 1, 1)
+%assign tlcOutputsFcnOfS0B2 = OpaqueTLCBlockFcn("Outputs", 0, 2, 0, 1, 2)
+%if !WHITE_SPACE(tlcOutputsFcnOfS0B0)
+/* {S!d2791}Outputs for Atomic SubSystem: '<Root>/Ethernet' */
+/* {S!d2794}S-Function (slrtIPConfig): '<S1>/UDP Configure' */
+%<tlcOutputsFcnOfS0B0>\
+%endif
+/* {S!d2796}Sin: '<S1>/Sine Wave' */
+if (Ethernet_DW.systemEnable != 0) {
+    Ethernet_DW.lastSin = std::sin(Ethernet_P.SineWave_Freq * %<(SLibCG_SE(LibGetTaskTime(0)))>);
+    Ethernet_DW.lastCos = std::cos(Ethernet_P.SineWave_Freq * %<(SLibCG_SE(LibGetTaskTime(0)))>);
+    Ethernet_DW.systemEnable = 0;
+}
+Ethernet_B.SineWave = ((Ethernet_DW.lastSin * Ethernet_P.SineWave_PCos + Ethernet_DW.lastCos * Ethernet_P.SineWave_PSin) * Ethernet_P.SineWave_HCos + (Ethernet_DW.lastCos * Ethernet_P.SineWave_PCos - Ethernet_DW.lastSin * Ethernet_P.SineWave_PSin) * Ethernet_P.SineWave_Hsin) * Ethernet_P.SineWave_Amp + Ethernet_P.SineWave_Bias;
+/* {E!d2796}End of Sin: '<S1>/Sine Wave' */
+%if !WHITE_SPACE(tlcOutputsFcnOfS0B1)
+
+/* {S!d2798}S-Function (xpcbytepacking): '<S1>/Byte Packing ' */
+%<tlcOutputsFcnOfS0B1>\
+%endif
+%if !WHITE_SPACE(tlcOutputsFcnOfS0B2)
+/* {S!d2800}S-Function (slrtUDPSend): '<S1>/UDP Send' */
+%<tlcOutputsFcnOfS0B2>\
+%endif
+/* {S!d2802}Update for Sin: '<S1>/Sine Wave' */
+HoldSine = Ethernet_DW.lastSin;
+HoldCosine = Ethernet_DW.lastCos;
+Ethernet_DW.lastSin = HoldSine * Ethernet_P.SineWave_HCos + HoldCosine * Ethernet_P.SineWave_Hsin;
+Ethernet_DW.lastCos = HoldCosine * Ethernet_P.SineWave_HCos - HoldSine * Ethernet_P.SineWave_Hsin;
+/* {E!d2791}End of Outputs for SubSystem: '<Root>/Ethernet' */
+%<SLibInsertSolverResetCode()>\
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedOutputLocalVars", localVarDecl)>
+%endfunction
+%function OutputsFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void Outputs(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 1, fcnProtoType)>
+%endfunction

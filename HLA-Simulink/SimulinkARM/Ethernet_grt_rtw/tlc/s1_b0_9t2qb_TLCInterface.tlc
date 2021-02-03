@@ -1,0 +1,1132 @@
+%implements s1_b0_9t2qb_TLCInterface "C"
+
+%function getDWorkAddr_0_0_0_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_0_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_0_0_0_0_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_0_0_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParamAddr_0_0_0_0_0_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getParam_0_0_0_0_0_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getInputAddr_0_2_0_0_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_0_2_0_0_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_0_2_0_0_1_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.Width"
+%endfunction
+
+%function getInput_0_2_0_0_1_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.Width"
+%endfunction
+
+%function getDWorkAddr_0_2_0_0_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_2_0_0_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_2_0_0_1_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getDWork_0_2_0_0_1_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getParamAddr_0_2_0_0_1_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParam_0_2_0_0_1_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParamAddr_0_2_0_0_1_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParam_0_2_0_0_1_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParamAddr_0_2_0_0_1_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParam_0_2_0_0_1_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParamAddr_0_2_0_0_1_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParam_0_2_0_0_1_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParamAddr_0_2_0_0_1_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParam_0_2_0_0_1_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParamAddr_0_2_0_0_1_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P6"
+%endfunction
+
+%function getParam_0_2_0_0_1_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P6"
+%endfunction
+
+%function getDWorkAddr_0_0_0_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_0_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_0_0_0_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_0_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParamAddr_0_0_0_0_2_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getParam_0_0_0_0_2_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getInputAddr_0_2_0_0_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_0_2_0_0_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_0_2_0_0_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.Width"
+%endfunction
+
+%function getInput_0_2_0_0_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.Width"
+%endfunction
+
+%function getDWorkAddr_0_2_0_0_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_2_0_0_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_2_0_0_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getDWork_0_2_0_0_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getParamAddr_0_2_0_0_3_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParam_0_2_0_0_3_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParamAddr_0_2_0_0_3_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParam_0_2_0_0_3_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParamAddr_0_2_0_0_3_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParam_0_2_0_0_3_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParamAddr_0_2_0_0_3_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParam_0_2_0_0_3_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParamAddr_0_2_0_0_3_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParam_0_2_0_0_3_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParamAddr_0_2_0_0_3_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P6"
+%endfunction
+
+%function getParam_0_2_0_0_3_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P6"
+%endfunction
+
+%function getDWorkAddr_0_0_0_1_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_1_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_0_0_1_0_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_1_0_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParamAddr_0_0_0_1_0_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getParam_0_0_0_1_0_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getInputAddr_0_1_0_1_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.SineWave"
+%endfunction
+
+%function getInput_0_1_0_1_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.SineWave"
+%endfunction
+
+%function getOutputAddr_0_1_0_1_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getOutput_0_1_0_1_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_1_0_1_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.BytePacking_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_1_0_1_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.BytePacking_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_0_2_0_1_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_0_2_0_1_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_0_2_0_1_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.Width"
+%endfunction
+
+%function getInput_0_2_0_1_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.Width"
+%endfunction
+
+%function getDWorkAddr_0_2_0_1_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_2_0_1_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_2_0_1_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getDWork_0_2_0_1_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getParamAddr_0_2_0_1_2_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParam_0_2_0_1_2_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParamAddr_0_2_0_1_2_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParam_0_2_0_1_2_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParamAddr_0_2_0_1_2_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParam_0_2_0_1_2_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParamAddr_0_2_0_1_2_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParam_0_2_0_1_2_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParamAddr_0_2_0_1_2_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParam_0_2_0_1_2_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParamAddr_0_2_0_1_2_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P6"
+%endfunction
+
+%function getParam_0_2_0_1_2_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P6"
+%endfunction
+
+%function getDWorkAddr_0_0_0_3_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_3_0_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_0_0_3_0_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_3_0_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParamAddr_0_0_0_3_0_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getParam_0_0_0_3_0_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getInputAddr_0_2_0_3_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_0_2_0_3_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_0_2_0_3_1_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.Width"
+%endfunction
+
+%function getInput_0_2_0_3_1_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.Width"
+%endfunction
+
+%function getDWorkAddr_0_2_0_3_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_2_0_3_1_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_2_0_3_1_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getDWork_0_2_0_3_1_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getParamAddr_0_2_0_3_1_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParam_0_2_0_3_1_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParamAddr_0_2_0_3_1_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParam_0_2_0_3_1_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParamAddr_0_2_0_3_1_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParam_0_2_0_3_1_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParamAddr_0_2_0_3_1_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParam_0_2_0_3_1_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParamAddr_0_2_0_3_1_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParam_0_2_0_3_1_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParamAddr_0_2_0_3_1_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P6"
+%endfunction
+
+%function getParam_0_2_0_3_1_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P6"
+%endfunction
+
+%function getDWorkAddr_0_0_0_3_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_3_2_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_0_0_3_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_0_0_3_2_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPConfigure_PWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_1(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P1"
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_3(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P2"
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_5(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P3"
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_7(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P4"
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_9(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P5"
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_15(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P8"
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_17(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P9"
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_19(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P10"
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_21(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P11"
+%endfunction
+
+%function getParamAddr_0_0_0_3_2_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getParam_0_0_0_3_2_1_23(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPConfigure_P12"
+%endfunction
+
+%function getInputAddr_0_2_0_3_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInput_0_2_0_3_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.BytePacking" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getInputAddr_0_2_0_3_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_B.Width"
+%endfunction
+
+%function getInput_0_2_0_3_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_B.Width"
+%endfunction
+
+%function getDWorkAddr_0_2_0_3_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWork_0_2_0_3_3_0_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_IWORK" + SLibCG_ArrayIndexer(ucv, lcv, sigIdx)
+%endfunction
+
+%function getDWorkAddr_0_2_0_3_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getDWork_0_2_0_3_3_1_0(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_DW.UDPSend_PWORK"
+%endfunction
+
+%function getParamAddr_0_2_0_3_3_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParam_0_2_0_3_3_1_32(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P1"
+%endfunction
+
+%function getParamAddr_0_2_0_3_3_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParam_0_2_0_3_3_1_34(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P2"
+%endfunction
+
+%function getParamAddr_0_2_0_3_3_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParam_0_2_0_3_3_1_36(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P3"
+%endfunction
+
+%function getParamAddr_0_2_0_3_3_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParam_0_2_0_3_3_1_38(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P4"
+%endfunction
+
+%function getParamAddr_0_2_0_3_3_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParam_0_2_0_3_3_1_40(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P5"
+%endfunction
+
+%function getParamAddr_0_2_0_3_3_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "&Ethernet_P.UDPSend_P6"
+%endfunction
+
+%function getParam_0_2_0_3_3_1_42(opaqueBlock, block, lcv, ucv, sigIdx, reim) void
+
+%return "Ethernet_P.UDPSend_P6"
+%endfunction
+

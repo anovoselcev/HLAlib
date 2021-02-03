@@ -2,7 +2,7 @@
 #define RTIFIXEDRECOD_HPP
 #define BOOST_PFR_USE_CPP17 0
 #include "BasicTemplates.hpp"
-#include "boost/pfr.hpp"
+#include "../3dparty/magic_get-develop/include/boost/pfr.hpp"
 
 namespace HLA {
 

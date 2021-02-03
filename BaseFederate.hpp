@@ -145,7 +145,7 @@ namespace HLA{
 */
         BaseFederate(JSON&& file) noexcept;
 
- /**
+/**
 * @brief ~BaseFederate
 * Destructor of basic federate, which set Federate State to EXIT
 */
@@ -274,10 +274,6 @@ private:
 * ModelingStep          : Step of Modeling in milliseconds
 * CallbackMode          : Asynchronous/Synchronous mode match 0/1
 * ModelingMode          : Modeling Mode parameter, look ModelMode enumeration class
-* PublishAttributes     : List of attributes (matches with FOM), which federate want to publish ({"Attribute1", "Attribute2",....})
-* SubscribeAttributes   : Hash Map of objects and their attributes (matches with FOM), which federate want to subscribe ({{"Object1", {"Attribute1", "Attribute2",....}}....})
-* PublishInteractions   : Hash Map of interactions and their parameters (matches with FOM), which federate want to publish ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* SubscribeInteractions : Hash Map of interactions and their parameters (matches with FOM), which federate want to subscribe ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
 * Method for JSON file with lvalue reference
 * @return Sample reference of current Federate
 */
@@ -289,10 +285,6 @@ private:
 * ModelingStep          : Step of Modeling in milliseconds
 * CallbackMode          : Asynchronous/Synchronous mode match 0/1
 * ModelingMode          : Modeling Mode parameter, look ModelMode enumeration class
-* PublishAttributes     : List of attributes (matches with FOM), which federate want to publish ({"Attribute1", "Attribute2",....})
-* SubscribeAttributes   : Hash Map of objects and their attributes (matches with FOM), which federate want to subscribe ({{"Object1", {"Attribute1", "Attribute2",....}}....})
-* PublishInteractions   : Hash Map of interactions and their parameters (matches with FOM), which federate want to publish ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
-* SubscribeInteractions : Hash Map of interactions and their parameters (matches with FOM), which federate want to subscribe ({{"Interaction1", {"Parameter1", "Parameter2",....}}....})
 * Method for JSON file with rvalue reference
 * @return Sample reference of current Federate
 */
@@ -348,10 +340,6 @@ private:
 */
         struct InteractionClassHash{
             size_t operator()(const rti1516e::InteractionClassHandle& _Interaction) const noexcept;
-        };
-
-        struct AttributeHash{
-            size_t operator()(const rti1516e::AttributeHandle& attr) const noexcept;
         };
 
 /**
@@ -552,6 +540,7 @@ private:
 * Callback function from RTI. Call when subscribed federate update his attributes.
 * Info of reflected attributes in theUserSuppliedTag
 * Data of reflected attributes in theAttributeValues
+* Handle of reflected object
 */
         void reflectAttributeValues(rti1516e::ObjectInstanceHandle theObject,
                                             const rti1516e::AttributeHandleValueMap &theAttributeValues,
@@ -569,6 +558,7 @@ private:
 * Callback function from RTI. Call when subscribed interation with his parameters sends.
 * Info of recived interaction in theUserSuppliedTag
 * Data of recived interaction in theParameterValues
+* Handle of recived interaction
 */
         void receiveInteraction (rti1516e::InteractionClassHandle theInteraction,
                                          rti1516e::ParameterHandleValueMap const & theParameterValues,
@@ -578,17 +568,27 @@ private:
                                          rti1516e::SupplementalReceiveInfo theReceiveInfo)
         throw (rti1516e::FederateInternalError) override;
 
+/**
+* @brief receiveInteraction
+* @param theInteraction : Handle of recived interaction (default GO/READY)
+* @param theTime        : Time stamp, using for separate queue of interactions and managing tools
+* Callback function from RTI with time stamp. Call when federate send stamp READY or when FederationManager send GO
+*/
         void receiveInteraction (rti1516e::InteractionClassHandle theInteraction,
-                                rti1516e::ParameterHandleValueMap const & theParameterValues,
-                                rti1516e::VariableLengthData const & theUserSuppliedTag,
-                                rti1516e::OrderType sentOrder,
-                                rti1516e::TransportationType theType,
+                                rti1516e::ParameterHandleValueMap const & ,
+                                rti1516e::VariableLengthData const & ,
+                                rti1516e::OrderType ,
+                                rti1516e::TransportationType ,
                                 rti1516e::LogicalTime const & theTime,
-                                rti1516e::OrderType receivedOrder,
-                                rti1516e::SupplementalReceiveInfo theReceiveInfo)
+                                rti1516e::OrderType ,
+                                rti1516e::SupplementalReceiveInfo )
        throw (rti1516e::FederateInternalError) override;
 
-
+/**
+* @brief connectionLost
+* @param faultDescription : Description of lost
+* Callback function from RTI. Call when federate lost connection with RTI. After that federate go to EXIT state
+*/
        void connectionLost (std::wstring const & faultDescription)
           throw (rti1516e::FederateInternalError) override;
 
@@ -693,8 +693,7 @@ private:
 * Hash map for caching [ObjectID; ObjectClassID] in format [HashOF(ObjectID); PointerOF(ObjectClassID)] for better memory using
 * it valueable for switching and parsing queue of attributes
 */
-        mutable std::unordered_map<size_t, const rti1516e::ObjectClassHandle*> _CacheID;
-
+        mutable std::unordered_map<size_t, rti1516e::ObjectClassHandle> _CacheID;
 
 /**
 * @brief _qAttributes
@@ -766,7 +765,7 @@ private:
 
     template<>
 /**
-* @brief BaseFederate::Modeling<ModelMode::THREADING>
+* @brief BaseFederate::Modeling<ModelMode::FREE_THREADING>
 * Main function of modeling that sleep in sub-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
 */
     void BaseFederate::Modeling<MODELMODE::FREE_THREADING>();
@@ -774,7 +773,7 @@ private:
 
     template<>
 /**
-* @brief BaseFederate::Modeling<ModelMode::FOLLOWING>
+* @brief BaseFederate::Modeling<ModelMode::FREE_FOLLOWING>
 * Main function of modeling that sleep in call-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
 */
     void BaseFederate::Modeling<MODELMODE::FREE_FOLLOWING>();
@@ -782,14 +781,16 @@ private:
 
     template<>
 /**
-* @brief BaseFederate::Modeling<ModelMode::MANAGING>
+* @brief BaseFederate::Modeling<ModelMode::MANAGING_FOLLOWING>
+* Main function of modeling that wait for time-stamp GO from FederationManager and after that start process queue of attributes and parameters and update attributes and send interactions
 */
     void BaseFederate::Modeling<MODELMODE::MANAGING_FOLLOWING>();
 
 
     template<>
 /**
-* @brief BaseFederate::Modeling<ModelMode::MANAGING>
+* @brief BaseFederate::Modeling<ModelMode::MANAGING_THREADING>
+* Main function of modeling that wait for time-stamp GO from FederationManager in sub-thread and after that start process queue of attributes and parameters and update attributes and send interactions
 */
     void BaseFederate::Modeling<MODELMODE::MANAGING_THREADING>();
 }
