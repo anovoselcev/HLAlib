@@ -1,7 +1,0 @@
-  RITM_test_RT1007.c
-can_datatype_ground.c
-fiforeadwrite.c
-xpc_datatype_ground.c
-rt_logging_mmi.c
-rtw_modelmap_utils.c
-

@@ -1,9 +1,0 @@
--IC:\HLA\laboratory\HLA-Simulink\SimulinkARM
--IC:\HLA\laboratory\HLA-Simulink\SimulinkARM\RITM_test_RT1007_slrt_rtw
--I"C:\Program Files\MATLAB\R2020a\extern\include"
--I"C:\Program Files\MATLAB\R2020a\simulink\include"
--I"C:\Program Files\MATLAB\R2020a\rtw\c\src"
--IC:\Ritmlibs\RITM-master\RITM-master\lib
--I"C:\Program Files\MATLAB\R2020a\simulink\include\messages"
--I"C:\Program Files\MATLAB\R2020a\toolbox\shared\can\src\scanutil"
--I"C:\Program Files\MATLAB\R2020a\toolbox\rtw\targets\xpc\target\build\xpcblocks\include"
