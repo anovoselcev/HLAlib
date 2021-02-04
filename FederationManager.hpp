@@ -99,6 +99,8 @@ namespace HLA{
 
         std::unordered_map<rti1516e::ObjectInstanceHandle, std::wstring, ObjectInstanceClassHash> _federates_map;
 
+        std::unordered_map<size_t, rti1516e::ObjectInstanceHandle> _federates_hash;
+
         std::unordered_map<std::wstring, TIMESTAMP> _federates_stamps;
 
         std::unordered_map<std::wstring, std::unordered_map<std::wstring, rti1516e::VariableLengthData>> _federates_values;

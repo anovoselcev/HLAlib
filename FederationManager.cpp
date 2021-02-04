@@ -15,8 +15,9 @@ struct Some{        // To delete
     int value2;
     int16_t value3;
 };
-
+    static auto start =  std::chrono::steady_clock::now();
 using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
+
 
 
     FederationManager::FederationManager(const JSON& file) noexcept :
@@ -56,6 +57,9 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
         _ready_federates = 0;
 
         _rtiAmbassador->sendInteraction(_InteractionClasses.at(L"GO"), ParameterHandleValueMap(), _MyInstanceID.encode(), UselessStamp);
+        auto end = std::chrono::steady_clock::now();
+        //std::wcout << L"dt = " << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << std::endl;
+        start = std::chrono::steady_clock::now();
 
         for(auto& federate : _federates_stamps)
             federate.second = TIMESTAMP::GO;
@@ -67,11 +71,12 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
 
     void FederationManager::AttributeProcess(){
         lock_guard<mutex> guard(_amutex);
-        std::wcout << L"Here" << std::endl;
         while(!_qAttributes.empty()){
             auto& message = _qAttributes.front();
-            Some value = HLA::cast_from_rti<HLAsome>(message.data.begin()->second);                         // To delete
-            std::wcout << value.value1 << L"    " << value.value2 << L"   " << value.value3 << std::endl;   // To delete
+            _rtiAmbassador->updateAttributeValues(_MyInstanceID, {{_AttributesMap[_MyClass][L"Value"], message.data.begin()->second}}, rti1516e::VariableLengthData());
+//           Some value = HLA::cast_from_rti<HLAsome>(message.data.begin()->second);
+//           std::wcout << value.value1 << L"    " << value.value2 << L"   " << value.value3 << std::endl;
+
 
 //            for(const auto& object : _ObjectClasses){
 //                for(const auto& attributte : _AttributesMap[object.second]){
@@ -93,8 +98,10 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
                                                     throw (FederateInternalError){
         lock_guard<mutex> guard(_smutex);
         _federates_map[theObject] = theObjectInstanceName;
+        _federates_hash[static_cast<size_t>(theObject.hash())] = theObject;
         _federates_stamps[theObjectInstanceName] = TIMESTAMP::GO;
         _federates_count++;
+        std::wcout << L"I see new" << std::endl;
 
     }
 
@@ -105,14 +112,16 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
                                                     throw (FederateInternalError){
         lock_guard<mutex> guard(_smutex);
         _federates_map[theObject] = theObjectInstanceName;
+        _federates_hash[static_cast<size_t>(theObject.hash())] = theObject;
         _federates_stamps[theObjectInstanceName] = TIMESTAMP::GO;
         _federates_count++;
+        std::wcout << L"I see new" << std::endl;
     }
 
     void FederationManager::removeObjectInstance (ObjectInstanceHandle theObject,
-                                                  VariableLengthData const & theUserSuppliedTag,
-                                                  OrderType sentOrder,
-                                                  SupplementalRemoveInfo theRemoveInfo)
+                                                  VariableLengthData const & ,
+                                                  OrderType ,
+                                                  SupplementalRemoveInfo )
                                                   throw (FederateInternalError) {
 
         lock_guard<mutex> guard(_smutex);
@@ -122,6 +131,7 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
             _ready_federates--;
         _federates_stamps.erase(name);
         _federates_map.erase(theObject);
+        _federates_hash.erase(static_cast<size_t>(theObject.hash()));
         _federates_count--;
     }
 
@@ -138,13 +148,12 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
 
         if(theInteraction == _InteractionClasses[L"READY"] && _state >= STATE::STARTED){
             lock_guard<mutex> guard(_smutex);
-            long hash;
-            memcpy(&hash, theUserSuppliedTag.data(), sizeof (long));
-            auto fed = std::find_if(_federates_map.begin(), _federates_map.end(), [&hash](const auto& value){
-                return value.first.hash() == hash;
-            });
+            auto hash = HLA::cast_from_rti<HLA::Unsigned32BE>(theUserSuppliedTag);
+            if(!_federates_hash[static_cast<size_t>(hash)].isValid()){
+                hash = HLA::cast_from_rti<HLA::Unsigned32LE>(theUserSuppliedTag);
+            }
 
-            _federates_stamps[fed->second] = TIMESTAMP::READY;
+            _federates_stamps[_federates_map[_federates_hash[hash]]] = TIMESTAMP::READY;
 
             _ready_federates++;
 

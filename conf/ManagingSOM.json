@@ -20,13 +20,13 @@
                         "LogFile",
     
     "PublishAttributes": 
-                        ["Name"],
+                        ["Name", "Value"],
     "SubscribeAttributes" :
                         {"Following":
                                         ["Name"],
                          "Threading":
                                         ["Name"],
-                        "Matlab" : ["Value"]},
+                        "Matlab" : ["Value", "Name"]},
     "PublishInteractions" : 
                             {},
     "SubscribeInteractions" :

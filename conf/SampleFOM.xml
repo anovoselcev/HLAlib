@@ -38,6 +38,15 @@
                         <transportation>HLAreliable</transportation>
                         <order>Receive</order>
                     </attribute>
+                    <attribute>
+                        <name>Value</name>
+                        <dataType>HLAunicodeString</dataType>
+                        <updateType>Conditional</updateType>
+                        <ownership>DivestAcquire</ownership>
+                        <sharing>Neither</sharing>
+                        <transportation>HLAreliable</transportation>
+                        <order>Receive</order>
+                    </attribute>
             </objectClass>
             <objectClass>
                 <name>Following</name>
@@ -77,7 +86,7 @@
                         <transportation>HLAreliable</transportation>
                         <order>Receive</order>
                     </attribute>
-                    <attribute>
+					<attribute>
                         <name>Value</name>
                         <dataType>HLAunicodeString</dataType>
                         <updateType>Conditional</updateType>
