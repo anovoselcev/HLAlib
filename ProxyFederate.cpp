@@ -25,6 +25,7 @@ namespace HLA {
 
         _ports_sub_attributes = JSON::ToMapUshortWstring(root.at(L"Ports_Subscribe_Attributes"));
         for(const auto& port : _ports_sub_attributes){
+            _attributes_sub_ports[port.second] = port.first;
             _sockets[port.first] = std::make_unique<udp_socket_t>(_context);
             _sockets[port.first] -> open(boost::asio::ip::udp::v4());
             _sockets[port.first] -> bind(udp_endpoint_t(boost::asio::ip::address::from_string(std::string(ip.begin(), ip.end())), port.first));
@@ -102,8 +103,7 @@ namespace HLA {
             auto& message = _qAttributes.front();
             for(const auto& data : message.data){
                 auto name = _rtiAmbassador->getAttributeName(message.handle, data.first);
-                auto it = std::find_if(_ports_sub_attributes.begin(), _ports_sub_attributes.end(), [&name](const auto& x){return x.second == name;});
-                WriteAttributes(it->first, data.second);
+                WriteAttributes(_attributes_sub_ports[name], data.second);
             }
             _qAttributes.pop();
         }

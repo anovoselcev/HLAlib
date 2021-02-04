@@ -47,6 +47,7 @@ namespace HLA {
         std::unordered_map<unsigned short, std::unique_ptr<udp_socket_t>> _sockets;
 
         std::unordered_map<unsigned short, std::wstring> _ports_pub_attributes;
+        std::unordered_map<std::wstring, unsigned short> _attributes_sub_ports;
         std::unordered_map<unsigned short, std::wstring> _ports_sub_attributes;
         std::unordered_map<unsigned short, std::wstring> _ports_pub_interactions;
         std::unordered_map<unsigned short, std::wstring> _ports_sub_interactions;
