@@ -69,7 +69,7 @@ int main()
 //    HLA::ProxyFederate prx(file);
 //    prx.StartProxy(file_test, file);
     //std::wcout << L"Before wait" << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(10000));
+    std::this_thread::sleep_for(std::chrono::seconds(100000000));
     //std::wcout << L"After wait" << std::endl;
     //std::thread th1(NewThreadFederate,L"Fed1",1000);
     //th1.join();

@@ -146,8 +146,8 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
                                                 SupplementalReceiveInfo )
                                                 throw (FederateInternalError){
 
+        lock_guard<mutex> guard(_smutex);
         if(theInteraction == _InteractionClasses[L"READY"] && _state >= STATE::STARTED){
-            lock_guard<mutex> guard(_smutex);
             auto hash = HLA::cast_from_rti<HLA::Unsigned32BE>(theUserSuppliedTag);
             if(!_federates_hash[static_cast<size_t>(hash)].isValid()){
                 hash = HLA::cast_from_rti<HLA::Unsigned32LE>(theUserSuppliedTag);
