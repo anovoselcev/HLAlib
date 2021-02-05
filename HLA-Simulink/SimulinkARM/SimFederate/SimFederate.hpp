@@ -7,7 +7,7 @@ namespace HLA {
     enum Appoitment{
         ON_OFF,
         DO_NOTHING
-    }
+    };
     
 	struct Button{
 		int push = 0;

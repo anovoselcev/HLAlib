@@ -7,7 +7,7 @@ namespace HLA {
     
     extern std::unique_ptr<Logger> logger;
     
-    using HLAButton = Struct_Wrapper<HLA::Button, 8, Integer32LE, Integer32LE, Integer32LE, Wstring, Enum<Appoitment>>;
+    using HLAButton = Struct_wrapper<HLA::Button, 8, Integer32LE, Integer32LE, Integer32LE, Wstring, Enum<Appoitment>>;
 
 
     SimFederate::SimFederate(const std::wstring& name,
@@ -48,7 +48,7 @@ namespace HLA {
 		while(!_qParameters.empty()){
 			auto& message = _qParameters.front();
             if(message.handle == _InteractionClasses[L"ARMaction"]){
-                Button button = HLA::cast_from_rti<HLAButton>(message.data[_ParametersMap[name][L"PushButton"])->second);
+                Button button = HLA::cast_from_rti<HLAButton>(message.data[_ParametersMap[message.handle][L"PushButton"]]);
                 *logger << L"INFO:" << _federate_name << L" Recive button with name " << button.model_name << Logger::Flush();
                 if(button.model_name == _federate_name && button.action == Appoitment::ON_OFF){
                     active_mode = !active_mode;

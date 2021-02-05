@@ -1033,8 +1033,8 @@ namespace HLA{
                                            OrderType ,
                                            SupplementalReceiveInfo )
     throw (FederateInternalError){
-        if(theInteraction == _InteractionClasses[L"GO"] && _state >= STATE::STARTED){ // If slave federate recive GO time-stamp
-            lock_guard<mutex> guard(_smutex);
+        lock_guard<mutex> guard(_smutex);
+        if(theInteraction == _InteractionClasses[L"GO"] && _state >= STATE::STARTED){ // If slave federate recive GO time-stamp 
             _state = STATE::PROCESSING;       // Change state to processing
             _condition.notify_one();          // Start processing
         }
