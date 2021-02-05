@@ -19,5 +19,5 @@ void Terminate_Point(){
 }
 
 void Output_Point_ModelARM(double* u1, double* u2){
-   // HLA::ModelGuard guard(fed);
+   HLA::ModelGuard guard(fed);
 }
