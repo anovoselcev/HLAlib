@@ -47,7 +47,7 @@ namespace HLA {
 		//rti1516e::InteractionClassHandle name = _InteractionClasses.at(L"ARMaction");
 		while(!_qParameters.empty()){
 			auto& message = _qParameters.front();
-            if(message.handle == _InteractionClasses[L"ARMaction"){
+            if(message.handle == _InteractionClasses[L"ARMaction"]){
                 Button button = HLA::cast_from_rti<HLAButton>(message.data[_ParametersMap[name][L"PushButton"])->second);
                 *logger << L"INFO:" << _federate_name << L" Recive button with name " << button.model_name << Logger::Flush();
                 if(button.model_name == _federate_name && button.action == Appoitment::ON_OFF){
