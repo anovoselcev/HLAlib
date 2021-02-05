@@ -7,3 +7,4 @@
 010.055.082.202 2021.02. 4 14:38:46.590 КОНФИГУРАЦИЯ   ConfigurationManager Используется конфигурационный файл [C:\rrti-2.0\RRTI-2.0.0164\conf\lrc.cfg].
 010.055.082.202 2021.02. 4 14:38:46.590 КОНФИГУРАЦИЯ   ConfigurationParameter Параметр [LRC.TRANSPORT_KILL_ON_DEADLOCK] = [false].
 010.055.082.202 2021.02. 4 14:38:46.590 КОНФИГУРАЦИЯ   ConfigurationParameter Параметр [LRC.TRANSPORT_KILL_SLOW_READERS] = [false].
+010.055.082.202 2021.02. 4 14:52:32.833 ИНФОРМАЦИОННОЕ Logger Журнал закрыт
