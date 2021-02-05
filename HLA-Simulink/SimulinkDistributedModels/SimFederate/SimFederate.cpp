@@ -69,7 +69,7 @@ namespace HLA {
         }
     }
     
-    std::unordered_map<std::wstring, rti1516e::VariableLengthData> SimFederate::getData() { 
+    std::unordered_map<std::wstring, rti1516e::VariableLengthData>& SimFederate::getData() { 
         this->AttributeProcess();
         return inpt;
     }

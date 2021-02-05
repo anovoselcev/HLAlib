@@ -27,7 +27,7 @@ namespace HLA {
         
         void SendDataToRTI(const std::unordered_map<std::wstring, rti1516e::VariableLengthData>& output_data);
         
-        std::unordered_map<std::wstring, rti1516e::VariableLengthData> getData();
+        std::unordered_map<std::wstring, rti1516e::VariableLengthData>& getData();
         
         
     private:
