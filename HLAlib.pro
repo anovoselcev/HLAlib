@@ -42,6 +42,7 @@ HEADERS += \
     HLAdata/HLAvariant.hpp \
     HLAdata/NewDataTypes.hpp \
     HLAdata/Tools.hpp \
+    HLAlib.hpp \
     ProxyFederate.hpp \
     Tools/Logger.hpp \
     ModelGuard.hpp \

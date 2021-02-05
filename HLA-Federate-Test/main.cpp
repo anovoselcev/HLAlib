@@ -59,17 +59,17 @@ void NewFollowFederate(wstring&& name, int delay){
 int main()
 {
 
-   auto file = HLA::JSON::MakeJSON(L"C:\\config\\matlab.json");
-   auto file_test = HLA::JSON::MakeJSON(L"C:\\config\\proxy.json");
-//    HLA::FederationManager man(file);
+   auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/HLAlib/conf/ManagingSOM.json");
+   //auto file_test = HLA::JSON::MakeJSON(L"C:\\config\\proxy.json");
+   HLA::FederationManager man(file);
 //    auto start = std::chrono::steady_clock::now();
-//    man.ConnectRTI(file);
+    man.ConnectRTI(file);
 //    auto end = std::chrono::steady_clock::now();
 //    std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << L"us" << std::endl;
-    HLA::ProxyFederate prx(file);
-    prx.StartProxy(file_test, file);
+//    HLA::ProxyFederate prx(file);
+//    prx.StartProxy(file_test, file);
     //std::wcout << L"Before wait" << std::endl;
-    //std::this_thread::sleep_for(std::chrono::seconds(100));
+    std::this_thread::sleep_for(std::chrono::seconds(10000));
     //std::wcout << L"After wait" << std::endl;
     //std::thread th1(NewThreadFederate,L"Fed1",1000);
     //th1.join();
