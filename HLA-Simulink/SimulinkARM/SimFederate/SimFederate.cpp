@@ -31,14 +31,8 @@ namespace HLA {
     void SimFederate::ParameterProcess(rti1516e::InteractionClassHandle &handle,
                                        rti1516e::ParameterHandleValueMap &data,
                                        rti1516e::VariableLengthData &info){
-                if(handle == _InteractionClasses[L"ARMaction"]){
-                    Button button = HLA::cast_from_rti<HLAButton>(data[_ParametersMap[handle][L"PushButton"]]);
-                    *logger << L"INFO:" << _federate_name << L" Recive button with name " << button.model_name << Logger::Flush();
-                    if(button.model_name == _federate_name && button.action == Appoitment::ON_OFF){
-                        active_mode = !active_mode;
-                        SendBulbFlashSignal(button.bulb_id);
-                }
-            }            
+			auto strategy = MakeStrategy(handle);
+			strategy->Action(data);
         }
     
     void SimFederate::AttributeProcess(rti1516e::ObjectClassHandle &handle,
@@ -47,7 +41,22 @@ namespace HLA {
                                            if(active_mode){}
         }
 
-
+	
+	std::unique_ptr<SimFederate::Strategy> SimFederate::MakeStrategy(const rti1516e::InteractionClassHandle& handle){
+		if(_InteractionClasses[L"TurnModel"] == handle) return std::make_unique<SimFederate::TurnModel>(this);
+	}
+	
+    SimFederate::Strategy::Strategy(SimFederate* ptr) : _ptr(ptr) {}
+	
+    void SimFederate::TurnModel::Action(const rti1516e::ParameterHandleValueMap &data){
+        Button button = HLA::cast_from_rti<HLAButton>(data.at(_ptr->_ParametersMap[_ptr->_InteractionClasses[L"TurnModel"]][L"PushButton"]));
+        *logger << L"INFO:" << _ptr->_federate_name << L" Recive button with name " << button.model_name << Logger::Flush();
+        if(button.model_name == _ptr->_federate_name && button.action == Appoitment::ON_OFF){
+             _ptr->active_mode = !_ptr->active_mode;
+             _ptr->SendBulbFlashSignal(button.bulb_id);
+		}
+	}
+	
     void SimFederate::SendParameters() const{
 
     }

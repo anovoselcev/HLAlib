@@ -124,6 +124,18 @@
                 </parameter>
 			</interactionClass>
 			<interactionClass>
+				<name>TurnModel</name>
+				<sharing>PublishSubscribe</sharing>
+				<transportation>HLAreliable</transportation>
+				<order>Receive</order>
+				<semantics>Communication</semantics>
+				<parameter>
+					<name>PushButton</name>
+					<dataType>Int</dataType>
+					<semantics>Contents of message</semantics>
+                </parameter>
+			</interactionClass>
+			<interactionClass>
 				<name>MatlabCallback</name>
 				<sharing>PublishSubscribe</sharing>
 				<transportation>HLAreliable</transportation>

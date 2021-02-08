@@ -29,5 +29,7 @@
 										["Stamp"]},
     "SubscribeInteractions" :
                             {"ARMaction":
-										["Sender", "PushButton","Tumbler"]}
+										["Sender", "PushButton","Tumbler"],
+							 "TurnModel":
+										["PushButton"]}
 }

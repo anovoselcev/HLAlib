@@ -26,7 +26,9 @@
                                         ["Name"]},
     "PublishInteractions" : 
                             {"ARMaction":
-										["Sender", "PushButton","Tumbler"]},
+										["Sender", "PushButton","Tumbler"],
+							 "TurnModel":
+										["PushButton"]},
     "SubscribeInteractions" :
                             {"MatlabCallback":
 										["Stamp"]}

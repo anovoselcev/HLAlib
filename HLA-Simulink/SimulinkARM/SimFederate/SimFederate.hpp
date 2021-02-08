@@ -34,14 +34,17 @@ namespace HLA {
 		
         SimFederate(HLA::JSON&& file) noexcept;
 
-    private:
-        
+    protected:
+
         struct Strategy{
+            Strategy(SimFederate* ptr);
             virtual void Action(const rti1516e::ParameterHandleValueMap& data) = 0;
             virtual ~Strategy() = default;
+            SimFederate* _ptr = nullptr;
         };
 
-        struct PushButton : public Strategy{
+        struct TurnModel : public Strategy{
+            using Strategy::Strategy;
             void Action(const rti1516e::ParameterHandleValueMap &data) override;
         };
 
@@ -50,6 +53,8 @@ namespace HLA {
         };
 
         std::unique_ptr<Strategy> MakeStrategy(const rti1516e::InteractionClassHandle& handle);
+
+    private:
         
         bool active_mode = false;
 	
@@ -67,7 +72,8 @@ namespace HLA {
 		
 		void UpdateAttributes() const override;
 
-
+		friend Strategy;
+		friend TurnModel;
 	};
 }
 #endif // TRANSFER_HPP
