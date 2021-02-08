@@ -25,47 +25,6 @@ namespace HLA{
 
 /**
 * @brief BaseFederate::BaseFederate
-* @param name       Name of Federate
-* @param type       Type of federate, which match object in FOM
-* @param FOMname    Path to FOM file
-* @param fname      Name of Federation
-* @param ip         IP - address of CRC
-* Full-gapes constructor with lvalue, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), name of federation (_federation_name) and IP addres of CRC(_host_IP_address)
-*/
-    BaseFederate::BaseFederate(const wstring& name,
-                               const wstring& type,
-                               const wstring& FOMname,
-                               const wstring& fname,
-                               const wstring& ip) noexcept:
-                                        _federate_name(name),
-                                        _federate_type(type),
-                                        _FOMname(FOMname),
-                                        _federation_name(fname),
-                                        _host_IP_address(ip){}
-
-
-/**
-* @brief BaseFederate::BaseFederate
-* @param name       Name of Federate
-* @param type       Type of federate, which match object in FOM
-* @param FOMname    Path to FOM file
-* @param fname      Name of Federation
-* @param ip         IP - address of CRC
-* Full-gapes constructor with move, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), name of federation (_federation_name) and IP addres of CRC(_host_IP_address)
-*/
-    BaseFederate::BaseFederate(wstring&& name,
-                               wstring&& type,
-                               wstring&& FOMname,
-                               wstring&& fname,
-                               wstring&& ip) noexcept:
-                                      _federate_name(move(name)),
-                                      _federate_type(move(type)),
-                                      _FOMname(move(FOMname)),
-                                      _federation_name(move(fname)),
-                                      _host_IP_address(move(ip)){}
-
-/**
-* @brief BaseFederate::BaseFederate
 * @param file JSON file with necessary parameters:
 * Name           : Name of Federate
 * Type           : Type of federate, which match object in FOM
@@ -657,11 +616,11 @@ namespace HLA{
 
             tbb::parallel_invoke([this](){
                 // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
-                this->ParameterProcess();
+                this->ParameterProcessMain();
             },
                 // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
                                  [this](){
-                this->AttributeProcess();
+                this->AttributeProcessMain();
             });
         }
     }
@@ -694,11 +653,11 @@ namespace HLA{
 
            tbb::parallel_invoke([this](){
                // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
-               this->ParameterProcess();
+               this->ParameterProcessMain();
            },
                // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
                                 [this](){
-               this->AttributeProcess();
+               this->AttributeProcessMain();
            });
         }
     }
@@ -725,11 +684,11 @@ namespace HLA{
 
         tbb::parallel_invoke([this](){
             // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
-            this->ParameterProcess();
+            this->ParameterProcessMain();
         },
             // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
                              [this](){
-            this->AttributeProcess();
+            this->AttributeProcessMain();
         });
 
         _state = STATE::DOING;                                         // Change federate state to execute(doing) state without HLA
@@ -753,11 +712,11 @@ namespace HLA{
 
         tbb::parallel_invoke([this](){
             // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
-            this->ParameterProcess();
+            this->ParameterProcessMain();
         },
             // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
                              [this](){
-            this->AttributeProcess();
+            this->AttributeProcessMain();
         });
 
        _state = STATE::DOING;
@@ -767,11 +726,11 @@ namespace HLA{
 * @brief BaseFederate::AttributeProcess
 * Function that process queue of reflected attributes step by step in time order, should be override
 */
-    void BaseFederate::AttributeProcess(){
+    void BaseFederate::AttributeProcessMain(){
         lock_guard<mutex> guard(_amutex);           // Lock queue of recived attributes
         while(!_qAttributes.empty()){               // If queue isn't empty
             auto& message = _qAttributes.front();   // Take first message in queue
-            //...some processing
+            AttributeProcess(message.handle, message.data, message.info);
             _qAttributes.pop();                     // Delete first message in queue
         }
     }
@@ -780,13 +739,54 @@ namespace HLA{
 * @brief BaseFederate::ParameterProcess
 * Function that process queue of recived parameters of interactions step by step in time order, should be override
 */
-    void BaseFederate::ParameterProcess(){
+    void BaseFederate::ParameterProcessMain(){
         lock_guard<mutex> guard(_pmutex);           // Lock queue of recived interactions
         while(!_qParameters.empty()){               // If queue isn't empty
             auto& message = _qParameters.front();   // Take first message in queue
-            //...some processing
+            ParameterProcess(message.handle, message.data, message.info);
             _qParameters.pop();                     // Delete first message in queue
         }
+    }
+
+/**
+* @brief BaseFederate::AttributeProcess
+* @param handle
+* @param data
+* @param info
+*/
+    void BaseFederate::AttributeProcess(ObjectClassHandle &handle,
+                                        AttributeHandleValueMap &data,
+                                        VariableLengthData &info){}
+/**
+* @brief BaseFederate::ParameterProcess
+* @param handle
+* @param data
+* @param info
+*/
+    void BaseFederate::ParameterProcess(rti1516e::InteractionClassHandle &handle,
+                                        rti1516e::ParameterHandleValueMap &data,
+                                        rti1516e::VariableLengthData &info){}
+
+/**
+* @brief BaseFederate::UpdateAttributes
+* @param data
+* @param info
+*/
+    void BaseFederate::UpdateAttributes(const AttributeHandleValueMap &data,
+                                        const VariableLengthData info) const{
+        _rtiAmbassador->updateAttributeValues(_MyInstanceID, data, info);
+    }
+
+/**
+* @brief BaseFederate::SendParameters
+* @param handle
+* @param data
+* @param info
+*/
+    void BaseFederate::SendParameters(const InteractionClassHandle &handle,
+                                      const ParameterHandleValueMap &data,
+                                      const VariableLengthData info) const{
+        _rtiAmbassador->sendInteraction(handle, data, info);
     }
 
 /**

@@ -1,4 +1,4 @@
-#ifndef BASEFEDERATE_HPP
+﻿#ifndef BASEFEDERATE_HPP
 #define BASEFEDERATE_HPP
 
 #include <RTI/RTI1516.h>
@@ -87,37 +87,6 @@ namespace HLA{
 * Default constructor, initialization nothing specific
 */
         BaseFederate() = delete;
-
-/**
-* @brief BaseFederate
-* @param name       Name of Federate
-* @param type       Type of federate, which match object in FOM
-* @param FOMname    Path to FOM file
-* @param fname      Name of Federation
-* @param ip         IP - address of CRC
-* Full-gapes constructor with lvalue, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), name of federation (_federation_name) and IP addres of CRC(_host_IP_address)
-*/
-        BaseFederate(const std::wstring& name,
-                     const std::wstring& type,
-                     const std::wstring& FOMname,
-                     const std::wstring& fname,
-                     const std::wstring& ip = L"localhost") noexcept;
-
-
-/**
-* @brief BaseFederate
-* @param name       Name of Federate
-* @param type       Type of federate, which match object in FOM
-* @param FOMname    Path to FOM file
-* @param fname      Name of Federation
-* @param ip         IP - address of CRC
-* Full-gapes constructor with move, initialization name(_federate_name) and type(_federate_type) of federate, path to FOM(_FOMname), name of federation (_federation_name) and IP addres of CRC(_host_IP_address)
-*/
-        BaseFederate(std::wstring&& name,
-                     std::wstring&& type,
-                     std::wstring&& FOMname,
-                     std::wstring&& fname,
-                     std::wstring&& ip = L"localhost") noexcept;
 
 /**
 * @brief BaseFederate
@@ -469,6 +438,21 @@ private:
 */
         void CacheID(const rti1516e::ObjectInstanceHandle&) const;
 
+/**
+* @brief AttributeProcess
+* Function that process queue of reflected attributes step by step in time order, should be override
+*/
+        void AttributeProcessMain();
+
+/**
+* @brief ParameterProcess
+* Function that process queue of recived parameters of interactions step by step in time order, should be override
+*/
+        void ParameterProcessMain();
+
+
+
+
 //================================================================================================================================================
 
 //          Protected API and fields
@@ -497,6 +481,44 @@ private:
         virtual void SendParameters() const;
 
 
+/**
+* @brief UpdateAttributes
+* @param data
+* @param info
+*/
+        void UpdateAttributes(const rti1516e::AttributeHandleValueMap& data,
+                              const rti1516e::VariableLengthData info = rti1516e::VariableLengthData()) const;
+
+/**
+* @brief SendParameters
+* @param handle
+* @param data
+* @param info
+*/
+        void SendParameters(const rti1516e::InteractionClassHandle& handle,
+                            const rti1516e::ParameterHandleValueMap& data,
+                            const rti1516e::VariableLengthData info = rti1516e::VariableLengthData()) const;
+/**
+* @brief AttributeProcess
+* @param handle
+* @param data
+* @param info
+*/
+        virtual void AttributeProcess(rti1516e::ObjectClassHandle& handle,
+                                      rti1516e::AttributeHandleValueMap& data,
+                                      rti1516e::VariableLengthData& info);
+
+/**
+* @brief ParameterProcess
+* @param handle
+* @param data
+* @param info
+*/
+        virtual void ParameterProcess(rti1516e::InteractionClassHandle& handle,
+                                      rti1516e::ParameterHandleValueMap& data,
+                                      rti1516e::VariableLengthData& info);
+
+
        template<MODELMODE>
 /**
 * @brief Modeling
@@ -504,17 +526,7 @@ private:
 */
        void Modeling();
 
- /**
- * @brief AttributeProcess
- * Function that process queue of reflected attributes step by step in time order, should be override
- */
-        virtual void AttributeProcess();
 
-/**
-* @brief ParameterProcess
-* Function that process queue of recived parameters of interactions step by step in time order, should be override
-*/
-        virtual void ParameterProcess();
 
 /**
 * @brief objectInstanceNameReservationSucceeded

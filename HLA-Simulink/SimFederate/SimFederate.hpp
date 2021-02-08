@@ -49,10 +49,15 @@ namespace HLA {
         };
 
         std::unique_ptr<Strategy> MakeStrategy(const rti1516e::InteractionClassHandle& handle);
+
+        void AttributeProcess(rti1516e::ObjectClassHandle &handle,
+                              rti1516e::AttributeHandleValueMap &data,
+                              rti1516e::VariableLengthData &info) override;
+
+        void ParameterProcess(rti1516e::InteractionClassHandle &handle,
+                              rti1516e::ParameterHandleValueMap &data,
+                              rti1516e::VariableLengthData &info) override;
         
-        void ParameterProcess() override;
-        
-        void AttributeProcess() override;
         
         void SendParameters() const override;
         

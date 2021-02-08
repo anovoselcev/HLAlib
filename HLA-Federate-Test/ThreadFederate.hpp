@@ -9,17 +9,6 @@ extern std::unique_ptr<HLA::Logger> logger;
 
 class ThreadFederate final : public HLA::BaseFederate{
 public:
-    ThreadFederate(std::wstring&& name,
-                   std::wstring&& FOM) :
-        HLA::BaseFederate(name,L"Threading",FOM,L"Test"){
-        _mode = HLA::MODELMODE::FREE_THREADING;
-    }
-
-    ThreadFederate(const std::wstring& name,
-                   const std::wstring& FOM) :
-        HLA::BaseFederate(name,L"Threading",FOM,L"Test"){
-        _mode = HLA::MODELMODE::FREE_THREADING;
-    }
 
     ThreadFederate(HLA::JSON& file) :
                    HLA::BaseFederate(file){}
@@ -37,15 +26,13 @@ protected:
         _rtiAmbassador->updateAttributeValues(_MyInstanceID,map,type);
     }
 
-    void AttributeProcess() override{
-        std::lock_guard<std::mutex> guard(_amutex);
-        while(!_qAttributes.empty()){
-            auto& message = _qAttributes.front();
-            std::wcout << HLA::cast_from_rti<HLA::Wstring>(message.data.find(_AttributesMap[_ObjectClasses[L"Following"]][L"Name"])->second) << std::endl;
-            std::wcout << HLA::cast_from_rti<HLA::Float64BE>(message.info) << std::endl;
-            _qAttributes.pop();
-        }
+    void AttributeProcess(rti1516e::ObjectClassHandle &handle,
+                          rti1516e::AttributeHandleValueMap &data,
+                          rti1516e::VariableLengthData &info) override{
+        std::wcout << HLA::cast_from_rti<HLA::Wstring>(data.find(_AttributesMap[_ObjectClasses[L"Following"]][L"Name"])->second) << std::endl;
+        std::wcout << HLA::cast_from_rti<HLA::Float64BE>(info) << std::endl;
     }
+
 };
 
 #endif // THREADFEDERATE_HPP

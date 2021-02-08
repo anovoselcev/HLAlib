@@ -37,9 +37,9 @@ namespace HLA {
 
         void RunFederate() override;
 
-        void AttributeProcess() override;
+        void AttributeProcess(rti1516e::ObjectClassHandle &handle, rti1516e::AttributeHandleValueMap &data, rti1516e::VariableLengthData &info) override;
 
-        void ParameterProcess() override;
+        void ParameterProcess(rti1516e::InteractionClassHandle &handle, rti1516e::ParameterHandleValueMap &data, rti1516e::VariableLengthData &info) override;
 
         boost::asio::io_context _context;
         udp_endpoint_t _endp;

@@ -69,27 +69,11 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
 
     void FederationManager::SendParameters() const{}
 
-    void FederationManager::AttributeProcess(){
-        lock_guard<mutex> guard(_amutex);
-        while(!_qAttributes.empty()){
-            auto& message = _qAttributes.front();
-            _rtiAmbassador->updateAttributeValues(_MyInstanceID, {{_AttributesMap[_MyClass][L"Value"], message.data.begin()->second}}, rti1516e::VariableLengthData());
-//           Some value = HLA::cast_from_rti<HLAsome>(message.data.begin()->second);
-//           std::wcout << value.value1 << L"    " << value.value2 << L"   " << value.value3 << std::endl;
-
-
-//            for(const auto& object : _ObjectClasses){
-//                for(const auto& attributte : _AttributesMap[object.second]){
-//                    auto value = move(message.data.find(attributte.second)->second);
-//                    if(value.size())
-//                        _federates_values[object.first][attributte.first] = move(value);
-//                }
-//            }
-            _qAttributes.pop();
-        }
+    void FederationManager::AttributeProcess(rti1516e::ObjectClassHandle &handle, rti1516e::AttributeHandleValueMap &data, rti1516e::VariableLengthData &info){
+       BaseFederate::UpdateAttributes({{_AttributesMap[_MyClass][L"Value"], data.begin()->second}});
     }
 
-    void FederationManager::ParameterProcess(){}
+    void FederationManager::ParameterProcess(rti1516e::InteractionClassHandle &handle, rti1516e::ParameterHandleValueMap &data, rti1516e::VariableLengthData &info){}
 
 
     void FederationManager::discoverObjectInstance (ObjectInstanceHandle theObject,

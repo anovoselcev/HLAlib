@@ -9,21 +9,6 @@ namespace HLA {
     
     using HLAButton = Struct_wrapper<HLA::Button, 8, Integer32LE, Integer32LE, Integer32LE, Wstring, Enum<Appoitment>>;
 
-
-    SimFederate::SimFederate(const std::wstring& name,
-                             const std::wstring& type,
-                             const std::wstring& FOMname,
-                             const std::wstring& fname,
-                             const std::wstring& ip) noexcept:
-                                   BaseFederate(name,type,FOMname,fname,ip){}
-
-
-    SimFederate::SimFederate(std::wstring&& name,
-                             std::wstring&& type,
-                             std::wstring&& FOMname,
-                             std::wstring&& fname,
-                             std::wstring&& ip) noexcept:
-                                    BaseFederate(std::move(name),std::move(type),std::move(FOMname),std::move(fname),std::move(ip)){}
 									
     SimFederate::SimFederate(const HLA::JSON& file) noexcept : BaseFederate(file){}
 		
@@ -42,32 +27,26 @@ namespace HLA {
 		
 	}
 	
-    void SimFederate::ParameterProcess(){
-        std::lock_guard<std::mutex> guard(_pmutex);
-		//rti1516e::InteractionClassHandle name = _InteractionClasses.at(L"ARMaction");
-		while(!_qParameters.empty()){
-			auto& message = _qParameters.front();
-            if(message.handle == _InteractionClasses[L"ARMaction"]){
-                Button button = HLA::cast_from_rti<HLAButton>(message.data[_ParametersMap[message.handle][L"PushButton"]]);
-                *logger << L"INFO:" << _federate_name << L" Recive button with name " << button.model_name << Logger::Flush();
-                if(button.model_name == _federate_name && button.action == Appoitment::ON_OFF){
-                    active_mode = !active_mode;
-                    SendBulbFlashSignal(button.bulb_id);
+    
+    void SimFederate::ParameterProcess(rti1516e::InteractionClassHandle &handle,
+                                       rti1516e::ParameterHandleValueMap &data,
+                                       rti1516e::VariableLengthData &info) override{
+                if(handle == _InteractionClasses[L"ARMaction"]){
+                    Button button = HLA::cast_from_rti<HLAButton>(data[_ParametersMap[message.handle][L"PushButton"]]);
+                    *logger << L"INFO:" << _federate_name << L" Recive button with name " << button.model_name << Logger::Flush();
+                    if(button.model_name == _federate_name && button.action == Appoitment::ON_OFF){
+                        active_mode = !active_mode;
+                        SendBulbFlashSignal(button.bulb_id);
                 }
-            }
-			_qParameters.pop();
-		}
-    }
-
-    void SimFederate::AttributeProcess(){
-        std::lock_guard<std::mutex> guard(_amutex);
-        while(!_qAttributes.empty()){
-            if(active_mode){
-                
-            }
-            _qAttributes.pop();
+            }            
         }
-    }
+    
+    void SimFederate::AttributeProcess(rti1516e::ObjectClassHandle &handle,
+                                       rti1516e::AttributeHandleValueMap &data,
+                                       rti1516e::VariableLengthData &info) override{
+                                           if(active_mode){}
+                                       }
+
 
     void SimFederate::SendParameters() const{
 

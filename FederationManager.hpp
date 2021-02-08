@@ -93,9 +93,9 @@ namespace HLA{
 
         void SendParameters() const override;
 
-        void AttributeProcess() override;
+        void AttributeProcess(rti1516e::ObjectClassHandle &handle, rti1516e::AttributeHandleValueMap &data, rti1516e::VariableLengthData &info) override;
 
-        void ParameterProcess() override;
+        void ParameterProcess(rti1516e::InteractionClassHandle &handle, rti1516e::ParameterHandleValueMap &data, rti1516e::VariableLengthData &info) override;
 
         std::unordered_map<rti1516e::ObjectInstanceHandle, std::wstring, ObjectInstanceClassHash> _federates_map;
 

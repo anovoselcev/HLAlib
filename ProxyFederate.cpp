@@ -60,7 +60,7 @@ namespace HLA {
             data.setData(_buffers[port].data(), size);
             rti1516e::AttributeHandleValueMap map;
             map[_AttributesMap[_MyClass][_ports_pub_attributes[port]]] = data;
-            _rtiAmbassador->updateAttributeValues(_MyInstanceID, map, rti1516e::VariableLengthData());
+            BaseFederate::UpdateAttributes(map);
             this->Listen_attributes(port);
         };
 
@@ -75,7 +75,7 @@ namespace HLA {
             data.setData(_buffers[port].data(), size);
             rti1516e::ParameterHandleValueMap map;
             map[_ParametersMap[_InteractionClasses[_ports_pub_interactions[port]]].begin()->second] = data;
-            _rtiAmbassador->sendInteraction(_InteractionClasses[_ports_pub_interactions[port]], map, rti1516e::VariableLengthData());
+            BaseFederate::SendParameters(_InteractionClasses[_ports_pub_interactions[port]], map);
             this->Listen_attributes(port);
         };
 
@@ -97,29 +97,24 @@ namespace HLA {
         _sockets[port]->async_send_to(boost::asio::buffer(data.data(), data.size()), remote_endp, handle);
     }
 
-    void ProxyFederate::AttributeProcess(){
-        std::lock_guard<std::mutex> guard(_amutex);
-        while(!_qAttributes.empty()){
-            auto& message = _qAttributes.front();
-            for(const auto& data : message.data){
-                auto name = _rtiAmbassador->getAttributeName(message.handle, data.first);
-                WriteAttributes(_attributes_sub_ports[name], data.second);
-            }
-            _qAttributes.pop();
+    void ProxyFederate::AttributeProcess(rti1516e::ObjectClassHandle &handle,
+                                         rti1516e::AttributeHandleValueMap &data,
+                                         rti1516e::VariableLengthData &info){
+        for(const auto& _data : data){
+            auto name = _rtiAmbassador->getAttributeName(handle, _data.first);
+            WriteAttributes(_attributes_sub_ports[name], _data.second);
         }
     }
 
-    void ProxyFederate::ParameterProcess(){
-        std::lock_guard<std::mutex> guard(_pmutex);
-        while(!_qParameters.empty()){
-            auto& message = _qParameters.front();
-            for(const auto& data : message.data){
-                auto name = _rtiAmbassador->getParameterName(message.handle, data.first);
-                auto it = std::find_if(_ports_sub_interactions.begin(), _ports_sub_interactions.end(), [&name](const auto& x){return x.second == name;});
-                WriteInteractions(it->first, data.second);
-            }
-            _qParameters.pop();
+    void ProxyFederate::ParameterProcess(rti1516e::InteractionClassHandle &handle,
+                                         rti1516e::ParameterHandleValueMap &data,
+                                         rti1516e::VariableLengthData &info){
+        for(const auto& _data : data){
+            auto name = _rtiAmbassador->getParameterName(handle, _data.first);
+            auto it = std::find_if(_ports_sub_interactions.begin(), _ports_sub_interactions.end(), [&name](const auto& x){return x.second == name;});
+            WriteInteractions(it->first, _data.second);
         }
     }
+
 }
 
