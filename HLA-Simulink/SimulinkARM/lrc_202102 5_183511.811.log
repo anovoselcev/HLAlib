@@ -1,9 +1,0 @@
-010.055.082.202 2021.02. 5 18:35:11.812 КОНФИГУРАЦИЯ   RTIambassadorImpl.newInstance Версия СПО: 2.0.0164 для Win32
-010.055.082.202 2021.02. 5 18:35:11.812 КОНФИГУРАЦИЯ   ConfigurationManager Значение переменной окружения [RRTI_HOME]: [C:\rrti-2.0\RRTI-2.0.0164].
-010.055.082.202 2021.02. 5 18:35:11.812 КОНФИГУРАЦИЯ   ConfigurationManager Значение переменной окружения [CRC_CONFIG]: [(null)].
-010.055.082.202 2021.02. 5 18:35:11.812 КОНФИГУРАЦИЯ   ConfigurationManager Значение переменной окружения [LSRC_CONFIG]: [(null)].
-010.055.082.202 2021.02. 5 18:35:11.817 КОНФИГУРАЦИЯ   ConfigurationManager Значение переменной окружения [LRC_CONFIG]: [(null)].
-010.055.082.202 2021.02. 5 18:35:11.817 КОНФИГУРАЦИЯ   ConfigurationManager - Конфигурационный файл читается из директории RRTI_HOME/conf.
-010.055.082.202 2021.02. 5 18:35:11.817 КОНФИГУРАЦИЯ   ConfigurationManager Используется конфигурационный файл [C:\rrti-2.0\RRTI-2.0.0164\conf\lrc.cfg].
-010.055.082.202 2021.02. 5 18:35:11.817 КОНФИГУРАЦИЯ   ConfigurationParameter Параметр [LRC.TRANSPORT_KILL_ON_DEADLOCK] = [false].
-010.055.082.202 2021.02. 5 18:35:11.817 КОНФИГУРАЦИЯ   ConfigurationParameter Параметр [LRC.TRANSPORT_KILL_SLOW_READERS] = [false].

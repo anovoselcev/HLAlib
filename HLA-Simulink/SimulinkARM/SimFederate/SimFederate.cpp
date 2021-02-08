@@ -30,9 +30,9 @@ namespace HLA {
     
     void SimFederate::ParameterProcess(rti1516e::InteractionClassHandle &handle,
                                        rti1516e::ParameterHandleValueMap &data,
-                                       rti1516e::VariableLengthData &info) override{
+                                       rti1516e::VariableLengthData &info){
                 if(handle == _InteractionClasses[L"ARMaction"]){
-                    Button button = HLA::cast_from_rti<HLAButton>(data[_ParametersMap[message.handle][L"PushButton"]]);
+                    Button button = HLA::cast_from_rti<HLAButton>(data[_ParametersMap[handle][L"PushButton"]]);
                     *logger << L"INFO:" << _federate_name << L" Recive button with name " << button.model_name << Logger::Flush();
                     if(button.model_name == _federate_name && button.action == Appoitment::ON_OFF){
                         active_mode = !active_mode;
@@ -43,9 +43,9 @@ namespace HLA {
     
     void SimFederate::AttributeProcess(rti1516e::ObjectClassHandle &handle,
                                        rti1516e::AttributeHandleValueMap &data,
-                                       rti1516e::VariableLengthData &info) override{
+                                       rti1516e::VariableLengthData &info){
                                            if(active_mode){}
-                                       }
+        }
 
 
     void SimFederate::SendParameters() const{
