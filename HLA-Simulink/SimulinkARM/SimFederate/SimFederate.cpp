@@ -23,8 +23,7 @@ namespace HLA {
 			_rtiAmbassador->sendInteraction(name,map,HLA::cast_to_rti<HLA::String>("Matlab"));
 		}
 		catch(...){}
-			//*logger << L"ERROR:" << _federate_name << L"Can't send Interaction MatlabCallback" << Logger::Flush();
-		
+			//*logger << L"ERROR:" << _federate_name << L"Can't send Interaction MatlabCallback" << Logger::Flush();	
 	}
 	
     
@@ -32,7 +31,15 @@ namespace HLA {
                                        rti1516e::ParameterHandleValueMap &data,
                                        rti1516e::VariableLengthData &info){
 			auto strategy = MakeStrategy(handle);
-			strategy->Action(data);
+            if(strategy)
+                try{
+                    strategy->Action(data);
+            }
+            catch(...){
+                *logger << Logger::MSG::ERRORR
+                        << L"Can't do strategy"
+                        << Logger::Flush();
+            }
         }
     
     void SimFederate::AttributeProcess(rti1516e::ObjectClassHandle &handle,
@@ -44,6 +51,7 @@ namespace HLA {
 	
 	std::unique_ptr<SimFederate::Strategy> SimFederate::MakeStrategy(const rti1516e::InteractionClassHandle& handle){
 		if(_InteractionClasses[L"TurnModel"] == handle) return std::make_unique<SimFederate::TurnModel>(this);
+        return nullptr;
 	}
 	
     SimFederate::Strategy::Strategy(SimFederate* ptr) : _ptr(ptr) {}
