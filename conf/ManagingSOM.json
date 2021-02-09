@@ -26,8 +26,7 @@
                                         ["Name"],
                          "Threading":
                                         ["Name"],
-                        "Matlab" : ["Value", "Name"],
-                        "ARM" : ["Name"]},
+                        "Matlab" : ["Value", "Name"]},
     "PublishInteractions" : 
                             {},
     "SubscribeInteractions" :
