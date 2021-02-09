@@ -77,10 +77,11 @@ namespace HLA{
         if(_mode == MODELMODE::MANAGING_THREADING && _state >= STATE::CONNECTED)
             _condition.notify_one();
 
+        lock_guard<mutex> guard(_smutex);   // Lock state mutex
+
         if((_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING) && _state >= STATE::CONNECTED)
             _modeling_thread.join();        // Wait for end of thread
 
-        lock_guard<mutex> guard(_smutex);   // Lock state mutex
         _state = STATE::EXIT;               // Set federate state to EXIT
 
         *logger << Logger::MSG::INFO        // Write INFO message about disconnect
@@ -1012,9 +1013,17 @@ namespace HLA{
                                      TransportationType,
                                      SupplementalReceiveInfo)
     throw (FederateInternalError){
-        if(_state >= STATE::STARTED){                       // If federate start modeling
-            lock_guard<mutex> guard(_pmutex);               // Lock queue of recived interactions
-            _qParameters.push({info, theParameterValues, handle});   // Add new message {information or tag in byte array, map of interactions}
+        try{
+            if(_state >= STATE::STARTED){                       // If federate start modeling
+                lock_guard<mutex> guard(_pmutex);               // Lock queue of recived interactions
+                _qParameters.push({info, theParameterValues, handle});   // Add new message {information or tag in byte array, map of interactions}
+            }
+        }
+
+        catch(...){
+            *logger << Logger::MSG::ERRORR
+                    << L"Unknown error in queue of interactions making"
+                    << Logger::Flush();
         }
     }
 
@@ -1033,10 +1042,17 @@ namespace HLA{
                                            OrderType ,
                                            SupplementalReceiveInfo )
     throw (FederateInternalError){
-        lock_guard<mutex> guard(_smutex);
-        if(theInteraction == _InteractionClasses[L"GO"] && _state >= STATE::STARTED){ // If slave federate recive GO time-stamp 
-            _state = STATE::PROCESSING;       // Change state to processing
-            _condition.notify_one();          // Start processing
+        try{
+            lock_guard<mutex> guard(_smutex);
+            if(theInteraction == _InteractionClasses[L"GO"] && _state >= STATE::STARTED){ // If slave federate recive GO time-stamp
+                _state = STATE::PROCESSING;       // Change state to processing
+                _condition.notify_one();          // Start processing
+            }
+        }
+        catch(...){
+            *logger << Logger::MSG::ERRORR
+                    << L"Unknown error in recive GO slot"
+                    << Logger::Flush();
         }
     }
 

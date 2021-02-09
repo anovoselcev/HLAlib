@@ -99,7 +99,7 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
         _federates_hash[static_cast<size_t>(theObject.hash())] = theObject;
         _federates_stamps[theObjectInstanceName] = TIMESTAMP::GO;
         _federates_count++;
-        std::wcout << L"I see new" << std::endl;
+        std::wcout << L"I see new: total = " << _federates_count <<  std::endl;
     }
 
     void FederationManager::removeObjectInstance (ObjectInstanceHandle theObject,
@@ -117,6 +117,9 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
         _federates_map.erase(theObject);
         _federates_hash.erase(static_cast<size_t>(theObject.hash()));
         _federates_count--;
+        std::wcout << L"One less: total = " << _federates_count << std::endl;
+        if(_ready_federates == _federates_count)
+            SendGoTimeStamp();
     }
 
 
@@ -140,6 +143,8 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
             _federates_stamps[_federates_map[_federates_hash[hash]]] = TIMESTAMP::READY;
 
             _ready_federates++;
+
+            std::wcout << L"To ready = " << _ready_federates << std::endl;
 
             if(_ready_federates == _federates_count)
                     SendGoTimeStamp();
