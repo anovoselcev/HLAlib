@@ -117,6 +117,8 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
         _federates_map.erase(theObject);
         _federates_hash.erase(static_cast<size_t>(theObject.hash()));
         _federates_count--;
+        if(_ready_federates == _federates_count)
+            SendGoTimeStamp();
     }
 
 
