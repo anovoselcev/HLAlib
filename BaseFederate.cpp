@@ -10,6 +10,8 @@
     #include "3dparty/tbb/include/windows/oneapi/tbb/parallel_for_each.h"
 #endif
 
+#include <iostream>
+
 
 namespace HLA{
 
@@ -74,11 +76,23 @@ namespace HLA{
 
         _f_modeling = false;                // Change flag to finish modeling
 
-        if(_mode == MODELMODE::MANAGING_THREADING && _state >= STATE::CONNECTED)
-            _condition.notify_one();
+        *logger << Logger::MSG::INFO
+                << L"Change flag of modeling"
+                << Logger::Flush();
 
-        if((_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING) && _state >= STATE::CONNECTED)
+        if(_mode == MODELMODE::MANAGING_THREADING && _state >= STATE::CONNECTED){
+            *logger << Logger::MSG::INFO
+                    << L"Notify CV"
+                    << Logger::Flush();
+            _condition.notify_one();
+        }
+
+        if((_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING) && _state >= STATE::CONNECTED){
+            *logger << Logger::MSG::INFO
+                    << L"Join thread"
+                    << Logger::Flush();
             _modeling_thread.join();        // Wait for end of thread
+        }
 
         lock_guard<mutex> guard(_smutex);   // Lock state mutex
         _state = STATE::EXIT;               // Set federate state to EXIT
@@ -221,17 +235,6 @@ namespace HLA{
                 << _federate_name
                 << L"In Init() Name Not Found with "
                 << e.what()
-                << Logger::Flush();
-            return false;
-        }
-        catch(std::exception& e){                        // Catch RTI runtime error
-            std::string str = e.what();
-            std::wstring wstr;
-            wstr.assign(str.begin(), str.end());
-            *logger << Logger::MSG::ERRORR               // Write ERROR message about error
-                << _federate_name
-                << L"Error in Init() with "
-                << wstr
                 << Logger::Flush();
             return false;
         }
@@ -635,7 +638,9 @@ namespace HLA{
         while(_f_modeling){ // while modeling execute
 
            std::unique_lock<std::mutex> lock(_smutex);  // lock federate state
+
            _state = STATE::READY;                       // Set state to READY
+
            ReadyToGo();                                 // Send time-stamp READY
 
            _condition.wait(lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change _OR_ when execution finished
@@ -660,6 +665,10 @@ namespace HLA{
                this->AttributeProcessMain();
            });
         }
+
+        *logger << Logger::MSG::INFO
+                << L"End of managing-threading loop"
+                << Logger::Flush();
     }
 
     template<>
