@@ -10,9 +10,6 @@
     #include "3dparty/tbb/include/windows/oneapi/tbb/parallel_for_each.h"
 #endif
 
-#include <iostream>
-
-
 namespace HLA{
 
 /**
@@ -76,26 +73,29 @@ namespace HLA{
 
         _f_modeling = false;                // Change flag to finish modeling
 
-        *logger << Logger::MSG::INFO
-                << L"Change flag of modeling"
-                << Logger::Flush();
-
-        if(_mode == MODELMODE::MANAGING_THREADING && _state >= STATE::CONNECTED){
-            *logger << Logger::MSG::INFO
-                    << L"Notify CV"
-                    << Logger::Flush();
+        if(_mode == MODELMODE::MANAGING_THREADING && _state >= STATE::CONNECTED)
             _condition.notify_one();
-        }
 
-        if((_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING) && _state >= STATE::CONNECTED){
-            *logger << Logger::MSG::INFO
-                    << L"Join thread"
-                    << Logger::Flush();
+        if((_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING) && _state >= STATE::CONNECTED)
             _modeling_thread.join();        // Wait for end of thread
+
+
+        if(_mode >= MODELMODE::MANAGING_FOLLOWING)
+            _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"GO"]);
+
+        else if(_mode <= MODELMODE::FREE_THREADING){
+            try{
+                _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"READY"]);
+            }
+            catch(...){}
         }
 
-        lock_guard<mutex> guard(_smutex);   // Lock state mutex
-        _state = STATE::EXIT;               // Set federate state to EXIT
+
+        {
+            lock_guard<mutex> guard(_smutex);   // Lock state mutex
+            _state = STATE::EXIT;               // Set federate state to EXIT
+        }
+
 
         *logger << Logger::MSG::INFO        // Write INFO message about disconnect
             << _federate_name
@@ -665,10 +665,6 @@ namespace HLA{
                this->AttributeProcessMain();
            });
         }
-
-        *logger << Logger::MSG::INFO
-                << L"End of managing-threading loop"
-                << Logger::Flush();
     }
 
     template<>
@@ -1056,10 +1052,12 @@ namespace HLA{
                                            SupplementalReceiveInfo )
     throw (FederateInternalError){
         try{
-            lock_guard<mutex> guard(_smutex);
-            if(theInteraction == _InteractionClasses[L"GO"] && _state >= STATE::STARTED){ // If slave federate recive GO time-stamp
-                _state = STATE::PROCESSING;       // Change state to processing
-                _condition.notify_one();          // Start processing
+            if(theInteraction == _InteractionClasses[L"GO"]){ // If slave federate recive GO time-stamp
+                lock_guard<mutex> guard(_smutex);
+                if(_state >= STATE::STARTED){
+                    _state = STATE::PROCESSING;       // Change state to processing
+                    _condition.notify_one();          // Start processing
+                }
             }
         }
         catch(FederateInternalError& e){
@@ -1073,6 +1071,7 @@ namespace HLA{
                     << L" In recive GO stamp unknown error"
                     << Logger::Flush();
         }
+
     }
 
 /**

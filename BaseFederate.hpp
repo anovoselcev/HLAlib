@@ -596,6 +596,8 @@ private:
                                 rti1516e::SupplementalReceiveInfo )
        throw (rti1516e::FederateInternalError) override;
 
+
+
 /**
 * @brief connectionLost
 * @param faultDescription : Description of lost
