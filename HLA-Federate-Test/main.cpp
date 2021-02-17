@@ -93,7 +93,6 @@ int main()
 //    boost::pfr::for_each_field(s, [](const auto& value){
 //        std::cout << get_size(value) << std::endl;
 //    });
-    std::cout << HLA::JSON::ToJSON(s) << std::endl;
 //    const char* sep = "";
 //    boost::pfr::for_each_field(s, [&](const auto& v) {
 //        out << std::exchange(sep, ", ");

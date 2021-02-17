@@ -79,5 +79,5 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/inte
 INCLUDEPATH += $$PWD/../3dparty/boost_1_75_0/
 DEPENDPATH += $$PWD/../3dparty/boost_1_75_0/
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_75_0/stage/lib/ -llibboost_date_time-vc142-mt-x64-1_74
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_75_0/stage/lib/ -llibboost_date_time-vc142-mt-gd-x64-1_74
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_75_0/stage/lib/ -llibboost_date_time-vc142-mt-x64-1_75
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_75_0/stage/lib/ -llibboost_date_time-vc142-mt-gd-x64-1_75
