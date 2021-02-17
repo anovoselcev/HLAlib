@@ -63,6 +63,7 @@ using HLAsome = Struct_wrapper<Some, 2, Float64LE, Integer32LE, Integer16LE>;
 
         for(auto& federate : _federates_stamps)
             federate.second = TIMESTAMP::GO;
+        std::wcout << L"Do new step" << std::endl;
     }
 
     void FederationManager::UpdateAttributes() const{}

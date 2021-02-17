@@ -2,7 +2,7 @@ TEMPLATE = app
 CONFIG += console c++14
 CONFIG -= app_bundle
 CONFIG -= qt
-QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV  -pthread
+QMAKE_CXXFLAGS += -DRRTI -DFED_AMBASSADOR -DRRTI_EV  -pthread -ftemplate-depth=5000
 LIBS += -pthread
 SOURCES += \
         ../BaseFederate.cpp \
@@ -62,9 +62,6 @@ win32: LIBS += -L$$PWD/../../../rrti-2.0/RRTI-2.0.0164/lib/ -lrtiexec
 INCLUDEPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 DEPENDPATH += $$PWD/../../../rrti-2.0/RRTI-2.0.0164/include/HLA2010
 
-INCLUDEPATH += $$PWD/../3dparty/magic_get-develop/include
-DEPENDPATH += $$PWD/../3dparty/magic_get-develop/include
-
 unix:!macx: LIBS += -L$$PWD/../3dparty/tbb/lib/intel64/gcc4.8/ -ltbb
 
 INCLUDEPATH += $$PWD/../3dparty/tbb/include/linux/
@@ -79,8 +76,8 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/tbb/lib/inte
 
 
 
-INCLUDEPATH += $$PWD/../3dparty/boost_1_74_0/
-DEPENDPATH += $$PWD/../3dparty/boost_1_74_0/
+INCLUDEPATH += $$PWD/../3dparty/boost_1_75_0/
+DEPENDPATH += $$PWD/../3dparty/boost_1_75_0/
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_74_0/stage/lib/ -llibboost_date_time-vc142-mt-x64-1_74
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_74_0/stage/lib/ -llibboost_date_time-vc142-mt-gd-x64-1_74
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_75_0/stage/lib/ -llibboost_date_time-vc142-mt-x64-1_74
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../3dparty/boost_1_75_0/stage/lib/ -llibboost_date_time-vc142-mt-gd-x64-1_74

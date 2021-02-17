@@ -1,8 +1,10 @@
 #ifndef RTIFIXEDRECOD_HPP
 #define RTIFIXEDRECOD_HPP
 #define BOOST_PFR_USE_CPP17 0
+#define BOOST_PFR_USE_LOOPHOLE  1
 #include "BasicTemplates.hpp"
-#include "../3dparty/magic_get-develop/include/boost/pfr.hpp"
+
+#include <boost/pfr.hpp>
 
 namespace HLA {
 

@@ -6,7 +6,7 @@
 #include "../FederationManager.hpp"
 #include "../ProxyFederate.hpp"
 #include <assert.h>
-#include <tbb/tbb.h>
+#include <map>
 
 constexpr int step = 2;
 
@@ -55,21 +55,65 @@ void NewFollowFederate(wstring&& name, int delay){
     }
 }
 
+struct A{
+    int a;
+    int b;
+};
+
+struct B {
+int b = 0;
+};
+
+#include <boost/variant.hpp>
+struct simple{
+    int a;
+    double c;
+    std::string b;
+    A d;
+    std::map<int, std::string> f;
+    B e;
+};
+
+struct Empty{
+
+};
+
+struct One{
+    int d;
+};
+
 
 int main()
 {
+    simple s{10, 123.1, "dd", {1,2}, {{1, "232"}, {3, "121"}}, B()};
+    std::stringstream out;
+    int d = 1;
+    A dd{1,3};
+    //std::cout << get_size(s.b) << std::endl;
+//    boost::pfr::for_each_field(s, [](const auto& value){
+//        std::cout << get_size(value) << std::endl;
+//    });
+    std::cout << HLA::JSON::ToJSON(s) << std::endl;
+//    const char* sep = "";
+//    boost::pfr::for_each_field(s, [&](const auto& v) {
+//        out << std::exchange(sep, ", ");
+//        out << boost::pfr::io_fields(v);
 
-   auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/HLAlib/conf/ManagingSOM.json");
+//    });
+//    std::cout << out.str() << std::endl;
+
+
+   //auto file = HLA::JSON::MakeJSON(L"/home/k-110-04/QtWork/HLA/HLAlib/conf/ManagingSOM.json");
    //auto file_test = HLA::JSON::MakeJSON(L"C:\\config\\proxy.json");
-   HLA::FederationManager man(file);
+  // HLA::FederationManager man(file);
 //    auto start = std::chrono::steady_clock::now();
-    man.ConnectRTI(file);
+    //man.ConnectRTI(file);
 //    auto end = std::chrono::steady_clock::now();
 //    std::wcout << std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() << L"us" << std::endl;
 //    HLA::ProxyFederate prx(file);
 //    prx.StartProxy(file_test, file);
     //std::wcout << L"Before wait" << std::endl;
-    std::this_thread::sleep_for(std::chrono::seconds(100000000));
+    //std::this_thread::sleep_for(std::chrono::seconds(100000000));
     //std::wcout << L"After wait" << std::endl;
     //std::thread th1(NewThreadFederate,L"Fed1",1000);
     //th1.join();

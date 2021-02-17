@@ -44,6 +44,7 @@ HEADERS += \
     HLAdata/Tools.hpp \
     HLAlib.hpp \
     ProxyFederate.hpp \
+    Tools/Formater.hpp \
     Tools/Logger.hpp \
     ModelGuard.hpp \
     *Federate.hpp \
@@ -100,9 +101,6 @@ INCLUDEPATH += $$PWD/3dparty/tbb/include/windows/
 DEPENDPATH += $$PWD/3dparty/tbb/include/windows/
 
 
-INCLUDEPATH += $$PWD/3dparty/magic_get-develop/include/
-DEPENDPATH += $$PWD/3dparty/magic_get-develop/include/
-
-INCLUDEPATH += $$PWD/3dparty/boost_1_74_0/
-DEPENDPATH += $$PWD/3dparty/boost_1_74_0/
+INCLUDEPATH += $$PWD/3dparty/boost_1_75_0/
+DEPENDPATH += $$PWD/3dparty/boost_1_75_0/
 
