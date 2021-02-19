@@ -15,8 +15,7 @@ namespace HLA {
 
         ProxyFederate(JSON&& file) noexcept;
 
-        bool StartProxy(const JSON& proxy_file,
-                        const JSON& hla_file);
+        bool StartProxy(const JSON& proxy_file);
 
 
     private:
@@ -52,7 +51,7 @@ namespace HLA {
         std::unordered_map<unsigned short, std::wstring> _ports_pub_interactions;
         std::unordered_map<unsigned short, std::wstring> _ports_sub_interactions;
         std::wstring ip_remote;
-        std::unordered_map<unsigned short, std::array<char, 64>> _buffers;
+        std::unordered_map<unsigned short, std::array<char, 256>> _buffers;
     };
 }
 

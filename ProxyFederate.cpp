@@ -1,15 +1,22 @@
 #include "ProxyFederate.hpp"
 #include "HLAdata/HLAdata.hpp"
 #include <algorithm>
+#include <iostream>
 
 namespace HLA {
 
 
-    ProxyFederate::ProxyFederate(const JSON& file) noexcept : BaseFederate(file){}
+    struct Shit{
+        double a;
+        double b;
+    };
+
+    using HLAshit = HLA::Struct_wrapper<Shit, 8, HLA::Float64LE, HLA::Float64LE>;
+
+    ProxyFederate::ProxyFederate(const JSON& file) noexcept : BaseFederate(JSON::MakeJSON(file.GetRoot()->AsMap().at(L"SOM_path")->AsWstring())){}
 
 
-    bool ProxyFederate::StartProxy(const JSON &proxy_file,
-                                   const JSON &hla_file){
+    bool ProxyFederate::StartProxy(const JSON &proxy_file){
 
         auto root = proxy_file.GetRoot()->AsMap();
         auto ip = root.at(L"IP_local")->AsWstring();
@@ -46,6 +53,7 @@ namespace HLA {
             _sockets[port.first] -> bind(udp_endpoint_t(boost::asio::ip::address::from_string(std::string(ip.begin(), ip.end())), port.first));
         }
 
+        auto hla_file = JSON::MakeJSON(root.at(L"SOM_path")->AsWstring());
         return ConnectRTI(hla_file);
     }
 
@@ -54,13 +62,14 @@ namespace HLA {
     }
 
     void ProxyFederate::Listen_attributes(unsigned short port){
+        //std::wcout << L"I recive" << std::endl;
         auto handle = [this, port](const udp_error_t& error, size_t size){
             if(error) return;
             rti1516e::VariableLengthData data;
             data.setData(_buffers[port].data(), size);
             rti1516e::AttributeHandleValueMap map;
             map[_AttributesMap[_MyClass][_ports_pub_attributes[port]]] = data;
-            BaseFederate::UpdateAttributes(map);
+            this->UpdateAttributes(map);
             this->Listen_attributes(port);
         };
 
@@ -100,6 +109,7 @@ namespace HLA {
     void ProxyFederate::AttributeProcess(rti1516e::ObjectClassHandle &handle,
                                          rti1516e::AttributeHandleValueMap &data,
                                          rti1516e::VariableLengthData &info){
+       // std::wcout << handle.toString() << std::endl;
         for(const auto& _data : data){
             auto name = _rtiAmbassador->getAttributeName(handle, _data.first);
             WriteAttributes(_attributes_sub_ports[name], _data.second);
