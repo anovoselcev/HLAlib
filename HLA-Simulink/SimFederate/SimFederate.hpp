@@ -24,9 +24,9 @@ namespace HLA {
 		std::string tumbler_id;
 	};
     
-    using AngleData = Struct_wrapper<AngleData, 8, Float64LE, Float64LE>;
+    //using AngleData = Struct_wrapper<AngleData, 8, Float64LE, Float64LE>;
     
-    using BinsData = Struct_wrapper<BinsData, 8, Float64LE, Float64LE, Float64LE, Float64LE, Float64LE, Float64LE>;
+    //using BinsData = Struct_wrapper<BinsData, 8, Float64LE, Float64LE, Float64LE, Float64LE, Float64LE, Float64LE>;
 
     class SimFederate : public BaseFederate{
     public:

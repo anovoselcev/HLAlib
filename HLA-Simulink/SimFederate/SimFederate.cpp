@@ -68,7 +68,7 @@ namespace HLA {
                                        rti1516e::VariableLengthData &info){
         if(active_mode){
                 for(const auto& attr_map : _AttributesMap[handle]){
-                    auto& data_v = data.find(attr_map.second);
+                    const auto& data_v = data.find(attr_map.second);
                     if(data_v != end(data))
                         inpt[attr_map.first] = std::move(data_v->second);
                 }
