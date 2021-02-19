@@ -2,45 +2,55 @@
 #define SIMFEDERATE_HPP
 #include "BaseFederate.hpp"
 #include "HLAdata/HLAdata.hpp"
+#include "BusType.h"
+
 namespace HLA {
     
+    enum Appoitment{
+        ON_OFF,
+        DO_NOTHING
+    };
     
+	struct Button{
+		int push = 0;
+		int button_id;
+		int bulb_id;
+		std::wstring model_name;
+        Appoitment action = Appoitment::DO_NOTHING;
+	};
+
+	struct Tumbler{
+		int state = 0;
+		std::string tumbler_id;
+	};
+    
+    using AngleData = Struct_wrapper<AngleData, 8, Float64LE, Float64LE>;
+    
+    using BinsData = Struct_wrapper<BinsData, 8, Float64LE, Float64LE, Float64LE, Float64LE, Float64LE, Float64LE>;
+
     class SimFederate : public BaseFederate{
     public:
 
-        SimFederate() = delete;
-        
-        SimFederate(const std::wstring& name,
-                const std::wstring& type,
-                const std::wstring& FOMname,
-                const std::wstring& fname,
-                const std::wstring& ip = L"localhost") noexcept;
-        
-        SimFederate(std::wstring&& name,
-                std::wstring&& type,
-                std::wstring&& FOMname,
-                std::wstring&& fname,
-                std::wstring&& ip = L"localhost") noexcept;
-        
+					  
         SimFederate(const HLA::JSON& file) noexcept;
-        
+		
         SimFederate(HLA::JSON&& file) noexcept;
         
-        void SendDataToRTI();
+        void SendDataToRTI(const std::unordered_map<std::wstring, rti1516e::VariableLengthData>& output_data);
         
-        std::unordered_map<std::wstring, rti1516e::VariableLengthData>& getInputData();
-        
-        std::unordered_map<std::wstring, rti1516e::VariableLengthData>& getOutputData();
-        
-        
-    private:
+        std::unordered_map<std::wstring, rti1516e::VariableLengthData>& getData();
+
+    protected:
 
         struct Strategy{
+            Strategy(SimFederate* ptr);
             virtual void Action(const rti1516e::ParameterHandleValueMap& data) = 0;
             virtual ~Strategy() = default;
+            SimFederate* _ptr = nullptr;
         };
 
-        struct PushButton : public Strategy{
+        struct TurnModel : public Strategy{
+            using Strategy::Strategy;
             void Action(const rti1516e::ParameterHandleValueMap &data) override;
         };
 
@@ -50,6 +60,12 @@ namespace HLA {
 
         std::unique_ptr<Strategy> MakeStrategy(const rti1516e::InteractionClassHandle& handle);
 
+    private:
+        
+        bool active_mode = true;
+	
+		void SendBulbFlashSignal(int&);
+
         void AttributeProcess(rti1516e::ObjectClassHandle &handle,
                               rti1516e::AttributeHandleValueMap &data,
                               rti1516e::VariableLengthData &info) override;
@@ -57,15 +73,15 @@ namespace HLA {
         void ParameterProcess(rti1516e::InteractionClassHandle &handle,
                               rti1516e::ParameterHandleValueMap &data,
                               rti1516e::VariableLengthData &info) override;
-        
-        
+
         void SendParameters() const override;
+		
+		void UpdateAttributes() const override;
         
-        void UpdateAttributes() const override;
-        
-        std::unordered_map<std::wstring, rti1516e::VariableLengthData> input;
-        std::unordered_map<std::wstring, rti1516e::VariableLengthData> output;
-        
-    };
+        std::unordered_map<std::wstring, rti1516e::VariableLengthData> inpt;
+
+		friend Strategy;
+		friend TurnModel;
+	};
 }
 #endif // TRANSFER_HPP
