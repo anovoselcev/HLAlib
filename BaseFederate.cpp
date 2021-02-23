@@ -1059,6 +1059,14 @@ namespace HLA{
                     _condition.notify_one();          // Start processing
                 }
             }
+            else if(theInteraction == _InteractionClasses[L"STOP"]){
+                lock_guard<mutex> guard(_smutex);
+                if(_state >= STATE::STARTED){
+                    _state = STATE::EXIT;
+                    _f_modeling = false;
+                    _condition.notify_one();
+                }
+            }
         }
         catch(FederateInternalError& e){
             *logger << Logger::MSG::ERRORR
