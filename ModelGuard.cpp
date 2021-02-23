@@ -64,7 +64,7 @@ namespace HLA {
         _federate->ReadyToGo();                                       // Send READY time stamp
 
         _federate->_condition.wait(_lock,[this]{                      // Wait for GO federate state, federate notify ModelGuard about state change
-            return _federate->_state == STATE::PROCESSING;
+            return _federate->_state == STATE::PROCESSING || !_federate->_f_modeling;
         });
         _federate->Modeling<MODELMODE::MANAGING_FOLLOWING>();         // Start processing
 
