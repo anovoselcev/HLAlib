@@ -1,0 +1,10 @@
+-IC:\HLA\laboratory\HLA-Simulink\SimulinkARM
+-IC:\HLA\laboratory\HLA-Simulink\SimulinkARM\ARM_model_2020a_grt_rtw
+-IC:\HLA\laboratory
+-IC:\HLA\rrti-2.0\RRTI-2.0.0164\include\HLA2010
+-IC:\HLA\laboratory\3dparty\magic_get-develop\include
+-IC:\HLA\laboratory\3dparty\tbb\include\windows
+-I"C:\Program Files\MATLAB\R2020a\extern\include"
+-I"C:\Program Files\MATLAB\R2020a\simulink\include"
+-I"C:\Program Files\MATLAB\R2020a\rtw\c\src"
+-I"C:\Program Files\MATLAB\R2020a\rtw\c\src\ext_mode\common"

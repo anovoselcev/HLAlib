@@ -450,6 +450,8 @@ private:
 */
         void ParameterProcessMain();
 
+        void TryToStopModellingThread();
+
 
 
 

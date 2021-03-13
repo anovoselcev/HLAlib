@@ -13,13 +13,18 @@ namespace HLA {
 		
     SimFederate::SimFederate(HLA::JSON&& file) noexcept : BaseFederate(std::move(file)){}
     
-    void SimFederate::SendDataToRTI(const std::unordered_map<std::wstring, rti1516e::VariableLengthData>& output_data){
+    void SimFederate::SendDataToRTI(const std::unordered_map<std::wstring, rti1516e::VariableLengthData>& output_data,
+									const std::string& info){
         if(active_mode){
             rti1516e::AttributeHandleValueMap map;
             for(const auto& data: output_data)
                 map[_AttributesMap[_MyClass][data.first]] = data.second;
+			rti1516e::VariableLengthData add = HLA::cast_to_rti<HLA::String>(info);
+			std::wstring mess;
+			mess.assign(info.begin(), info.end());
+			*logger << L"New inf = " << mess << Logger::Flush();
             try{
-                _rtiAmbassador->updateAttributeValues(_MyInstanceID,map, rti1516e::VariableLengthData());
+                _rtiAmbassador->updateAttributeValues(_MyInstanceID,map, add);
             }
             catch(...){
                 *logger << Logger::MSG::ERRORR
@@ -74,6 +79,11 @@ namespace HLA {
                 }
                                            }
         }
+		
+	
+	void SimFederate::RunFederate(){
+		*logger << L"INFO:" << L" I do all " << Logger::Flush();
+	}
 
 	
 	std::unique_ptr<SimFederate::Strategy> SimFederate::MakeStrategy(const rti1516e::InteractionClassHandle& handle){

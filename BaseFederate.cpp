@@ -76,19 +76,19 @@ namespace HLA{
         if(_mode == MODELMODE::MANAGING_THREADING && _state >= STATE::CONNECTED)
             _condition.notify_one();
 
-        if((_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING) && _state >= STATE::CONNECTED)
-            _modeling_thread.join();        // Wait for end of thread
+        if(_state >= STATE::CONNECTED)
+            TryToStopModellingThread();        // Wait for end of thread
 
 
-        if(_mode >= MODELMODE::MANAGING_FOLLOWING)
-            _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"GO"]);
+        try{
+            if(_mode >= MODELMODE::MANAGING_FOLLOWING)
+                _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"GO"]);
 
-        else if(_mode <= MODELMODE::FREE_THREADING){
-            try{
+            else if(_mode <= MODELMODE::FREE_THREADING)
                 _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"READY"]);
-            }
-            catch(...){}
         }
+        catch(...){}
+
 
 
         {
@@ -918,6 +918,11 @@ namespace HLA{
     BaseFederate& BaseFederate::SetModelMode(MODELMODE mode)  noexcept{
         _mode = mode;
         return *this;
+    }
+
+    void BaseFederate::TryToStopModellingThread(){
+        if(_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING)
+            _modeling_thread.join();
     }
 
 /**

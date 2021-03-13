@@ -1,0 +1,35 @@
+{
+    "Name" :
+                        "Model1",
+    "Type" :            
+                        "SP",
+    "FOMpath" :
+                        "C:\\config\\SampleFOM.xml",
+    "FederationName":
+                        "Test",
+    "Address":
+                        "10.55.82.125",
+    "ModelingStep" : 
+                        1,
+    "CallbackMode" : 
+                        0,
+                        
+    "ModelingMode" :
+                        2,
+    "LogFileName" :
+                        "LogFile",
+    
+    "PublishAttributes": 
+                        ["Angle"],
+    "SubscribeAttributes" :
+                        {"FPO" :
+										["Angle"]},
+    "PublishInteractions" : 
+                            {"MatlabCallback":
+										["Stamp"]},
+    "SubscribeInteractions" :
+                            {"ARMaction":
+										["Sender", "PushButton","Tumbler"],
+							 "TurnModel":
+										["PushButton"]}
+}
