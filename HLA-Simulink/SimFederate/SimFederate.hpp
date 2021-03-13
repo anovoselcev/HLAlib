@@ -2,7 +2,7 @@
 #define SIMFEDERATE_HPP
 #include "BaseFederate.hpp"
 #include "HLAdata/HLAdata.hpp"
-#include "BusType.h"
+#include "Tools/Formater.hpp"
 
 namespace HLA {
     
@@ -24,9 +24,6 @@ namespace HLA {
 		std::string tumbler_id;
 	};
     
-    //using AngleData = Struct_wrapper<AngleData, 8, Float64LE, Float64LE>;
-    
-    //using BinsData = Struct_wrapper<BinsData, 8, Float64LE, Float64LE, Float64LE, Float64LE, Float64LE, Float64LE>;
 
     class SimFederate : public BaseFederate{
     public:
@@ -36,7 +33,8 @@ namespace HLA {
 		
         SimFederate(HLA::JSON&& file) noexcept;
         
-        void SendDataToRTI(const std::unordered_map<std::wstring, rti1516e::VariableLengthData>& output_data);
+        void SendDataToRTI(const std::unordered_map<std::wstring, rti1516e::VariableLengthData>& output_data,
+						   const std::string& info);
         
         std::unordered_map<std::wstring, rti1516e::VariableLengthData>& getData();
 
@@ -77,6 +75,8 @@ namespace HLA {
         void SendParameters() const override;
 		
 		void UpdateAttributes() const override;
+		
+		void RunFederate() override;
         
         std::unordered_map<std::wstring, rti1516e::VariableLengthData> inpt;
 

@@ -1,0 +1,50 @@
+>>Mon Feb 22 16:35:59 2021
+: INFO: Connect of Model1 done 
+>>Mon Feb 22 16:35:59 2021
+: INFO: Model1 Reserved name 
+>>Mon Feb 22 16:35:59 2021
+: INFO: Init of Model1 done 
+>>Mon Feb 22 16:37:38 2021
+: INFO: Model1  Recive button with name  Model1 
+>>Mon Feb 22 16:37:38 2021
+: INFO: Model1  Send  0 
+>>Mon Feb 22 16:37:38 2021
+: ERROR: Model1 Can't send Interaction MatlabCallback 
+>>Mon Feb 22 16:37:41 2021
+: INFO: Model1  Recive button with name  Model1 
+>>Mon Feb 22 16:37:41 2021
+: INFO: Model1  Send  0 
+>>Mon Feb 22 16:37:41 2021
+: ERROR: Model1 Can't send Interaction MatlabCallback 
+>>Mon Feb 22 16:37:48 2021
+: INFO: Model1  Recive button with name  Model1 
+>>Mon Feb 22 16:37:48 2021
+: INFO: Model1  Send  0 
+>>Mon Feb 22 16:37:48 2021
+: ERROR: Model1 Can't send Interaction MatlabCallback 
+>>Mon Feb 22 16:37:59 2021
+: INFO: Model1  Recive button with name  Model1 
+>>Mon Feb 22 16:37:59 2021
+: INFO: Model1  Send  0 
+>>Mon Feb 22 16:37:59 2021
+: ERROR: Model1 Can't send Interaction MatlabCallback 
+>>Mon Feb 22 16:38:09 2021
+: INFO: Model1  Recive button with name  Model1 
+>>Mon Feb 22 16:38:09 2021
+: INFO: Model1  Send  0 
+>>Mon Feb 22 16:38:09 2021
+: ERROR: Model1 Can't send Interaction MatlabCallback 
+>>Mon Feb 22 16:38:12 2021
+: INFO: Model1  Recive button with name  Model1 
+>>Mon Feb 22 16:38:12 2021
+: INFO: Model1  Send  0 
+>>Mon Feb 22 16:38:12 2021
+: ERROR: Model1 Can't send Interaction MatlabCallback 
+>>Mon Feb 22 16:38:37 2021
+: INFO: Model1  Recive button with name  Model1 
+>>Mon Feb 22 16:38:37 2021
+: INFO: Model1  Send  0 
+>>Mon Feb 22 16:38:37 2021
+: ERROR: Model1 Can't send Interaction MatlabCallback 
+>>Mon Feb 22 16:45:34 2021
+: INFO: Model1 disconnect from 10.55.82.125 

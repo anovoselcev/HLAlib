@@ -76,18 +76,17 @@ namespace HLA{
         if(_mode == MODELMODE::MANAGING_THREADING && _state >= STATE::CONNECTED)
             _condition.notify_one();
 
-        if(_state >= STATE::CONNECTED)
+        if(_state >= STATE::CONNECTED){
             TryToStopModellingThread();        // Wait for end of thread
 
 
-        try{
             if(_mode >= MODELMODE::MANAGING_FOLLOWING)
                 _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"GO"]);
 
             else if(_mode <= MODELMODE::FREE_THREADING)
                 _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"READY"]);
         }
-        catch(...){}
+
 
 
 
