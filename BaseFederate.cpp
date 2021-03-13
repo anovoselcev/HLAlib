@@ -79,12 +79,14 @@ namespace HLA{
         if(_state >= STATE::CONNECTED){
             TryToStopModellingThread();        // Wait for end of thread
 
+            try{
+                if(_mode >= MODELMODE::MANAGING_FOLLOWING)
+                    _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"GO"]);
 
-            if(_mode >= MODELMODE::MANAGING_FOLLOWING)
-                _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"GO"]);
-
-            else if(_mode <= MODELMODE::FREE_THREADING)
-                _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"READY"]);
+                else if(_mode <= MODELMODE::FREE_THREADING)
+                    _rtiAmbassador->unsubscribeInteractionClass(_InteractionClasses[L"READY"]);
+            }
+            catch(...){}
         }
 
 
