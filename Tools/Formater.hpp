@@ -111,6 +111,17 @@ private:
         return ss.str();
     }
 
+
+
+
+    template<typename T>
+    static std::enable_if_t<std::is_enum<T>::value, std::string>
+    Print(const T& value){
+        std::stringstream ss;
+        ss <<static_cast<int>(value);
+        return  ss.str();
+    }
+
     static std::string Print(const std::string& value){return "\"" + value + "\"";}
 
     static std::string Print(const std::wstring& value){
@@ -127,11 +138,8 @@ private:
         std::string str{char(value)};
         return "'" + str + "'";
     }
-
-
-
     template<typename T>
-    static std::enable_if_t<(!std::is_floating_point<T>::value && !std::is_integral<T>::value && !std::is_same<T, std::string>::value && !std::is_same<T, std::wstring>::value),std::string>
+    static std::enable_if_t<(!std::is_enum<T>::value && !std::is_floating_point<T>::value && !std::is_integral<T>::value && !std::is_same<T, std::string>::value && !std::is_same<T, std::wstring>::value),std::string>
     Print(const T& value){
         std::stringstream ss;
         const char* sep = "";
@@ -145,7 +153,7 @@ private:
     }
 
     template<typename T>
-    static std::enable_if_t<(std::is_floating_point<T>::value || std::is_integral<T>::value), std::string>
+    static std::enable_if_t<(std::is_floating_point<T>::value || std::is_integral<T>::value) && !std::is_enum<T>::value, std::string>
     Print(const T& value){
         std::stringstream ss;
         ss << boost::pfr::io(value);

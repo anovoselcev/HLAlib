@@ -26,8 +26,13 @@
                                         ["Name"],
                          "Threading":
                                         ["Name"],
-                        "Matlab" : ["Value", "Name"],
-                        "ARM" : ["Name"]},
+                        "Matlab" :
+                                        ["Value", "Name"],
+                        "ARM" :
+                                        ["Name"],
+                        "SP" : ["Angle"],
+                        "FPO" : ["Angle"],
+                        "BINS" : ["BinsData"]},
     "PublishInteractions" : 
                             {},
     "SubscribeInteractions" :

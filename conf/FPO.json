@@ -1,0 +1,31 @@
+{
+    "Name" :
+                        "ProxyFPO",
+    "Type" :            
+                        "FPO",
+    "FOMpath" :
+                        "C:\\config\\SampleFOM.xml",
+    "FederationName":
+                        "Test",
+    "Address":
+                        "10.55.82.125",
+    "ModelingStep" : 
+                        1,
+    "CallbackMode" : 
+                        0,
+                        
+    "ModelingMode" :
+                        3,
+    "LogFileName" :
+                        "LogFile",
+    
+    "PublishAttributes": 
+                        ["Angle"],
+    "SubscribeAttributes" :
+                        {"SP" :
+										["Angle"]},
+    "PublishInteractions" : 
+                            {},
+    "SubscribeInteractions" :
+                            {}
+}

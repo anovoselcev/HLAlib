@@ -5,5 +5,6 @@
 #include "FederationManager.hpp"
 #include "ModelGuard.hpp"
 #include "HLAdata/HLAdata.hpp"
+#include "Tools/Formater.hpp"
 
 #endif // HLALIB_HPP
