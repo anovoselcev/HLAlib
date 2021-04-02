@@ -44,12 +44,12 @@ struct Formater {
         std::stringstream ss;
         ss << "{";
         ss << Print(name);
-        ss << ": {";
+        ss << ": [";
         ss << PrintWithoutFormat(value);
         if(sizeof (std::tuple<Types...>))
-            ss << ", " << Print(other...);
+            ss << ", " << PrintWithoutFormat(other...);
 
-        ss << "}}";
+        ss << "]}";
         return ss.str();
     }
 
@@ -75,12 +75,12 @@ struct Formater {
         std::stringstream ss;
         ss << "{";
         ss << Print(name);
-        ss << ": {";
+        ss << ": [";
         ss << Print(value);
         if(sizeof (std::tuple<Types...>))
             ss << ", " << Print(other...);
 
-        ss << "}}";
+        ss << "]}";
         return ss.str();
     }
 
