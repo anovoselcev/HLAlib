@@ -814,7 +814,7 @@ namespace HLA{
 * Return name of Federation
 * @return std::wstring
 */
-    const wstring BaseFederate::GetFederation() const noexcept{return _federation_name;}   
+    const wstring BaseFederate::GetFederation() const noexcept{return _federation_name;}
 
 /**
 * @brief BaseFederate::GetFOMpath
