@@ -607,7 +607,7 @@ namespace HLA{
                 _state = STATE::DOING;            // Change federate state to execute(doing) state without HLA
             }
             _condition.notify_one();                                      // Notify conditional variable in ModelGuard
-            this_thread::sleep_for(chrono::milliseconds(_modeling_step)); // Sleep for modeling step
+            this_thread::sleep_for(chrono::microseconds(_modeling_step)); // Sleep for modeling step
 
             tbb::parallel_invoke([this](){
                 // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
@@ -674,10 +674,10 @@ namespace HLA{
 * Main function of modeling that sleep in call-thread for modeling step and after that process queue of attributes and parameters and update attributes and send interactions
 */
     void BaseFederate::Modeling<MODELMODE::FREE_FOLLOWING>(){                                                                      // Create log writer
-        auto dur = chrono::duration_cast<chrono::milliseconds>(chrono::steady_clock::now() - _last_time);  // Create time interval
-        auto step = chrono::duration_cast<chrono::milliseconds>(chrono::milliseconds(_modeling_step));   // Convert modeling step to time interval
+        auto dur = chrono::duration_cast<chrono::microseconds>(chrono::steady_clock::now() - _last_time);  // Create time interval
+        auto step = chrono::duration_cast<chrono::microseconds>(chrono::microseconds(_modeling_step));   // Convert modeling step to time interval
         if((step - dur).count()>0)                                                                       // If dur less than modeling step
-            this_thread::sleep_for(chrono::milliseconds(step - dur));                                    // Sleep for difference betwen step and dur
+            this_thread::sleep_for(chrono::microseconds(step - dur));                                    // Sleep for difference betwen step and dur
 
         tbb::parallel_invoke([this](){
             // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
