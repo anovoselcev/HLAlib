@@ -601,7 +601,7 @@ namespace HLA{
 */
 
     void BaseFederate::Modeling<MODELMODE::FREE_THREADING>(){
-        while(_f_modeling){                       // while modeling execute
+        while(_f_modeling && _modeling_step){                       // while modeling execute
             {
                 lock_guard<mutex> guard(_smutex); // Lock state mutex
                 _state = STATE::DOING;            // Change federate state to execute(doing) state without HLA
@@ -923,7 +923,8 @@ namespace HLA{
 
     void BaseFederate::TryToStopModellingThread(){
         if(_mode == MODELMODE::FREE_THREADING || _mode == MODELMODE::MANAGING_THREADING)
-            _modeling_thread.join();
+            if(_modeling_thread.joinable())
+                _modeling_thread.join();
     }
 
 /**
