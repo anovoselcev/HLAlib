@@ -99,6 +99,16 @@ struct Formater {
     }
 
 
+    template<typename Name, typename Data>
+    static std::string TiePair(const Name& name, const Data& value){
+        std::stringstream ss;
+        ss << Print(name);
+        ss << ": ";
+        ss << Print(value);
+        return ss.str();
+    }
+
+
 private:
 
     template<typename Type, typename ...Types>
@@ -254,11 +264,7 @@ private:
         ss << "{";
         for(const auto& el : value){
             ss << std::exchange(sep, ", ");
-            //ss << "{";
-            ss << Print(el.first);
-            ss << ": ";
-            ss << Print(el.second);
-            //ss << "}";
+            ss << TiePair(el.first, el.second);
         }
         ss << "}";
         return ss.str();
@@ -271,11 +277,7 @@ private:
         ss << "{";
         for(const auto& el : value){
             ss << std::exchange(sep, ", ");
-            //ss << "{";
-            ss << Print(el.first);
-            ss << ": ";
-            ss << Print(el.second);
-            //ss << "}";
+            ss << TiePair(el.first, el.second);
         }
         ss << "}";
         return ss.str();
@@ -287,6 +289,16 @@ private:
         std::string str;
         str.assign(value.begin(), value.end());
         return str;
+    }
+
+    template<typename Type, typename ...Types>
+    static std::enable_if_t<sizeof (std::tuple<Types...>), std::string>
+    PrintWithoutFormat(const Type& data, const Types& ...other){
+        std::stringstream ss;
+        ss << PrintWithoutFormat(data);
+        if(sizeof (std::tuple<Types...>))
+            ss << ", " << PrintWithoutFormat(other...);
+        return ss.str();
     }
 
     template<typename T>
