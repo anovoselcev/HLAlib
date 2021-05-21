@@ -26,7 +26,7 @@ namespace HLA{
 * Free_Following      : Do modeling process and federate time control in the thread, which connect federate to RTI with independent modeling step (master)
 * Free_Threading      : Do modeling process and federate time control in the new thread with independent modeling step (master)
 * Managing_Following  : Do modeling process in the thread, which connect federate to RTI with depends on FederationManager (slave)
-* Managing_Threading  :  Do modeling process and federate time control in the new thread with depends on FederationManager (slave)
+* Managing_Threading  : Do modeling process and federate time control in the new thread with depends on FederationManager (slave)
 */
     enum class MODELMODE : short{
         FREE_FOLLOWING      = 0,
