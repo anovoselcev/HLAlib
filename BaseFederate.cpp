@@ -917,21 +917,21 @@ void BaseFederate::Modeling<MODELMODE::FREE_THREADING>(){
         this_thread::sleep_for(chrono::microseconds(_modeling_step)); // Sleep for modeling step
 
         tbb::parallel_invoke([this](){
-            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
-            this->UpdateAttributes();
-        },
-        // Call SendParameters method to send interaction with parameters to RTI, look more at SendParameters()
-        [this](){
-            this->SendParameters();
-        });
-
-        tbb::parallel_invoke([this](){
             // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
             this->ParameterProcessMain();
         },
         // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
         [this](){
             this->AttributeProcessMain();
+        });
+
+        tbb::parallel_invoke([this](){
+            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
+            this->UpdateAttributes();
+        },
+        // Call SendParameters method to send interaction with parameters to RTI, look more at SendParameters()
+        [this](){
+            this->SendParameters();
         });
     }
 }
@@ -956,21 +956,21 @@ void BaseFederate::Modeling<MODELMODE::MANAGING_THREADING>(){
         });
 
         tbb::parallel_invoke([this](){
-            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
-            this->UpdateAttributes();
-        },
-        // Call SendParameters method to send interaction with parameters to RTI, look more at SendParameters()
-        [this](){
-            this->SendParameters();
-        });
-
-        tbb::parallel_invoke([this](){
             // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
             this->ParameterProcessMain();
         },
         // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
         [this](){
             this->AttributeProcessMain();
+        });
+
+        tbb::parallel_invoke([this](){
+            // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
+            this->UpdateAttributes();
+        },
+        // Call SendParameters method to send interaction with parameters to RTI, look more at SendParameters()
+        [this](){
+            this->SendParameters();
         });
     }
 }
@@ -987,21 +987,21 @@ void BaseFederate::Modeling<MODELMODE::FREE_FOLLOWING>(){                       
         this_thread::sleep_for(chrono::microseconds(step - dur));                                    // Sleep for difference betwen step and dur
 
     tbb::parallel_invoke([this](){
-        // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
-        this->UpdateAttributes();
-    },
-    // Call SendParameters method to send interaction with parameters to RTI, look more at SendParameters()
-    [this](){
-        this->SendParameters();
-    });
-
-    tbb::parallel_invoke([this](){
         // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
         this->ParameterProcessMain();
     },
     // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
     [this](){
         this->AttributeProcessMain();
+    });
+
+    tbb::parallel_invoke([this](){
+        // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
+        this->UpdateAttributes();
+    },
+    // Call SendParameters method to send interaction with parameters to RTI, look more at SendParameters()
+    [this](){
+        this->SendParameters();
     });
 
     _state = STATE::DOING;                                         // Change federate state to execute(doing) state without HLA
@@ -1015,21 +1015,21 @@ template<>
 void BaseFederate::Modeling<MODELMODE::MANAGING_FOLLOWING>(){
 
     tbb::parallel_invoke([this](){
-        // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
-        this->UpdateAttributes();
-    },
-    // Call SendParameters method to send interaction with parameters to RTI, look more at SendParameters()
-    [this](){
-        this->SendParameters();
-    });
-
-    tbb::parallel_invoke([this](){
         // Call ParameterProcess method to proccess interactions from RTI, look more at ParameterProcess()
         this->ParameterProcessMain();
     },
     // Call AttributeProcess method to proccess attributes from RTI, look more at AttributeProcess()
     [this](){
         this->AttributeProcessMain();
+    });
+
+    tbb::parallel_invoke([this](){
+        // Call UpdateAttributes method to send attributes to RTI, look more at UpdateAttributes()
+        this->UpdateAttributes();
+    },
+    // Call SendParameters method to send interaction with parameters to RTI, look more at SendParameters()
+    [this](){
+        this->SendParameters();
     });
 
     _state = STATE::DOING;
