@@ -11,7 +11,7 @@ namespace HLA{
     template<typename HLAtype, unsigned Size, unsigned OBV>
     typename std::array<typename HLAtype::type, Size> cast_from_rti(const rti1516e::VariableLengthData& v);
 
-    template <class T_FOM, size_t uiDim, unsigned m_OBV, class T_MOD = class T_FOM::type>
+    template <class T_FOM, size_t uiDim, unsigned m_OBV, typename T_MOD = typename T_FOM::type>
     class Array : public ClassForRTI <std::array<T_MOD,uiDim>, m_OBV>{
         Array & operator = (const Array &) {
             return *this;
