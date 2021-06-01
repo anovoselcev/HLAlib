@@ -18,8 +18,8 @@ namespace HLA{
         }
     public:
 
-        using type = T_MOD;
-        using assertion_type = std::array<type, uiDim>;
+        using type = std::array<T_MOD, uiDim>;
+        using assertion_type = type;
 
         virtual ~Array() {
             if (ptrData) {

@@ -21,8 +21,8 @@ class Vector final: public ClassForRTI<std::vector<T_MOD>,m_OBV>
 
 public:
 
-    using type = T_MOD;
-    using assertion_type = std::vector<type>;
+    using type = std::vector<T_MOD>;
+    using assertion_type = type;
 
     virtual ~Vector() {
         if (ptrData) {
